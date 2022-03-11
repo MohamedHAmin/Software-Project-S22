@@ -10,5 +10,13 @@ router.post("/follow", async (req, res) => {
     res.status(400).send("error");
   }
 });
+router.get("/followers", async (req, res) => {
+  try {
+    res.write("<h1>OK</h1>")
+    res.status(200).end()
+  } catch (e) {
+    res.status(400).send("error");
+  }
+});
 
 module.exports = router;
