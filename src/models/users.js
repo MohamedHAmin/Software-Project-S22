@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bcypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken')
 
 
@@ -106,7 +106,7 @@ userschema.statics.findbycradenials=async(email,password)=>{
     if(!user){
         throw new Error('unable to login')
     }
-    const ismatch=await bcypt.compare(password,user.password)
+    const ismatch=await bcrypt.compare(password,user.password)
     if(!ismatch){
         throw new Error("unable to login")
     }
@@ -135,7 +135,7 @@ userschema.methods.generateAuthToken=async function(){
 userschema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
-    user.password = await bcypt.hash(user.password, 8);
+    user.password = await bcrypt.hash(user.password, 8);
   }
 });
 

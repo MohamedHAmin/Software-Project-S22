@@ -1,4 +1,5 @@
 
+const { text } = require('express');
 const mongoose =require('mongoose')
 const validator =require('validator')
 
@@ -16,8 +17,8 @@ const tweetschema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
     },  
     Text:{
-      type:Text,
-      tirm:true
+      type:String,
+      trim:true
   },
   hashtags:{
      type:Array,
@@ -26,9 +27,9 @@ const tweetschema = new mongoose.Schema({
       type:Array,
       tirm:true
   },
-  liks:[{like:{
+  likes:[{like:{
       react:{
-          type:Text
+          type:String
       },
       userId:{
         type: mongoose.Schema.Types.ObjectId,
@@ -46,7 +47,7 @@ const tweetschema = new mongoose.Schema({
   
 });
 
-userschema.virtual('Comment',{
+tweetschema.virtual('Comment',{
     ref:'Comment',
     localField:'_id',
     foreignField:'commenton'
