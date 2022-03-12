@@ -3,9 +3,11 @@ const Users = require("../models/users");
 const auth = require("../midlware/auth");
 const router = new express.Router();
 
-router.post("/follow", async (req, res) => {
+
+router.post("/follow",auth,async (req, res) => {
   try {
     
+    res.send()
   } catch (e) {
     res.status(400).send("error");
   }

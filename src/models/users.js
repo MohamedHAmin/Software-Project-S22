@@ -19,13 +19,36 @@ const userschema = new mongoose.Schema({
       }
     },
   },
+  isAdmin:{
+    type:Boolean,
+    default:false
+  },
   password: {
     type: String,
     trim: true,
     required: true,
     minlength: 6,
-    
   },
+  pann:{
+    type:Date,
+    default:Null
+  },
+  block:{
+    type:Array
+  },
+  report:[{
+    report:{
+      id:{
+        type:mongoose.Schema.Types.ObjectId,
+
+      },
+      msg:{
+           type:Text  
+      },
+
+        
+    }
+    }],
   email: {
     type: String,
     trim: true,
@@ -46,7 +69,7 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  follower:{            ///who i follow
+  following:{            ///who i follow
     type: Array,
   },
   followercount:{        /////who follow me
@@ -54,6 +77,10 @@ const userschema = new mongoose.Schema({
   },
   followedcount:{        ////who i follow
     type:Number,
+  },
+  googleId:{
+    type: String,
+    trim: true,
   }
   ,
   tokens: [{

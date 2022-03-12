@@ -3,7 +3,16 @@ const mongoose =require('mongoose')
 const validator =require('validator')
 
 const tweetschema = new mongoose.Schema({
-    userId:{
+    
+  shared:{
+    type:Boolean,
+    default:false
+  },
+   shareduser:{
+    type: mongoose.Schema.Types.ObjectId,
+    default:NULL
+   },
+  userId:{
         type: mongoose.Schema.Types.ObjectId,
     },  
     Text:{
@@ -11,10 +20,10 @@ const tweetschema = new mongoose.Schema({
       tirm:true
   },
   hashtags:{
-      type:Array,
+     type:Array,
   },
   tags:{
-      type:Text,
+      type:Array,
       tirm:true
   },
   liks:[{like:{

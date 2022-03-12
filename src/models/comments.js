@@ -4,7 +4,7 @@ const validator =require('validator')
 
 const commentSchema = new mongoose.Schema({
   
-    commenton:{
+    commentOn:{
      type: mongoose.Schema.Types.ObjectId,
      required:true
     },
@@ -12,9 +12,6 @@ const commentSchema = new mongoose.Schema({
       type:Text,
       tirm:true,
       required:true
-  },
-  hashtags:{
-      type:Array,
   },
   tags:{
       type:Text,
@@ -39,9 +36,6 @@ const commentSchema = new mongoose.Schema({
         type:Text,
         tirm:true,
         required:true
-    },
-    hashtags:{
-        type:Array,
     },
     tags:{
         type:Text,
