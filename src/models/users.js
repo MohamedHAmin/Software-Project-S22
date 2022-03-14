@@ -33,22 +33,7 @@ const userschema = new mongoose.Schema({
     type:Date,
     default:Null
   },
-  block:{
-    type:Array
-  },
-  report:[{
-    report:{
-      id:{
-        type:mongoose.Schema.Types.ObjectId,
-
-      },
-      msg:{
-           type:Text  
-      },
-
-        
-    }
-    }],
+ 
   email: {
     type: String,
     trim: true,
@@ -69,9 +54,21 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  following:{            ///who i follow
-    type: Array,
-  },
+  following:[{       ////who i follow
+    userId:{
+      type: mongoose.Schema.Types.ObjectId,
+      required:true,
+      ref:'user'
+    }
+   }],
+   follower:[{             //// who follow me
+    userId:{
+      type: mongoose.Schema.Types.ObjectId,
+      required:true,
+      ref:'user'
+    }
+   }]
+   ,
   followercount:{        /////who follow me
     type:Number,
   },

@@ -21,13 +21,13 @@ const tweetschema = new mongoose.Schema({
       trim:true,
       required:true
   },
-  retweet:[{retweet:{
+  retweet:[{
     userId:{
       type: mongoose.Schema.Types.ObjectId,
       required:true,
       ref:'user'
     }
-   }}]
+   }]
   ,
   tags:[{
     tag:{
