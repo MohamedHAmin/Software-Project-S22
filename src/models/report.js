@@ -1,21 +1,23 @@
 
 const mongoose =require('mongoose')
 
-const commentSchema = new mongoose.Schema({
+const reportSchema = new mongoose.Schema({
 
     userId:{
-    type:mongoose.Schema.Types.ObjectId,
-    required:true
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
     },
     msg:{
-        type:Text  
-    },type:{
-        type:Enum["tweet","comment","user"],
-    required:true
+        type:String  
+    },
+    type:{
+        type:String,
+        enum:["tweet","comment","user"],
+        required:true
     },
     reportOn:{
-    type:mongoose.Schema.Types.ObjectId,
-    required:true
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
     }
 
 },
@@ -25,6 +27,6 @@ const commentSchema = new mongoose.Schema({
         
  });
       
-      const Comment = mongoose.model('Comment', commentSchema);
+      const Report = mongoose.model('Report', reportSchema);
       
-      module.exports = Comment
+      module.exports = Report
