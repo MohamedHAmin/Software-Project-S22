@@ -5,8 +5,6 @@ const Report = require("../models/report");
 const auth = require("../midlware/auth");
 const router = new express.Router();
 
-
-
 router.post("/follow",auth,async (req, res) => {
   try {
     
@@ -39,7 +37,13 @@ router.put("/tweet/:id", async (req, res) => {
 router.get("/tweet/:uid", async (req, res) => {
   try {
     const temp = await user.findById(req.params.uid)
+<<<<<<< HEAD
     const newtweet=await tweet.find({userId:req.params.uid})
+=======
+    let newtweet = await tweet.find({userId:req.params.uid}).populate('sharedtweet')
+    //newtweet.forEach(async (value,index,array)=>await array[index]=value.populate('sharedtweet'))
+    //if(newtweet.forEach()){await newtweet.populate('sharedtweet')}
+>>>>>>> fa653b4d3d51e3e4669b060e69ad40c1342f0043
     if(temp.isPrivate==true){res.status(400).end("Private Account")}
     else{res.status(200).json({newtweet}).end()}
   } catch (e) {

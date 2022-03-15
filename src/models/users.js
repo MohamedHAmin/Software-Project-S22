@@ -33,10 +33,11 @@ const userschema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
-  pann:{
+  ban:{
     type:Date,
     default:null
   },
+<<<<<<< HEAD
   block:{
     type:Array
   },
@@ -53,6 +54,8 @@ const userschema = new mongoose.Schema({
         
   //   }
   //   }],
+=======
+>>>>>>> fa653b4d3d51e3e4669b060e69ad40c1342f0043
   email: {
     type: String,
     trim: true,
