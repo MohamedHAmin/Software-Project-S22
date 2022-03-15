@@ -37,25 +37,6 @@ const userschema = new mongoose.Schema({
     type:Date,
     default:null
   },
-<<<<<<< HEAD
-  block:{
-    type:Array
-  },
-  // report:[{
-  //   report:{
-  //     id:{
-  //       type:mongoose.Schema.Types.ObjectId,
-
-  //     },
-  //     msg:{
-  //          type:Text  
-  //     },
-
-        
-  //   }
-  //   }],
-=======
->>>>>>> fa653b4d3d51e3e4669b060e69ad40c1342f0043
   email: {
     type: String,
     trim: true,
