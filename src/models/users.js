@@ -8,7 +8,7 @@ const userschema = new mongoose.Schema({
   user_name: {
     type: String,
     required: true,
-    tirm: true
+    trim: true
   },
   age: {
     type: Number,
@@ -23,6 +23,10 @@ const userschema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
+  isPrivate:{
+    type:Boolean,
+    default:false
+  },
   password: {
     type: String,
     trim: true,
@@ -31,24 +35,24 @@ const userschema = new mongoose.Schema({
   },
   pann:{
     type:Date,
-    default:Null
+    default:null
   },
   block:{
     type:Array
   },
-  report:[{
-    report:{
-      id:{
-        type:mongoose.Schema.Types.ObjectId,
+  // report:[{
+  //   report:{
+  //     id:{
+  //       type:mongoose.Schema.Types.ObjectId,
 
-      },
-      msg:{
-           type:Text  
-      },
+  //     },
+  //     msg:{
+  //          type:Text  
+  //     },
 
         
-    }
-    }],
+  //   }
+  //   }],
   email: {
     type: String,
     trim: true,
