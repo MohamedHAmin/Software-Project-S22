@@ -53,4 +53,35 @@ router.post("/user", async (req, res) => {
   }
 });
 
+          //~~~~~~Search for user or tweet~~~~~~~~
+          //Search will take the text from the search bar in req.body and search for the keyword in all tweets
+          //and return all matching tweets and will also lookup users that has this keyword and return them
+          // if not found will return a 200 status but say it is not found if an error occured will return 
+          // a 400 timeout or 500 server error 
+router.post("/search", async (req,res)=>{
+  try{
+    console.log("Search function implementation");
+  } catch (e){
+    console.log("faced an error");
+  }
+});
+          //~~~~~~Reply on a tweet~~~~~~~~
+          //Function gets id of tweet and req.body and use them to create a reply on the specified tweet
+router.post("/tweet/:id/reply", async (req,res)=>{
+  try{
+    console.log("Reply creation function");
+  } catch (e){
+    console.log("faced an error");
+  }
+});
+          //~~~~~~Retweet~~~~~~~~
+          //Function that gets tweet post the same tweet under the guise of retweet in another profile
+router.post("/retweet", async (req,res)=>{
+  try{
+    console.log("Retweet creation function");
+  } catch (e){
+    console.log("faced an error");
+  }
+})
+
 module.exports = router;
