@@ -10,14 +10,13 @@ const userschema = new mongoose.Schema({
     required: true,
     tirm: true
   },
-  age: {
-    type: Number,
+  Tag:{
+     type:String,
+     unique:true
+  },
+  BD: {
+    type: Date,
     default: 0,
-    validate(value) {
-      if (value < 0) {
-        throw new Error("age must be postive");
-      }
-    },
   },
   isAdmin:{
     type:Boolean,
