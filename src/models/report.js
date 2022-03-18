@@ -19,7 +19,6 @@ const reportSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         required:true
     }
-
 },
 {
     timestamps:true,

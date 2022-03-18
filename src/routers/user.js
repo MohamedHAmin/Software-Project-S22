@@ -15,25 +15,28 @@ router.post("/follow",auth,async (req, res) => {
 
 
           //~~~~~~Create Tweet~~~~~~~~
+
 router.post("/tweet", async (req, res) => {
   try {
-    console.log(req.body.userID)
-    const newtweet=await tweet.create(req.body)
-    res.status(200).json({newtweet}).end()
+    console.log(req.body.userID);
+    const newtweet = await tweet.create(req.body);
+    res.status(200).json({ newtweet }).end();
   } catch (e) {
     res.status(400).send("error");
   }
 });
-          //~~~~~~Edit Tweet~~~~~~~~
+//~~~~~~Edit Tweet~~~~~~~~
 router.put("/tweet/:id", async (req, res) => {
   try {
-    const newtweet=await tweet.findByIdAndUpdate(req.params.id,{Text:req.body.Text})
-    res.status(200).json({newtweet}).end()
+    const newtweet = await tweet.findByIdAndUpdate(req.params.id, {
+      Text: req.body.Text,
+    });
+    res.status(200).json({ newtweet }).end();
   } catch (e) {
     res.status(400).send("error");
   }
 });
-          //~~~~~~Retrieve Tweets~~~~~~~~
+//~~~~~~Retrieve Tweets~~~~~~~~
 router.get("/tweet/:uid", async (req, res) => {
   try {
     const temp = await user.findById(req.params.uid)
@@ -46,21 +49,21 @@ router.get("/tweet/:uid", async (req, res) => {
     res.status(400).send("error");
   }
 });
-          //~~~~~~Delete Tweet~~~~~~~~
+//~~~~~~Delete Tweet~~~~~~~~
 router.delete("/tweet/:id", async (req, res) => {
   try {
-    const newtweet=await tweet.findByIdAndDelete(req.params.id)
-    res.status(200).end('Success')
+    const newtweet = await tweet.findByIdAndDelete(req.params.id);
+    res.status(200).end("Success");
   } catch (e) {
     res.status(400).send("error");
   }
 });
-          //~~~~~~Create User~~~~~~~~
+//~~~~~~Create User~~~~~~~~
 router.post("/user", async (req, res) => {
   try {
+
     const newuser=await user.create(req.body)
     res.status(200).json({newuser}).end()
-
   } catch (e) {
     res.status(400).send("error");
   }
@@ -78,4 +81,67 @@ router.post("/report", async (req, res) => {
   }
 });
 
-module.exports = router
+//~~~~~~Search for user or tweet~~~~~~~~
+//Search will take the text from the search bar in req.body and search for the keyword in all tweets
+//and return all matching tweets and will also lookup users that has this keyword and return them
+// if not found will return a 200 status but say it is not found if an error occured will return
+// a 400 timeout or 500 server error
+router.post("/search", async (req, res) => {
+  try {
+    console.log("Search function implementation");
+  } catch (e) {
+    console.log("faced an error");
+  }
+});
+//~~~~~~Reply on a tweet~~~~~~~~
+//Function gets id of tweet and req.body and use them to create a reply on the specified tweet
+router.post("/tweet/:id/reply", async (req, res) => {
+  try {
+    console.log("Reply creation function");
+  } catch (e) {
+    console.log("faced an error");
+  }
+});
+
+//~~~~~~delete a Reply on a tweet~~~~~~~~
+//Function gets tweet id to locate reply in it using reply id when found deletes it
+router.delete("/tweet/:id/reply/:replyid", async (req, res) => {
+  try {
+    console.log("Reply deletion function");
+  } catch (e) {
+    console.log("faced an error");
+  }
+});
+
+//~~~~~~edit a Reply on a tweet~~~~~~~~
+//Function gets tweet id and reply id to view tweet and the required reply with it
+router.get("/tweet/:id/reply/:replyid", async (req, res) => {
+  try {
+    console.log("Reply read function");
+  } catch (e) {
+    console.log("faced an error");
+  }
+});
+
+//~~~~~~get a Reply on a tweet~~~~~~~~
+//Function gets tweet id to locate reply in it using reply id when found edits it
+router.put("/tweet/:id/reply/:replyid", async (req, res) => {
+  try {
+    console.log("Reply edit function");
+  } catch (e) {
+    console.log("faced an error");
+  }
+});
+
+//~~~~~~Retweet~~~~~~~~
+//Function that gets tweet post the same tweet under the guise of retweet in another profile
+router.post("/retweet", async (req, res) => {
+  try {
+    console.log("Retweet creation function");
+  } catch (e) {
+    console.log("faced an error");
+  }
+});
+
+module.exports = router;
+

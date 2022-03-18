@@ -5,43 +5,47 @@ const validator =require('validator')
 
 const tweetschema = new mongoose.Schema({
     
-  shared:{
-      type:Boolean,
-      default:false
-  },
   replying_to:{
-    type:mongoose.Schema.Types.ObjectId,
-  },
-  sharedtweet:{
-    //populate if shared=true
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Tweet',
-      default:null
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'Tweet',
+    default:null
   },
   userId:{
       type: mongoose.Schema.Types.ObjectId,
-    },  
+  },  
   Text:{
       type:String,
-      trim:true
+      trim:true,
+      required:true
   },
-  hashtags:{
-     type:Array,
+  retweet:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Tweet',
+      default:null
   },
-  tags:{
-      type:Array,
-      trim:true
+  tags:[{
+    tag:{
+      
+        type: String,
+        required:true,
+       
+      }
+  }],
+  likeCount:{
+    type:Number
+  },
+  retweetCount:{
+    type:Number
+  },
+  replyCount:{
+    type:Number
   },
   likes:[{like:{
-      react:{
-          type:String
-      },
-      userId:{
-          type: mongoose.Schema.Types.ObjectId,
-      },
-      name:{
-          type:String
-      }
+      
+        type: mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'user'
+      
   }},{
     timestamps:true,
     toJSON: {virtuals: true}
@@ -53,11 +57,7 @@ const tweetschema = new mongoose.Schema({
   
 });
 
-tweetschema.virtual('Comment',{
-    ref:'Comment',
-    localField:'_id',
-    foreignField:'commenton'
-})
+
 
 const Tweet = mongoose.model('Tweet', tweetschema);
 
