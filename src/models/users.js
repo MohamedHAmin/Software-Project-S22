@@ -31,7 +31,7 @@ const userschema = new mongoose.Schema({
   },
   pann:{
     type:Date,
-    default:Null
+    
   },
  
   email: {
@@ -49,46 +49,80 @@ const userschema = new mongoose.Schema({
   profile_avater: {
     type: String,
     trim: true,
+  
   },
   banner:{
     type: String,
     trim: true,
+
+
   },
   following:[{       ////who i follow
     userId:{
       type: mongoose.Schema.Types.ObjectId,
-      required:true,
+      // required:true,
       ref:'user'
     }
-   }],
-   follower:[{             //// who follow me
-    userId:{
-      type: mongoose.Schema.Types.ObjectId,
-      required:true,
-      ref:'user'
-    }
-   }]
-   ,
+   },  
+   {timestamps:true,
+   toJSON: {virtuals: true},
+   toObject: { virtuals: true }}],
+   
   followercount:{        /////who follow me
     type:Number,
+    default:0
+
   },
   followedcount:{        ////who i follow
     type:Number,
+    default:0
   },
   googleId:{
     type: String,
     trim: true,
+  },
+  Notifications:[{
+    Notification:{
+         text:{
+          type: String,
+          trim: true,
+          //required:true
+         },
+         userId:{
+          type: mongoose.Schema.Types.ObjectId,
+          ref:'user'
+         }
+
+    }
+  }, { timestamps:true,
+    toJSON: {virtuals: true}
+    }],
+  Notificationssetting:{
+    newfollow:{
+      type:Boolean,
+      default:true
+    },
+    newtweet:{
+      type:Boolean,
+      default:true
+    },
+    liketweet:{
+      type:Boolean,
+      default:true
+    }
   }
   ,
   tokens: [{
       token:{
           type:String,
-          required: true
+          //required: true
       }
   }]
 },{
   timestamps:true,
-  toJSON: {virtuals: true}
+  toJSON: {virtuals: true},
+  toObject: { virtuals: true },
+  
   
 });
  ////to connect with tweet he tweet
@@ -97,7 +131,11 @@ userschema.virtual('Tweet',{
   localField:'_id',
   foreignField:'userId'
 })
-
+userschema.virtual('follower',{
+  ref:'user',
+  localField:'_id',
+  foreignField:'following.userId'
+})
 userschema.statics.findbycradenials=async(email,password)=>{
     const user=await User.findOne({email}) 
     if(!user){
@@ -116,6 +154,7 @@ userschema.methods.toJSON=function(){
   const userobject=user.toObject()
   delete userobject.password
   delete userobject.tokens
+
   return userobject
 
 }
@@ -138,6 +177,6 @@ userschema.pre("save", async function (next) {
 
 
 
-const User = mongoose.model('User', userschema);
+const User = mongoose.model('user', userschema);
 
 module.exports = User

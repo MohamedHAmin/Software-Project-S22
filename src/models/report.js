@@ -1,31 +1,60 @@
 
+const { text } = require('express');
 const mongoose =require('mongoose')
+const validator =require('validator')
 
-const commentSchema = new mongoose.Schema({
-
+const tweetschema = new mongoose.Schema({
+    
+  replyed:{
+    type:Boolean,
+    default:false
+  },
+   replieduser:{
+    type: mongoose.Schema.Types.ObjectId,
+   },
+  userId:{
+        type: mongoose.Schema.Types.ObjectId,
+    },  
+    Text:{
+      type:String,
+      trim:true,
+      required:true
+  },
+  retweet:[{
     userId:{
-    type:mongoose.Schema.Types.ObjectId,
-    required:true,
-    ref:'user'
-    },
-    msg:{
-        type:String, 
-        required:true,
-
-    },
-    reportOn:{
-    type:mongoose.Schema.Types.ObjectId,
-    required:true,
-     ref:'user'
+      type: mongoose.Schema.Types.ObjectId,
+      required:true,
+      ref:'user'
     }
-
-},
-{
+   }]
+  ,
+  tags:[{
+    tag:{
+      
+        type: String,
+        required:true,
+       
+      }
+  }],
+  likes:[{like:{
+      
+        type: mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'user'
+      
+  }},{
     timestamps:true,
     toJSON: {virtuals: true}
-        
- });
-      
-      const Comment = mongoose.model('report', commentSchema);
-      
-      module.exports = Comment
+  }]
+ 
+},{
+  timestamps:true,
+  toJSON: {virtuals: true}
+  
+});
+
+
+
+const Tweet = mongoose.model('Tweet', tweetschema);
+
+module.exports = Tweet

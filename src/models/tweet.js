@@ -11,7 +11,6 @@ const tweetschema = new mongoose.Schema({
   },
    replieduser:{
     type: mongoose.Schema.Types.ObjectId,
-    default:NULL
    },
   userId:{
         type: mongoose.Schema.Types.ObjectId,
@@ -32,7 +31,7 @@ const tweetschema = new mongoose.Schema({
   tags:[{
     tag:{
       
-        type: string,
+        type: String,
         required:true,
        
       }
