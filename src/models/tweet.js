@@ -32,13 +32,16 @@ const tweetschema = new mongoose.Schema({
       }
   }],
   likeCount:{
-    type:Number
+    type:Number,
+    default:0
   },
   retweetCount:{
-    type:Number
+    type:Number,
+    default:0
   },
   replyCount:{
-    type:Number
+    type:Number,
+    default:0
   },
   likes:[{like:{
       
