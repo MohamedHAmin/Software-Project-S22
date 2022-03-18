@@ -3,6 +3,7 @@ const tweet = require("../models/tweet");
 const user = require("../models/users");
 const Report = require("../models/report");
 const auth = require("../midlware/auth");
+const { query } = require("express");
 const router = new express.Router();
 
 router.post("/follow",auth,async (req, res) => {
@@ -17,7 +18,6 @@ router.post("/follow",auth,async (req, res) => {
           //~~~~~~Create Tweet~~~~~~~~
 router.post("/tweet", async (req, res) => {
   try {
-    console.log(req.body.userID)
     const newtweet=await tweet.create(req.body)
     res.status(200).json({newtweet}).end()
   } catch (e) {
@@ -68,9 +68,36 @@ router.post("/user", async (req, res) => {
           //~~~~~~Report~~~~~~~~
 router.post("/report", async (req, res) => {
   try {
-    console.log(req.body)
     const newreport=await Report.create(req.body)
     res.status(200).json({newreport}).end()
+
+  } catch (e) {
+    console.log(e)
+    res.status(400).send("error");
+  }
+});
+router.post("/ban", async (req, res) => {
+  try {
+    res.status(200).end("<h1>Placeholder<h1>")
+
+  } catch (e) {
+    console.log(e)
+    res.status(400).send("error");
+  }
+});
+router.get("/report", async (req, res) => {
+  try {
+    const newreport=await Report.find().limit(req.query.perPage)
+    res.status(200).json({newreport}).end()
+
+  } catch (e) {
+    console.log(e)
+    res.status(400).send("error");
+  }
+});
+router.get("/dashboard", async (req, res) => {
+  try {
+    res.status(200).end("<h1>Placeholder<h1>")
 
   } catch (e) {
     console.log(e)
