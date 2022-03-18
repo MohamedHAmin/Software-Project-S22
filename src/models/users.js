@@ -9,6 +9,7 @@ const userschema = new mongoose.Schema({
     type: String,
     required: true,
     tirm: true
+    
   },
   Tag:{
      type:String,
