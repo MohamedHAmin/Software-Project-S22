@@ -1,0 +1,26 @@
+.sideBarIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  max-width: 200px;
+}
+
+.sideBarIcon > .MuiSvgIcon-root {
+  margin-left: 20px;
+}
+.sideBarIcon:hover {
+  background-color: var(--twitter-color-hover);
+  border-radius: 40px;
+  color: white;
+  transition: color 100ms ease-out;
+}
+
+.sideBarIcon > h2 {
+  font-weight: 580;
+  font-size: 18px;
+  margin: 9px;
+}
+
+.sideBarIcon--active {
+  color: var(--twitter-color);
+}
