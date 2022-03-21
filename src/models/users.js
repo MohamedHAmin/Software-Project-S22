@@ -57,18 +57,7 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
     default:null
-  },
-  following:[{       ////who i follow
-    userId:{
-      type: mongoose.Schema.Types.ObjectId,
-      // required:true,
-      ref:'user'
-    }
-   },  
-   {timestamps:true,
-   toJSON: {virtuals: true},
-   toObject: { virtuals: true }}],
-   
+  },  
   followercount:{        /////who follow me
     type:Number,
     default:0
@@ -82,22 +71,6 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  Notifications:[{
-    Notification:{
-         text:{
-          type: String,
-          trim: true,
-          //required:true
-         },
-         userId:{
-          type: mongoose.Schema.Types.ObjectId,
-          ref:'user'
-         }
-
-    }
-  }, { timestamps:true,
-    toJSON: {virtuals: true}
-    }],
   Notificationssetting:{
     newfollow:{
       type:Boolean,
@@ -133,7 +106,7 @@ userschema.virtual('Tweet',{
   foreignField:'userId'
 })
 userschema.virtual('follower',{
-  ref:'user',
+  ref:'User',
   localField:'_id',
   foreignField:'following.userId'
 })
@@ -178,6 +151,6 @@ userschema.pre("save", async function (next) {
 
 
 
-const User = mongoose.model('user', userschema);
+const User = mongoose.model('User', userschema);
 
 module.exports = User

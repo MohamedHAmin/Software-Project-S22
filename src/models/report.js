@@ -1,4 +1,3 @@
-
 const mongoose =require('mongoose')
 
 const reportSchema = new mongoose.Schema({
@@ -7,7 +6,6 @@ const reportSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:'User'
-        
     },
     msg:{
         type:String  
@@ -19,8 +17,7 @@ const reportSchema = new mongoose.Schema({
     },
     reportOn:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:'User'
+        required:true
     }
 },
 {
