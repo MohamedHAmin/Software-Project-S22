@@ -8,7 +8,7 @@ const userschema = new mongoose.Schema({
   user_name: {
     type: String,
     required: true,
-    tirm: true
+    trim: true
   },
   Tag:{
      type:String,
@@ -22,17 +22,20 @@ const userschema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
+  isPrivate:{
+    type:Boolean,
+    default:false
+  },
   password: {
     type: String,
     trim: true,
     required: true,
     minlength: 6,
   },
-  pann:{
+  ban:{
     type:Date,
-    
+    default:null
   },
- 
   email: {
     type: String,
     trim: true,
@@ -48,13 +51,12 @@ const userschema = new mongoose.Schema({
   profile_avater: {
     type: String,
     trim: true,
-  
+    default:null
   },
   banner:{
     type: String,
     trim: true,
-
-
+    default:null
   },
   following:[{       ////who i follow
     userId:{

@@ -5,29 +5,24 @@ const validator =require('validator')
 
 const tweetschema = new mongoose.Schema({
     
-  replyed:{
-    type:Boolean,
-    default:false
-  },
-   replieduser:{
+  replying_to:{
     type: mongoose.Schema.Types.ObjectId,
-   },
+    ref:'Tweet',
+    default:null
+  },
   userId:{
-        type: mongoose.Schema.Types.ObjectId,
-    },  
-    Text:{
+      type: mongoose.Schema.Types.ObjectId,
+  },  
+  Text:{
       type:String,
       trim:true,
       required:true
   },
-  retweet:[{
-    userId:{
+  retweet:{
       type: mongoose.Schema.Types.ObjectId,
-      required:true,
-      ref:'user'
-    }
-   }]
-  ,
+      ref:'Tweet',
+      default:null
+  },
   tags:[{
     tag:{
       
@@ -36,6 +31,18 @@ const tweetschema = new mongoose.Schema({
        
       }
   }],
+  likeCount:{
+    type:Number,
+    default:0
+  },
+  retweetCount:{
+    type:Number,
+    default:0
+  },
+  replyCount:{
+    type:Number,
+    default:0
+  },
   likes:[{like:{
       
         type: mongoose.Schema.Types.ObjectId,
