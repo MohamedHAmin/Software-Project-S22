@@ -7,9 +7,8 @@ const   TokenSchema = new mongoose.Schema({
     },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:'User'
-        
+        required:true,    
+        ref:'user'
     },
 },
 {
@@ -17,6 +16,6 @@ const   TokenSchema = new mongoose.Schema({
     toJSON: {virtuals: true}      
  });
       
-      const token = mongoose.model('Token', reportSchema);
+      const Token = mongoose.model('Token', reportSchema);
       
-      module.exports = token
+      module.exports = Token
