@@ -2,13 +2,22 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken')
-
-
+const Token = require('./token');
+const { format } = require("express/lib/response");
 const userschema = new mongoose.Schema({
   user_name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    unique: true,
+    validate(value) {
+      if (validator.isEmpty(value)) {
+        throw new Error("empty usernames aren't allowed");
+      }
+      if(validator.isNumeric(value)){
+        throw new Error ("username cannot be of numbers")
+      }
+    },
   },
   Tag:{
      type:String,
@@ -16,7 +25,12 @@ const userschema = new mongoose.Schema({
   },
   BD: {
     type: Date,
-    default: 0,
+    default: "1-1-1990",
+    validate(value) {
+      if (!validator.isDate(value[format,strictMode])) {
+        throw new Error("not valid birthdate");
+      }
+    },
   },
   isAdmin:{
     type:Boolean,
@@ -51,7 +65,12 @@ const userschema = new mongoose.Schema({
   profile_avater: {
     type: String,
     trim: true,
-    default:null
+    default:null,
+    // validate(value) {
+    //   if (!validator.isURL(value)) {
+    //     throw new Error("Image not found ");
+    //   }
+    // },
   },
   banner:{
     type: String,
@@ -86,12 +105,6 @@ const userschema = new mongoose.Schema({
     }
   }
   ,
-  tokens: [{
-      token:{
-          type:String,
-          //required: true
-      }
-  }]
 },{
   timestamps:true,
   toJSON: {virtuals: true},
@@ -136,8 +149,8 @@ userschema.methods.toJSON=function(){
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    user.tokens=user.tokens.concat({token})
-    await user.save()
+    const acceesstoken = new Token({token,userId:_id})
+    await acceesstoken.save()
     return token
 
 }
