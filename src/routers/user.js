@@ -6,13 +6,6 @@ const auth = require("../midlware/auth");
 const { query } = require("express");
 const router = new express.Router();
 
-router.post("/follow",auth,async (req, res) => {
-  try {
-    
-    res.send()}
-    catch (e) {
-      res.status(400).send("error");
-  }})
 
 
           //~~~~~~Create Tweet~~~~~~~~
@@ -59,15 +52,15 @@ router.delete("/tweet/:id", async (req, res) => {
   }
 });
 //~~~~~~Create User~~~~~~~~
-router.post("/user", async (req, res) => {
-  try {
+// router.post("/user", async (req, res) => {
+//   try {
 
-    const newuser=await user.create(req.body)
-    res.status(200).json({newuser}).end()
-  } catch (e) {
-    res.status(400).send("error");
-  }
-});
+//     const newuser=await user.create(req.body)
+//     res.status(200).json({newuser}).end()
+//   } catch (e) {
+//     res.status(400).send("error");
+//   }
+// });
           //~~~~~~Report~~~~~~~~
 router.post("/report", async (req, res) => {
   try {

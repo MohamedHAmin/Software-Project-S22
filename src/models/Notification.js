@@ -18,6 +18,6 @@ const NotificationSchema = new mongoose.Schema({
         
  });
       
-      const Report = mongoose.model('Report', reportSchema);
+      const Report = mongoose.model('Report', NotificationSchema);
       
       module.exports = Report

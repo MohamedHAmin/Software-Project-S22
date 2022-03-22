@@ -16,6 +16,6 @@ const   TokenSchema = new mongoose.Schema({
     toJSON: {virtuals: true}      
  });
       
-      const Token = mongoose.model('Token', reportSchema);
+      const Token = mongoose.model('Token', TokenSchema);
       
       module.exports = Token

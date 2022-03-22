@@ -7,12 +7,13 @@ const router = new express.Router();
 
 router.post("/user", async (req, res) => {
     const user = new User(req.body);
-    
+    console.log("256");
     try {
       await user.save();
       const token = await user.generateAuthToken();
-  
-      res.send({ user,token});
+    console.log("257");
+           
+      res.send({ user});
     } catch (e) {
       res.status(400).send("error"+e);
     }

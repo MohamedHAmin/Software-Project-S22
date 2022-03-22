@@ -9,8 +9,9 @@ const followRouter =require('./routers/follow')
 const app=express()
 const port=process.env.PORT
 app.use(express.json())
-app.use(userRouter)
 app.use(followRouter)
+app.use(userRouter)
+
 
 
 
