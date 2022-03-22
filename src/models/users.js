@@ -26,14 +26,6 @@ const userschema = new mongoose.Schema({
   BD: {
     type: Date,
     default: "1-1-1990",
-    validate(value) {
-      if (!validator.isDate(value[format,strictMode])) {
-        throw new Error("not valid birthdate");
-      }
-      if(!validator.isAfter(value[1900-1-1])){
-        throw new Error("A valid year should be entered")
-      }
-    },
   },
   isAdmin:{
     type:Boolean,
@@ -152,8 +144,8 @@ userschema.methods.toJSON=function(){
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    const acceesstoken = new Token({token,userId:_id})
-    await acceesstoken.save()
+    const accesstoken = new Token({token:token,userId:user._id.toString()})
+    await accesstoken.save()
     return token
 
 }
