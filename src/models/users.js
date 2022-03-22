@@ -30,6 +30,9 @@ const userschema = new mongoose.Schema({
       if (!validator.isDate(value[format,strictMode])) {
         throw new Error("not valid birthdate");
       }
+      if(!validator.isAfter(value[1900-1-1])){
+        throw new Error("A valid year should be entered")
+      }
     },
   },
   isAdmin:{
