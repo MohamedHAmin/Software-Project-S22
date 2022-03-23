@@ -3,24 +3,10 @@ const express = require("express");
 const User = require("../models/users");
 const auth = require("../midlware/auth");
 const router = new express.Router();
-  /////////////~~~~~~~~~~~~~~~~create user~~~~~~~~~`////
-
-router.post("/user", async (req, res) => {
-    const user = new User(req.body);
-    
-    try {
-      await user.save();
-      const token = await user.generateAuthToken();
-  
-      res.send({ user,token});
-    } catch (e) {
-      res.status(400).send("error"+e);
-    }
-  });
   /////////////~~~~~~~~~~~~~~~~login~~~~~~~~~`////
   router.post("/login", async (req, res) => {
     try {
-      const user = await User.findbycradenials(
+      const user = await User.findbycredentials(
         req.body.email,
         req.body.password
       );
