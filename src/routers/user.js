@@ -6,13 +6,6 @@ const auth = require("../midlware/auth");
 const { query } = require("express");
 const router = new express.Router();
 
-router.post("/follow",auth,async (req, res) => {
-  try {
-    
-    res.send()}
-    catch (e) {
-      res.status(400).send("error");
-  }})
 
 
           //~~~~~~Create Tweet~~~~~~~~

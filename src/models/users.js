@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
+const Token = require("./token");
 
 
 const userschema = new mongoose.Schema({
@@ -64,7 +65,6 @@ const userschema = new mongoose.Schema({
    {timestamps:true,
    toJSON: {virtuals: true},
    toObject: { virtuals: true }}],
-   
   followercount:{        /////who follow me
     type:Number,
     default:0
@@ -129,7 +129,7 @@ userschema.virtual('Tweet',{
   foreignField:'userId'
 })
 userschema.virtual('follower',{
-  ref:'user',
+  ref:'User',
   localField:'_id',
   foreignField:'following.userId'
 })
@@ -172,8 +172,8 @@ userschema.methods.isBanned=async function(){
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    user.tokens=user.tokens.concat({token})
-    await user.save()
+    const tok= new Token({token,userId:user._id})
+    await tok.save()
     return token
 
 }
@@ -188,6 +188,6 @@ userschema.pre("save", async function (next) {
 
 
 
-const User = mongoose.model('user', userschema);
+const User = mongoose.model('User', userschema);
 
 module.exports = User
