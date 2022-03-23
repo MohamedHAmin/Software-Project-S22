@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken');
-const Token = require("./token");
 
 
 const userschema = new mongoose.Schema({
@@ -172,8 +171,8 @@ userschema.methods.isBanned=async function(){
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    const tok= new Token({token,userId:user._id})
-    await tok.save()
+    user.tokens=user.tokens.concat({token})
+    await user.save()
     return token
 
 }
