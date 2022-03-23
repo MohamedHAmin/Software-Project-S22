@@ -19,10 +19,6 @@ const userschema = new mongoose.Schema({
     type: Date,
     default: 0,
   },
-  isAdmin:{
-    type:Boolean,
-    default:false
-  },
   isPrivate:{
     type:Boolean,
     default:false
@@ -58,7 +54,17 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
     default:null
-  },  
+  },
+  following:[{       ////who i follow //???
+    userId:{
+      type: mongoose.Schema.Types.ObjectId,
+      // required:true,
+      ref:'user'
+    }
+   },  
+   {timestamps:true,
+   toJSON: {virtuals: true},
+   toObject: { virtuals: true }}],
   followercount:{        /////who follow me
     type:Number,
     default:0
@@ -72,6 +78,22 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  Notifications:[{      //???
+    Notification:{
+         text:{
+          type: String,
+          trim: true,
+          //required:true
+         },
+         userId:{
+          type: mongoose.Schema.Types.ObjectId,
+          ref:'user'
+         }
+
+    }
+  }, { timestamps:true,
+    toJSON: {virtuals: true}
+    }],
   Notificationssetting:{
     newfollow:{
       type:Boolean,
@@ -86,7 +108,13 @@ const userschema = new mongoose.Schema({
       default:true
     }
   }
-  
+  ,
+  tokens: [{
+      token:{
+          type:String,
+          default:null
+      }
+  }]
 },{
   timestamps:true,
   toJSON: {virtuals: true},
@@ -105,7 +133,7 @@ userschema.virtual('follower',{
   localField:'_id',
   foreignField:'following.userId'
 })
-userschema.statics.findbycradenials=async(email,password)=>{
+userschema.statics.findbycredentials=async(email,password)=>{
     const user=await User.findOne({email}) 
     if(!user){
         throw new Error('unable to login')
@@ -128,6 +156,19 @@ userschema.methods.toJSON=function(){
 
 }
 
+userschema.methods.isBanned=async function(){
+  const user = this
+  let now=new Date()
+  if(user.ban>now){
+    return true
+  }
+  else{
+    user.ban=null
+    await user.save()
+    return false
+  }
+}
+
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
@@ -142,6 +183,7 @@ userschema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+  next()
 });
 
 

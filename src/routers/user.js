@@ -1,6 +1,6 @@
 const express = require("express");
-const tweet = require("../models/tweet");
-const user = require("../models/users");
+const Tweet = require("../models/tweet");
+const User = require("../models/users");
 const Report = require("../models/report");
 const auth = require("../midlware/auth");
 const { query } = require("express");
@@ -12,7 +12,13 @@ const router = new express.Router();
 
 router.post("/tweet", async (req, res) => {
   try {
-    const newtweet=await tweet.create(req.body)
+    const tempuser=await User.findById(req.body.userId)
+    const B=await tempuser.isBanned()
+    if(B){
+      res.status(200).send("User is Banned").end()
+      return
+    }
+    const newtweet=await Tweet.create(req.body)
     res.status(200).json({newtweet}).end()
   } catch (e) {
     res.status(400).send("error");
@@ -21,7 +27,7 @@ router.post("/tweet", async (req, res) => {
 //~~~~~~Edit Tweet~~~~~~~~
 router.put("/tweet/:id", async (req, res) => {
   try {
-    const newtweet = await tweet.findByIdAndUpdate(req.params.id, {
+    const newtweet = await Tweet.findByIdAndUpdate(req.params.id, {
       Text: req.body.Text,
     });
     res.status(200).json({ newtweet }).end();
@@ -32,10 +38,8 @@ router.put("/tweet/:id", async (req, res) => {
 //~~~~~~Retrieve Tweets~~~~~~~~
 router.get("/tweet/:uid", async (req, res) => {
   try {
-    const temp = await user.findById(req.params.uid)
-    let newtweet = await tweet.find({userId:req.params.uid}).populate('sharedtweet')
-    //newtweet.forEach(async (value,index,array)=>await array[index]=value.populate('sharedtweet'))
-    //if(newtweet.forEach()){await newtweet.populate('sharedtweet')}
+    const temp = await User.findById(req.params.uid)
+    let newtweet = await Tweet.find({userId:req.params.uid}).populate('retweet')
     if(temp.isPrivate==true){res.status(400).end("Private Account")}
     else{res.status(200).json({newtweet}).end()}
   } catch (e) {
@@ -43,24 +47,41 @@ router.get("/tweet/:uid", async (req, res) => {
   }
 });
 //~~~~~~Delete Tweet~~~~~~~~
-router.delete("/tweet/:id", async (req, res) => {
+router.delete("/tweet/:id",auth ,async (req, res) => {
   try {
-    const newtweet = await tweet.findByIdAndDelete(req.params.id);
-    res.status(200).end("Success");
-  } catch (e) {
+    const targettweet=await Tweet.findById(req.params.id)
+    const B=targettweet.userId.equals(req.user._id)
+    // console.log(req.user._id)
+    console.log(req.admin)
+    if(req.admin||B)
+    {
+      //console.log(temp)
+      const temp=await Tweet.findByIdAndDelete(req.params.id)
+      res.status(200).end("Success");
+    }
+    else{
+    throw new Error()
+    }
+  }
+  catch (e) {
+    //console.log(e)
     res.status(400).send("error");
   }
 });
-//~~~~~~Create User~~~~~~~~
-// router.post("/user", async (req, res) => {
-//   try {
+  /////////////~~~~~~~~~~~~~~~~create user~~~~~~~~~`////
 
-//     const newuser=await user.create(req.body)
-//     res.status(200).json({newuser}).end()
-//   } catch (e) {
-//     res.status(400).send("error");
-//   }
-// });
+  router.post("/User", async (req, res) => {
+    const user = new User(req.body);
+    
+    try {
+      await user.save();
+      const token = await user.generateAuthToken();
+  
+      res.send({ user,token});
+    } catch (e) {
+      res.status(400).send("error"+e);
+    }
+  });
           //~~~~~~Report~~~~~~~~
 router.post("/report", async (req, res) => {
   try {
@@ -72,35 +93,6 @@ router.post("/report", async (req, res) => {
     res.status(400).send("error");
   }
 });
-router.post("/ban", async (req, res) => {
-  try {
-    res.status(200).end("<h1>Placeholder<h1>")
-
-  } catch (e) {
-    console.log(e)
-    res.status(400).send("error");
-  }
-});
-router.get("/report", async (req, res) => {
-  try {
-    const newreport=await Report.find().limit(req.query.perPage)
-    res.status(200).json({newreport}).end()
-
-  } catch (e) {
-    console.log(e)
-    res.status(400).send("error");
-  }
-});
-router.get("/dashboard", async (req, res) => {
-  try {
-    res.status(200).end("<h1>Placeholder<h1>")
-
-  } catch (e) {
-    console.log(e)
-    res.status(400).send("error");
-  }
-});
-
 //~~~~~~Search for user or tweet~~~~~~~~
 //Search will take the text from the search bar in req.body and search for the keyword in all tweets
 //and return all matching tweets and will also lookup users that has this keyword and return them
