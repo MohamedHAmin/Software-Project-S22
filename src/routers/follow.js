@@ -1,7 +1,8 @@
-
 const express = require("express");
 const User = require("../models/users");
-const auth = require("../midlware/auth");
+const auth = require("../middleware/auth");
+const adminauth = require("../middleware/adminauth");
+const userauth = require("../middleware/userauth");
 const router = new express.Router();
   /////////////~~~~~~~~~~~~~~~~login~~~~~~~~~`////
   router.post("/login", async (req, res) => {

@@ -49,6 +49,7 @@ adminSchema.methods.generateAdminToken=async function(){
   const admin = this;
   const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET)
   admin.tokens.token=token
+  //admin.tokens.concat({token})
   await admin.save()
   return token
 }

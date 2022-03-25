@@ -3,7 +3,9 @@ const Tweet = require("../models/tweet");
 const User = require("../models/users");
 const Report = require("../models/report");
 const Admin = require("../models/admin")
-const auth = require("../midlware/auth");
+const auth = require("../middleware/auth");
+const adminauth = require("../middleware/adminauth");
+const userauth = require("../middleware/userauth");
 const { query } = require("express");
 const router = new express.Router();
 
