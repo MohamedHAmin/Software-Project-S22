@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{ useState } from 'react';
 import "./Styles/SideBar.css";
 import SideBarIcon from './SideBarIcon';
 import HomeIcon from '@mui/icons-material/Home';
@@ -10,22 +10,34 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import LarryIcon from '../Images/Logo Default.png';
-import {Button} from '@mui/material';
+import {Button} from '@mui/material'
+
+
 
 function SideBar()
 {
+  const [{isActive1,isActive2,isActive3,isActive4,isActive5,isActive6,isActive7,isActive8},setActive]=useState([true,false,false,false,false,false,false,false]);
+
+  function Selected()
+  { 
+    setActive([true,false]);
+  }
   return(
     <div className='sidebar'>
+    
     <img className="sideBarLarryIcon" src={LarryIcon}/>
-    <SideBarIcon active text="Home" Icon={HomeIcon}/>
-    <SideBarIcon text="Explore" Icon={SearchIcon}/>
-    <SideBarIcon text="Notifications" Icon={NotificationsIcon}/>
-    <SideBarIcon text="Message" Icon={ChatIcon}/>
-    <SideBarIcon text="Bookmark" Icon={BookmarkIcon}/>
-    <SideBarIcon text="List" Icon={ViewListIcon}/>
-    <SideBarIcon text="Profile" Icon={AccountBoxIcon}/>
-    <SideBarIcon text="More" Icon={MoreHorizIcon}/>
-    <Button className="sideBarTweet"  variant="outlined" fullWidth>Tweet
+    
+    <ul>
+    <li onClick={Selected}> <SideBarIcon active={isActive1} text="Home" Icon={HomeIcon}/></li>
+    <li onClick={Selected}><SideBarIcon active={isActive2}  text="Explore" Icon={SearchIcon}/></li>
+    <li><SideBarIcon  text="Notifications" Icon={NotificationsIcon}/></li>
+    <li><SideBarIcon text="Bookmark" Icon={BookmarkIcon}/></li>
+    <li><SideBarIcon text="Message" Icon={ChatIcon}/></li>
+    <li><SideBarIcon text="List" Icon={ViewListIcon}/></li>
+    <li><SideBarIcon text="Profile" Icon={AccountBoxIcon}/></li>
+    <li><SideBarIcon text="More" Icon={MoreHorizIcon}/></li>
+    </ul>
+    <Button className="sideBarTweet"  variant="outlined" fullWidth>Lar
     </Button>
     </div>
   )
