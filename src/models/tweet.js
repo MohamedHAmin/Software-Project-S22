@@ -27,8 +27,7 @@ const tweetschema = new mongoose.Schema({
     tag:{
       
         type: String,
-        required:true,
-       
+        required:true
       }
   }],
   likeCount:{

@@ -50,22 +50,23 @@ router.get("/tweet/:uid", async (req, res) => {
 router.delete("/tweet/:id",auth ,async (req, res) => {
   try {
     const targettweet=await Tweet.findById(req.params.id)
+    if(!targettweet){throw new Error("Not Found")}
     const B=targettweet.userId.equals(req.user._id)
-    // console.log(req.user._id)
-    console.log(req.admin)
     if(req.admin||B)
     {
-      //console.log(temp)
       const temp=await Tweet.findByIdAndDelete(req.params.id)
       res.status(200).end("Success");
     }
     else{
-    throw new Error()
+      throw new Error("Unauthorized")
     }
   }
   catch (e) {
-    //console.log(e)
-    res.status(400).send("error");
+    if(e=="Error: Not Found"){
+      res.status(404)
+    }
+    else{res.status(400)}
+    res.send(""+e)
   }
 });
   /////////////~~~~~~~~~~~~~~~~create user~~~~~~~~~`////

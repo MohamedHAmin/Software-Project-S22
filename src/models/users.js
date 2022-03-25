@@ -10,8 +10,9 @@ const userschema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  Tag:{
+  tag:{
      type:String,
+     required:true,
      unique:true
   },
   BD: {
@@ -106,14 +107,17 @@ const userschema = new mongoose.Schema({
       type:Boolean,
       default:true
     }
+  },
+  tokens:{
+    token:{
+      type:String,
+      default:null
+    },
+    refreshToken:{
+      type:String,
+      default:null
+    }
   }
-  ,
-  tokens: [{
-      token:{
-          type:String,
-          default:null
-      }
-  }]
 },{
   timestamps:true,
   toJSON: {virtuals: true},
@@ -171,7 +175,7 @@ userschema.methods.isBanned=async function(){
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    user.tokens=user.tokens.concat({token})
+    user.tokens.token=token
     await user.save()
     return token
 

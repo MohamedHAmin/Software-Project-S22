@@ -28,12 +28,16 @@ const adminSchema = new mongoose.Schema({
         required: true,
         minlength: 6,
       },
-    tokens:[{
+    tokens:{
       token:{
         type:String,
         default:null
+      },
+      refreshToken:{
+        type:String,
+        default:null
       }
-    }]
+    }
 },
 {
     timestamps:true,
@@ -44,7 +48,7 @@ const adminSchema = new mongoose.Schema({
 adminSchema.methods.generateAdminToken=async function(){
   const admin = this;
   const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET)
-  admin.tokens=admin.tokens.concat({token})
+  admin.tokens.token=token
   await admin.save()
   return token
 }
