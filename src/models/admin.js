@@ -5,7 +5,7 @@ const jwt=require('jsonwebtoken')
 
 const adminSchema = new mongoose.Schema({
 
-    admin_name: {
+    adminName: {
         type: String,
         required: true,
         trim: true

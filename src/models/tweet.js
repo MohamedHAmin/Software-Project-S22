@@ -5,20 +5,20 @@ const validator =require('validator')
 
 const tweetschema = new mongoose.Schema({
     
-  replying_to:{
+  replyingTo:{
     type: mongoose.Schema.Types.ObjectId,
     ref:'Tweet',
     default:null
   },
-  userId:{
+  authorId:{
       type: mongoose.Schema.Types.ObjectId,
   },  
-  Text:{
+  text:{
       type:String,
       trim:true,
       required:true
   },
-  retweet:{
+  retweetedTweet:{
       type: mongoose.Schema.Types.ObjectId,
       ref:'Tweet',
       default:null
@@ -28,6 +28,12 @@ const tweetschema = new mongoose.Schema({
       
         type: String,
         required:true
+      }
+  }],
+  gallery:[{
+    photo:{
+      
+        type: String,
       }
   }],
   likeCount:{
@@ -42,18 +48,20 @@ const tweetschema = new mongoose.Schema({
     type:Number,
     default:0
   },
-  likes:[{like:{
-      
-        type: mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:'user'
-      
-  }},{
+  likes:[{
+        like:{
+          type: mongoose.Schema.Types.ObjectId,
+          required:true,
+          ref:'user'
+        }
+  },
+  {
     timestamps:true,
     toJSON: {virtuals: true}
   }]
  
-},{
+},
+{
   timestamps:true,
   toJSON: {virtuals: true}
   

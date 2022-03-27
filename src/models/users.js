@@ -5,7 +5,7 @@ const jwt=require('jsonwebtoken');
 
 
 const userschema = new mongoose.Schema({
-  user_name: {
+  screenName: {
     type: String,
     required: true,
     trim: true
@@ -15,7 +15,7 @@ const userschema = new mongoose.Schema({
      required:true,
      unique:true
   },
-  BD: {
+  birthDate: {
     type: Date,
     default: 0,
   },
@@ -45,7 +45,7 @@ const userschema = new mongoose.Schema({
       }
     },
   },
-  profile_avater: {
+  profileAvater: {
     type: String,
     trim: true,
     default:null
@@ -70,7 +70,7 @@ const userschema = new mongoose.Schema({
     default:0
 
   },
-  followedcount:{        ////who i follow
+  followingcount:{        ////who i follow
     type:Number,
     default:0
   },
@@ -78,22 +78,10 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  Notifications:[{      //???
-    Notification:{
-         text:{
-          type: String,
-          trim: true,
-          //required:true
-         },
-         userId:{
-          type: mongoose.Schema.Types.ObjectId,
-          ref:'user'
-         }
-
-    }
-  }, { timestamps:true,
-    toJSON: {virtuals: true}
-    }],
+  facebookId:{
+    type: String,
+    trim: true,
+  },
   Notificationssetting:{
     newfollow:{
       type:Boolean,

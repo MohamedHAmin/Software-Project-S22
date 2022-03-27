@@ -2,7 +2,7 @@ const mongoose =require('mongoose')
 
 const reportSchema = new mongoose.Schema({
 
-    userId:{
+    reporterId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:'User'
@@ -15,7 +15,7 @@ const reportSchema = new mongoose.Schema({
         enum:["tweet","user"],
         required:true
     },
-    reportOn:{
+    reportedId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
     }
