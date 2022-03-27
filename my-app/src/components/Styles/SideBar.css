@@ -1,30 +1,45 @@
 .sidebar {
-  border-right: 2px solid var(--twitter-color);
-  flex: 0.23;
-  min-width: 200px;
-  padding-left: 30px;
-  padding-right: 30px;
+  border-right: 2px solid var(--color-border);
+  flex: 0.2;
 }
 
 .sideBarLarryIcon {
-  margin-top: -80px;
-  margin-bottom: -80px;
-  max-height: 250px;
-  margin-left: auto;
-  margin-right: auto;
+  height: 55px;
+  margin-top: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .sideBarTweet {
-  background-color: var(--twitter-color) !important;
+  background-color: var(--larry-color) !important;
   border: none !important;
   color: white !important;
   font-weight: 800 !important;
+  font-size: 17px !important;
   text-transform: inherit !important;
   border-radius: 40px !important;
-  height: 50px !important;
+  height: 7.5% !important;
   margin-top: 20px !important;
+  width: 85% !important;
 }
 
 .sideBarTweet:hover {
-  background-color: var(--twitter-color-hover) !important;
+  background-color: var(--color-hover) !important;
+}
+
+@media screen and (max-width: 1000px) {
+  .sidebar {
+    min-width: 120px;
+  }
+
+  .sideBarLarryIcon {
+    margin-left: auto;
+  }
+  li {
+    margin-left: 35%;
+  }
 }

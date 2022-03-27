@@ -1,13 +1,30 @@
 * {
   margin: 0;
+  padding: 0;
 }
 .App {
   font-family: "Montserrat", "Verdana", "Times New Roman";
-  --twitter-color: #2b3dbc;
-  --twitter-color-background: #ffffff;
-  --twitter-color-hover: #6d71ff;
+  --larry-color: #2b3dbc;
+  --color-border: #2b3cbc13;
+  --color-background: #ffffff;
+  --color-hover: #6d71ff;
 
-  background-color: var(--twitter-color-background);
+  background-color: var(--color-background);
+  margin-left: 5%;
+  margin-right: 5%;
   display: flex;
   height: 100vh;
+  position: relative;
+}
+
+@media screen and (max-width: 1000px) {
+  .App {
+    margin-left: 2%;
+  }
+}
+
+@media screen and (max-width: 703px) {
+  .App {
+    margin-right: 0;
+  }
 }
