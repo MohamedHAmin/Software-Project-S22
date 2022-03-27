@@ -144,7 +144,7 @@ userschema.methods.toJSON=function(){
 userschema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    const accesstoken = new Token({token:token,userId:user._id.toString()})
+    const accesstoken = new Token({token:token,userId:user._id})
     await accesstoken.save()
     return token
 

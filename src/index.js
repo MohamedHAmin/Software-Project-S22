@@ -1,7 +1,7 @@
 
 const express=require('express')
 require('./db/mongoose')
-
+const methodOverride = require('method-override')
 
 const userRouter =require('./routers/user')
 const followRouter =require('./routers/follow')
