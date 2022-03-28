@@ -1,0 +1,5 @@
+ .text p{
+    border: 5px outset rgb(48, 38, 38);
+  background-color: lightblue;
+  text-align: center;
+}
