@@ -12,7 +12,7 @@ const reportSchema = new mongoose.Schema({
     },
     type:{
         type:String,
-        enum:["tweet","user"],
+        enum:["Tweet","User"],
         required:true
     },
     reportedId:{

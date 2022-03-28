@@ -7,9 +7,9 @@ const notificationSchema = new mongoose.Schema({
         trim: true,
         //required:true
        },
-       userId:{
+    notifiedUid:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'user'
+        ref:'User'
        }},
     
 {
