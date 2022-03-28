@@ -40,9 +40,8 @@ router.post("/signup", async (req, res) => {
       }
       catch (err) {
       res.status(400).send("error");
-    }
+      }
   })
-
 
   router.delete("/logoutall" ,auth,  async (req, res) => {
       try{
@@ -64,6 +63,6 @@ router.post("/signup", async (req, res) => {
   /////////////////~~~~~~~~~~~~Email Verification~~~~~~~~~~~////////////////
   /////////////////~~~~~~~~~~~~Sign in with Google ~~~~~~~~~~~////////////////
 
-
+      
 
   module.exports = router 
