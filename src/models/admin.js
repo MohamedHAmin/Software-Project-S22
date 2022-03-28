@@ -28,15 +28,17 @@ const adminSchema = new mongoose.Schema({
         required: true,
         minlength: 6,
       },
-    tokens:{
+    tokens:[{
       token:{
         type:String,
-        default:null
-      },
-      refreshToken:{
-        type:String,
-        default:null
+        default:null,
+        ref:"Token"
       }
+    }],
+    refreshToken:{
+        type:String,
+        default:null,
+        ref:"Token"
     }
 },
 {

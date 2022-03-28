@@ -3,7 +3,7 @@ const { text } = require('express');
 const mongoose =require('mongoose')
 const validator =require('validator')
 
-const tweetschema = new mongoose.Schema({
+const tweetSchema = new mongoose.Schema({
     
   replyingTo:{
     type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +52,7 @@ const tweetschema = new mongoose.Schema({
         like:{
           type: mongoose.Schema.Types.ObjectId,
           required:true,
-          ref:'user'
+          ref:'User'
         }
   },
   {
@@ -69,6 +69,6 @@ const tweetschema = new mongoose.Schema({
 
 
 
-const Tweet = mongoose.model('Tweet', tweetschema);
+const Tweet = mongoose.model('Tweet', tweetSchema);
 
 module.exports = Tweet

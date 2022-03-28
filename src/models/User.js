@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken');
 
 
-const userschema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   screenName: {
     type: String,
     required: true,
@@ -59,7 +59,7 @@ const userschema = new mongoose.Schema({
     userId:{
       type: mongoose.Schema.Types.ObjectId,
       // required:true,
-      ref:'user'
+      ref:'User'
     }
    },  
    {timestamps:true,
@@ -96,17 +96,20 @@ const userschema = new mongoose.Schema({
       default:true
     }
   },
-  tokens:{
+  tokens:[{
     token:{
       type:String,
-      default:null
-    },
-    refreshToken:{
-      type:String,
-      default:null
+      default:null,
+      ref:"Token"
     }
+  }],
+  refreshToken:{
+      type:String,
+      default:null,
+      ref:"Token"
   }
-},{
+},
+{
   timestamps:true,
   toJSON: {virtuals: true},
   toObject: { virtuals: true },
@@ -179,6 +182,6 @@ userschema.pre("save", async function (next) {
 
 
 
-const User = mongoose.model('User', userschema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User

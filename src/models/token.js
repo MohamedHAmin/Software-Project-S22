@@ -6,7 +6,7 @@ const tokenSchema = new mongoose.Schema({
         type:String,
         default:null
       },
-    },
+},
 {
     timestamps:true,
     toJSON: {virtuals: true}
