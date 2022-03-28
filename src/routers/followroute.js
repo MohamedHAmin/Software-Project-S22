@@ -1,8 +1,6 @@
 const express = require("express");
-const User = require("../models/users");
+const User = require("../models/User");
 const auth = require("../middleware/auth");
-const adminauth = require("../middleware/adminauth");
-const userauth = require("../middleware/userauth");
 const router = new express.Router();
   /////////////~~~~~~~~~~~~~~~~login~~~~~~~~~`////
   router.post("/login", async (req, res) => {
@@ -36,7 +34,7 @@ const router = new express.Router();
       user.followercount++
       await user.save()
     
-      req.user.following=req.user.following.concat({userId:user._id})
+      req.user.following=req.user.following.concat({followingId:user._id})
       req.user.followedcount++
       await req.user.save()
   
@@ -52,7 +50,7 @@ const router = new express.Router();
     try {
   
       req.user.following = req.user.following.filter((follow) => {
-        return follow.userID != req.userID;
+        return follow.followingID != req.userID;
       });
       
       await req.user.save();
@@ -68,13 +66,13 @@ const router = new express.Router();
   
     try {
       await user.populate({
-        path: "following.userId",
+        path: "following.followingId",
       });
-      console.log(user.following[0].userId);
+      console.log(user.following[0].followingId);
       user.following.map(follow=>{
         console.log('1');
-         follow.userId.password=''
-        console.log( follow.userId.password)
+         follow.followingId.password=''
+        console.log( follow.followingId.password)
   
       })
       // if(user.following.userId.password){

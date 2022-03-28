@@ -1,5 +1,5 @@
 const request = require('supertest')
-const Admin = require('../models/admin')
+const Admin = require('../models/Admin')
 const app = require('../unittest')
 beforeEach(async ()=>{
     await Admin.deleteMany()
@@ -7,23 +7,23 @@ beforeEach(async ()=>{
 test('Check Admin Creation', async ()=>{
     const res=await request(app).post('/admin/create')
     .send({
-        admin_name:"coolAdmin23",
+        adminName:"coolAdmin23",
         email:"cool23@gmail.com",
         password:"awesomeadmin"
     })
     .expect(200)
-    expect(res.body.admin.admin_name).toEqual("coolAdmin23")
+    expect(res.body.admin.adminName).toEqual("coolAdmin23")
     expect(res.body.admin.email).toEqual("cool23@gmail.com")
 })
 test('Check Email Duplication', async ()=>{
     await Admin.create({
-        admin_name:"coolAdmin23",
+        adminName:"coolAdmin23",
         email:"cool23@gmail.com",
         password:"awesomeadmin"
     })
     const res=await request(app).post('/admin/create')
     .send({
-        admin_name:"SuperAdmin14",
+        adminName:"SuperAdmin14",
         email:"cool23@gmail.com",
         password:"superadmin"
     })
@@ -33,7 +33,7 @@ test('Check Email Duplication', async ()=>{
 test('Check Password Length', async ()=>{
     const res=await request(app).post('/admin/create')
     .send({
-        admin_name:"SuperAdmin14",
+        adminName:"SuperAdmin14",
         email:"cool23@gmail.com",
         password:"super"
     })
@@ -43,7 +43,7 @@ test('Check Password Length', async ()=>{
 test('Email Validity', async ()=>{
     const res=await request(app).post('/admin/create')
     .send({
-        admin_name:"SuperAdmin14",
+        adminName:"SuperAdmin14",
         email:"cool23@gmail",
         password:"superadmin"
     })
@@ -57,12 +57,12 @@ test('Empty Name', async ()=>{
         password:"superadmin"
     })
     .expect(400)
-    expect(res.text).toMatch("`admin_name` is required")
+    expect(res.text).toMatch("`adminName` is required")
 })
 test('Empty Email', async ()=>{
     const res=await request(app).post('/admin/create')
     .send({
-        admin_name:"SuperAdmin14",
+        adminName:"SuperAdmin14",
         password:"superadmin"
     })
     .expect(400)
@@ -71,7 +71,7 @@ test('Empty Email', async ()=>{
 test('Empty Password', async ()=>{
     const res=await request(app).post('/admin/create')
     .send({
-        admin_name:"SuperAdmin14",
+        adminName:"SuperAdmin14",
         email:"cool23@gmail.com"
     })
     .expect(400)

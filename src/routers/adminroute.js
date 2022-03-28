@@ -4,8 +4,6 @@ const User = require("../models/User");
 const Report = require("../models/Report");
 const Admin = require("../models/Admin")
 const auth = require("../middleware/auth");
-const adminauth = require("../middleware/adminauth");
-const userauth = require("../middleware/userauth");
 const { query } = require("express");
 const router = new express.Router();
 

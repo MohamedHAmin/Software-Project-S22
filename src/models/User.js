@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
     default:null
   },
   following:[{       ////who i follow //???
-    userId:{
+    followingId:{
       type: mongoose.Schema.Types.ObjectId,
       // required:true,
       ref:'User'
@@ -96,13 +96,13 @@ const userSchema = new mongoose.Schema({
       default:true
     }
   },
-  tokens:[{
+  tokens:{
     token:{
       type:String,
       default:null,
       ref:"Token"
     }
-  }],
+  },
   refreshToken:{
       type:String,
       default:null,
@@ -117,17 +117,17 @@ const userSchema = new mongoose.Schema({
   
 });
  ////to connect with tweet he tweet
-userschema.virtual('Tweet',{
+userSchema.virtual('Tweet',{
   ref:'Tweet',
   localField:'_id',
-  foreignField:'userId'
+  foreignField:'authorId'
 })
-userschema.virtual('follower',{
+userSchema.virtual('follower',{
   ref:'User',
   localField:'_id',
-  foreignField:'following.userId'
+  foreignField:'following.followingId'
 })
-userschema.statics.findbycredentials=async(email,password)=>{
+userSchema.statics.findbycredentials=async(email,password)=>{
     const user=await User.findOne({email}) 
     if(!user){
         throw new Error('unable to login')
@@ -140,7 +140,7 @@ userschema.statics.findbycredentials=async(email,password)=>{
 }
 
 ///delete data before send to client
-userschema.methods.toJSON=function(){
+userSchema.methods.toJSON=function(){
   const user = this
   const userobject=user.toObject()
   delete userobject.password
@@ -150,7 +150,7 @@ userschema.methods.toJSON=function(){
 
 }
 
-userschema.methods.isBanned=async function(){
+userSchema.methods.isBanned=async function(){
   const user = this
   let now=new Date()
   if(user.ban>now){
@@ -163,7 +163,7 @@ userschema.methods.isBanned=async function(){
   }
 }
 
-userschema.methods.generateAuthToken=async function(){
+userSchema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
     user.tokens.token=token
@@ -172,7 +172,7 @@ userschema.methods.generateAuthToken=async function(){
     return token
 }
 
-userschema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);

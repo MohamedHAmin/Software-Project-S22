@@ -3,8 +3,8 @@ const express=require('express')
 require('./db/mongoose')
 
 
-const userRouter =require('./routers/user')
-const followRouter =require('./routers/follow')
+const userRouter =require('./routers/userroute')
+const followRouter =require('./routers/followroute')
 const adminRouter =require('./routers/adminroute')
 
 const app=express()

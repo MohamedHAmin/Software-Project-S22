@@ -1,7 +1,7 @@
 const request = require('supertest')
-const Admin = require('../models/admin')
-const Tweet = require('../models/tweet')
-const User = require('../models/users')
+const Admin = require('../models/Admin')
+const Tweet = require('../models/Tweet')
+const User = require('../models/User')
 const app = require('../unittest')
 beforeEach(async ()=>{
     await Admin.deleteMany()
@@ -10,21 +10,20 @@ beforeEach(async ()=>{
 })
 test('Check Admin Delete Authority', async ()=>{
     const admin=await Admin.create({
-        admin_name:"coolAdmin23",
+        adminName:"coolAdmin23",
         email:"cool23@gmail.com",
         password:"awesomeadmin"
     })
     await admin.generateAdminToken()
     const user1=await User.create({
-        "user_name":"user1",
+        "screenName":"user1",
         "tag":"user1",
-        "age":15,
         "email":"user1@gmail.com",
         "password":"123456"
     })
     const tweet1=await Tweet.create({
-        "userId":user1._id, 
-        "Text":"User1 Tweet"
+        "authorId":user1._id, 
+        "text":"User1 Tweet"
     })
     const res=await request(app).delete('/tweet/'+tweet1._id)
     .set('Authorization','Bearer '+admin.tokens.token)
@@ -34,24 +33,22 @@ test('Check Admin Delete Authority', async ()=>{
 })
 test('Check User Delete Authority', async ()=>{
     const user1=await User.create({
-        "user_name":"user1",
+        "screenName":"user1",
         "tag":"user1",
-        "age":15,
         "email":"user1@gmail.com",
         "password":"123456"
     })
     user1.generateAuthToken()
     const user2=await User.create({
-        "user_name":"user2",
+        "screenName":"user2",
         "tag":"user2",
-        "age":15,
         "email":"user2@gmail.com",
         "password":"123456"
     })
     user2.generateAuthToken()
     const tweet2=await Tweet.create({
-        "userId":user2._id, 
-        "Text":"User2 Tweet"
+        "authorId":user2._id, 
+        "text":"User2 Tweet"
     })
     const res1=await request(app).delete('/tweet/'+tweet2._id)
     .set('Authorization','Bearer '+user1.tokens.token)
@@ -66,7 +63,7 @@ test('Check User Delete Authority', async ()=>{
 })
 test('Check Wrong ID', async ()=>{
     const admin=await Admin.create({
-        admin_name:"coolAdmin23",
+        adminName:"coolAdmin23",
         email:"cool23@gmail.com",
         password:"awesomeadmin"
     })
@@ -79,16 +76,15 @@ test('Check Wrong ID', async ()=>{
 })
 test('Check Non-existing ID', async ()=>{
     const user1=await User.create({
-        "user_name":"user1",
+        "screenName":"user1",
         "tag":"user1",
-        "age":15,
         "email":"user1@gmail.com",
         "password":"123456"
     })
     user1.generateAuthToken()
     const tweet=await Tweet.create({
-        "userId":user1._id, 
-        "Text":"User1 Tweet"
+        "authorId":user1._id, 
+        "text":"User1 Tweet"
     })
     await Tweet.deleteMany()
     const res=await request(app).delete('/tweet/'+tweet._id)
