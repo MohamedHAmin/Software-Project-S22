@@ -1,0 +1,18 @@
+.settingsMenu {
+  border-right: 1px solid #c9d3db;
+  border-left: 1px solid #c9d3db;
+  flex: 0.4;
+  min-width: 350px;
+}
+
+.settingsMenuHeaderLight {
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 10px;
+}
+.settingsMenuHeaderDark {
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 10px;
+  color: #ffffff;
+}
