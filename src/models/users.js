@@ -9,7 +9,6 @@ const userschema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
     validate(value) {
       if (validator.isEmpty(value)) {
         throw new Error("empty usernames aren't allowed");
@@ -21,7 +20,8 @@ const userschema = new mongoose.Schema({
   },
   Tag:{
      type:String,
-     unique:true
+     unique:true,
+     required:true
   },
   BD: {
     type: Date,
