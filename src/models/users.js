@@ -6,13 +6,12 @@ const Token = require("./token");
 
 
 const userschema = new mongoose.Schema({
-  user_name: {
+  name: {
     type: String,
     required: true,
     trim: true
   },
-  Tag:{
-     type:String,
+  tag:{   type:String,
      unique:true
   },
   BD: {
@@ -98,6 +97,11 @@ const userschema = new mongoose.Schema({
 userschema.virtual('Tweet',{
   ref:'Tweet',
   localField:'_id',
+  foreignField:'userId'
+})
+userschema.virtual('follower',{
+  ref:'Tweet',
+  localField:'follower',
   foreignField:'userId'
 })
 userschema.virtual('follower',{

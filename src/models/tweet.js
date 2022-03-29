@@ -18,7 +18,7 @@ const tweetschema = new mongoose.Schema({
       trim:true,
       required:true
   },
-  retweet:{
+  retweetId:{
       type: mongoose.Schema.Types.ObjectId,
       ref:'Tweet',
       default:null
@@ -59,6 +59,12 @@ const tweetschema = new mongoose.Schema({
   toJSON: {virtuals: true}
   
 });
+
+userschema.virtual('retweeted',{
+  ref:'Tweet',
+  localField:'_id',
+  foreignField:'retweet'
+})
 
 
 
