@@ -16,6 +16,7 @@
   "dependencies": {
     "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
+    "browserslist": "^4.20.2",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
