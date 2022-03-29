@@ -7,7 +7,7 @@ const auth = require("../middleware/auth");
 const { query } = require("express");
 const router = new express.Router();
 
-router.post("/create", async (req, res) => {
+router.post("/create",async (req, res) => {
     const admin = new Admin(req.body);
     try {
       await admin.save();
@@ -19,7 +19,7 @@ router.post("/create", async (req, res) => {
     }
   });
           //~~~~~~Report~~~~~~~~
-router.delete("/report/:id", async (req, res) => {
+router.delete("/report/:id",async (req, res) => {
   try {
     const newreport=await Report.findByIdAndDelete(req.params.id)
     res.status(200).json({newreport}).end()
@@ -29,7 +29,7 @@ router.delete("/report/:id", async (req, res) => {
     res.status(400).send("error");
   }
 });
-router.post("/ban/:id", async (req, res) => {
+router.post("/ban/:id",async (req, res) => {
   try {
     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
     res.status(200).send({tempUser})
@@ -37,7 +37,7 @@ router.post("/ban/:id", async (req, res) => {
     res.status(400).send("error");
   }
 });
-router.get("/report", async (req, res) => {
+router.get("/report",async (req, res) => {
   try {
     const newreport=await Report.find().limit(req.query.perPage)
     res.status(200).json({newreport}).end()
@@ -47,7 +47,7 @@ router.get("/report", async (req, res) => {
     res.status(400).send("error");
   }
 });
-router.get("/dashboard", async (req, res) => {
+router.get("/dashboard",async (req, res) => {
   try {
     res.status(200).end("<h1>Placeholder<h1>")
 
@@ -71,4 +71,3 @@ router.post("/search", async (req, res) => {
 });
 
 module.exports = router;
-

@@ -1,21 +1,22 @@
 const mongoose =require('mongoose')
 
-const   TokenSchema = new mongoose.Schema({
+const tokenSchema = new mongoose.Schema({
+
     token:{
         type:String,
-        required: true
+        required:true
     },
-    userId:{
+    ownerId:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true,    
-        ref:'user'
-    },
+        required:true
+    }
 },
 {
     timestamps:true,
-    toJSON: {virtuals: true}      
+    toJSON: {virtuals: true}
+        
  });
       
-      const Token = mongoose.model('Token', TokenSchema);
+      const Token = mongoose.model('Token', tokenSchema);
       
       module.exports = Token

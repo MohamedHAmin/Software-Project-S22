@@ -1,8 +1,8 @@
 const express = require("express");
-const Tweet = require("../models/tweet");
-const User = require("../models/users");
-const Report = require("../models/report");
-const auth = require("../midlware/auth");
+const Tweet = require("../models/Tweet");
+const User = require("../models/User");
+const Report = require("../models/Report");
+const auth = require("../middleware/auth");
 const { query } = require("express");
 const router = new express.Router();
 
@@ -39,7 +39,7 @@ router.put("/tweet/:id", async (req, res) => {
 router.get("/tweet/:uid", async (req, res) => {
   try {
     const temp = await User.findById(req.params.uid)
-    let newtweet = await Tweet.find({userId:req.params.uid}).populate('retweet')
+    let newtweet = await Tweet.find({authorId:req.params.uid}).populate('retweet')
     if(temp.isPrivate==true){res.status(400).end("Private Account")}
     else{res.status(200).json({newtweet}).end()}
   } catch (e) {
@@ -47,25 +47,26 @@ router.get("/tweet/:uid", async (req, res) => {
   }
 });
 //~~~~~~Delete Tweet~~~~~~~~
-router.delete("/tweet/:id",auth ,async (req, res) => {
+router.delete("/tweet/:id",auth("any"),async (req, res) => {
   try {
     const targettweet=await Tweet.findById(req.params.id)
-    const B=targettweet.userId.equals(req.user._id)
-    // console.log(req.user._id)
-    console.log(req.admin)
+    if(!targettweet){throw new Error("Not Found")}
+    const B=targettweet.authorId.equals(req.user._id)
     if(req.admin||B)
     {
-      //console.log(temp)
       const temp=await Tweet.findByIdAndDelete(req.params.id)
       res.status(200).end("Success");
     }
     else{
-    throw new Error()
+      throw new Error("Unauthorized")
     }
   }
   catch (e) {
-    //console.log(e)
-    res.status(400).send("error");
+    if(e=="Error: Not Found"){
+      res.status(404)
+    }
+    else{res.status(400)}
+    res.send(""+e)
   }
 });
   /////////////~~~~~~~~~~~~~~~~create user~~~~~~~~~`////
