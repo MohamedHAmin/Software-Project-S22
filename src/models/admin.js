@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
+const Token = require("./Token");
 
 const adminSchema = new mongoose.Schema({
 
@@ -9,7 +10,7 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-      },
+    },
     email: {
         type: String,
         trim: true,
@@ -20,25 +21,13 @@ const adminSchema = new mongoose.Schema({
           if (!validator.isEmail(value)) {
             throw new Error("not valid email");
           }
-        },
-      },
+        }
+    },
     password: {
         type: String,
         trim: true,
         required: true,
         minlength: 6,
-      },
-    tokens:{
-      token:{
-        type:String,
-        default:null,
-        ref:"Token"
-      }
-    },
-    refreshToken:{
-        type:String,
-        default:null,
-        ref:"Token"
     }
 },
 {
@@ -50,9 +39,12 @@ const adminSchema = new mongoose.Schema({
 adminSchema.methods.generateAdminToken=async function(){
   const admin = this;
   const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET)
-  admin.tokens.token=token
+  await Token.create({
+    'token':token,
+    'ownerId':admin._id
+  })
   //admin.tokens.concat({token})
-  await admin.save()
+  //await admin.save()
   return token
 }
 adminSchema.pre("save", async function (next) {

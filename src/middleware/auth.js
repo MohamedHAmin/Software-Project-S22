@@ -11,13 +11,13 @@ const auth =(role)=>{
             let user;
             if(role==="admin"||role==="any")
             {
-                user=await Admin.findOne({ _id:decoded._id,'tokens.token':token})
+                user=await Admin.findOne({ _id:decoded._id})
                 req.admin=true;
             }
             if(!user){
                 if(role==="user"||role==="any")
                 {
-                    user=await User.findOne({ _id:decoded._id,'tokens.token':token})
+                    user=await User.findOne({ _id:decoded._id})
                     req.admin=false
                 }
                 if(!user){

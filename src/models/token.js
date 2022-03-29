@@ -4,8 +4,12 @@ const tokenSchema = new mongoose.Schema({
 
     token:{
         type:String,
-        default:null
-      },
+        required:true
+    },
+    ownerId:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    }
 },
 {
     timestamps:true,

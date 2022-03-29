@@ -1,8 +1,10 @@
 const request = require('supertest')
 const Admin = require('../models/Admin')
+const Token = require('../models/Token')
 const app = require('../unittest')
 beforeEach(async ()=>{
     await Admin.deleteMany()
+    await Token.deleteMany()
 })
 test('Check Admin Creation', async ()=>{
     const res=await request(app).post('/admin/create')
