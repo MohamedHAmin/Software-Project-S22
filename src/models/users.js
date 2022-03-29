@@ -118,6 +118,7 @@ userschema.virtual('follower',{
   localField:'_id',
   foreignField:'following.userId'
 })
+//edited function name and verifications
 userschema.statics.findByCredentials=async(emailorUsername,password)=>{
     var user=await User.findOne({email: emailorUsername}) 
     if(!user){
