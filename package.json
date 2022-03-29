@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --watch"
+    "test": "env-cmd -f ./config/test.env jest --watch --detectOpenHandles"
   },
   "jest": {
     "testEnvironment": "node"
@@ -14,13 +14,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
     "mongodb": "^4.3.1",
     "mongoose": "^6.2.0",
-    "supertest": "^6.2.2",
     "validator": "^13.7.0"
   },
   "devDependencies": {

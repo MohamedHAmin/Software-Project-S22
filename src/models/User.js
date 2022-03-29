@@ -2,25 +2,23 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken');
-const Token = require("./token");
+const Token = require("./Token");
 
 
-const userschema = new mongoose.Schema({
-  name: {
+const userSchema = new mongoose.Schema({
+  screenName: {
     type: String,
     required: true,
     trim: true
   },
-  tag:{   type:String,
+  tag:{
+     type:String,
+     required:true,
      unique:true
   },
-  BD: {
+  birthDate: {
     type: Date,
     default: 0,
-  },
-  isAdmin:{
-    type:Boolean,
-    default:false
   },
   isPrivate:{
     type:Boolean,
@@ -48,7 +46,7 @@ const userschema = new mongoose.Schema({
       }
     },
   },
-  profile_avater: {
+  profileAvater: {
     type: String,
     trim: true,
     default:null
@@ -57,17 +55,31 @@ const userschema = new mongoose.Schema({
     type: String,
     trim: true,
     default:null
-  },  
+  },
+  following:[{       ////who i follow //???
+    followingId:{
+      type: mongoose.Schema.Types.ObjectId,
+      // required:true,
+      ref:'User'
+    }
+   },  
+   {timestamps:true,
+   toJSON: {virtuals: true},
+   toObject: { virtuals: true }}],
   followercount:{        /////who follow me
     type:Number,
     default:0
 
   },
-  followedcount:{        ////who i follow
+  followingcount:{        ////who i follow
     type:Number,
     default:0
   },
   googleId:{
+    type: String,
+    trim: true,
+  },
+  facebookId:{
     type: String,
     trim: true,
   },
@@ -85,8 +97,8 @@ const userschema = new mongoose.Schema({
       default:true
     }
   }
-  
-},{
+},
+{
   timestamps:true,
   toJSON: {virtuals: true},
   toObject: { virtuals: true },
@@ -94,35 +106,32 @@ const userschema = new mongoose.Schema({
   
 });
  ////to connect with tweet he tweet
-userschema.virtual('Tweet',{
+userSchema.virtual('Tweet',{
   ref:'Tweet',
   localField:'_id',
-  foreignField:'userId'
+  foreignField:'authorId'
 })
-userschema.virtual('follower',{
-  ref:'Tweet',
-  localField:'follower',
-  foreignField:'userId'
-})
-userschema.virtual('follower',{
+userSchema.virtual('follower',{
   ref:'User',
   localField:'_id',
-  foreignField:'following.userId'
+  foreignField:'following.followingId'
 })
-userschema.statics.findbycradenials=async(email,password)=>{
-    const user=await User.findOne({email}) 
-    if(!user){
-        throw new Error('unable to login')
-    }
-    const ismatch=await bcrypt.compare(password,user.password)
-    if(!ismatch){
-        throw new Error("unable to login")
-    }
-    return user
+userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
+  var user=await User.findOne({email: emailorUsername}) 
+  if(!user){
+    user=await User.findOne({tag: emailorUsername})
+    if(!user)
+      throw new Error('unable to login')
+  }
+  const ismatch=await bcrypt.compare(password,user.password)
+  if(!ismatch){
+      throw new Error("unable to login")
+  }
+  return user
 }
 
 ///delete data before send to client
-userschema.methods.toJSON=function(){
+userSchema.methods.toJSON=function(){
   const user = this
   const userobject=user.toObject()
   delete userobject.password
@@ -132,24 +141,41 @@ userschema.methods.toJSON=function(){
 
 }
 
-userschema.methods.generateAuthToken=async function(){
-    const user = this;
-    const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    const tok= new Token({token,userId:user._id})
-    await tok.save()
-    return token
-
+userSchema.methods.isBanned=async function(){
+  const user = this
+  let now=new Date()
+  if(user.ban>now){
+    return true
+  }
+  else{
+    user.ban=null
+    await user.save()
+    return false
+  }
 }
 
-userschema.pre("save", async function (next) {
+userSchema.methods.generateAuthToken=async function(){
+    const user = this;
+    const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
+    await Token.create({
+      'token':token,
+      'ownerId':user._id
+    })
+    //user.tokens.concat({token})
+    //await user.save()
+    return token
+}
+
+userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+  next()
 });
 
 
 
-const User = mongoose.model('User', userschema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User
