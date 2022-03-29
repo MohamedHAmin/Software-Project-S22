@@ -1,27 +1,11 @@
-
 const express = require("express");
-const User = require("../models/users");
-const auth = require("../midlware/auth");
+const User = require("../models/User");
+const auth = require("../middleware/auth");
 const router = new express.Router();
-  /////////////~~~~~~~~~~~~~~~~create user~~~~~~~~~`////
-
-router.post("/user", async (req, res) => {
-    const user = new User(req.body);
-    console.log("256");
-    try {
-      await user.save();
-      const token = await user.generateAuthToken();
-    console.log("257");
-           
-      res.send({ user});
-    } catch (e) {
-      res.status(400).send("error"+e);
-    }
-  });
   /////////////~~~~~~~~~~~~~~~~login~~~~~~~~~`////
   router.post("/login", async (req, res) => {
     try {
-      const user = await User.findbycradenials(
+      const user = await User.findbycredentials(
         req.body.email,
         req.body.password
       );
@@ -50,7 +34,7 @@ router.post("/user", async (req, res) => {
       user.followercount++
       await user.save()
     
-      req.user.following=req.user.following.concat({userId:user._id})
+      req.user.following=req.user.following.concat({followingId:user._id})
       req.user.followedcount++
       await req.user.save()
   
@@ -66,7 +50,7 @@ router.post("/user", async (req, res) => {
     try {
   
       req.user.following = req.user.following.filter((follow) => {
-        return follow.userID != req.userID;
+        return follow.followingID != req.userID;
       });
       
       await req.user.save();
@@ -82,13 +66,13 @@ router.post("/user", async (req, res) => {
   
     try {
       await user.populate({
-        path: "following.userId",
+        path: "following.followingId",
       });
-      console.log(user.following[0].userId);
+      console.log(user.following[0].followingId);
       user.following.map(follow=>{
         console.log('1');
-         follow.userId.password=''
-        console.log( follow.userId.password)
+         follow.followingId.password=''
+        console.log( follow.followingId.password)
   
       })
       // if(user.following.userId.password){

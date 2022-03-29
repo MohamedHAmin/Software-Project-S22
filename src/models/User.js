@@ -116,6 +116,7 @@ userSchema.virtual('follower',{
   localField:'_id',
   foreignField:'following.followingId'
 })
+<<<<<<< HEAD
 userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
   var user=await User.findOne({email: emailorUsername}) 
   if(!user){
@@ -128,6 +129,18 @@ userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
       throw new Error("unable to login")
   }
   return user
+=======
+userSchema.statics.findbycredentials=async(email,password)=>{
+    const user=await User.findOne({email}) 
+    if(!user){
+        throw new Error('unable to login')
+    }
+    const ismatch=await bcrypt.compare(password,user.password)
+    if(!ismatch){
+        throw new Error("unable to login")
+    }
+    return user
+>>>>>>> ba6bad55e86f4eb09704c168cc0e153204894ddf
 }
 
 ///delete data before send to client
