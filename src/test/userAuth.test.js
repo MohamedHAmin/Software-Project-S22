@@ -6,7 +6,7 @@ const app = require('../unittest')
       await User.deleteMany()
       await Token.deleteMany()
   })
-test('Check User Login', async ()=>{
+test('Check User Login with wrong password', async ()=>{
      await User.create({
         user_name:"oz",
         email:"oz123@gmail.com",
@@ -20,7 +20,7 @@ test('Check User Login', async ()=>{
     })
     .expect(400)
 })
-test('Check User Login', async ()=>{
+test('Check User Login with email', async ()=>{
      await User.create({
         user_name:"oz",
         email:"oz123@gmail.com",
@@ -29,7 +29,22 @@ test('Check User Login', async ()=>{
     })
     const res=await request(app).post('/login')
     .send({
+        email_or_username:"oz123@gmail.com",
+        password:"oz12345"
+    })
+    .expect(200)
+})
+
+test('Check User Login with username', async ()=>{
+     await User.create({
+        user_name:"oz",
         email:"oz123@gmail.com",
+        password : "oz12345",
+        Tag:"@ozer123"
+    })
+    const res=await request(app).post('/login')
+    .send({
+        email_or_username:"oz",
         password:"oz12345"
     })
     .expect(200)

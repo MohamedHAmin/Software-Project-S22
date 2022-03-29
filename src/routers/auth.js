@@ -18,13 +18,14 @@ router.post("/signup", async (req, res) => {
  /////////////////~~~~~~~~~~~~Login~~~~~~~~~~~////////////////
   router.post("/login", async (req, res) => {
     try {
-      const user = await User.findbycradenials(
-        req.body.email,
+      const user = await User.findByCredentials(
+        req.body.email_or_username,
         req.body.password
       );
       const token = await user.generateAuthToken();
       res.send({ user, token });
     } catch (e) {
+      console.log(e);
       res.status(400).send("error");
     }
   });

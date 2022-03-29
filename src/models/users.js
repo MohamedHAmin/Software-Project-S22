@@ -118,9 +118,11 @@ userschema.virtual('follower',{
   localField:'_id',
   foreignField:'following.userId'
 })
-userschema.statics.findbycradenials=async(email,password)=>{
-    const user=await User.findOne({email}) 
+userschema.statics.findByCredentials=async(emailorUsername,password)=>{
+    var user=await User.findOne({email: emailorUsername}) 
     if(!user){
+      user=await User.findOne({user_name: emailorUsername})
+      if(!user)
         throw new Error('unable to login')
     }
     const ismatch=await bcrypt.compare(password,user.password)
