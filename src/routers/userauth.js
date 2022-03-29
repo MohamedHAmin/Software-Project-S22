@@ -11,7 +11,6 @@ router.post("/user/signup", async (req, res) => {
     try {
       await user.save();
       const token = await user.generateAuthToken();
-      console.log(token)
       res.send({ user,token});
     } catch (e) {
       res.status(400).send("error"+e);
@@ -35,10 +34,13 @@ router.post("/user/signup", async (req, res) => {
   //token is put in header [in postman]
   router.delete("/user/logout" ,auth('any'),async (req, res) => {
       try{
-      const deleletedToken = await Token.deleteOne({ token: req.token })
-      if(!deleletedToken)
-      res.status(200).end("Success")
-      }
+        console.log(req.token)
+      const deleletedToken = await Token.deleteMany({ token: req.token })
+      console.log(deleletedToken)
+   
+      res.status(200).end("Success")}
+      
+      
       catch (err) {
       res.status(400).send("error");
       }

@@ -108,4 +108,28 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
   }
 });
 
+router.delete("/tweet/:id",auth("any"),async (req, res) => {
+  try {
+    const targettweet=await Tweet.findById(req.params.id)
+    if(!targettweet){throw new Error("Not Found")}
+    const B=targettweet.authorId.equals(req.user._id)
+    if(req.admin||B)
+    {
+      const temp=await Tweet.findByIdAndDelete(req.params.id)
+      res.status(200).end("Success");
+    }
+    else{
+      throw new Error("Unauthorized")
+    }
+  }
+  catch (e) {
+    if(e=="Error: Not Found"){
+      res.status(404)
+    }
+    else{res.status(400)}
+    res.send(""+e)
+  }
+});
+
+
 module.exports=router;

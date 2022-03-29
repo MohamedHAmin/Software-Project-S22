@@ -43,8 +43,6 @@ adminSchema.methods.generateAdminToken=async function(){
     'token':token,
     'ownerId':admin._id
   })
-  //admin.tokens.concat({token})
-  //await admin.save()
   return token
 }
 adminSchema.pre("save", async function (next) {
