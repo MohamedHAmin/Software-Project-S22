@@ -13,7 +13,7 @@ test('Check User Creation (Signup)', async ()=>{
     password:"123456",
     tag:"@oz174"
     })
-    .expect(200)
+    .expect(201)
     expect(res.body.user.screenName).toEqual("oz")
     expect(res.body.user.email).toEqual("oz123@gmail.com")
     expect(res.body.user.tag).toEqual("@oz174")
@@ -31,6 +31,22 @@ test('Check Email Duplication', async ()=>{
     email:"oz123@gmail.com",
     password:"123456",
     tag:"@o88"
+    })
+    .expect(400)
+})
+test('Check Tag Duplication', async ()=>{
+    await User.create({
+        screenName:"user6",
+        email:"oz123@gmail.com",
+        password:"123456",
+        tag:"@oz174"
+    })
+    const res=await request(app).post('/user/signup')
+    .send({
+        screenName:"user6",
+    email:"oz124@gmail.com",
+    password:"123456",
+    tag:"@oz174"
     })
     .expect(400)
 })

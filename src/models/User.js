@@ -142,29 +142,29 @@ userSchema.methods.toJSON=function(){
 
 }
 
-userSchema.methods.isBanned=async function(){
-  const user = this
-  let now=new Date()
-  if(user.ban>now){
-    return true
-  }
-  else{
-    user.ban=null
-    await user.save()
-    return false
-  }
-}
+// userSchema.methods.isBanned=async function(){
+//   const user = this
+//   let now=new Date()
+//   if(user.ban>now){
+//     return true
+//   }
+//   else{
+//     user.ban=null
+//     await user.save()
+//     return false
+//   }
+// }
 
 userSchema.methods.generateAuthToken=async function(){
     const user = this;
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
-    await Token.create({
+    const tokenObj=await Token.create({
       'token':token,
       'ownerId':user._id
     })
     //user.tokens.concat({token})
     //await user.save()
-    return token
+    return tokenObj
 }
 
 userSchema.pre("save", async function (next) {
