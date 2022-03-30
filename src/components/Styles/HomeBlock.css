@@ -1,0 +1,79 @@
+.homeblock
+{
+    border-width: auto;
+    height: fit-content;
+    border-style: solid;
+    border-color: lightgrey;
+    padding:calc(2%);
+    margin: 10px;
+    max-width: 600px;
+    min-width: 300px;
+    width: auto;
+    overflow: hidden;
+}
+.homeblock:hover
+{
+    border-color: #6d71ff;
+}
+.homebox
+{
+    word-wrap: normal;
+    width: 100%;
+    flex-direction: column;
+}
+.homeIcon
+{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-right: 90%;
+    margin-left: 0%;
+    margin-bottom: -5px;
+}
+.homeIcon.li
+{
+    list-style-type: none;
+    /*margin-left: 0%;
+    margin-right: 50%;*/
+}
+.l1:hover,.l2:hover,.l3:hover
+{
+    color:rgba(109, 113, 255, 1);
+}
+@media screen and (max-width: 1000px) 
+{
+    .homeIcon
+    {
+        margin-bottom: -25px;
+    }
+    .tweetButton
+    {
+        width:100%;
+    }
+    .homeblock
+    {
+        width: auto;
+    }
+    /*.homeIcon.li
+    {
+        margin-left: 0%;
+        margin-right: 60%;
+    }*/
+}
+.tweetButton {
+    background-color: var(--larry-color) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 800 !important;
+    font-size: 17px !important;
+    text-transform: inherit !important;
+    border-radius: 40px !important;
+    height: 7.5% !important;
+    margin-top: 0px !important;
+    width: 40% !important;
+    float: right;
+}
+.tweetButton:hover {
+    background-color: var(--color-hover) !important;
+  }

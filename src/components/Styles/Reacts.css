@@ -1,0 +1,13 @@
+@media screen and (max-width: 1000px) {
+    .reactsBar {
+      min-width: 160px;
+    }
+    .icon
+    {
+        margin-right: 40%;
+    }
+}
+.icon
+{
+    margin-right: 40%;
+}

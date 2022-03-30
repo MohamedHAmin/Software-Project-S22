@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.App {
+  font-family: "Montserrat", "Verdana", "Times New Roman";
+  --larry-color: #2b3dbc;
+  --color-border: #2b3cbc13;
+  --color-background: #ffffff;
+  --color-hover: #6d71ff;
+
+  background-color: var(--color-background);
+  margin-left: 5%;
+  margin-right: 5%;
+  display: flex;
+  height: 100vh;
+}
+.home
+{
+  flex-direction: column;
+}
+/*.Block
+{
+  border-width: auto;
+  border-style: solid;
+  border-color: lightgrey;
+  padding:calc(2%);
+  margin: 10px;
+  max-width: 1000px;
+  min-width: 300px;
+  width:100%;
+}
+.Block:hover
+{
+    border-color: #6d71ff;
+}*/
+ul
+{
+  list-style: none;
+  list-style-type: none;
+}
+.tweets
+{
+  height: fit-content;
+}
+@media screen and (max-width: 1000px) {
+  .App {
+    margin-left: 2%;
+  }
+}
+
+@media screen and (max-width: 703px) {
+  .App {
+    margin-right: 0;
+  }
+}
