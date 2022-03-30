@@ -1,0 +1,43 @@
+.settingsMenuOptionsLight {
+  font-weight: bolder;
+  font-size: 10px;
+  font-stretch: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1.5em;
+  color: rgb(48, 48, 49);
+}
+.settingsMenuOptionsDark {
+  font-weight: bolder;
+  font-size: 10px;
+  font-stretch: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1.5em;
+  color: rgb(255, 255, 255);
+}
+.settingsMenuOptionsLight:hover {
+  background-color: rgb(247, 246, 246);
+  transition: background 100ms ease-in-out;
+}
+.settingsMenuOptionsLight--active {
+  background-color: rgb(247, 246, 246);
+}
+.settingsMenuOptionsDark:hover {
+  background-color: rgb(53, 49, 77);
+  transition: background 100ms ease-in-out;
+}
+.settingsMenuOptionsDark--active {
+  background-color: rgb(53, 49, 77);
+}
+.arrowIcon {
+  margin-right: 20px !important;
+}
