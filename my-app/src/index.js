@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
+import ProfilePage from "./components/ProfilePage";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<ProfilePage />, document.getElementById("root"));
 

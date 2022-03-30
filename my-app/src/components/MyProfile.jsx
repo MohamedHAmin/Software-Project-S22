@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import './Styles/MyProfile.css'
 import ProfileName from "./ProfileName";

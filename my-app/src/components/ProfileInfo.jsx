@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import './Styles/ProfileInfo.css'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';

@@ -34,23 +34,19 @@
   right: 10px !important;
 }
 
+.setupProfileButton:hover {
+  background-color: var(--color-hover) !important;
+}
+
 @media screen and (max-width: 703px) {
   .myProfile {
     flex: 0.9;
     border-right: none;
-  }
-  .setupProfileButton {
-    position: absolute !important;
-    right: 10px !important;
   }
 }
 
 @media screen and (min-width: 704px) and (max-width: 1030px) {
   .myProfile {
     flex: 0.65;
-  }
-  .setupProfileButton {
-    position: absolute !important;
-    right: 10px !important;
   }
 }
