@@ -16,3 +16,28 @@
   padding-left: 10px;
   color: #ffffff;
 }
+
+.settingsMenuParagraphLight {
+  font-weight: 200;
+  font-size: 14px;
+  padding-left: 20px;
+}
+
+.settingsMenuParagraphDark {
+  font-weight: 200;
+  font-size: 14px;
+  padding-left: 20px;
+  color: #ffffff;
+}
+
+.karim {
+  display: flex;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.forceChangePasswordMUIDarkMode {
+  color: #ffffff !important;
+}

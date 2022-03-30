@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import './Styles/SettingsMenu.css'
 import SettingsMenuOptions from './SettingsMenuOptions';
-import MenuOfChoosenSetting from './MenuOfChoosenSetting';
 import KeyIcon from '@mui/icons-material/Key';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
-
 function SettingsMenu(props){
 
     const [isclickedAcc,setAccActive]=useState(true);
@@ -59,7 +57,9 @@ function SettingsMenu(props){
         setPrivacyActive(false);
         setNotificationActive(false);
         setAccessibilityActive(false);
-        <MenuOfChoosenSetting />
+        props.onIdChange(1);
+        
+        
     }
     function clickedSecurity(){
         setAccActive(false);
@@ -67,7 +67,8 @@ function SettingsMenu(props){
         setPrivacyActive(false);
         setNotificationActive(false);
         setAccessibilityActive(false);
-
+        props.onIdChange(2);
+        
     }
     function clickedPrivacy(){
         setAccActive(false);
@@ -75,6 +76,7 @@ function SettingsMenu(props){
         setPrivacyActive(true);
         setNotificationActive(false);
         setAccessibilityActive(false);
+        props.onIdChange(3);
     }
     function clickedNotifications(){
         setAccActive(false);
@@ -82,6 +84,7 @@ function SettingsMenu(props){
         setPrivacyActive(false);
         setNotificationActive(true);
         setAccessibilityActive(false);
+        props.onIdChange(4);
 
     }
     function clickedAccessibility(){
@@ -90,10 +93,11 @@ function SettingsMenu(props){
         setPrivacyActive(false);
         setNotificationActive(false);
         setAccessibilityActive(true);
+        props.onIdChange(5);
     }
     return(
         <div className="settingsMenu">
-            <h1 className={props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Settings</h1>
+            <h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Settings</h1>
             {/*,clickedSecurity,clickedPrivacy,clickedNotifications,clickedAccessibility settings menu{fontWeight:500, fontSize:22} */}
             <Search>
             <SearchIconWrapper>
@@ -104,16 +108,26 @@ function SettingsMenu(props){
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+          
+        <div className='karim' style={{}}>
+          
+          <div> 
+            <div  onClick={clickedAccount}><SettingsMenuOptions id="1" darkMode={props.isDarkMode} active={isclickedAcc} Icon={KeyIcon}  text="Your account"/> </div> 
+            <div  onClick={clickedSecurity}><SettingsMenuOptions id="2" darkMode={props.isDarkMode} active={isclickedSecurity} Icon={KeyIcon} text="Security and account access"/> </div> 
+            <div  onClick={clickedPrivacy}><SettingsMenuOptions id="3" darkMode={props.isDarkMode} active={isclickedPrivacy} Icon={KeyIcon} text="Privacy and safety"/>  </div>
+            <div  onClick={clickedNotifications}><SettingsMenuOptions id="4" darkMode={props.isDarkMode} active={isclickedNotifications} Icon={KeyIcon} text="Notifications"/>  </div>
+            <div  onClick={clickedAccessibility}><SettingsMenuOptions id="5" darkMode={props.isDarkMode} active={isclickedAccessibility} Icon={KeyIcon} text="accessibility, display, and languages"/>  </div>
+          </div>
+
+          {/* <div style={{marginLeft:250}}>
+            {isclickedAcc==true&&(<AccountSettings darkMode={props.isDarkMode}/>)}
+          </div> */}
+        </div>
+        
+      </div> 
+     
+
            
-       
-        <div  onClick={clickedAccount}><SettingsMenuOptions id="1" darkMode={props.isDarkMode} active={isclickedAcc} Icon={KeyIcon}  text="Your account"/> </div>
-        <div  onClick={clickedSecurity}><SettingsMenuOptions id="2" active={isclickedSecurity} Icon={KeyIcon} text="Security and account access"/> </div> 
-        <div  onClick={clickedPrivacy}><SettingsMenuOptions id="3" active={isclickedPrivacy} Icon={KeyIcon} text="Privacy and safety"/>  </div>
-        <div  onClick={clickedNotifications}><SettingsMenuOptions id="4" active={isclickedNotifications} Icon={KeyIcon} text="Notifications"/>  </div>
-        <div  onClick={clickedAccessibility}><SettingsMenuOptions id="5" active={isclickedAccessibility} Icon={KeyIcon} text="accessibility, display, and languages"/>  </div>
-      {/* mini menu of choosen setting  */}
-      
-        </div>    
     );
 
 }

@@ -8,6 +8,7 @@
   cursor: pointer;
   padding-top: 1em;
   padding-bottom: 1em;
+  padding-left: 1.5em;
   color: rgb(48, 48, 49);
 }
 .settingsMenuOptionsDark {
@@ -20,6 +21,7 @@
   cursor: pointer;
   padding-top: 1em;
   padding-bottom: 1em;
+  padding-left: 1.5em;
   color: rgb(255, 255, 255);
 }
 .settingsMenuOptionsLight:hover {
