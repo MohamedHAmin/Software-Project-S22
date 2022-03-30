@@ -74,7 +74,7 @@ router.post("/tweet",auth('any'),async (req, res) => {
     //here all exception caught sends their respective
     //error according to failed test
  
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.toString() });
    
   }
 });
@@ -97,13 +97,13 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
   } catch (e) {
     //here all caught errors are sent to the client
     if (e == "Tweet Id not sent or is null") {
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.toString() });
     } else if (e == "tweet not found") {
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.toString() });
     } else {
       //here for testing purposes if an unhandled error routerears
       console.error(e);
-      res.status(400).send(e);
+      res.status(400).send({ error: e.toString() });
     }
   }
 });
@@ -127,7 +127,7 @@ router.delete("/tweet/:id",auth("any"),async (req, res) => {
       res.status(404)
     }
     else{res.status(400)}
-    res.send(""+e)
+    res.send({error:e.toString()})
   }
 });
 

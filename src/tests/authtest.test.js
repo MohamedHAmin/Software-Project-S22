@@ -8,17 +8,33 @@ const app = require('../app')
   })
 test('Check User Login with wrong password', async ()=>{
      await User.create({
-        screenName:"user6",
+    screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
     tag:"tag6"
-    })
-    const res=await request(app).post('/user/login')
-    .send({
-        email:"user70@gmail.com",
-        password:"shirogani174"
-    })
-    .expect(400)
+})
+const res=await request(app).post('/user/login')
+.send({
+    email_or_username:"user70@gmail.com",
+    password:"12jhfd36"
+})
+.expect(400)
+expect(res.text).toMatch("unable to login")
+})
+test('Check User Login with wrong email or username', async ()=>{
+     await User.create({
+    screenName:"user6",
+    email:"user70@gmail.com",
+    password:"123456",
+    tag:"tag6"
+})
+const res=await request(app).post('/user/login')
+.send({
+    email_or_username:"user7@gmail.com",
+    password:"123456"
+})
+.expect(400)
+expect(res.text).toMatch("unable to login")
 })
 test('Check User Login with email', async ()=>{
      await User.create({
@@ -37,7 +53,7 @@ test('Check User Login with email', async ()=>{
 
 test('Check User Login with username', async ()=>{
      await User.create({
-        screenName:"user6",
+    screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
     tag:"tag6"
@@ -52,7 +68,7 @@ test('Check User Login with username', async ()=>{
 
 test('Check User Logout from one device ', async ()=>{
     const user1 = await User.create({
-        screenName:"user6",
+    screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
     tag:"tag6"
@@ -60,14 +76,14 @@ test('Check User Logout from one device ', async ()=>{
     const authtoken = await user1.generateAuthToken()
     
     const res=await request(app).delete('/user/logout')
-    .set('Authorization','Bearer '+ authtoken)
+    .set('Authorization','Bearer '+ authtoken.token)
     .send({})
     .expect(200)
 })
 
 test('Check User Logout from All devices ', async ()=>{
     const user1 = await User.create({
-        screenName:"user6",
+    screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
     tag:"tag6"
@@ -75,9 +91,9 @@ test('Check User Logout from All devices ', async ()=>{
 
     const destroytoken = await user1.generateAuthToken()
     const res=await request(app).delete('/user/logoutall')
-    .set('Authorization','Bearer '+ destroytoken)
+    .set('Authorization','Bearer '+ destroytoken.token)
     .send({
-        userId: destroytoken.userId
+        ownerId: destroytoken.ownerId
     })
     .expect(200)
 })

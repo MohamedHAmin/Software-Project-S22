@@ -29,7 +29,7 @@ const auth =(role)=>{
             next()
         }catch(e){
             console.log(e)
-            res.status(400).send({error: 'please authenticate.'})
+            res.status(401).send({error: 'Please Authenticate'})
 
         }
     }

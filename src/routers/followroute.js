@@ -2,33 +2,8 @@ const express = require("express");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 const router = new express.Router();
-  /////////////~~~~~~~~~~~~~~~~login~~~~~~~~~`////
-  router.post("/login", async (req, res) => {
-    try {
-      const user = await User.findbycredentials(
-        req.body.email,
-        req.body.password
-      );
-      const token = await user.generateAuthToken();
-      res.send({ user, token });
-    } catch (e) {
-      res.status(400).send("error");
-    }
-  });
-  /////~~~~~~~~~~~~~~logout~~~~~~~~~~~~~~////
-  router.post("/logout", auth, async (req, res) => {
-    try {
-      req.user.tokens = req.user.tokens.filter((token) => {
-        return token.token != req.token;
-      });
-      await req.user.save();
-      res.send("user");
-    } catch (e) {
-      res.status(400).send("error");
-    }
-  });
-  ////~~~~~~~~~~~~~~~follow~~~~~~~~~~~~~~/////
-  router.post("/follow/:id",auth, async (req, res) => {
+    //~~~~~~~~~~~~~~~follow~~~~~~~~~~~~~~//
+  router.post("/follow/:id",auth('user'), async (req, res) => {
     const user=await User.findById(req.params.id)
     try {
       user.followercount++
@@ -41,11 +16,11 @@ const router = new express.Router();
       const n=req.user
       res.send({ user,n});
     } catch (e) {
-      res.status(400).send("error"+e);
+      res.status(400).send({error:e.toString()});
     }
   });
-  ///////////***unfollow */
-  router.post("/unfollow/:id", auth, async (req, res) => {
+    //~~~~~~~~~~~~~~~unfollow~~~~~~~~~~~~~~//
+  router.post("/unfollow/:id", auth('user'), async (req, res) => {
     const user=await User.findById(req.params.id)
     try {
   
@@ -56,12 +31,12 @@ const router = new express.Router();
       await req.user.save();
       res.send("user");
     } catch (e) {
-      res.status(400).send("error");
+      res.status(400).send({error:e.toString()});
     }
   });
   
   
-  router.get("/following/:id",auth, async (req, res) => {
+  router.get("/following/:id",auth('user'), async (req, res) => {
     const user=await User.findById(req.params.id)
   
     try {
@@ -81,10 +56,10 @@ const router = new express.Router();
        
       res.send(user);
     } catch (e) {
-      res.status(400).send("error"+e);
+      res.status(400).send({error:e.toString()});
     }
   });
-  router.get("/follower/:id",auth, async (req, res) => {
+  router.get("/follower/:id",auth('user'), async (req, res) => {
     const user=await User.findOne({ _id:req.params.id})
     try {
       await user.populate( {
@@ -95,7 +70,7 @@ const router = new express.Router();
       
       res.send({ user});
     } catch (e) {
-      res.status(400).send("error"+e);
+      res.status(400).send({error:e.toString()});
     }
   });
   
