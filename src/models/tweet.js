@@ -9,7 +9,6 @@ const tweetSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref:'Tweet',
     default:null
-
   },
   authorId:{
       type: mongoose.Schema.Types.ObjectId,
@@ -53,9 +52,7 @@ const tweetSchema = new mongoose.Schema({
         like:{
           type: mongoose.Schema.Types.ObjectId,
           required:true,
-          ref:'User',
-          unique:true
-          
+          ref:'User'
         }
   },
   {
