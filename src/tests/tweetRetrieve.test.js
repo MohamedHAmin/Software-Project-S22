@@ -1,69 +1,44 @@
 const request = require("supertest");
 const Tweet = require("../models/tweet");
 const User = require("../models/User");
-const app = require("../unittest");
-
+const app = require("../app");
+let user;
+let usertoken;
 beforeEach(async () => {
-  await User.create({
-    _id: {
-        $oid: "6243029293c3005534908f6c"
-    },
-    screenName: "Youssef Hany",
-    tag: "YoussefHany",
-    password: "123456",
-    email: "yousseftron@gmail.com",
-  });
+    await Tweet.deleteMany();
+    await User.deleteMany();
+    user=await User.create({
+        screenName: "Youssef Hany",
+        tag: "YoussefHany",
+        password: "123456",
+        email: "yousseftron@gmail.com",
+    });
+    usertoken=await user.generateAuthToken()
 });
 
-afterEach(async () => {
-  await Tweet.deleteMany();
-  await User.deleteMany();
-});
-
-test('check Retreiving tweet',()=>{
-    await Tweet.create({_id:{"$oid":"6243066df28e1b6ae1298632"},replyed:false,replieduser:null,userId:{"$oid":"6243029293c3005534908f6c"},Text:"I am Abdelkhalek",tags:[{tag:"AhmedTarek",_id:{$oid:"6243066df28e1b6ae1298633"}},{tag:"Nouredlin",_id:{$oid:"6243066df28e1b6ae1298634"}}],likes:[{like:{$oid:"624302b293c3005534908f6d"},_id:{$oid:"6243066df28e1b6ae1298635"}},{like:{$oid:"624302d693c3005534908f6e"},_id:{$oid:"6243066df28e1b6ae1298636"}}],retweet:[],createdAt:{$date:"2022-03-29T13:15:25.407Z"},updatedAt:{$date:"2022-03-29T13:15:25.407Z"},__v:0})
-    const res = await request(app).get('/tweet/6243066df28e1b6ae1298632').expect(200)
-
-    expect(res.body).toEqual({
-        "_id": "6243066df28e1b6ae1298632",
-        "replyed": false,
-        "replieduser": null,
-        "userId": "6243029293c3005534908f6c",
-        "Text": "I am Abdelkhalek",
-        "tags": [
-            {
-                "tag": "AhmedTarek",
-                "_id": "6243066df28e1b6ae1298633"
-            },
-            {
-                "tag": "Nouredlin",
-                "_id": "6243066df28e1b6ae1298634"
-            }
-        ],
-        "likes": [
-            {
-                "like": "624302b293c3005534908f6d",
-                "_id": "6243066df28e1b6ae1298635"
-            },
-            {
-                "like": "624302d693c3005534908f6e",
-                "_id": "6243066df28e1b6ae1298636"
-            }
-        ],
-        "retweet": [],
-        "createdAt": "2022-03-29T13:15:25.407Z",
-        "updatedAt": "2022-03-29T13:15:25.407Z",
-        "__v": 0,
-        "id": "6243066df28e1b6ae1298632"
+test('check Retreiving tweet',async ()=>{
+    const newtweet=await Tweet.create({
+        "authorId":user._id,
+        "text":"I am Abdelkhalek"
     })
+    const res = await request(app).get('/tweet/'+newtweet._id)
+    .set('Authorization','Bearer '+usertoken.token)
+    .expect(200)
+
+    expect(res.body.authorId).toEqual(user._id.toString())
+    expect(res.body.text).toEqual("I am Abdelkhalek")
 });
 
 test('Refuse if sent id parameter is not there', async ()=>{
-    const res = await request(app).get('/tweet/').expect(400)
-    expect(res.body).toEqual({error:"Tweet Id not sent or is null"});
+    const res = await request(app).get('/tweet/')
+    .set('Authorization','Bearer '+usertoken.token)
+    .expect(404)
+    //expect(res.body).toEqual({error:"Tweet Id not sent or is null"});
 });
 
 test('Tweet not found', async ()=>{
-    const res = await request(app).get('/tweet/6243066df28e1b6ae1298655').expect(400)
+    const res = await request(app).get('/tweet/6243066df28e1b6ae1298655')
+    .set('Authorization','Bearer '+usertoken.token)
+    .expect(400)
     expect(res.body).toEqual({error:"tweet not found"});
 });

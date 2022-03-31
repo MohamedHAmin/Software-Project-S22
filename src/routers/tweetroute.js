@@ -102,7 +102,6 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
       res.status(400).send({ error: e.toString() });
     } else {
       //here for testing purposes if an unhandled error routerears
-      console.error(e);
       res.status(400).send({ error: e.toString() });
     }
   }

@@ -162,8 +162,6 @@ userSchema.methods.generateAuthToken=async function(){
       'token':token,
       'ownerId':user._id
     })
-    //user.tokens.concat({token})
-    //await user.save()
     return tokenObj
 }
 
