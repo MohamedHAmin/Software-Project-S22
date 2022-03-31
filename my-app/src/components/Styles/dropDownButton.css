@@ -1,0 +1,21 @@
+.input-group{
+    padding-left: 20px;
+    padding-bottom: 4px;
+    padding-right: 90%;
+    border: none;
+    width: 10px;
+    box-shadow: 0px 1px 0 0 rgba(0, 0, 0, 0.1);
+}
+.btn{
+    border: none;
+    outline: none;
+    outline:0px !important;
+    box-shadow: none !important;
+    color: rgb(43, 61, 188);
+}
+.dropdown-toggle::after {
+    content: none;
+}
+.btn:hover{
+    color: rgb(43, 61, 188);
+}

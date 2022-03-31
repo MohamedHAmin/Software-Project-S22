@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+.postConatiner {
+  min-width: 50%;
+}
 .App {
   font-family: "Montserrat", "Verdana", "Times New Roman";
   --larry-color: #2b3dbc;

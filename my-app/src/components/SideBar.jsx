@@ -10,7 +10,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import LarryIcon from '../Images/Logo Default.png';
-import {Button} from '@mui/material'
+import {Button} from '@mui/material';
 
 
 
