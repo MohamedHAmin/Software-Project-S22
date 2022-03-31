@@ -12,8 +12,6 @@ beforeEach(async ()=>{
         email:"cool23o4@gmail.com",
         password:"awesomeadmin"
     });
-    console.log(admin)
-    //await admin.save();
     token = await admin.generateAdminToken();
 })
 test('Check Admin Creation', async ()=>{
@@ -37,16 +35,11 @@ test('Check Admin Creation', async ()=>{
     .expect(401)
 })
 test('Check Email Duplication', async ()=>{
-    await Admin.create({
-        adminName:"coolAdmin23",
-        email:"cool23@gmail.com",
-        password:"awesomeadmin"
-    })
     const res=await request(app).post('/admin/create')
     .set('Authorization','Bearer '+token.token)
     .send({
         adminName:"SuperAdmin14",
-        email:"cool23@gmail.com",
+        email:"cool23o4@gmail.com",
         password:"superadmin"
     })
     .expect(400)

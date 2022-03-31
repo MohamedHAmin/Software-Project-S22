@@ -1,6 +1,6 @@
 const jwt=require('jsonwebtoken')
 const User=require('../models/User')
-const Admin=require('../models/Admin')
+const Admin=require('../models/Admin.js')
 
 
 const auth =(role)=>{
@@ -28,7 +28,6 @@ const auth =(role)=>{
             req.user=user
             next()
         }catch(e){
-            console.log(e)
             res.status(401).send({error: 'Please Authenticate'})
 
         }

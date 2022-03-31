@@ -9,7 +9,6 @@
 
   },
   "jest": {
-    "globalTeardown": "./config/test-teardown-globals.js",
     "testEnvironment": "node"
   },
   "keywords": [],
