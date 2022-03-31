@@ -8,7 +8,6 @@
     "test": "env-cmd -f ./config/test.env jest --detectOpenHandles --coverage"
   },
   "jest": {
-    "globalTeardown": "./config/test-teardown-globals.js",
     "testEnvironment": "node"
   },
   "keywords": [],
