@@ -15,7 +15,6 @@ test('Check User Creation (Signup)', async ()=>{
     })
     .expect(201)
     expect(res.body.user.screenName).toEqual("oz")
-    expect(res.body.user.email).toEqual("oz123@gmail.com")
     expect(res.body.user.tag).toEqual("@oz174")
 })
 test('Check Email Duplication', async ()=>{

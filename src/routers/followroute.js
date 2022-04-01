@@ -1,74 +1,117 @@
 const express = require("express");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
-const router = new express.Router();
-    //~~~~~~~~~~~~~~~follow~~~~~~~~~~~~~~//
-  router.post("/follow/:id",auth('user'), async (req, res) => {
-    const user=await User.findById(req.params.id)
+const router = new express.Router()
+
+//*follow rout
+  router.post("/user/:userId/follow/:id",auth("user"), async (req, res) => {
+  
     try {
-      user.followercount++
-      await user.save()
-    
+      //you can not follow your self
+      if(req.params.id.toString()===req.user._id)
+      {
+        throw new Error("you can not follow your self ")
+      }
+      //find user
+      const user=await User.findById(req.params.id)
+      //if no user
+      if(!user){
+        throw new Error("no user found")
+      }
+      //*check if you already follow the user
+      const isfollow=await User.findOne({_id:req.user._id},{following:{followingId:user._id}})
+
+      if(isfollow.following.length>0)
+      {
+        throw new Error("no user found") 
+      }
+      //*add to user following 
       req.user.following=req.user.following.concat({followingId:user._id})
       req.user.followedcount++
       await req.user.save()
-  
-      const n=req.user
-      res.send({ user,n});
+      user.followercount++
+      await user.save()
+      res.send(req.user.following);
     } catch (e) {
+
       res.status(400).send({error:e.toString()});
     }
   });
-    //~~~~~~~~~~~~~~~unfollow~~~~~~~~~~~~~~//
-  router.post("/unfollow/:id", auth('user'), async (req, res) => {
-    const user=await User.findById(req.params.id)
+  //*unfollow ROUT
+  router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
+   
+   
     try {
-  
+      const user=await User.findById(req.params.id)
+      //if no user
+        if(!user){
+          throw new Error("no user found")
+        }
+        const lengthBefore=req.user.following.length
+       
       req.user.following = req.user.following.filter((follow) => {
-        return follow.followingID != req.userID;
+        return follow.followingId == user._id;
       });
-      
-      await req.user.save();
-      res.send("user");
+     
+      const lengthAfter=req.user.following.length
+ 
+      //*if you already unfollow user
+      if(lengthAfter===lengthBefore){
+        throw new Error("you already unfollow that user")
+      }
+
+       req.user.followedcount= req.user.followedcount-1
+      await req.user.save()
+      user.followercount=user.followercount-1
+      await user.save()
+      res.send({sccuss:true});
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
   });
   
-  
-  router.get("/following/:id",auth('user'), async (req, res) => {
-    const user=await User.findById(req.params.id)
-  
+  router.get("/user/:id/following",auth("user"), async (req, res) => {
+
     try {
+      
+     const user=await User.findById(req.params.id)
+     //*populate follower data
       await user.populate({
         path: "following.followingId",
+        select: '_id screenName tag followercount followingcount'
       });
-      console.log(user.following[0].followingId);
-      user.following.map(follow=>{
-        console.log('1');
-         follow.followingId.password=''
-        console.log( follow.followingId.password)
-  
-      })
-      // if(user.following.userId.password){
-      //    user.following.userId.password=''
-      //    user.following.userId.tokens=''}
-       
-      res.send(user);
+     
+      res.send(user.following);
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
   });
-  router.get("/follower/:id",auth('user'), async (req, res) => {
-    const user=await User.findOne({ _id:req.params.id})
+
+  router.get("/user/:id/follower",auth("user"), async (req, res) => {
+
+    
     try {
+      const user=await User.findOne({ _id:req.params.id})
       await user.populate( {
         path: "follower",
+        select: '_id screenName tag followercount followingcount',
+        options:{
+          limit: parseInt(req.query.limit),
+          skip: parseInt(req.query.skip),
+        }
       });
-      
-      console.log(user);
-      
-      res.send({ user});
+
+      const follower=user.follower.map(follow=>{
+        const isfollowed=user.following.some(followed=>followed.followingId.toString()==follow._id.toString())
+        if(isfollowed){
+          follow={...follow._doc,isfollowing:true}
+         return follow
+        }else{
+          follow={...follow._doc,isfollowing:false}
+          return follow
+        }
+      })
+      res.send(follower);
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
@@ -76,5 +119,5 @@ const router = new express.Router();
   
   
   
-  module.exports = router
+  module.exports = router 
   

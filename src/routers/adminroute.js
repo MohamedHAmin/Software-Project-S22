@@ -11,7 +11,7 @@ router.post("/create",auth("admin"),async (req, res) => {
     const admin = new Admin(req.body);
     try {
       await admin.save();
-      const token = await admin.generateAdminToken();
+      const token = await admin.generateAuthToken();
   
       res.status(201).send({ admin,token}).end();
     } catch (e) {
@@ -25,10 +25,11 @@ router.delete("/report/:id",auth("admin"),async (req, res) => {
     res.status(200).json({newreport}).end()
 
   } catch (e) {
-    console.log(e)
     res.status(400).send({error:e.toString()});
   }
 });
+
+// TODO: IN NEXT PHASES
 // router.post("/ban/:id",auth("admin"),async (req, res) => {
 //   try {
 //     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})

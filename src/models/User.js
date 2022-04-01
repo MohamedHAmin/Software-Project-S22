@@ -3,7 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken');
 const Token = require("./Token");
-
+const Admin = require("./Admin")
 
 const userSchema = new mongoose.Schema({
   screenName: {
@@ -59,9 +59,8 @@ const userSchema = new mongoose.Schema({
   following:[{       ////who i follow //???
     followingId:{
       type: mongoose.Schema.Types.ObjectId,
-      // required:true,
       ref:'User'
-    }
+    },
    },  
    {timestamps:true,
    toJSON: {virtuals: true},
@@ -118,10 +117,18 @@ userSchema.virtual('follower',{
 })
 
 userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
-  var user=await User.findOne({email: emailorUsername}) 
+  let admin=await Admin.findOne({ email: emailorUsername })
+  if(admin){
+    const ismatch=await bcrypt.compare(password,admin.password)
+      if(ismatch){
+        return admin
+      }
+ 
+  }
+  let user=await User.findOne({ $or: [ {email: emailorUsername}, {tag: emailorUsername} ] })
+  // LET USER=AWAIT USER.FINDONE({EMAIL: EMAILORUSERNAME}) 
   if(!user){
-    user=await User.findOne({tag: emailorUsername})
-    if(!user)
+    // user=await User.findOne({tag: emailorUsername})
       throw new Error('unable to login')
   }
   const ismatch=await bcrypt.compare(password,user.password)
@@ -137,6 +144,12 @@ userSchema.methods.toJSON=function(){
   const userobject=user.toObject()
   delete userobject.password
   delete userobject.tokens
+  delete userobject.Notificationssetting
+  delete userobject.googleId
+  delete userobject.following
+  delete userobject.facebookId
+  delete userobject.ban
+  delete userobject.email
 
   return userobject
 
@@ -162,8 +175,6 @@ userSchema.methods.generateAuthToken=async function(){
       'token':token,
       'ownerId':user._id
     })
-    //user.tokens.concat({token})
-    //await user.save()
     return tokenObj
 }
 
@@ -172,6 +183,7 @@ userSchema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+  
   next()
 });
 

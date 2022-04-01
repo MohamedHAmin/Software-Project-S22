@@ -81,10 +81,7 @@ router.post("/tweet",auth('any'),async (req, res) => {
 
 router.get("/tweet/:id", auth('any') ,async (req, res) => {
   try {
-    if (req.params.id===null) {
-      e = "Tweet Id not sent or is null";
-      throw e;
-    }
+
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
     // TODO: add populate to tweet to send user ID and screenName to the tweet
@@ -96,20 +93,16 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
     res.json(tweet);
   } catch (e) {
     //here all caught errors are sent to the client
-    if (e == "Tweet Id not sent or is null") {
-      res.status(400).send({ error: e.toString() });
-    } else if (e == "tweet not found") {
-      res.status(400).send({ error: e.toString() });
-    } else {
+   
       //here for testing purposes if an unhandled error routerears
-      console.error(e);
       res.status(400).send({ error: e.toString() });
-    }
+    
   }
 });
 
 router.delete("/tweet/:id",auth("any"),async (req, res) => {
   try {
+
     const targettweet=await Tweet.findById(req.params.id)
     if(!targettweet){throw new Error("Not Found")}
     const B=targettweet.authorId.equals(req.user._id)

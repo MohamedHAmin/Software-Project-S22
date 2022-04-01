@@ -1,5 +1,6 @@
 const request = require('supertest')
 const User = require('../models/User')
+const Admin = require('../models/Admin')
 const Token = require('../models/Token')
 const app = require('../app')
   beforeEach(async ()=>{
@@ -96,4 +97,17 @@ test('Check User Logout from All devices ', async ()=>{
         ownerId: destroytoken.ownerId
     })
     .expect(200)
+})
+test('Check Admin Login ', async ()=>{
+    await Admin.create({
+        adminName:"coolAdmin24o",
+        email:"cool23o4@gmail.com",
+        password:"123456"
+})
+const res=await request(app).post('/user/login')
+.send({
+   email_or_username:"cool23o4@gmail.com",
+   password:"123456"
+})
+.expect(200)
 })

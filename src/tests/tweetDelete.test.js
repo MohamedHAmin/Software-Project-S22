@@ -16,7 +16,7 @@ test('Check Admin Delete Authority', async ()=>{
         email:"cool23@gmail.com",
         password:"awesomeadmin"
     })
-    const admintoken=await admin.generateAdminToken()
+    const admintoken=await admin.generateAuthToken()
     const user1=await User.create({
         "screenName":"user1",
         "tag":"user1",
@@ -69,7 +69,7 @@ test('Check Wrong ID', async ()=>{
         email:"cool23@gmail.com",
         password:"awesomeadmin"
     })
-    const admintoken=await admin.generateAdminToken()
+    const admintoken=await admin.generateAuthToken()
     const res=await request(app).delete('/tweet/23')
     .set('Authorization','Bearer '+admintoken.token)
     .send({})
