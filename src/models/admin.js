@@ -45,7 +45,6 @@ adminSchema.methods.generateAuthToken=async function(){
   })
   return tokenObj
 }
-
 adminSchema.pre("save", async function (next) {
   const admin = this;
   if (admin.isModified("password")) {

@@ -6,6 +6,7 @@ const app = require('../app')
   beforeEach(async ()=>{
       await User.deleteMany()
       await Token.deleteMany()
+      await Admin.deleteMany()
   })
 test('Check User Login with wrong password', async ()=>{
      await User.create({
