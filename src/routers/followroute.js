@@ -78,10 +78,24 @@ const router = new express.Router()
      //*populate follower data
       await user.populate({
         path: "following.followingId",
-        select: '_id screenName tag followercount followingcount'
+        select: '_id screenName tag followercount followingcount',
+        options:{
+          limit: parseInt(req.query.limit),
+          skip: parseInt(req.query.skip),
+        }
       });
-     
-      res.send(user.following);
+
+      const following=user.following.map(follow=>{
+        const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==follow.followingId._id.toString())
+        if(isfollowed){
+          follow={...follow._doc,isfollowing:true}
+         return follow
+        }else{
+          follow={...follow._doc,isfollowing:false}
+          return follow
+        }
+      })
+      res.send(following);
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
