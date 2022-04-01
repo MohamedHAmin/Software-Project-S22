@@ -1,0 +1,9 @@
+.Explorepage
+{
+    display: flex;
+    flex-direction: row;
+}
+.bar
+{
+    margin-right: 2%;
+}

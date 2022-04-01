@@ -16,7 +16,7 @@
   height: 100vh;
   flex-direction: row;
 }
-.leftbar
+/*.leftbar
 {
   margin-left: 5%;
   margin-right: 5%;
@@ -48,7 +48,7 @@
 {
     border-color: #6d71ff;
 }*/
-.searchbar
+/*.searchbar
 {
   position: relative;
   top: 15px;
@@ -86,4 +86,4 @@ ul
   {
     min-width: 350px;
   }
-}
+}*/
