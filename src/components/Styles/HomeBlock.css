@@ -20,6 +20,8 @@
     word-wrap: normal;
     width: 100%;
     flex-direction: column;
+    resize: none;
+    border: none;
 }
 .homeIcon
 {

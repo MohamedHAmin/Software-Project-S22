@@ -3,6 +3,11 @@
     float: right;
     width: 20px;
 }
+.userInfo
+{
+    margin-right: 100%;
+    display: flex;
+}
 .tweet
 {
     border-width: 2px;
@@ -71,4 +76,12 @@
 .tweet:hover
 {
     border-color: rgba(109, 113, 255, 1);
+}
+.deleteIcon
+{
+    float: right;
+}
+.deleteIcon:hover
+{
+    color: red;
 }
