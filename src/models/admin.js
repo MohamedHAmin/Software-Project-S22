@@ -36,7 +36,6 @@ const adminSchema = new mongoose.Schema({
         
  });
  
- 
  adminSchema.methods.generateAuthToken=async function(){
   const admin = this;
   const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET)
@@ -46,7 +45,6 @@ const adminSchema = new mongoose.Schema({
   })
   return tokenObj
 }
-
 adminSchema.pre("save", async function (next) {
   const admin = this;
   if (admin.isModified("password")) {
