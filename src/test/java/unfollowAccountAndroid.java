@@ -45,6 +45,7 @@ public class unfollowAccountAndroid {
         WebElement next = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(nextXpath)));
         next.click();
         // Check if the username filed is found or not.
+        Thread.sleep(3000);
         WebElement textCompare = driver.findElement(new By.ById(compareTextId));
         String printedText = textCompare.getText();
         if(printedText.equalsIgnoreCase(expected)){
@@ -115,7 +116,7 @@ public class unfollowAccountAndroid {
         Thread.sleep(5000);
         MobileElement elementToClick;
         elementToClick = (MobileElement) driver.findElement(new MobileBy.ByAndroidUIAutomator("new UiScrollable(new UiSelector()"
-                + ".resourceId(\"com.android.settings:id/name_item\")).scrollIntoView("
+                + ".resourceId(\"com.android.settings:id/name_item\")).scrollIntoView ("
                 + "new UiSelector().text(\"engy\"));"));
         if(elementToClick.isDisplayed()){
             System.out.println(testPass);
@@ -132,6 +133,9 @@ public class unfollowAccountAndroid {
         TouchAction touchAction = new TouchAction(driver);
         // Wait for 2 seconds till the home page appear.
         Thread.sleep(2000);
+        touchAction.tap(PointOption.point(88, 143)).perform();
+        Thread.sleep(2000);
+        touchAction.tap(PointOption.point(88, 143)).perform();
         // Find the navigation drawer then click on it.
         WebElement profileIcon = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new MobileBy.ByAccessibilityId(navigationDrawerAccId)));
         profileIcon.click();
