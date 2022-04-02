@@ -43,6 +43,7 @@ public class notificationIconToNotificationPageAndroid {
         // Find the "Next" button and click on it.
         WebElement next = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(nextXpath)));
         next.click();
+        Thread.sleep(3000);
         // Check if the username filed is found or not.
         WebElement textCompare = driver.findElement(new By.ById(compareTextId));
         String printedText = textCompare.getText();
