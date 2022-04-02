@@ -16,7 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static variables.selectors.*;
-import static variables.selectors.testFailed;
 
 public class logoutCancelAndroid {
     AppiumDriver driver;
@@ -36,15 +35,18 @@ public class logoutCancelAndroid {
 
         // Wait 5 seconds till the app open.
         Thread.sleep(5000);
-        // Here we will click on "login" which is defined by x and y coordinates as it is hybrid link not button.
         TouchAction touchAction = new TouchAction(driver);
+        // Here we will click on "login" which is defined by x and y coordinates as it is hybrid link not button.
         touchAction.tap(PointOption.point(632, 1982)).perform();
+//        touchAction.tap(PointOption.point(632, 1875)).perform();
+        Thread.sleep(5000);
         // Find the emil field and enter the valid email.
         WebElement emailField = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(emailFieldId)));
         emailField.sendKeys(Email);
         // Find the "Next" button and click on it.
         WebElement next = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(nextXpath)));
         next.click();
+        Thread.sleep(5000);
         // Check if the username filed is found or not.
         WebElement textCompare = driver.findElement(new By.ById(compareTextId));
         String printedText = textCompare.getText();
@@ -92,8 +94,8 @@ public class logoutCancelAndroid {
         profileIcon.click();
         // Wait for 2 seconds till the side menu appear.
         Thread.sleep(2000);
-        // Finding settings option by x and y coordinates.
         TouchAction touchAction = new TouchAction(driver);
+        // Finding settings option by x and y coordinates.
         touchAction.tap(PointOption.point(224, 1849)).perform();
         // Find "Your account" then click on it.
         WebElement yourAccount = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(yourAccountXpath)));
@@ -108,20 +110,30 @@ public class logoutCancelAndroid {
         Thread.sleep(2000);
         // Finding cancel by x and y coordinates.
         touchAction.tap(PointOption.point(622, 1206)).perform();
-        // Check if you logged out successfully.
-        // Find welcome text to check that you are in log in page.
-        WebElement check = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(compareTextId)));
+
+        Thread.sleep(7000);
+        // Check.
+        WebElement check = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(accountInfoTextXpath)));
         String actualText = check.getText();
         // If the text match the expected one this mean test done.
-        if(actualText.equalsIgnoreCase(expectedLogoutText)) {
+        if(actualText.equalsIgnoreCase(expectedAccountText)) {
             System.out.println(testPass); }
         else { System.out.println(testFailed); }
+
     }
 
     // After the test in done.
     // Close the app.
     @AfterTest
-    public void tearDown() {
+    public void tearDown() throws InterruptedException {
+        // Find "log out" then click on it.
+        WebElement logoutButton = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(logoutButtonXpath)));
+        logoutButton.click();
+        // Wait for 2 seconds till log out tab appear.
+        Thread.sleep(2000);
+        TouchAction touchAction = new TouchAction(driver);
+        // Finding "log out" by x and y coordinates
+        touchAction.tap(PointOption.point(859, 1216)).perform();
         if (null != driver) {
             driver.quit();
         }
