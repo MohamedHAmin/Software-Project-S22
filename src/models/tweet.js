@@ -12,6 +12,7 @@ const tweetSchema = new mongoose.Schema({
   },
   authorId:{
       type: mongoose.Schema.Types.ObjectId,
+      ref:'User'
   },  
   text:{
       type:String,
@@ -63,7 +64,8 @@ const tweetSchema = new mongoose.Schema({
 },
 {
   timestamps:true,
-  toJSON: {virtuals: true}
+  toJSON: {virtuals: true},
+  toObject: { virtuals: true },
   
 });
 

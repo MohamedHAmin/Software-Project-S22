@@ -68,7 +68,7 @@ router.post("/tweet",auth('any'),async (req, res) => {
     }
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
-    await Tweet.create(req.body);
+    await Tweet.create({...req.body,authorId:req.user._id});
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
   } catch (e) {
     //here all exception caught sends their respective
@@ -90,7 +90,11 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
       e = "tweet not found";
       throw e;
     }
-    res.json(tweet);
+    await tweet.populate({
+      path: "authorId",
+      select: '_id screenName tag followercount followingcount'
+    });
+    res.send(tweet);
   } catch (e) {
     //here all caught errors are sent to the client
    

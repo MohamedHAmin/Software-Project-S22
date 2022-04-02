@@ -15,7 +15,7 @@ beforeEach(async () => {
     });
     usertoken=await user.generateAuthToken()
 });
-
+//
 test('check Retreiving tweet',async ()=>{
     const newtweet=await Tweet.create({
         "authorId":user._id,
@@ -25,7 +25,7 @@ test('check Retreiving tweet',async ()=>{
     .set('Authorization','Bearer '+usertoken.token)
     .expect(200)
 
-    expect(res.body.authorId).toEqual(user._id.toString())
+    expect(res.body.authorId._id).toEqual(user._id.toString())
     expect(res.body.text).toEqual("I am Abdelkhalek")
 });
 
