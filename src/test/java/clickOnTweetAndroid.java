@@ -101,12 +101,13 @@ public class clickOnTweetAndroid {
                 + ".resourceId(\"com.android.settings:id/content\")).scrollIntoView("
                 + "new UiSelector().text(\"Google\"));"));
         elementToClick.click();
+        Thread.sleep(5000);
         // click on tweet.
         WebElement viewTweet = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(viewTweetId)));
         viewTweet.click();
         Thread.sleep(20000);
         // check that it redirects you to the tweet page.
-        WebElement check = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(tweetTextXpath)));
+        WebElement check = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(tweetTextXpath)));
         String actualText = check.getText();
         // If the text match the expected one this mean test done.
         if(actualText.equalsIgnoreCase(expectedTweetText)) {
@@ -123,8 +124,13 @@ public class clickOnTweetAndroid {
         // First logout
         TouchAction touchAction = new TouchAction(driver);
         touchAction.tap(PointOption.point(88, 143)).perform();
-        WebElement back = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new MobileBy.ByAccessibilityId(navigateUpId)));
-        back.click();
+        Thread.sleep(3000);
+        touchAction.tap(PointOption.point(88, 143)).perform();
+        Thread.sleep(3000);
+        touchAction.tap(PointOption.point(88, 143)).perform();
+//        WebElement back = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(navigateUpId)));
+//        back.click();
+//        touchAction.tap(PointOption.point(84, 139)).perform();
         Thread.sleep(2000);
         // Find the navigation drawer then click on it.
         WebElement profileIcon = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new MobileBy.ByAccessibilityId(navigationDrawerAccId)));
