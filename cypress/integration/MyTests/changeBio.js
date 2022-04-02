@@ -1,3 +1,4 @@
+//
 /// <reference types="cypress-xpath" />
 
 import selectors from "../../support/selectors"
