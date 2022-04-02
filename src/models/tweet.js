@@ -12,7 +12,8 @@ const tweetSchema = new mongoose.Schema({
   },
   authorId:{
       type: mongoose.Schema.Types.ObjectId,
-      ref:'User'
+      ref:'User',
+      required: true,
   },  
   text:{
       type:String,
@@ -26,14 +27,12 @@ const tweetSchema = new mongoose.Schema({
   },
   tags:[{
     tag:{
-      
         type: String,
         required:true
       }
   }],
   gallery:[{
     photo:{
-      
         type: String,
       }
   }],

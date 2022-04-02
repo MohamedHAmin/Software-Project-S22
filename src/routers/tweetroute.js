@@ -8,7 +8,7 @@ const Tweet = require("../models/Tweet");
 
 
 
-router.post("/tweet",auth('any'),async (req, res) => {
+router.post("/tweet",auth('user'),async (req, res) => {
   //Creates a new tweet with the json data that the user sends
   // through req.body
 
