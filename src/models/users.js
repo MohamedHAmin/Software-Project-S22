@@ -25,7 +25,7 @@ const userschema = new mongoose.Schema({
   },
   BD: {
     type: Date,
-    default: "1-1-1990",
+    default: "1990-01-01",
   },
   isAdmin:{
     type:Boolean,
@@ -149,7 +149,7 @@ userschema.methods.generateAuthToken=async function(){
     const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
     const accesstoken = new Token({token:token,userId:user._id})
     await accesstoken.save()
-    return token
+    return accesstoken
 
 }
 

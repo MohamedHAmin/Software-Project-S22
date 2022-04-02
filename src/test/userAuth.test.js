@@ -15,7 +15,7 @@ test('Check User Login with wrong password', async ()=>{
     })
     const res=await request(app).post('/login')
     .send({
-        email:"oz123@gmail.com",
+        email_or_username:"oz123@gmail.com",
         password:"shirogani174"
     })
     .expect(400)
