@@ -122,6 +122,7 @@ const router = new express.Router()
         if(!user.follower.length<1){
       user.follower=user.follower.map(follow=>{
         const isfollowed=user.following.some(followed=>followed.followingId.toString()==follow._id.toString())
+        delete follow._doc.following
         if(isfollowed){
           follow={...follow._doc,isfollowing:true}
          return follow
