@@ -8,7 +8,7 @@ const router = new express.Router()
   
     try {
       //you can not follow your self
-      if(req.params.id.toString()===req.user._id)
+      if(req.params.id.toString()==req.user._id.toString())
       {
         throw new Error("you can not follow your self ")
       }
@@ -19,15 +19,15 @@ const router = new express.Router()
         throw new Error("no user found")
       }
       //*check if you already follow the user
-      const isfollow=await User.findOne({_id:req.user._id},{following:{followingId:user._id}})
+    
+        const isfollowed=req.user.following.some(followed=>followed.followingId.toString()===req.params.id)
+        if(isfollowed){
+          throw new Error("you already follow the user") 
 
-      if(isfollow.following.length>0)
-      {
-        throw new Error("no user found") 
-      }
+        }
       //*add to user following 
       req.user.following=req.user.following.concat({followingId:user._id})
-      req.user.followedcount++
+      req.user.followingcount++
       await req.user.save()
       user.followercount++
       await user.save()
@@ -50,17 +50,15 @@ const router = new express.Router()
         const lengthBefore=req.user.following.length
        
       req.user.following = req.user.following.filter((follow) => {
-        return follow.followingId == user._id;
+        return follow.followingId !=req.params.id;
       });
-     
       const lengthAfter=req.user.following.length
  
       //*if you already unfollow user
       if(lengthAfter===lengthBefore){
         throw new Error("you already unfollow that user")
       }
-
-       req.user.followedcount= req.user.followedcount-1
+       req.user.followingcount= req.user.followingcount-1
       await req.user.save()
       user.followercount=user.followercount-1
       await user.save()
@@ -85,16 +83,20 @@ const router = new express.Router()
         }
       });
         //to check if you follow the user or not
-        
+
+
+        user.following=user.following.filter((follow)=> {
+          return follow.followingId!=null})
         if(!user.following.length<1){
-       user.following=user.following.map(follow=>{
-        const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==follow.followingId._id.toString())
+          user.following=user.following.map(follow=>{
+ 
+        isfollowed=req.user.following.some(followed=>followed.followingId.toString()==follow.followingId._id.toString())
         if(isfollowed){
-          follow={...follow._doc,isfollowing:true}
-         return follow
+          const foll={...follow._doc,isfollowing:true}
+         return foll
         }else{
-          follow={...follow._doc,isfollowing:false}
-          return follow
+          const foll={...follow._doc,isfollowing:false}
+          return foll
         }
       })}
       res.send(user.following);
@@ -118,8 +120,6 @@ const router = new express.Router()
       });
         //to check if you follow the user or not
         if(!user.follower.length<1){
-           
-        
       user.follower=user.follower.map(follow=>{
         const isfollowed=user.following.some(followed=>followed.followingId.toString()==follow._id.toString())
         if(isfollowed){
