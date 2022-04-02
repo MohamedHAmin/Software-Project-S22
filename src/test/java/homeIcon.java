@@ -44,6 +44,7 @@ public class homeIcon {
         // Find the "Next" button and click on it.
         WebElement next = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(nextXpath)));
         next.click();
+        Thread.sleep(5000);
         // Check if the username filed is found or not.
         WebElement textCompare = driver.findElement(new By.ById(compareTextId));
         String printedText = textCompare.getText();
@@ -58,7 +59,7 @@ public class homeIcon {
             Thread.sleep(1000);
             loginButton.click();
         }
-        // If username field not found.
+        // If username field found.
         else {
             Thread.sleep(2000);
             // Find the username filed.
@@ -106,7 +107,7 @@ public class homeIcon {
         }
 
         touchAction.tap(PointOption.point(752, 1998)).perform();
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         // Find the notification text.
         WebElement notificationText = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath(notificationTextXpath)));
         String actual = notificationText.getText();
