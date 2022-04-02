@@ -132,13 +132,17 @@ public class followAccountAndroid  {
     @AfterTest
     public void tearDown() throws InterruptedException {
         // First log out
-        WebElement backToProfile = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new MobileBy.ByAccessibilityId(navigateUpId)));
-        backToProfile.click();
-        WebElement back = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new MobileBy.ByAccessibilityId(navigateUpId)));
-        back.click();
+        Thread.sleep(2000);
+//        WebElement backToProfile = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(navigateUpId)));
+//        backToProfile.click();
+        TouchAction touchAction = new TouchAction(driver);
+        touchAction.tap(PointOption.point(88, 143)).perform();
+        Thread.sleep(2000);
+        touchAction.tap(PointOption.point(88, 143)).perform();
+//        WebElement back = (new WebDriverWait(driver,60)).until(ExpectedConditions.presenceOfElementLocated(new By.ById(navigateUpId)));
+//        back.click();
         Thread.sleep(2000);
         // Finding back icon button by x and y coordinates.
-        TouchAction touchAction = new TouchAction(driver);
 //        touchAction.tap(PointOption.point(125, 136)).perform();
         // Wait for 2 seconds till the home page appear.
         Thread.sleep(2000);
