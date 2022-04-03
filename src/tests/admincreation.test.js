@@ -3,7 +3,7 @@ const Admin = require('../models/Admin')
 const Token = require('../models/Token')
 const app = require('../app')
 var token;
-var admin;
+var admin;//
 beforeEach(async ()=>{
     await Admin.deleteMany()
     await Token.deleteMany()

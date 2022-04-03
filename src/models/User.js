@@ -123,7 +123,6 @@ userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
       if(ismatch){
         return admin
       }
- 
   }
   let user=await User.findOne({ $or: [ {email: emailorUsername}, {tag: emailorUsername} ] })
   // LET USER=AWAIT USER.FINDONE({EMAIL: EMAILORUSERNAME}) 
@@ -154,7 +153,7 @@ userSchema.methods.toJSON=function(){
   return userobject
 
 }
-
+// TODO
 // userSchema.methods.isBanned=async function(){
 //   const user = this
 //   let now=new Date()

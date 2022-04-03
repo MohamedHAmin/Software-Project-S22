@@ -96,7 +96,6 @@ test('check follower',async ()=>{
     const res=await request(app).get('/user/'+user2._id.toString()+'/follower/')
     .set('Authorization','Bearer '+user2token.token)
     .expect(200)
-    
    
     expect(res.body[0].screenName).toEqual(user1.screenName)
     expect(res.body[0].isfollowing).toEqual(false)
