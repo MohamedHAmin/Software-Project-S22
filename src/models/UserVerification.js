@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const { format } = require("express/lib/response");
 const userverificationschema = new mongoose.Schema({
   userId: String,
   uniqueString: String,
