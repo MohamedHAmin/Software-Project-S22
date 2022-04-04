@@ -1,7 +1,4 @@
 node_modules
 config
-<<<<<<< HEAD
 coverage
-=======
-coverage
->>>>>>> BE
+.env

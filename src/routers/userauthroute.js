@@ -1,9 +1,29 @@
 const express = require("express")
 const auth = require("../middleware/auth")
 const User = require("../models/User")
+const UserVerificatoin = require("../models/UserVerification")
 const Token = require("../models/Token")
 const router = new express.Router()
-const methodOverride = require('method-override')
+const bcrypt = require("bcryptjs"); //generating unique strings 
+const nodemailer = require("nodemailer")
+const {v4: uuidv4 } = require("uuid")
+require('env-cmd')
+//nodemailer setup [less secure option on ]
+let transporter = nodemailer.createTransport({
+  service:"gmail",
+  auth:{
+    user: process.env.AUTH_EMAIL,
+    pass: process.env.AUTH_PASS,
+  }
+})
+transporter.verify((error,success)=>{
+  if(error){
+    console.log(error);
+  }else {
+    console.log("Ready for messages ");
+    console.log(success);
+  }
+})
             //~~~~~~~~~~~~Signup~~~~~~~~~~~//
 router.post("/signup",async (req, res) => {
   
