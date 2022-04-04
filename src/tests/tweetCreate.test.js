@@ -1,5 +1,5 @@
 const request=require('supertest');
-const Tweet=require('../models/tweet');
+const Tweet=require('../models/Tweet');
 const User=require('../models/User');
 const app=require('../app');
 let user;

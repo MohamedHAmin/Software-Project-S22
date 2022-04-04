@@ -19,17 +19,17 @@ router.post("/create",auth("admin"),async (req, res) => {
     }
   });
           //~~~~~~Report~~~~~~~~
-router.delete("/report/:id",auth("admin"),async (req, res) => {
-  try {
-    const newreport=await Report.findByIdAndDelete(req.params.id)
-    res.status(200).json({newreport}).end()
-
-  } catch (e) {
-    res.status(400).send({error:e.toString()});
-  }
-});
 
 // TODO: IN NEXT PHASES
+// router.delete("/report/:id",auth("admin"),async (req, res) => {
+//   try {
+//     const newreport=await Report.findByIdAndDelete(req.params.id)
+//     res.status(200).json({newreport}).end()
+
+//   } catch (e) {
+//     res.status(400).send({error:e.toString()});
+//   }
+// });
 // router.post("/ban/:id",auth("admin"),async (req, res) => {
 //   try {
 //     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})

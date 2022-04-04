@@ -6,12 +6,9 @@ const router = new express.Router();
 const filter = require("../ethics/bad_words");
 const Tweet = require("../models/Tweet");
 
-
-
-router.post("/tweet",auth('any'),async (req, res) => {
+router.post("/tweet",auth('user'),async (req, res) => {
   //Creates a new tweet with the json data that the user sends
   // through req.body
-
   try {
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
@@ -22,7 +19,6 @@ router.post("/tweet",auth('any'),async (req, res) => {
       e = "Empty Post";
       throw e;
     }
-
     if (text.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
