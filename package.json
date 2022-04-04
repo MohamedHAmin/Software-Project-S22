@@ -5,7 +5,11 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+<<<<<<< HEAD
     "test":"env-cmd -f ./config/test.env jest --detectOpenHandles --coverage"
+=======
+    "test": "env-cmd -f ./config/test.env jest --runInBand --coverage"
+>>>>>>> BE
   },
   "jest": {
     "testEnvironment": "node",
@@ -15,7 +19,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
+    "browserslist": "^4.20.2",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
@@ -30,6 +36,9 @@
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
+  },
+  "directories": {
+    "test": "tests"
   },
   "description": ""
 }
