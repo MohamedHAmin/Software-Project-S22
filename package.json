@@ -5,15 +5,11 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-<<<<<<< HEAD
-    "test":"env-cmd -f ./config/test.env jest --detectOpenHandles --coverage"
-=======
-    "test": "env-cmd -f ./config/test.env jest --runInBand --coverage"
->>>>>>> BE
+    "test": "env-cmd -f ./config/test.env jest --detectOpenHandles --coverage"
   },
   "jest": {
     "testEnvironment": "node",
-    "globalTeardown":"./config/test-teardown-globals.js"
+    "globalTeardown": "./config/test-teardown-globals.js"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +24,8 @@
     "method-override": "^3.0.0",
     "mongodb": "^4.3.1",
     "mongoose": "^6.2.0",
+    "nodemailer": "^6.7.3",
+    "uuid": "^8.3.2",
     "validator": "^13.7.0"
   },
   "devDependencies": {
