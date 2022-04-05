@@ -1,0 +1,70 @@
+.settingsMenu {
+  border-right: 1px solid var(--color-border);
+  min-width: 350px;
+  height: 100vh;
+  margin-top: 8px;
+}
+
+.settingsMenu h2 {
+  font-size: 17px;
+}
+
+.settingsSubMenu {
+  min-width: 350px;
+  margin-top: 8px;
+  height: 100vh;
+}
+
+.settingsSubMenu h2 {
+  font-size: 17px;
+}
+
+.settingsMenuHeaderLight {
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 10px;
+  margin-bottom: 7px;
+  margin-left: 14px;
+}
+.settingsMenuHeaderDark {
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 10px;
+  color: #ffffff;
+  margin-bottom: 7px;
+  margin-left: 14px;
+}
+
+.settingsMenuParagraphLight {
+  font-weight: 400;
+  font-size: 14px;
+  padding-left: 20px;
+  margin-bottom: 5px;
+}
+
+.settingsMenuParagraphDark {
+  font-weight: 400;
+  font-size: 14px;
+  padding-left: 20px;
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+
+.karim{
+  display: flex;
+  flex:0.8;
+  margin-right: 4%;
+}
+
+.App-link {
+  text-decoration: underline;
+  color: #61dafb;
+}
+
+.forceChangePasswordMUIDarkMode {
+  color: #ffffff !important;
+}
+
+.SettingsPage{
+  display:flex
+}

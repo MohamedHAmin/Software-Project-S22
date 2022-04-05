@@ -1,0 +1,43 @@
+.profileTopBanner {
+  margin-left: 20px;
+}
+
+.profileTopBanner > h2 {
+  font-weight: 550;
+  font-size: 19px;
+}
+
+.profileTopBanner > h6 {
+  margin-top: 2px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.calenderInfo > p {
+  margin-top: 4px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.calenderInfo {
+  display: flex;
+  margin-top: 6px;
+  margin-left: -3px;
+}
+
+.followInfo {
+  display: flex;
+}
+.followInfo > p {
+  margin-right: 20px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 450;
+}
+
+.calenderInfo > .MuiSvgIcon-root {
+  height: 20px !important;
+  width: 20px !important;
+  margin-right: 4px;
+  margin-top: 2px;
+}

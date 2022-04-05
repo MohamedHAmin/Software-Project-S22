@@ -1,0 +1,39 @@
+.profileName {
+  display: flex;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.profileName h2 {
+  font-size: 19px;
+  margin-bottom: 0;
+}
+
+.description {
+  margin-top: 15px;
+  font-weight: 550;
+  font-size: 12px;
+  
+}
+p {
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.profileName > .MuiSvgIcon-root {
+  height: 21px !important;
+  width: 30px !important;
+  margin-right: 30px;
+  margin-left: 13px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.profileName > .MuiSvgIcon-root:hover {
+  background-color: var(--color-hover);
+  border-radius: 40px;
+  color: white;
+  transition: color 100ms ease-out;
+  padding: auto;
+}
