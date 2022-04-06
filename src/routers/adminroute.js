@@ -21,33 +21,50 @@ router.post("/create",auth("admin"),async (req, res) => {
           //~~~~~~Report~~~~~~~~
 
 // TODO: IN NEXT PHASES
-// router.delete("/report/:id",auth("admin"),async (req, res) => {
-//   try {
-//     const newreport=await Report.findByIdAndDelete(req.params.id)
-//     res.status(200).json({newreport}).end()
+router.delete("/report/:id",auth("admin"),async (req, res) => {
+  try {
+    const newreport=await Report.findByIdAndDelete(req.params.id)
+    res.status(200).json({newreport}).end()
 
-//   } catch (e) {
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
-// router.post("/ban/:id",auth("admin"),async (req, res) => {
-//   try {
-//     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
-//     res.status(200).send({tempUser})
-//   } catch (e) {
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
-// router.get("/report",auth("admin"),async (req, res) => {
-//   try {
-//     const newreport=await Report.find().limit(req.query.perPage)
-//     res.status(200).json({newreport}).end()
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
+router.get("/report/:pageNum",auth("admin"),async (req, res) => {
+  try {
+    const perPage=parseInt(req.query.perPage);
+    const skip=(parseInt(req.params.pageNum)-1)*perPage;
+    let reports;
+    if(req.query.filter==="User")
+    {
+      reports=await Report.find({type:"User"})
+      .skip(skip).limit(perPage)
+      .sort({createdAt:-1})
+      .populate({path:'reportedId',model:User})
+    }
+    if(req.query.filter==="Tweet")
+    {
+      reports=await Report.find({type:"Tweet"})
+      .skip(skip).limit(perPage)
+      .sort({createdAt:-1})
+      .populate({path:'reportedId',model:Tweet})
+    }
+    if(reports.length===0){throw Error("No Reports Found")}
+    res.status(200).json({reports}).end()
 
-//   } catch (e) {
-//     console.log(e)
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
+  } catch (e) {
+    console.log(e)
+    res.status(400).send({error:e.toString()});
+  }
+});
+router.post("/ban/:id",auth("admin"),async (req, res) => {
+  try {
+    const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
+    res.status(200).send({tempUser})
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
 // router.get("/dashboard",auth("admin"),async (req, res) => {
 //   try {
 //     res.status(200).end("<h1>Placeholder<h1>")
