@@ -1,9 +1,11 @@
 .sidebar {
   border-right: 2px solid var(--color-border);
-  flex: 0.2;
+  flex: 0.18;
   margin-left: 4%;
 }
- a { text-decoration: none; }
+
+.sidebar a 
+{ text-decoration: none; }
 
 .sideBarLarryIcon {
   height: 55px;
@@ -27,7 +29,7 @@ ul {
   height: 7.5% !important;
   margin-top: 20px !important;
   width: 85% !important;
-  margin-bottom:47% !important;
+  margin-bottom:40% !important;
   
 }
 
@@ -44,7 +46,7 @@ ul {
   }
 
   .sideBarLarryIcon {
-    margin-left: auto;
+    margin-left: -4%;
   }
   li {
     margin-left: 35%;

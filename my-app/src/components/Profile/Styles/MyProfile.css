@@ -1,21 +1,23 @@
 .myProfile {
-  flex: 0.5;
+  flex: 0.52;
   border-right: 2px solid var(--color-border);
   position: relative;  
 }
 
 .profileSetup {
   display: flex;
+  margin-top: -67.5px;
 }
 
 .profileImage {
-  margin: 20px;
-  height: 120px !important;
-  width: 120px !important;
+  margin: 0px 0px 10px 20px;
+  height: 135px !important;
+  width: 135px !important;
+  border: 4px solid var(--color-background);
 }
 
 .profileImage:hover {
-  opacity: 0.7;
+  opacity: 90%;
   cursor: pointer;
 }
 
@@ -29,9 +31,87 @@
   border-radius: 40px !important;
   height: 30px !important;
   margin-top: 80px !important;
-  width: 140px !important;
+  width: 130px !important;
   position: absolute !important;
   right: 10px !important;
+}
+
+.editProfileContainer .saveProfileButton {
+  background-color: #7e1a7e !important;
+  border: none !important;
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 26px !important;
+  width: 70px !important;
+  position: relative !important;
+  left: 340px !important;
+  top: 2px;
+}
+
+.editProfileContainer {
+  position: fixed;
+  top:10%;
+  left: 25%;
+  text-transform: inherit !important;
+  border-radius: 20px !important;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  width: 600px;
+  border: 1px solid var(--color-border);
+  box-shadow: 10px !important;
+  background-color: #ffffff;
+}
+
+.editProfileCloseContainer {
+  position: fixed;
+  top:10%;
+  left: 25%;
+  text-transform: inherit !important;
+  border-radius: 20px !important;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  width: 600px;
+  border: 1px solid var(--color-border);
+  box-shadow: 10px !important;
+  background-color: #ffffff;
+  
+}
+
+.editProfileHeader {
+  display: flex;
+}
+
+.editProfileContainer h6 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.editProfileContainer .MuiSvgIcon-root {
+  position: relative;
+  margin-right: 15px;
+  width: 35px;
+  height: 23px;
+  top:1px;
+}
+
+.editProfileInputs {
+  padding: 20px;
+}
+
+.editProfileField {
+  margin-bottom: 25px !important;
+}
+
+.editProfileModal {
+  position: absolute;
+  width: 500px;
 }
 
 .FollowUnfollowButton {
@@ -53,15 +133,33 @@
   background-color: var(--color-hover) !important;
 }
 
-@media screen and (max-width: 703px) {
+.closeIcon {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 703px) {
   .myProfile {
     flex: 0.9;
     border-right: none;
   }
+  .profileImage {
+    height: 100px !important;
+    width: 100px !important;
+  }
+  .profileSetup {
+    margin-top: -50px;
+  }
 }
 
-@media screen and (min-width: 704px) and (max-width: 1030px) {
+@media only screen and (min-width: 704px) and (max-width: 1030px) {
   .myProfile {
     flex: 0.65;
+  }
+  .profileImage {
+    height: 120px !important;
+    width: 120px !important;
+  }
+  .profileSetup {
+    margin-top: -60px;
   }
 }

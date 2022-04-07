@@ -1,14 +1,22 @@
 * {
   margin:0;
 }
+
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .AppLight {
   font-family: "Montserrat", "Verdana", "Times New Roman";
   --larry-color: #2b3dbc;
   --color-border: #2b3cbc13;
   --color-background: #ffffff;
   --color-hover: #6d71ff;
-  --color-mode: #000;
+  --color-mode: rgb(0, 0, 0);
   background-color: var(--color-background);
+  
 }
 .AppDark {
   --color-background: #192030;

@@ -3,7 +3,7 @@
     display: flex;
 }
 .postConatiner {
-    flex:0.5;
+    flex:0.56;
     min-width: 350px;
   }
 @media screen and (max-width: 720px) {

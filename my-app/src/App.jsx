@@ -29,14 +29,14 @@ function App() {
 {/* Routing from Sidebar to all possible options */}
       <div className={DarkMode===false? "AppLight":"AppDark"}>
         <BrowserRouter>
-          <div className='App'>
+          
             <Routes>
               <Route path="/Home" element={<Homepage />} ></Route>
               <Route path="/Settings" element={<SettingsPage isDark={DarkMode} onDarkModeChange={onDisplayDarkModeChange}/>} ></Route>
               <Route path="/Profile" element={<ProfilePage />} ></Route>
               <Route path="/Logout" element={<Login />} ></Route>
             </Routes>
-          </div>
+          
         </BrowserRouter> 
       </div>  
     </div>  

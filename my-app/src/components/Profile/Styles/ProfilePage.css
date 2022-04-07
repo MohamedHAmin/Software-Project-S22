@@ -9,13 +9,13 @@
 }
 
 @media screen and (max-width: 1000px) {
-  .App {
+  .ProfilePage {
     margin-left: 2%;
   }
 }
 
 @media screen and (max-width: 703px) {
-  .App {
+  .ProfilePage {
     margin-right: 0;
   }
 }
