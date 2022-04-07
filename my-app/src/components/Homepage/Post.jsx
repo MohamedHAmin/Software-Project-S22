@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import Logo from "../../Images/Logo Title Page.png"
 import Delete from '@mui/icons-material/DeleteOutlined';
 import "./Styles/Post.css";
+import Button from "./dropDownButton"
 
 function Post(props) {
   const [isdeletedtweet,setdeletedtweet]=useState(false);
@@ -22,11 +23,12 @@ function deletepost(){
     },[props.post])
   return (
     <React.Fragment>
-
+ 
     <div className="tweet" >
         {/* <button onClick={deletepost}>karimm</button> */}
-        <img className="logo" src={Logo}/>
-        <div className="deleteIcon">{isAdmin==true && React.createElement(Delete)}</div>
+        {/* <img className="logo" src={Logo}/> */}
+        {/* <div className="deleteIcon">{isAdmin==true && React.createElement(Delete)}</div> */}
+        <div className="deleteIcon" ><a href='/Report'><Button /></a></div>
         <div className="userInfo">
             <Avatar className="profilePic"/>
             <div className="profileInfo">

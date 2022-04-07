@@ -8,6 +8,7 @@ import './components/Homepage/Styles/Homepage.css';
 import ProfilePage from './components/Profile/ProfilePage';
 import SettingsPage from'./components/settings/SettingsPage';
 import Report from './components/Homepage/Report';
+import ReportAction from './components/Homepage/ReportAction';
 function App() {
   // dark mode var and its functions used to identify the state od display :Light or Dark
   const [DarkMode,setDarkMode]=useState(false);
@@ -36,7 +37,9 @@ function App() {
               <Route path="/Settings" element={<SettingsPage isDark={DarkMode} onDarkModeChange={onDisplayDarkModeChange}/>} ></Route>
               <Route path="/Profile" element={<ProfilePage />} ></Route>
               <Route path="/Logout" element={<Login />} ></Route>
-              {/* <Route path="/Home" element={<Report />} ></Route>               */}
+              <Route path="/Report" element={<Report />} ></Route>      
+              <Route path="/ReportAction" element={<ReportAction />} ></Route>              
+
             </Routes>
           </div>
         </BrowserRouter> 

@@ -26,14 +26,6 @@ function Homepage(){
   return (
     <div className="Homepage">
       <SideBar Home/>
-      
-      {/* <a href='/Report'> <button>mohsen</button></a> */}
-      {/* <Report /> */}
-          {/* <BrowserRouter>
-          <Routes>
-          <Route path="/Report" element={<Report />} ></Route>
-          </Routes>
-          </BrowserRouter> */}
       <div className="postConatiner">
           <Header />
           <Tweet onChangeHandeler={onChangeHandeler} />
@@ -55,5 +47,12 @@ export default Homepage;
           <BrowserRouter>
           <Routes>
           <Route path="/Profile" element={<ProfilePage />} ></Route>
+          </Routes>
+          </BrowserRouter> */}
+
+          {/* <Report /> */}
+          {/* <BrowserRouter>
+          <Routes>
+          <Route path="/Report" element={<Report />} ></Route>
           </Routes>
           </BrowserRouter> */}

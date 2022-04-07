@@ -9,19 +9,19 @@ function Report() {
     return (
       <div className="Report" >
         <SideBar Home/>
-        <div className="Ali">
-        <div className="karim">
-        <ArrowBackIcon/>
+        <div className="subrebdiv">
+        <div className="subsubrepdiv">
+        <a  className="BackArrow" href="/Home"><ArrowBackIcon/></a>
         <h3 className="H3">Report an issue</h3>
         </div>
         <h3 className="H33">Help us understand the problem. What is going on with this Lar?</h3>
         <div className="pos">
-        <ButtonGroup  orientation="vertical" variant="text" aria-label="outlined primary button group" color="inherit">
-        <Button className="btngroupofrepp">i'm not intersted in this tweet</Button>
-        <Button className="btngroupofrep">it's suspicious or spam</Button>
-        <Button className="btngroupofrep">it displays a senstive photo or video</Button>
-        <Button className="btngroupofrep">it's abusive or harmful</Button>
-        <Button className="btngroupofreppp">it expresses intentions of self-harm or sucide</Button>
+        <ButtonGroup className="hehe"  orientation="vertical" variant="text" aria-label="outlined primary button group" color="inherit">
+        <Button className="btngroupofrepp"><a className="Repbtnanchor" href="/ReportAction">i'm not intersted in this Lar</a></Button>
+        <Button className="btngroupofrep"><a className="Repbtnanchor" href="/ReportAction">it's suspicious or spam</a></Button>
+       <Button className="btngroupofrep"> <a className="Repbtnanchor" href="/ReportAction">it displays a senstive photo or video</a></Button>
+       <Button className="btngroupofrep"> <a className="Repbtnanchor" href="/ReportAction">it's abusive or harmful</a></Button>
+        <Button className="btngroupofreppp"><a className="Repbtnanchor" href="/ReportAction">it expresses intentions of self-harm or sucide</a></Button>
         </ButtonGroup>
         </div>
         <p className="repanch"><a href="https://help.twitter.com/en/rules-and-policies/twitter-report-violation#specific-violations">Learn more</a> about reporting violations of our rules.</p>

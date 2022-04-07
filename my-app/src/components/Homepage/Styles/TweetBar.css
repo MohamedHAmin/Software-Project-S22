@@ -2,7 +2,10 @@
     height: 50px;
     margin-top: 10px;
     outline: none;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+    /* box-shadow: 0 0 0 1px rgb(0 0 0 / 10%); */
+    border: 2px solid var(--color-border);
+    border-left: 0;
+    border-right: 0;
     width:100% ;
     padding-right: 15px;
     justify-content: space-between;

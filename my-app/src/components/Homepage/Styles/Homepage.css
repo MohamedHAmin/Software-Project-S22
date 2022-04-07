@@ -1,13 +1,16 @@
 .Homepage
 {
     display: flex;
+      
 }
 .postConatiner {
     flex:0.5;
     min-width: 350px;
-    border-width: 1px;
+    border-width: 2px;
     border-style: solid;
-    border-color: lightgray;
+    border-color: var(--color-border);
+    border-left: 0px;
+    border-top: 0;
   }
 @media screen and (max-width: 720px) {
     .searchbar

@@ -2,11 +2,11 @@
     display:flex;
     
 }
-.Ali{
+.subrebdiv{
     flex: 0.8;
     flex-direction: column;
 }
-.karim{
+.subsubrepdiv{
     display: flex;
     flex-direction: row;
 }
@@ -50,13 +50,19 @@
     font-family: 'Roboto', sans-serif !important;
     text-transform: none!important;
 }
+/* a{
+    color: var(--color-hover);
+}
+a:hover{
+    color: var(--color-hover);
+} */
 .btngroupofrep{
     /* padding-top: 50px!important; */
     font-size: 30px !important;
     font-family: 'Roboto', sans-serif !important;
     text-transform: none!important;
 }
-.karim > .MuiSvgIcon-root {
+.BackArrow > .MuiSvgIcon-root {
     height: 21px !important;
     width: 30px !important;
     margin-right: 30px;
@@ -66,14 +72,16 @@
     cursor: pointer;
 }
   
-.karim > .MuiSvgIcon-root:hover {
+.BackArrow > .MuiSvgIcon-root:hover {
     background-color: var(--color-hover);
     border-radius: 40px;
     color: white;
     transition: color 100ms ease-out;
     padding: auto;
 }
-
+.hehe{
+    width: 67.5%!important;
+}
 .pos{
     /* border-top: 1px;
     border-bottom: 1px;
@@ -83,8 +91,11 @@
     padding-top: 55px;
     align-self: center;
 }
+.Repbtnanchor{
+    color: black!important;
+}
 .repanch{
-    padding-top: 60px;
+    padding-top: 80px!important;
 }
 @media (min-width: 707px) and (max-width: 1338px) {
     .H33{
