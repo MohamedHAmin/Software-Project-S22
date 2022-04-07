@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
   },
   birthDate: {
     type: Date,
-    default: 0,
   },
   isPrivate:{
     type:Boolean,
@@ -47,14 +46,25 @@ const userSchema = new mongoose.Schema({
     },
   },
   profileAvater: {
-    type: String,
+    url:{ type: String,
+    trim: true,
+    default:null},
+    cloudnaryId:{
+      type: String,
     trim: true,
     default:null
+    }
+   
   },
   banner:{
-    type: String,
-    trim: true,
-    default:null
+    url:{ type: String,
+      trim: true,
+      default:null},
+      cloudnaryId:{
+        type: String,
+      trim: true,
+      default:null
+      }
   },
   following:[{       ////who i follow //???
     followingId:{
@@ -104,7 +114,7 @@ const userSchema = new mongoose.Schema({
   
   
 });
- ////to connect with tweet he tweet
+ //to connect with tweet he tweet
 userSchema.virtual('Tweet',{
   ref:'Tweet',
   localField:'_id',
