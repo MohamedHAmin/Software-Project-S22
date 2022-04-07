@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.ProfilePage {
+  color: var(--color-mode);
+  margin-right: 4%;
+  display: flex;
+}
+
+@media screen and (max-width: 1000px) {
+  .App {
+    margin-left: 2%;
+  }
+}
+
+@media screen and (max-width: 703px) {
+  .App {
+    margin-right: 0;
+  }
+}
