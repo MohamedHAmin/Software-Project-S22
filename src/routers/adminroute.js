@@ -23,8 +23,9 @@ router.post("/create",auth("admin"),async (req, res) => {
 // TODO: IN NEXT PHASES
 router.delete("/report/:id",auth("admin"),async (req, res) => {
   try {
-    const newreport=await Report.findByIdAndDelete(req.params.id)
-    res.status(200).json({newreport}).end()
+    const deletedreport=await Report.findByIdAndDelete(req.params.id)
+    if(!deletedreport){throw Error("Not Found")}
+    res.status(200).json({deletedreport}).end()
 
   } catch (e) {
     res.status(400).send({error:e.toString()});
@@ -32,23 +33,22 @@ router.delete("/report/:id",auth("admin"),async (req, res) => {
 });
 router.get("/report/:pageNum",auth("admin"),async (req, res) => {
   try {
+    const filter = req.query.filter ?{type:req.query.filter} :{};
     const perPage=parseInt(req.query.perPage);
     const skip=(parseInt(req.params.pageNum)-1)*perPage;
-    let reports;
-    if(req.query.filter==="User")
-    {
-      reports=await Report.find({type:"User"})
-      .skip(skip).limit(perPage)
-      .sort({createdAt:-1})
-      .populate({path:'reportedId',model:User})
-    }
-    if(req.query.filter==="Tweet")
-    {
-      reports=await Report.find({type:"Tweet"})
-      .skip(skip).limit(perPage)
-      .sort({createdAt:-1})
-      .populate({path:'reportedId',model:Tweet})
-    }
+    let reports=await Report.find(filter)
+    .skip(skip).limit(perPage)
+    .sort({createdAt:-1});
+    reports= await Promise.all(reports.map(async(report)=>{
+      if(report.type==="User")
+      {
+        return await Report.populate(report,{path:'reportedId',model:User})
+      }
+      else if(report.type==="Tweet")
+      {
+        return await Report.populate(report,{path:'reportedId',model:Tweet})
+      }
+    }))
     if(reports.length===0){throw Error("No Reports Found")}
     res.status(200).json({reports}).end()
 
