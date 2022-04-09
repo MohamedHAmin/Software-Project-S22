@@ -3,10 +3,11 @@ import "./Styles/MyProfile.css";
 import ProfileName from "./ProfileName";
 import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
-import { Button, Typography, Modal, Box } from "@mui/material";
+import { Button, Typography, Modal } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import MyProfileTabs from "./MyProfileTabs";
+
 function MyProfile({
   name,
   tweets,
@@ -47,18 +48,14 @@ function MyProfile({
   }
 
   function closeBtn() {
-    <Modal
-      open={buttonclosePopup}
-      onClose={buttonclosePopup}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className="editProfileModal"
-    >
-      <Box className="editProfileCloseContainer">
-        <Typography>Hello</Typography>
-      </Box>
-    </Modal>;
-    setButtonPopup(false);
+    if (
+      Name === name &&
+      Bio === bio &&
+      Location === location &&
+      Website === website
+    )
+      setButtonPopup(false);
+    else setButtonClosePopup(true);
   }
 
   return (
@@ -88,6 +85,7 @@ function MyProfile({
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="editProfileModal"
+          keepMounted
         >
           <form
             className="editProfileContainer"
@@ -96,10 +94,7 @@ function MyProfile({
             onSubmit={saveBtn}
           >
             <div className="editProfileHeader">
-              <div className="closeIcon" onClick={closeBtn}>
-                <CloseIcon />
-              </div>
-
+              <CloseIcon className="closeIcon" onClick={closeBtn} />
               <Typography variant="h6" color="black">
                 Edit Profile
               </Typography>
@@ -117,7 +112,7 @@ function MyProfile({
                 className="editProfileField"
                 label="Name"
                 onChange={(e) => setName1(e.target.value)}
-                defaultValue={Name}
+                defaultValue={name}
                 required
                 fullWidth
                 inputProps={{ maxLength: 50 }}
@@ -127,7 +122,7 @@ function MyProfile({
                 className="editProfileField"
                 label="Bio"
                 onChange={(e) => setBio1(e.target.value)}
-                defaultValue={Bio}
+                defaultValue={bio}
                 fullWidth
                 multiline
                 rows={3}
@@ -137,7 +132,7 @@ function MyProfile({
                 className="editProfileField"
                 label="Location"
                 onChange={(e) => setLocation1(e.target.value)}
-                defaultValue={Location}
+                defaultValue={location}
                 fullWidth
                 inputProps={{ maxLength: 30 }}
               />
@@ -145,11 +140,54 @@ function MyProfile({
                 className="editProfileField"
                 label="Website"
                 onChange={(e) => setWebsite1(e.target.value)}
-                defaultValue={Website}
+                defaultValue={website}
                 fullWidth
                 inputProps={{ maxLength: 100 }}
               />
             </div>
+            <Modal
+              open={buttonclosePopup}
+              onClose={false}
+              className="closeEditProfileModal"
+            >
+              <form
+                className="editProfileCloseContainer"
+                noValidate
+                autoComplete="off"
+              >
+                <Typography
+                  variant="h6"
+                  color="black"
+                  fontSize={18}
+                  fontWeight={600}
+                >
+                  Discard Changes?
+                </Typography>
+                <Typography
+                  variant="p"
+                  color="black"
+                  fontSize={15}
+                  fontWeight={400}
+                >
+                  This can't be undone and you 'll lose your changes.
+                </Typography>
+                <Button
+                  className="profileDiscardContainerButton"
+                  onClick={() => {
+                    setButtonClosePopup(false);
+                    setButtonPopup(false);
+                  }}
+                >
+                  Discard
+                </Button>
+                <Button
+                  className="profileCloseContainerButton"
+                  onClick={() => setButtonClosePopup(false)}
+                >
+                  Cancel
+                </Button>
+              </form>
+            </Modal>
           </form>
         </Modal>
       </div>
