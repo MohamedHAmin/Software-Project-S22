@@ -33,8 +33,8 @@ router.delete("/report/:id",auth("admin"),async (req, res) => {
 });
 router.get("/report/:pageNum",auth("admin"),async (req, res) => {
   try {
-    const filter = req.query.filter ?{type:req.query.filter} :{};
-    const perPage=parseInt(req.query.perPage);
+    const filter = req.query.filter ? {type:req.query.filter} : {};
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
     const skip=(parseInt(req.params.pageNum)-1)*perPage;
     let reports=await Report.find(filter)
     .skip(skip).limit(perPage)
@@ -53,18 +53,17 @@ router.get("/report/:pageNum",auth("admin"),async (req, res) => {
     res.status(200).json({reports}).end()
 
   } catch (e) {
-    console.log(e)
     res.status(400).send({error:e.toString()});
   }
 });
-router.post("/ban/:id",auth("admin"),async (req, res) => {
-  try {
-    const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
-    res.status(200).send({tempUser})
-  } catch (e) {
-    res.status(400).send({error:e.toString()});
-  }
-});
+// router.post("/ban/:id",auth("admin"),async (req, res) => {
+//   try {
+//     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
+//     res.status(200).send({tempUser})
+//   } catch (e) {
+//     res.status(400).send({error:e.toString()});
+//   }
+// });
 // router.get("/dashboard",auth("admin"),async (req, res) => {
 //   try {
 //     res.status(200).end("<h1>Placeholder<h1>")
