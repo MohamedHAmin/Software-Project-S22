@@ -1,7 +1,7 @@
 const express = require("express")
 const auth = require("../middleware/auth")
 const User = require("../models/User")
-const UserVerificatoin = require("../models/UserVerification")
+const UserVerification = require("../models/UserVerification")
 const Token = require("../models/Token")
 const router = new express.Router()
 const bcrypt = require("bcryptjs"); //generating unique strings 
@@ -24,15 +24,93 @@ transporter.verify((error,success)=>{
     console.log(success);
   }
 })
+const sendVerificationEmail = async({_id,email},res)=>{
+  //url to be used in the email 
+  try{
+  const currenturl = "http://localhost:3000/"
+  const uniqueString = _id.toString() //mongo's genrated ID 
+
+  //hash the string 
+  
+    const newVerification = new UserVerification({
+      userId : _id,
+      uniqueString: uniqueString,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 21600000, //6 hrs in ms]
+    })  
+    const mailOptions = {
+      from : process.env.AUTH_EMAIL,
+      to: email,
+      subject : " Verify Your Email",
+      html: `<p> Verify the email address to complete the signup and login to your account. </p> 
+      <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "/" + uniqueString}> here </a> to proceed </p>`
+      
+    }
+    
+    newVerification
+    .save()
+    .then(()=>{
+      transporter.sendMail(mailOptions)
+    })
+  
+}catch(e){
+console.log(e);
+}
+
+}
+router.get("/verify/:userId/:uniqueString", async(req,res)=>{
+  try{
+    let {userId, uniqueString} = req.params
+    
+    const result=await UserVerification.find({userId})
+ 
+    
+      if(result.length > 0 ){
+
+        
+        const hasheduniqueString = result[0].uniqueString
+        console.log("🚀 ~ file: userauthroute.js ~ line 71 ~ router.get ~ hasheduniqueString", hasheduniqueString)
+    
+          const isMatch = await bcrypt.compare(uniqueString,hasheduniqueString)
+
+             console.log("🚀 ~ file: userauthroute.js ~ line 80 ~ router.get ~ hasheduniqueString", hasheduniqueString)
+            
+            if(isMatch){
+                          await User.updateOne({_id:userId},{verified:true})
+             
+               await UserVerification.deleteOne({userId})
+                
+              }
+              
+            
+            else{
+            
+              
+              console.log("Hashed String and Unique String mismatch");
+            }
+        }
+          res.send("Email sent , pending verification")
+  } catch (e){
+   res.send(e)
+  }
+  
+})
+
             //~~~~~~~~~~~~Signup~~~~~~~~~~~//
 router.post("/signup",async (req, res) => {
+    //new signup is to check if that email is found and if the verification is true , delete the user verification 
+    //if the verified att is false , delete both 
   
-   
     try {
+      await User.deleteOne({email:req.body.email},{verified:false})
+      await UserVerification.deleteOne({email:req.body.email})
       const user = new User(req.body);
-      await user.save();
-      const token = await user.generateAuthToken();
-      res.status(201).send({ user,token});
+      const result = await user.save()
+      if(result){
+        sendVerificationEmail(result,res)
+      }
+      //don't generate token unless verified [with login now]
+      res.status(201).send({ user});
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }
