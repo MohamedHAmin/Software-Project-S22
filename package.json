@@ -25,13 +25,10 @@
     "method-override": "^3.0.0",
     "mongodb": "^4.3.1",
     "mongoose": "^6.2.0",
-<<<<<<< HEAD
     "multer": "^1.4.4",
     "supertest": "^6.2.2",
-=======
     "nodemailer": "^6.7.3",
     "uuid": "^8.3.2",
->>>>>>> 69cf1f2c1cca14cb72fa57af2175c7f61306d4c9
     "validator": "^13.7.0"
   },
   "devDependencies": {
