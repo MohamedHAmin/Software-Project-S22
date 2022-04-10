@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type:Date,
     default:null
   },
+  verified:{
+    type: Boolean,
+    default:false
+  },
   email: {
     type: String,
     trim: true,
@@ -138,7 +142,10 @@ userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
   // LET USER=AWAIT USER.FINDONE({EMAIL: EMAILORUSERNAME}) 
   if(!user){
     // user=await User.findOne({tag: emailorUsername})
-      throw new Error('unable to login')
+      throw new Error('unable to login as user is not found')
+  }
+  if( !user.verified){
+    throw new Error('unable to login as user is not verified')
   }
   const ismatch=await bcrypt.compare(password,user.password)
   if(!ismatch){

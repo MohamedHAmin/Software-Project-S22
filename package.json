@@ -5,10 +5,11 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --runInBand --coverage"
+    "test": "env-cmd -f ./config/test.env jest --detectOpenHandles --coverage"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "globalTeardown": "./config/test-teardown-globals.js"
   },
   "keywords": [],
   "author": "",
@@ -24,14 +25,21 @@
     "method-override": "^3.0.0",
     "mongodb": "^4.3.1",
     "mongoose": "^6.2.0",
+<<<<<<< HEAD
     "multer": "^1.4.4",
     "supertest": "^6.2.2",
+=======
+    "nodemailer": "^6.7.3",
+    "uuid": "^8.3.2",
+>>>>>>> 69cf1f2c1cca14cb72fa57af2175c7f61306d4c9
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "env-cmd": "^10.1.0",
     "jest": "^27.5.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   },
   "directories": {
     "test": "tests"
