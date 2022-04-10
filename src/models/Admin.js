@@ -5,7 +5,6 @@ const jwt=require('jsonwebtoken');
 const Token = require("./Token");
 
 const adminSchema = new mongoose.Schema({
-
     adminName: {
         type: String,
         required: true,
@@ -36,7 +35,7 @@ const adminSchema = new mongoose.Schema({
         
  });
  
-adminSchema.methods.generateAdminToken=async function(){
+ adminSchema.methods.generateAuthToken=async function(){
   const admin = this;
   const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET)
   const tokenObj=await Token.create({

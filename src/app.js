@@ -16,7 +16,7 @@ app.use(express.json())
 app.use('/user',userAuthRouter)
 app.use(tweetRouter)
 app.use(followRouter)
-app.use(profileRouter)
+app.use('/profile',profileRouter)
 app.use('/admin',adminRouter)
 
 module.exports =app

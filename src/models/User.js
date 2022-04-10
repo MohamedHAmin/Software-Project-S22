@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
   },
   birthDate: {
     type: Date,
-    default: 0,
   },
   isPrivate:{
     type:Boolean,
@@ -34,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type:Date,
     default:null
   },
+  verified:{
+    type: Boolean,
+    default:false
+  },
   email: {
     type: String,
     trim: true,
@@ -47,14 +50,25 @@ const userSchema = new mongoose.Schema({
     },
   },
   profileAvater: {
-    type: String,
+    url:{ type: String,
+    trim: true,
+    default:null},
+    cloudnaryId:{
+      type: String,
     trim: true,
     default:null
+    }
+   
   },
   banner:{
-    type: String,
-    trim: true,
-    default:null
+    url:{ type: String,
+      trim: true,
+      default:null},
+      cloudnaryId:{
+        type: String,
+      trim: true,
+      default:null
+      }
   },
   following:[{       ////who i follow //???
     followingId:{
@@ -104,7 +118,7 @@ const userSchema = new mongoose.Schema({
   
   
 });
- ////to connect with tweet he tweet
+ //to connect with tweet he tweet
 userSchema.virtual('Tweet',{
   ref:'Tweet',
   localField:'_id',
@@ -123,13 +137,15 @@ userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
       if(ismatch){
         return admin
       }
- 
   }
   let user=await User.findOne({ $or: [ {email: emailorUsername}, {tag: emailorUsername} ] })
   // LET USER=AWAIT USER.FINDONE({EMAIL: EMAILORUSERNAME}) 
   if(!user){
     // user=await User.findOne({tag: emailorUsername})
-      throw new Error('unable to login')
+      throw new Error('unable to login as user is not found')
+  }
+  if( !user.verified){
+    throw new Error('unable to login as user is not verified')
   }
   const ismatch=await bcrypt.compare(password,user.password)
   if(!ismatch){
@@ -154,7 +170,7 @@ userSchema.methods.toJSON=function(){
   return userobject
 
 }
-
+// TODO
 // userSchema.methods.isBanned=async function(){
 //   const user = this
 //   let now=new Date()

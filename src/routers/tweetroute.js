@@ -6,12 +6,9 @@ const router = new express.Router();
 const filter = require("../ethics/bad_words");
 const Tweet = require("../models/Tweet");
 
-
-
-router.post("/tweet",auth('any'),async (req, res) => {
+router.post("/tweet",auth('user'),async (req, res) => {
   //Creates a new tweet with the json data that the user sends
   // through req.body
-
   try {
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
@@ -22,7 +19,6 @@ router.post("/tweet",auth('any'),async (req, res) => {
       e = "Empty Post";
       throw e;
     }
-
     if (text.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
@@ -68,7 +64,7 @@ router.post("/tweet",auth('any'),async (req, res) => {
     }
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
-    await Tweet.create(req.body);
+    await Tweet.create({...req.body,authorId:req.user._id});
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
   } catch (e) {
     //here all exception caught sends their respective
@@ -90,7 +86,11 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
       e = "tweet not found";
       throw e;
     }
-    res.json(tweet);
+    await tweet.populate({
+      path: "authorId",
+      select: '_id screenName tag followercount followingcount'
+    });
+    res.send(tweet);
   } catch (e) {
     //here all caught errors are sent to the client
    
