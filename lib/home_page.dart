@@ -5,6 +5,7 @@ import 'settings_page.dart';
 import 'create_post_page.dart';
 
 import 'profile_page.dart';
+import 'profile_page_2.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -54,7 +55,12 @@ class _HomePageState extends State<HomePage> {
                   backgroundImage: const AssetImage('assets/user_2.png'),
                 ),
                 TextButton(
-                    onPressed: null, //Action to be added later
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage2()));
+                    },
                     child: Row(children: [
                       Text('Username',
                           style: TextStyle(
@@ -87,7 +93,12 @@ class _HomePageState extends State<HomePage> {
                   backgroundImage: const AssetImage('assets/user_avatar.png'),
                 ),
                 TextButton(
-                    onPressed: null, //Action to be added later
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()));
+                    }, //Action to be added later
                     child: Row(children: [
                       Text('Username',
                           style: TextStyle(

@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:sign_up_page/sign_in_page.dart';
+import 'package:project_sw/sign_in_page.dart';
 
 void main() {
   group('Login', () {

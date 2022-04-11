@@ -10,8 +10,89 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+class _tweet extends StatefulWidget {
+  const _tweet({Key? key}) : super(key: key);
+
+  @override
+  State<_tweet> createState() => _tweetState();
+}
+
+class _tweetState extends State<_tweet> {
+  bool liked = false;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(children: <Widget>[
+          CircleAvatar(
+            backgroundImage: const AssetImage('assets/user_avatar.png'),
+          ),
+          TextButton(
+              onPressed: null, //Action to be added later
+              child: Row(children: [
+                Text('Username',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18))
+              ])),
+          Text('@user_handle',
+              style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff9e9e9e))),
+          Text(
+            ' 23m',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 8,
+                color: Color(0xff9e9e9e)),
+          )
+        ]),
+        Text(
+            'Tweet Content: this is only an example of the tweet text and will be updated later.'),
+        Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  liked = !liked;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                primary: Colors.white,
+                fixedSize: Size(15, 15),
+              ),
+              child: Stack(
+                children: [
+                  Icon(
+                    Icons.thumb_up,
+                    color: liked ? Colors.green : Colors.white,
+                    size: 20,
+                  ),
+                  Icon(
+                    Icons.thumb_up_outlined,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+            )),
+        SizedBox(
+          height: 15,
+        ),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 75),
+            child: Divider(
+              color: Color(0xff6d71ff),
+            )),
+      ],
+    );
+  }
+}
+
 class _ProfilePageState extends State<ProfilePage> {
-  bool followed = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,70 +139,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontWeight: FontWeight.bold,
                       color: Color(0xff9e9e9e))),
               SizedBox(
-                width: 25,
+                width: 40,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    followed = !followed;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    primary: followed ? Colors.red : Colors.green),
-                child: Icon(
-                  followed
-                      ? Icons.group_remove_outlined
-                      : Icons.group_add_outlined,
-                  color: Colors.white,
-                  size: 25.0,
-                ),
-              )
             ],
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Divider(
             color: Color(0xff6d71ff),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Container(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage:
-                          const AssetImage('assets/user_avatar.png'),
-                    ),
-                    TextButton(
-                        onPressed: null, //Action to be added later
-                        child: Row(children: [
-                          Text('Username',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18))
-                        ])),
-                    Text('@user_handle',
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff9e9e9e))),
-                    Text(
-                      ' 23m',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 8,
-                          color: Color(0xff9e9e9e)),
-                    )
-                  ]),
-                  Text(
-                      'Tweet Content: this is only an example of the tweet text and will be updated later.')
+                  _tweet(),
+                  _tweet(),
                 ]),
 
             // this container is for tweets
