@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import SettingsMenuOptions from './SettingsMenuOptions';
-import './Styles/SubMenu.css'
 import PaletteIcon from '@mui/icons-material/Palette';
 import "./Styles/SettingsMenu.css"
 import clsx from 'clsx';
 import { styled } from '@mui/system';
 import { useSwitch } from '@mui/base/SwitchUnstyled';
-
 
 //button of dark/light mode
 const blue = {
@@ -93,7 +91,7 @@ function DisplaySettings(props) {
      const [isClickedDarkMode,setDarkModeActive]=useState(false);
      function clickedDarkMode(){
         setDarkModeActive(!isClickedDarkMode);
-        props.onDarkModeChange(!isClickedDarkMode)  ;    
+        props.onDarkModeChanged(!isClickedDarkMode)  ;    
     }
     
     const { getInputProps, checked, disabled, focusVisible } = useSwitch(props);
@@ -106,14 +104,14 @@ function DisplaySettings(props) {
     
 
     return ( 
-        <div className="settingsMenu">
+        <div className="settingsSubMenu">
         {/* if nothing clicked */}
             {isClickedDisplay==false &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Accessibility, display and languages</h1>)}
-            {isClickedDisplay==false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage how Twitter content is displayed to you.</p>)}
-            {isClickedDisplay==false &&(<div onClick={clickedDisplay} ><SettingsMenuOptions id="9" darkMode={props.isDarkMode} active={isClickedDisplay} Icon={PaletteIcon} text="Display" subtext="Manage your font size, color, and background. These settings affect all the Twitter accounts on this browser."/></div>)}
+            {isClickedDisplay==false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage how Larry content is displayed to you.</p>)}
+            {isClickedDisplay==false &&(<div onClick={clickedDisplay} ><SettingsMenuOptions id="10" darkMode={props.isDarkMode} active={isClickedDisplay} Icon={PaletteIcon} text="Display" subtext="Manage your font size, color, and background. These settings affect all the Larry accounts on this browser." isSubtextExist={true} /></div>)}
         {/* if Display clicked */}  
             {isClickedDisplay==true &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Display</h1>)}
-            {isClickedDisplay==true &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" } >Manage your font size, color, and background. These settings affect all the Twitter accounts on this browser.</p>)}
+            {isClickedDisplay==true &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" } >Manage your font size, color, and background. These settings affect all the Larry accounts on this browser.</p>)}
             {isClickedDisplay==true &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" } style={{fontSize:20}}> Light mode/ Dark mode</h1>)}
              {isClickedDisplay==true &&(<div onClick={clickedDarkMode} >{/*<Button variant="contained">Contained</Button> */}
                 <SwitchRoot className={clsx(stateClasses)}>
@@ -123,10 +121,7 @@ function DisplaySettings(props) {
                 <SwitchInput {...getInputProps()} aria-label="Demo switch" />
                 </SwitchRoot>
             </div>)}
-        
-        
         </div>
-
      );
 }
 
