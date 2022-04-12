@@ -1,43 +1,76 @@
 .settingsMenu {
-  border-right: 1px solid #c9d3db;
-  border-left: 1px solid #c9d3db;
-  flex: 0.4;
+  border-right: 2px solid var(--color-border);
   min-width: 350px;
+  height: 100vh;
+  margin-top: 15px;
+  flex:0.5;
 }
-
+.settingsSubMenu {
+  /* flex:0.5; */
+  min-width: 350px;
+  margin-top: 15px;
+  height: 100vh;
+  border-right: 2px solid var(--color-border);
+}
+.noneClass{
+  display:none;
+}
 .settingsMenuHeaderLight {
   font-weight: 500;
   font-size: 22px;
   padding-left: 10px;
+  margin-bottom: 7px;
 }
 .settingsMenuHeaderDark {
   font-weight: 500;
   font-size: 22px;
   padding-left: 10px;
   color: #ffffff;
+  margin-bottom: 7px;
 }
 
 .settingsMenuParagraphLight {
-  font-weight: 200;
+  font-weight: 400;
   font-size: 14px;
   padding-left: 20px;
+  margin-bottom: 5px;
 }
 
 .settingsMenuParagraphDark {
-  font-weight: 200;
+  font-weight: 400;
   font-size: 14px;
   padding-left: 20px;
   color: #ffffff;
+  margin-bottom: 5px;
 }
 
-.karim {
+.karim{
   display: flex;
+  flex:0.8;
+  margin-right: 4%;
 }
 
 .App-link {
-  color: #61dafb;
+  color: var(--color-hover) ;
+}
+.App-link:hover {
+  text-decoration: underline;
+  color: var(--larry-color);
 }
 
 .forceChangePasswordMUIDarkMode {
   color: #ffffff !important;
+}
+
+.SettingsPage{
+  display:flex
+}
+
+
+.TextFieldStyling{
+  margin-top: 2em;
+  margin-bottom: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  display:flex;
 }
