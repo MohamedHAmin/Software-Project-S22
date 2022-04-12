@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import AccountSettings from './AccountSettings';
 import './Styles/SettingsMenu.css'
 import SettingsMenuOptions from './SettingsMenuOptions';
 import KeyIcon from '@mui/icons-material/Key';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
+import Homepage from '../Homepage/Homepage';
 function SettingsMenu(props){
 
     const [isclickedAcc,setAccActive]=useState(true);
@@ -97,38 +101,42 @@ function SettingsMenu(props){
     }
     return(
         <div className="settingsMenu">
-            <h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Settings</h1>
-            {/*,clickedSecurity,clickedPrivacy,clickedNotifications,clickedAccessibility settings menu{fontWeight:500, fontSize:22} */}
-            <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          
-        <div className='karim' style={{}}>
-          
-          <div> 
-            <div  onClick={clickedAccount}><SettingsMenuOptions id="1" darkMode={props.isDarkMode} active={isclickedAcc} Icon={KeyIcon}  text="Your account"/> </div> 
-            <div  onClick={clickedSecurity}><SettingsMenuOptions id="2" darkMode={props.isDarkMode} active={isclickedSecurity} Icon={KeyIcon} text="Security and account access"/> </div> 
-            <div  onClick={clickedPrivacy}><SettingsMenuOptions id="3" darkMode={props.isDarkMode} active={isclickedPrivacy} Icon={KeyIcon} text="Privacy and safety"/>  </div>
-            <div  onClick={clickedNotifications}><SettingsMenuOptions id="4" darkMode={props.isDarkMode} active={isclickedNotifications} Icon={KeyIcon} text="Notifications"/>  </div>
-            <div  onClick={clickedAccessibility}><SettingsMenuOptions id="5" darkMode={props.isDarkMode} active={isclickedAccessibility} Icon={KeyIcon} text="accessibility, display, and languages"/>  </div>
-          </div>
+              <h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Settings</h1>
+              <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+              </Search>
+              {/* Routing from Nav bar in login main screen*/}
+      
 
-          {/* <div style={{marginLeft:250}}>
-            {isclickedAcc==true&&(<AccountSettings darkMode={props.isDarkMode}/>)}
-          </div> */}
+              <div>
+                <div> 
+                {/* <NavLink to="/Settings/account"></NavLink> */}
+                <div  onClick={clickedAccount}><SettingsMenuOptions id="1" darkMode={props.isDarkMode} active={isclickedAcc} Icon={KeyIcon}  text="Your account"/> </div> 
+                <NavLink to="/Home"><div  ><SettingsMenuOptions id="2" darkMode={props.isDarkMode} active={isclickedSecurity} Icon={KeyIcon} text="Larry blue"/> </div> </NavLink>
+                  <div  onClick={clickedPrivacy}><SettingsMenuOptions id="3" darkMode={props.isDarkMode} active={isclickedPrivacy} Icon={KeyIcon} text="Privacy and safety"/>  </div>
+                  <div  onClick={clickedNotifications}><SettingsMenuOptions id="4" darkMode={props.isDarkMode} active={isclickedNotifications} Icon={KeyIcon} text="Notifications"/>  </div>
+                  <div  onClick={clickedAccessibility}><SettingsMenuOptions id="5" darkMode={props.isDarkMode} active={isclickedAccessibility} Icon={KeyIcon} text="accessibility, display, and languages"/>  </div>
+                </div>
+            </div>
+      <div>
+      
+        <div >
+          <Routes>
+            <Route path="/Home" element={<Homepage />} ></Route>
+            
+          </Routes>
         </div>
+      
+      </div>
         
-      </div> 
-     
-
-           
-    );
+      </div>      
+);
 
 }
 
