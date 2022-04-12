@@ -1,12 +1,26 @@
 const express = require("express");
 const auth = require("../middleware/auth");
+const bodyParser = require("body-parser");
+const multer = require("multer");
+const cloudinary = require("cloudinary");
+const fs = require("fs");
+
 const router = new express.Router();
 //! remember to require and install badwords
+router.use(bodyParser.json({ limit: "50mb" }));
+router.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 
 const filter = require("../ethics/bad_words");
 const Tweet = require("../models/Tweet");
+const { json } = require("express/lib/response");
 
-router.post("/tweet",auth('user'),async (req, res) => {
+router.post("/tweet", auth("user"), async (req, res) => {
   //Creates a new tweet with the json data that the user sends
   // through req.body
   try {
@@ -62,22 +76,34 @@ router.post("/tweet",auth('user'),async (req, res) => {
         }
       }
     }
+
+    // if(req.query.images==="true"){
+    //   let gallery=req.body.gallery;
+    //   let count=0;
+    //   for(picture of gallery)
+    //   {
+    //     if(picture.type=='png'){
+    //       fs.writeFile("trialPhoto"+count,picture.photo,base64,(err)=>{
+    //         console.log(error);
+    //       })
+    //     }
+    //   }
+    // }
+
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
-    await Tweet.create({...req.body,authorId:req.user._id});
+    await Tweet.create({ ...req.body, authorId: req.user._id });
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
   } catch (e) {
     //here all exception caught sends their respective
     //error according to failed test
- 
-      res.status(400).send({ error: e.toString() });
-   
+
+    res.status(400).send({ error: e.toString() });
   }
 });
 
-router.get("/tweet/:id", auth('any') ,async (req, res) => {
+router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
-
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
     // TODO: add populate to tweet to send user ID and screenName to the tweet
@@ -88,41 +114,104 @@ router.get("/tweet/:id", auth('any') ,async (req, res) => {
     }
     await tweet.populate({
       path: "authorId",
-      select: '_id screenName tag followercount followingcount'
+      select: "_id screenName tag followercount followingcount",
     });
     res.send(tweet);
   } catch (e) {
     //here all caught errors are sent to the client
-   
-      //here for testing purposes if an unhandled error routerears
-      res.status(400).send({ error: e.toString() });
-    
+
+    //here for testing purposes if an unhandled error routerears
+    res.status(400).send({ error: e.toString() });
   }
 });
 
-router.delete("/tweet/:id",auth("any"),async (req, res) => {
+router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
-
-    const targettweet=await Tweet.findById(req.params.id)
-    if(!targettweet){throw new Error("Not Found")}
-    const B=targettweet.authorId.equals(req.user._id)
-    if(req.admin||B)
-    {
-      const temp=await Tweet.findByIdAndDelete(req.params.id)
+    const targettweet = await Tweet.findById(req.params.id);
+    if (!targettweet) {
+      throw new Error("Not Found");
+    }
+    const B = targettweet.authorId.equals(req.user._id);
+    if (req.admin || B) {
+      const temp = await Tweet.findByIdAndDelete(req.params.id);
       res.status(200).end("Success");
+    } else {
+      throw new Error("Unauthorized");
     }
-    else{
-      throw new Error("Unauthorized")
+  } catch (e) {
+    if (e == "Error: Not Found") {
+      res.status(404);
+    } else {
+      res.status(400);
     }
-  }
-  catch (e) {
-    if(e=="Error: Not Found"){
-      res.status(404)
-    }
-    else{res.status(400)}
-    res.send({error:e.toString()})
+    res.send({ error: e.toString() });
   }
 });
 
+router.put("/tweet/:id/like", auth("user"), async (req, res) => {
+  try {
+    //likes or unlikes a tweet
+    let unliked = false;
+    let unlikedIndex;
+    //unliked determines if the put request is a like or an unlike(variable unliked)
+    //variable unlikedIndex determines which element is the like pending to be removed
+    const ReqTweet = await Tweet.findById(req.params.id);
+    if (!ReqTweet) {
+      //makes sure that tweet exists by making sure ReqTweet is not a null
+      e = "Error : Not Found";
+      throw e;
+    }
+    let likes = ReqTweet.likes;
+    for (let i = 0; i < ReqTweet.likeCount; i++) {
+      //searches if user liked this tweet before
+      // if true toggle unliked and get index of like of current user and break the loop
+      // if false continue loop and leave unliked as false and leave loop going till end of likes array
+      if (likes[i].like.equals(req.user._id)) {
+        unliked = true;
+        unlikedIndex = i;
+        break;
+      }
+    }
+    if (unliked === true) {
+      //if unliked is true there are 2 possiblities
+      if (ReqTweet.likeCount > 1) {
+        //if the like pending for removal is not the only one in the array
+        //use splice and decrease count and update the tweet in the database
+        ReqTweet.likes.splice(unlikedIndex, 1);
+        console.log(ReqTweet.likes.toString());
+        ReqTweet.likeCount = ReqTweet.likeCount - 1;
+        await ReqTweet.save();
+        res.status(201);
+        res.send(ReqTweet.likes);
+      } else if (ReqTweet.likeCount == 1) {
+        //if the like pending for removal is the only one in the array return the likes array as
+        //an empty array "[]" and make the count equal to zero and update tweet in the database
+        //? splice function doesn't work when it is required to remove the only element in an array
+        //? should i return the empty array as [] or is there something else to do?
+        ReqTweet.likes = [];
+        ReqTweet.likeCount = 0;
+        await ReqTweet.save();
+        res.status(201);
+        res.send(ReqTweet.likes);
+      }
+    } else if (unliked === false) {
+      //if the unliked is false then add a like attribute with the id of the user that
+      //liked the tweet into the likes array and update the tweet in the database
+      ReqTweet.likes = ReqTweet.likes.concat({ like: req.user._id });
+      ReqTweet.likeCount++;
+      await ReqTweet.save();
+      res.status(201);
+      res.send(ReqTweet.likes);
+    }
+  } catch (e) {
+    //catch and send back errors to the front end
+    if (e == "Error: Not Found") {
+      res.status(404);
+    } else {
+      res.status(400);
+    }
+    res.send({ error: e.toString() });
+  }
+});
 
-module.exports=router;
+module.exports = router;
