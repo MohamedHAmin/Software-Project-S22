@@ -56,6 +56,16 @@ router.get("/report/:pageNum",auth("admin"),async (req, res) => {
     res.status(400).send({error:e.toString()});
   }
 });
+router.get("/profile/:id",auth("admin"),async (req, res) => {
+  try {
+    const admin=await Admin.findById(req.params.id)
+    if(!admin){throw Error("Not Found")}
+    res.status(200).json({admin}).end()
+
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
 // router.post("/ban/:id",auth("admin"),async (req, res) => {
 //   try {
 //     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
