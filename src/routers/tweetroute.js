@@ -106,7 +106,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
-    // TODO: add populate to tweet to send user ID and screenName to the tweet
     const tweet = await Tweet.findById(req.params.id);
     if (!tweet) {
       e = "tweet not found";
@@ -116,6 +115,16 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       path: "authorId",
       select: "_id screenName tag followercount followingcount",
     });
+
+    if (tweet.retweetedTweet) {
+      await tweet.populate({
+        //if it is a retweet view content of retweeted tweet
+        path: "retweetedTweet",
+        select:
+          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+      });
+    }
+
     res.send(tweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -211,6 +220,76 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
       res.status(400);
     }
     res.send({ error: e.toString() });
+  }
+});
+
+router.post("/retweet", auth("user"), async (req, res) => {
+  try {
+    //same as creating a new tweet but has an added retweet that
+    //also increases the retweet count on the original tweet
+    const Retweetedtweet = await Tweet.findById(req.body.retweetedTweet);
+    console.log(Retweetedtweet);
+    if (!Retweetedtweet) {
+      e = "Retweeted tweet does not exist";
+      throw e;
+    }
+    Retweetedtweet.retweetCount++;
+    await Retweetedtweet.save();
+    let text = req.body.text.trim();
+    //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
+    //then put in a variable called text for ease of use
+    if (text.length == 0) {
+      //checks if user sent Text parameter empty
+      //if true the post will be rejected and sends an error
+      e = "Empty Post";
+      throw e;
+    }
+    if (text.length > 280) {
+      //checks if post exceeded 280 characters
+      //if true post will be rejected
+      e = "Post exceeds max length";
+      throw e;
+    }
+
+    if (filter.isProfane(text) == true) {
+      //checks if user has a blacklisted word in their post
+      //if true post will be rejected and sends an error
+      e = "bad word";
+      throw e;
+    }
+
+    let tags = req.body.tags;
+    //tags array are put in variable called tags for ease of use
+    //if tags is null or an empty error we assume that there is
+    //no tags in this post
+    if (tags && tags.length != 0 && tags.length > 10) {
+      //if tags are not a null and not an empty list but
+      //exceeds 10 tags refuse this post and send an error
+      e = "tags exceeded limit";
+      throw e;
+    } else if (tags && tags.length != 0 && tags.length <= 10) {
+      //if tags are not a null and don't exceed 10 tags then
+      //then enter a loop on all tag object inside tags
+      for (let i = 0; i < tags.length; i++) {
+        if (!tags[i].tag || tags[i].tag.trim().length === 0) {
+          //if tag is "" (empty) or null remove it from array
+          //and decrease index of loop
+          tags.splice(i, 1);
+          i--;
+        } else if (!/\S/.test(tags[i].tag)) {
+          //if tag is only whitespaces remove it from array
+          //and decrease index of loop
+          tags.splice(i, 1);
+          i--;
+        }
+      }
+    }
+    //if text passed through all tests creates a new entry in the database
+    //and sends an OK status message to the client
+    await Tweet.create({ ...req.body, authorId: req.user._id });
+    res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
+  } catch (e) {
+    res.status(400).send({ error: e.toString() });
   }
 });
 
