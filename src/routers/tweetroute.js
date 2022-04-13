@@ -111,6 +111,14 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       e = "tweet not found";
       throw e;
     }
+
+    if (tweet.text === "No-text") {
+      //in case you get a tweet with this place holder in its text path
+      //replace it with null
+      //! you will only get no text in case of retweet
+      tweet.text = null;
+    }
+
     await tweet.populate({
       path: "authorId",
       select: "_id screenName tag followercount followingcount",
@@ -228,22 +236,22 @@ router.post("/retweet", auth("user"), async (req, res) => {
     //same as creating a new tweet but has an added retweet that
     //also increases the retweet count on the original tweet
     const Retweetedtweet = await Tweet.findById(req.body.retweetedTweet);
-    console.log(Retweetedtweet);
     if (!Retweetedtweet) {
       e = "Retweeted tweet does not exist";
       throw e;
     }
     Retweetedtweet.retweetCount++;
-    await Retweetedtweet.save();
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
+
     if (text.length == 0) {
-      //checks if user sent Text parameter empty
-      //if true the post will be rejected and sends an error
-      e = "Empty Post";
-      throw e;
+      //in case of retweet with no text replace here place holder to be
+      //removed while getting
+
+      text = "No-text";
     }
+
     if (text.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
@@ -286,7 +294,8 @@ router.post("/retweet", auth("user"), async (req, res) => {
     }
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
-    await Tweet.create({ ...req.body, authorId: req.user._id });
+    await Retweetedtweet.save();
+    await Tweet.create({ ...req.body, authorId: req.user._id, text: text });
     res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
   } catch (e) {
     res.status(400).send({ error: e.toString() });
