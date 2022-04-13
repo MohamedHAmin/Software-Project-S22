@@ -29,7 +29,7 @@
   font-weight: 700;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1060px) {
   
   .sideBarIcon > h2 {
     display: none;
