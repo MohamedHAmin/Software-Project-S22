@@ -9,11 +9,10 @@ import Modal from '@mui/material/Modal';
 import "./Styles/Reacts.css";
 import TweetBar from './TweetBar';
 import { Box } from "@mui/system";
+import moment from 'moment';
 import CommentDisplayBlock from './CommentDisplayBlock';
-import { Fade, TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import { Visibility } from '@mui/icons-material/Visibility';
-import retweets from './Arrays/retweets';
 import posts from './Arrays/posts';
 function Reacts (props) {
     //const [numberOfComments,setNumberOfComments]=useState(0);
@@ -55,7 +54,9 @@ function Reacts (props) {
             innerpostid:props.postId,
             username:"Ahmed_Emad",
             displayName:"AhmedEmad71",
-            content:value
+            content:value,
+            posthour:moment().format('hh:mm'),
+            postdate:moment().format('DD/MM/YYYY')
         });
         handleClose();
         setValue("");

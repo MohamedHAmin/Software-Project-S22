@@ -11,6 +11,7 @@ import ProfilePage from "../Profile/ProfilePage";
 import Report from "./Report";
 import posts from "./Arrays/posts"
 import Retweet from './Retweet';
+import moment from 'moment';
 
 function Homepage(){
     //const [post,setPost] = useState("");
@@ -32,7 +33,9 @@ function Homepage(){
         id:posts.length,
         username:"Ahmed_Emad",
         displayName:"AhmedEmad71",
-        content:text
+        content:text,
+        posthour:moment().format('hh:mm'),
+        postdate:moment().format('DD/MM/YYYY')
       });
       var temp=count;
       temp++;
@@ -58,6 +61,8 @@ function Homepage(){
               username={post.username}
               tagName={post.displayName}
               content={post.content}
+              hour={post.posthour}
+              date={post.postdate}
             />)
           ):(<></>)}
           {posts?.length ? ( 
@@ -68,6 +73,8 @@ function Homepage(){
               username={post.username}
               tagName={post.displayName}
               content={post.content}
+              hour={post.posthour}
+              date={post.postdate}
               innerid={post.innerpostid}
               innerusername={posts[post.innerpostid].username}
               innerdisplayName={posts[post.innerpostid].displayName}

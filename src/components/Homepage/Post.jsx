@@ -95,8 +95,8 @@ function deletepost(){
         </div>
         <div className="tweetContent">{props.content}</div>
         <div className="time">
-            <p>{moment().format('hh:mm')}&nbsp;&nbsp;</p>
-            <p>{moment().format('DD/MM/YYYY')}</p>
+            <p>{props.hour}&nbsp;&nbsp;</p>
+            <p>{props.date}</p>
         </div>
         <div className="reactsBar">
             <Reacts postId={postId} tweetcontent={tweetcontent} username={username} displayName={displayName} commentsCount={commentsperpost} CommentHandler={CommentHandler}/>
