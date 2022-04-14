@@ -1,0 +1,70 @@
+.Homepage
+{
+    display: flex;
+      
+}
+.postConatiner {
+    flex:0.5;
+    min-width: 350px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--color-border);
+    border-left: 0px;
+    border-top: 0;
+  }
+@media screen and (max-width: 720px) {
+    .searchbar
+    {
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+      visibility: none;
+      z-index: -1;
+    }
+  }
+.rightbar
+  {
+    margin-left: 5%;
+    margin-right: 0%;
+    display: flex;
+    flex:0.3;
+    height: 100vh;
+
+    min-width: 200px;
+    width: 100%;
+  }
+.searchbar
+{
+  position: relative;
+  top: 15px;
+  right: 5%;
+  width: inherit;
+}
+@media screen and (max-width: 1000px) {
+    .Homepage {
+      margin-left: 2%;
+    }
+}
+* {
+  margin:0;
+}
+.settingsPageDiv {
+  flex: 0.8;
+}
+@media screen and (max-width: 703px) {
+    .Homepage {
+      margin-right: 0;
+    }
+    .rightbar
+    {
+      max-width: 0px;
+      margin: 0px;
+      display: none;
+    }  
+    
+    .postConatiner
+    {
+      min-width: 338px;
+      width: 100%;
+    }
+}

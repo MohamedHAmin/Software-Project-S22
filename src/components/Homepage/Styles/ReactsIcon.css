@@ -1,0 +1,29 @@
+.reactsIcon
+{
+    display: flex;
+    cursor: pointer;
+    margin-right: 75%;
+    max-width: 60px;
+}
+.iconInfo
+{
+    display: flex;
+    flex-direction: column;
+}
+.reactsIcon:hover
+{
+    color: rgba(109, 113, 255, 1);
+}
+.reactsIcon:focus
+{
+    color: rgba(43, 61, 188, 1);
+}
+@media screen and (max-width: 1000px) {
+    .reactsIcon {
+      max-width: 38px;
+    }
+
+    .reactsIcon:hover {
+        color: rgba(109, 113, 255, 1);
+    }
+  }
