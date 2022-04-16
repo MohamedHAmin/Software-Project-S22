@@ -4,6 +4,7 @@ const User = require("../models/User")
 const UserVerification = require("../models/UserVerification")
 const generator = require('generate-password')
 const Token = require("../models/Token")
+const passport = require("passport")
 const router = new express.Router()
 const bcrypt = require("bcryptjs"); //generating unique strings 
 const nodemailer = require("nodemailer")
@@ -22,9 +23,9 @@ router.post("/signup",async (req, res) => {
       await UserVerification.deleteOne({email:req.body.email})
       const user = new User(req.body);
       const result = await user.save()
-      if(result){
-        sendVerificationEmail(result,res)
-      }
+      // if(result){
+      //   sendVerificationEmail(result,res)
+      // }
       //don't generate token unless verified [with login now]
       res.status(201).send({ user});
     } catch (e) {
@@ -210,6 +211,28 @@ router.post("/signup",async (req, res) => {
       console.log(e);
     }
   }
+  //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
+  router.get('/auth/google', passport.authenticate('google', {scope:['profile'] }))
 
+  router.get('auth/google/callback',passport.authenticate('google', {failureRedirect:'/googlelogin/failed',successRedirect:"/googlelogin/success"}))
+  //redirect pages will be later on implemented by FE
 
+//~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
+router.get("/googlelogin/failed",(req,res)=>{
+  res.status(401).json({
+    success: false,
+    message: "failure"
+  })
+})
+router.get("/googlelogin/success",(req,res)=>{
+  if(req.user){
+  res.status(200).json({
+    success: true,
+    message : "successful",
+    user:req.user,
+    //cookies: req.cookies
+  })
+  
+}
+})
   module.exports = router 
