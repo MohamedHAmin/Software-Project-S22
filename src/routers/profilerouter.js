@@ -40,6 +40,7 @@ const router = new express.Router()
   });
   router.put("/:id", auth("user"), async (req, res) => {
     try {
+
       const updates = Object.keys(req.body);
       const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting"];
       const isvalidoperation = updates.every((update) =>
@@ -96,6 +97,7 @@ const router = new express.Router()
   });
   router.put("/:id/banner",auth("any"),upload.single("image"), async (req, res) => {
     try {
+      console.log(req.body.name)
       if (!req.file) {
         throw new Error("no imge found")
       }
