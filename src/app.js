@@ -1,6 +1,8 @@
 const express=require('express')
-require('./db/mongoose')
 
+require('./db/mongoose')//? if you seed comment this line    
+
+//require('./db/seeding')  //? if want to seed uncomment this line
 
 const adminRouter =require('./routers/adminroute')
 const userAuthRouter =require('./routers/userauthroute')

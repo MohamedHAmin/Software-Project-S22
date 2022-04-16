@@ -14,6 +14,24 @@ const router = new express.Router()
       if(!user){
         throw new Error("no user found")
       }
+      if(user.Location.visability===false)
+       {delete user.Location.console.Location;}
+       if(user.birthDate.visability===false)
+       {delete user.Location.console.birthDate;}
+       delete userobject.ban
+       delete userobject.email
+       delete userobject.Notificationssetting
+      res.send(user);
+    } catch (e) {
+      res.status(400).send({error:e.toString()});
+    }
+  });
+  router.get("/me",auth("user"), async (req, res) => {
+    try {
+      const user=await User.findById(req.user._id)
+      if(!user){
+        throw new Error("no user found")
+      }
       res.send(user);
     } catch (e) {
       res.status(400).send({error:e.toString()});
@@ -21,17 +39,12 @@ const router = new express.Router()
   });
   router.put("/:id/password", auth("user"), async (req, res) => {
     try {
-      console.log('first')
       const ismatch=await bcrypt.compare(req.body.currentPassword,req.user.password)
-      console.log('1')
-      console.log("🚀 ~ file: profilerouter.js ~ line 24 ~ router.put ~ ismatch", ismatch)
+    
       if(!ismatch)
       { throw new Error("no user found")}
         req.user.password=req.body.newPassword
       await req.user.save();
-      console.log('first')
-      console.log("🚀 ~ file: profilerouter.js ~ line 27 ~ router.put ~ user", req.user)
-      
       res.send(req.user);
     } catch (e) {
       res.status(400);
@@ -42,7 +55,7 @@ const router = new express.Router()
     try {
 
       const updates = Object.keys(req.body);
-      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting"];
+      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting","Location"];
       const isvalidoperation = updates.every((update) =>
         allowtoupdate.includes(update)
       );
@@ -97,7 +110,6 @@ const router = new express.Router()
   });
   router.put("/:id/banner",auth("any"),upload.single("image"), async (req, res) => {
     try {
-      console.log(req.body.name)
       if (!req.file) {
         throw new Error("no imge found")
       }

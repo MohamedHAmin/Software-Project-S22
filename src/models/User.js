@@ -17,7 +17,21 @@ const userSchema = new mongoose.Schema({
      unique:true
   },
   birthDate: {
-    type: Date,
+   Date: {type: Date,},
+   visability:{
+    type:Boolean,
+    default:false
+   }
+  },
+  Location:{
+    place:{
+      type:String,
+      default:null
+    },
+    visability:{
+      type:Boolean,
+      default:false
+     }
   },
   isPrivate:{
     type:Boolean,
@@ -160,13 +174,10 @@ userSchema.methods.toJSON=function(){
   const userobject=user.toObject()
   delete userobject.password
   delete userobject.tokens
-  delete userobject.Notificationssetting
+ 
   delete userobject.googleId
   delete userobject.following
   delete userobject.facebookId
-  delete userobject.ban
-  delete userobject.email
-
   return userobject
 
 }
@@ -196,6 +207,7 @@ userSchema.methods.generateAuthToken=async function(){
 
 userSchema.pre("save", async function (next) {
   const user = this;
+  
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }

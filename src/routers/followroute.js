@@ -49,6 +49,7 @@ const router = new express.Router()
         }
         const lengthBefore=req.user.following.length
        
+        //*unfollow
       req.user.following = req.user.following.filter((follow) => {
         return follow.followingId !=req.params.id;
       });
