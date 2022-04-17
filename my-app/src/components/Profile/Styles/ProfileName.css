@@ -1,6 +1,9 @@
 .profileName {
   display: flex;
   border-bottom: 2px solid var(--color-border);
+  z-index: 5;
+  position: fixed;
+  background-color: rgba(221, 221, 221, 0.4);
 }
 
 .profileName h2 {
@@ -38,3 +41,5 @@
   transition: color 100ms ease-out;
   padding: auto;
 }
+
+

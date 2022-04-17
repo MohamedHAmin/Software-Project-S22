@@ -1,8 +1,9 @@
 .settingsMenu {
   border-right: 1px solid var(--color-border);
-  min-width: 350px;
+  width: max-content;
   height: 100vh;
   margin-top: 8px;
+  position: relative;
 }
 
 .settingsMenu h2 {
@@ -10,9 +11,10 @@
 }
 
 .settingsSubMenu {
-  min-width: 350px;
+  width: fit-content;
   margin-top: 8px;
   height: 100vh;
+  position: relative;
 }
 
 .settingsSubMenu h2 {
@@ -24,7 +26,6 @@
   font-size: 22px;
   padding-left: 10px;
   margin-bottom: 7px;
-  margin-left: 14px;
 }
 .settingsMenuHeaderDark {
   font-weight: 500;
@@ -52,8 +53,8 @@
 
 .karim{
   display: flex;
-  flex:0.88;
   margin-right: 4%;
+  margin-left: 18.5%;
 }
 
 .App-link {

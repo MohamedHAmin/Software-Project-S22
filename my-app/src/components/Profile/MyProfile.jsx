@@ -93,8 +93,11 @@ function MyProfile({
 
   return (
     <div className="myProfile">
-      <ProfileName pName={name} tweetNum={tweets} />
+      <div className="myProfileName">
+        <ProfileName pName={name} tweetNum={tweets} />
+      </div>
       <Avatar
+        className="coverImage"
         variant="square"
         sx={{ width: "auto", height: 180 }}
         alt={name}

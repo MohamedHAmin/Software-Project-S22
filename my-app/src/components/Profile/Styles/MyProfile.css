@@ -1,7 +1,7 @@
 .myProfile {
-  flex: 0.52;
   border-right: 2px solid var(--color-border);
   position: relative;  
+  width: 60%;
 }
 
 .profileSetup {
@@ -9,11 +9,21 @@
   margin-top: -67.5px;
 }
 
+.myProfileName {
+  height: fit-content;
+  max-width: 150%;
+  display:block;
+}
+
 .profileImage {
   margin: 0px 0px 10px 20px;
   height: 135px !important;
   width: 135px !important;
   border: 4px solid var(--color-background);
+}
+
+.coverImage {
+  margin-top: 65px;
 }
 
 .profileImage:hover {
@@ -178,10 +188,11 @@ opacity: 0.80;
   cursor: pointer;
 }
 
-@media only screen and (max-width: 703px) {
+@media only screen and (max-width: 859px) {
   .myProfile {
-    flex: 0.9;
+    margin-left:27.5%;
     border-right: none;
+    width: 80%;
   }
   .profileImage {
     height: 100px !important;
@@ -192,9 +203,10 @@ opacity: 0.80;
   }
 }
 
-@media only screen and (min-width: 704px) and (max-width: 1030px) {
+@media only screen and (min-width: 860px) and (max-width: 1060px) {
   .myProfile {
-    flex: 0.65;
+    margin-left: 21%;
+    min-width: 430px;
   }
   .profileImage {
     height: 120px !important;

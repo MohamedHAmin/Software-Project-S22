@@ -1,12 +1,13 @@
 .Homepage
 {
     display: flex;
+    margin-left: 24%;
 }
 .postConatiner {
     flex:0.56;
     min-width: 350px;
   }
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 859px) {
     .searchbar
     {
       display: none;
@@ -34,9 +35,9 @@
   right: 5%;
   width: inherit;
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1060px) {
     .Homepage {
-      margin-left: 2%;
+      margin-left: 22%;
     }
 }
 * {
@@ -45,9 +46,10 @@
 .settingsPageDiv {
   flex: 0.8;
 }
-@media screen and (max-width: 703px) {
+@media screen and (max-width: 859px) {
     .Homepage {
       margin-right: 0;
+      margin-left: 29%;
     }
     .rightbar
     {
