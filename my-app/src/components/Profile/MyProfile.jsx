@@ -15,6 +15,7 @@ function MyProfile({
   date,
   followers,
   following,
+  setFollowers,
   picture,
   pictureCover,
   bio,
@@ -24,6 +25,7 @@ function MyProfile({
   setBio,
   setLocation,
   setWebsite,
+  isFollowed,
 }) {
   const [buttonPopup, setButtonPopup] = useState(false);
   const [buttonclosePopup, setButtonClosePopup] = useState(false);
@@ -32,6 +34,12 @@ function MyProfile({
   const [Bio, setBio1] = useState(bio);
   const [Location, setLocation1] = useState(location);
   const [Website, setWebsite1] = useState(website);
+  const [modalState, setModalState] = useState(false);
+  const [IsFollowed, setIsFollowed] = useState(isFollowed);
+  const [Followers, setFollowers1] = useState(followers);
+  const [sameUserProf, setSameUserProf] = useState(false);
+
+
   function saveBtn(e) {
     e.preventDefault();
     setNameError(false);
@@ -58,6 +66,31 @@ function MyProfile({
     else setButtonClosePopup(true);
   }
 
+  function handleButtonClick(){
+    if(IsFollowed)
+    {
+      setModalState(true);
+    }
+    else{
+      setFollowers(followers+1)
+      setFollowers1(followers+1)
+      setIsFollowed(true);
+    }
+  }
+
+  function handleUnfollowAction(){
+
+    setFollowers(followers-1)
+    setFollowers1(followers-1)
+    setModalState(false);
+    setIsFollowed(false);
+
+  }
+
+  function handleCancelAction(){
+    setModalState(false);
+  }
+
   return (
     <div className="myProfile">
       <ProfileName pName={name} tweetNum={tweets} />
@@ -69,7 +102,7 @@ function MyProfile({
       />
       <div className="profileSetup">
         <Avatar className="profileImage" alt={name} src={picture} />
-
+        {sameUserProf ?         
         <Button
           className="setupProfileButton"
           onClick={() => setButtonPopup(true)}
@@ -77,7 +110,52 @@ function MyProfile({
           fullWidth
         >
           {picture || bio ? "Edit Profile" : "Set Up Profile"}
+        </Button> :
+        <Button
+        className="setupProfileButton"
+        id="btn1"
+        onClick={handleButtonClick}
+        >
+        {IsFollowed ? "Unfollow" : "Follow"}
         </Button>
+       }
+
+  <Modal 
+  open={modalState}
+  onClose={handleCancelAction}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+  keepMounted
+  >
+    <form 
+    className="editProfileCloseContainer" 
+    >
+      <Typography id="modal-modal-title" variant="h6" >
+        Unfollow @{userName}?
+      </Typography>
+      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        Their Tweets will no longer show up in your home timeline. You can still view their profile, unless their Tweets are protected.
+      </Typography>
+      <div style={{textAlign:"center"}}>
+        <Button 
+        onClick={handleUnfollowAction}
+        className="profileDiscardContainerButton"
+        >
+        Unfollow
+        </Button>
+      </div>
+      <div style={{ textAlign:"center"}}>
+        <Button
+        onClick={handleCancelAction}
+        className="profileCloseContainerButton"
+        >
+        Cancel
+        </Button>
+      </div>
+    </form>
+  </Modal>
+
+
 
         <Modal
           open={buttonPopup}
@@ -195,7 +273,7 @@ function MyProfile({
         name={name}
         userName={userName}
         date={date}
-        followers={followers}
+        followers={Followers}
         following={following}
         bio={bio}
         location={location}

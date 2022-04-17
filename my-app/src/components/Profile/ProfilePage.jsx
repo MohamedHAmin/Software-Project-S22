@@ -8,12 +8,13 @@ function ProfilePage() {
   const [bio, setBio] = useState("Pyyschooooooo");
   const [location, setLocation] = useState("6th of October");
   const [website, setWebsite] = useState("https://twitter.com/Ahmed_Emad81");
+  const [followers, setFollowers] = useState(13);
 
   var tweetNum = 12;
   const userName = "Ahmed_Emad81";
   var date = "October 2020";
-  var followers = 13;
   var following = 10;
+  var isFollowed = true;
   var picture =
     "https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y";
   var pictureCover =
@@ -29,6 +30,7 @@ function ProfilePage() {
         date={date}
         followers={followers}
         following={following}
+        setFollowers={setFollowers}
         picture={picture}
         pictureCover={pictureCover}
         bio={bio}
@@ -38,6 +40,7 @@ function ProfilePage() {
         setBio={setBio}
         setLocation={setLocation}
         setWebsite={setWebsite}
+        isFollowed={isFollowed}
       />
       <div className="rightbar">
         <div className="searchbar">

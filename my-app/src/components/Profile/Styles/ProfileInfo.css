@@ -18,6 +18,7 @@
 .moreInfo {
   margin-top: 6px;
   margin-left: -3px;
+  margin-bottom: 8px;
   font-weight: 500;
   font-size: 14px;
 }
@@ -34,15 +35,15 @@
   height: 20px !important;
   width: 20px !important;
   margin-right: 1px;
-  margin-top: -3px ;
+
   color: var(--color-mode);
   opacity: 0.8;
 }
 
 .moreInfo span {
+  align-items: center;
   margin-right: 10px;
-  font-size: 13px;
-  display:inline-block;
+  display:inline-flex;
 }
 
 .moreInfo a {
@@ -54,8 +55,9 @@
 }
 .followInfo span {
   margin-right: 20px;
-  margin-top: -8px;
+  margin-top: 0px;
   margin-left: 3px;
+  margin-bottom: 3px;
   font-size: 14px;
   font-weight: 450;
 }
