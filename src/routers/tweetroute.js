@@ -1,26 +1,19 @@
 const express = require("express");
 const auth = require("../middleware/auth");
 const bodyParser = require("body-parser");
-const multer = require("multer");
-const cloudinary = require("cloudinary");
+const upload = require("./multer");
+const cloudinary = require("./cloudinary");
 const fs = require("fs");
 
 const router = new express.Router();
 //! remember to require and install badwords
-router.use(bodyParser.json({ limit: "50mb" }));
-router.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000,
-  })
-);
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 const filter = require("../ethics/bad_words");
 const Tweet = require("../models/Tweet");
-const { json } = require("express/lib/response");
 
-router.post("/tweet", auth("user"), async (req, res) => {
+router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   //Creates a new tweet with the json data that the user sends
   // through req.body
   try {
@@ -76,24 +69,32 @@ router.post("/tweet", auth("user"), async (req, res) => {
         }
       }
     }
-
-    // if(req.query.images==="true"){
-    //   let gallery=req.body.gallery;
-    //   let count=0;
-    //   for(picture of gallery)
-    //   {
-    //     if(picture.type=='png'){
-    //       fs.writeFile("trialPhoto"+count,picture.photo,base64,(err)=>{
-    //         console.log(error);
-    //       })
-    //     }
-    //   }
-    // }
-
-    //if text passed through all tests creates a new entry in the database
-    //and sends an OK status message to the client
-    await Tweet.create({ ...req.body, authorId: req.user._id });
-    res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
+    if (req.body.imageCheck === "true") {
+      // const uploader = (path) => cloudinary.uploads(path, "Images");
+      const urls = [];
+      const files = req.files;
+      for (const file of files) {
+        const path = file.path;
+        const newPath = await cloudinary.uploader.upload(path);
+        const newUrl = { photo: newPath.secure_url };
+        urls.push(newUrl);
+        fs.unlinkSync(path);
+        if (urls.length > 4) {
+          e = "Image limit exceeded";
+          throw e;
+        }
+      }
+      delete req.body.imageCheck;
+      await Tweet.create({
+        ...req.body,
+        authorId: req.user._id,
+        gallery: urls,
+      });
+      res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
+    } else {
+      await Tweet.create({ ...req.body, authorId: req.user._id });
+      res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
+    }
   } catch (e) {
     //here all exception caught sends their respective
     //error according to failed test
@@ -245,7 +246,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
 
-    if (text.length == 0) {
+    if (!text||text.length == 0) {
       //in case of retweet with no text replace here place holder to be
       //removed while getting
 

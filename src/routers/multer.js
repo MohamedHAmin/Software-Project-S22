@@ -1,17 +1,18 @@
 const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   //specifies how files are going to be stored
   //on local storage
   destination: (req, file, callback) => {
     //specifies destination
-    callback(null, "./uploads");
+    callback(null, path.join(__dirname, "../uploads"));
   },
   filename: (req, file, callback) => {
     //specifies how files are going to be named when uploaded
     //* the date is concatenated to the orginal
     //* file name to prevent repeated file names
-    callback(null, Date.now() + "-" + file.originalname);
+    callback(null, Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -34,7 +35,7 @@ const upload = multer({
   //and file limiter attribute has the file validator function
   //specified above
   storage: storage,
-  limits: { fileSize: 1024 * 1024 * 1024 },
+  limits: { fileSize: 1024 * 1024 * 10 },
   fileFilter: fileVaildator,
 });
 
