@@ -58,11 +58,11 @@ router.get("/verify/:userId/:uniqueString", async(req,res)=>{
 
         const hasheduniqueString = result[0].uniqueString
             if(uniqueString===hasheduniqueString){
-                          await User.updateOne({_id:userId},{verified:true})            
+              await User.updateOne({_id:userId},{verified:true})            
                await UserVerification.deleteOne({userId})             
               }
             else{
-              console.log("Hashed String and Unique String mismatch");
+              //console.log("Hashed String and Unique String mismatch");
             }
         }
           res.send("Email sent , pending verification")

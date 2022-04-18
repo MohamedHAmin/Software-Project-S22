@@ -14,7 +14,7 @@ const router = new express.Router()
       if(!user){
         throw new Error("no user found")
       }
-      if(user.Location.visability===false)
+      if(user.location.visability===false)
        {delete user.Location;}
        if(user.birthDate.visability===false)
        {delete user.Location;}

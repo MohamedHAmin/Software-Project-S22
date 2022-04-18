@@ -88,6 +88,7 @@ const router = new express.Router()
 
         user.following=user.following.filter((follow)=> {
           return follow.followingId!=null})
+          
         if(!user.following.length<1){
           user.following=user.following.map(follow=>{
  

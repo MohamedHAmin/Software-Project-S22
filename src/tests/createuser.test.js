@@ -132,6 +132,8 @@ test('email verfication', async ()=>{
         tag:"tg1"
     })
     const uniqueString = await bcrypt.hash(res.body.user._id.toString(), 8);
+    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ uniqueString", uniqueString.toString())
+    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ es.body.user._id", res.body.user._id.toString())
     const res2=await request(app).get('/user/verify/'+res.body.user._id.toString()+'/'+uniqueString.toString())
     .expect(200)
     

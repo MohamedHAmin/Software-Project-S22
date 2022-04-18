@@ -129,15 +129,20 @@ const userSchema = new mongoose.Schema({
   timestamps:true,
   toJSON: {virtuals: true},
   toObject: { virtuals: true },
-  
+  strictPopulate:false
   
 });
  //to connect with tweet he tweet
-userSchema.virtual('Tweet',{
+userSchema.virtual('Tweets',{
   ref:'Tweet',
   localField:'_id',
   foreignField:'authorId'
 })
+// userSchema.virtual('Tweets-timeline',{
+//   ref:'Tweet',
+//   localField:'following.followingId',
+//   foreignField:'authorId'
+// })
 userSchema.virtual('follower',{
   ref:'User',
   localField:'_id',
