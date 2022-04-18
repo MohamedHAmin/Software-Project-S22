@@ -15,10 +15,10 @@ function ProfilePage() {
   const userName = "Ahmed_Emad81";
   var date = "October 2020";
   var following = 10;
-  var isFollowed = true;
+  var isFollowed = false;
   var isAdmin = false;
-  var sameUserProf = true;
-  const birthday = "12/9/2001"
+  var sameUserProf = false;
+  const birthday = "12/9/2001";
   var picture =
     "https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y";
   var pictureCover =

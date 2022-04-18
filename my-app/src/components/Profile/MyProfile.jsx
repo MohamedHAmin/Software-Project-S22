@@ -9,7 +9,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import MyProfileTabs from "./MyProfileTabs";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import FormLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
 function MyProfile({
@@ -151,11 +150,16 @@ function MyProfile({
             onClick={() => setButtonPopup(true)}
             variant="outlined"
             fullWidth
+            data-testid="Edit-Profile-Button"
           >
             {picture || bio ? "Edit Profile" : "Set Up Profile"}
           </Button>
         ) : (
-          <Button className="FollowUnfollowButton" onClick={handleButtonClick}>
+          <Button
+            className="FollowUnfollowButton"
+            onClick={handleButtonClick}
+            data-testid="Follow-Profile-Button"
+          >
             {IsFollowed ? "Unfollow" : "Follow"}
           </Button>
         )}
@@ -251,6 +255,7 @@ function MyProfile({
               <Button
                 onClick={handleUnfollowAction}
                 className="profileDiscardContainerButton"
+                data-testid="Follow-Profile-Pop-Button"
               >
                 Unfollow
               </Button>
@@ -302,7 +307,9 @@ function MyProfile({
                 defaultValue={name}
                 required
                 fullWidth
-                inputProps={{ maxLength: 50 }}
+                inputProps={
+                  ({ maxLength: 50 }, { "data-testid": "editProfile-Name" })
+                }
                 error={NameError}
               />
               <TextField
@@ -313,7 +320,9 @@ function MyProfile({
                 fullWidth
                 multiline
                 rows={3}
-                inputProps={{ maxLength: 160 }}
+                inputProps={
+                  ({ maxLength: 160 }, { "data-testid": "editProfile-Bio" })
+                }
               />
               <TextField
                 className="editProfileField"
@@ -321,7 +330,9 @@ function MyProfile({
                 onChange={(e) => setLocation1(e.target.value)}
                 defaultValue={location}
                 fullWidth
-                inputProps={{ maxLength: 30 }}
+                inputProps={
+                  ({ maxLength: 30 }, { "data-testid": "editProfile-Location" })
+                }
               />
               <TextField
                 className="editProfileField"
@@ -329,9 +340,10 @@ function MyProfile({
                 onChange={(e) => setWebsite1(e.target.value)}
                 defaultValue={website}
                 fullWidth
-                inputProps={{ maxLength: 100 }}
+                inputProps={
+                  ({ maxLength: 100 }, { "data-testid": "editProfile-Website" })
+                }
               />
-              
             </div>
             <Modal
               open={buttonclosePopup}
