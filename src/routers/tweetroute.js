@@ -353,14 +353,12 @@ router.get("/timeline", auth("any"), async (req, res) => {
   try {
     
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
  
-    console.log(req.user)
     const followingsId=req.user.following.map(
         user=>{return user.followingId}
         )
-        console.log(followingsId)
     const user=req.user
   
        const followerTweet=await Tweet.find({authorId:{$in:followingsId}}).limit(limit).skip(skip).populate(
@@ -383,14 +381,13 @@ router.get("/timeline", auth("any"), async (req, res) => {
         }
       )
 
-      console.log('finish1')
 
     
-    if (!followerTweet) {
+    if (followerTweet.length===0) {
       e = "tweet not found";
       throw e;
     }
-
+    console.log(followerTweet);
     res.send(followerTweet);
   } catch (e) {
     //here all caught errors are sent to the client
