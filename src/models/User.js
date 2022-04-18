@@ -20,17 +20,17 @@ const userSchema = new mongoose.Schema({
    Date: {type: Date,},
    visability:{
     type:Boolean,
-    default:false
+    default:true
    }
   },
-  Location:{
+  location:{
     place:{
       type:String,
       default:null
     },
     visability:{
       type:Boolean,
-      default:false
+      default:true
      }
   },
   isPrivate:{
@@ -214,8 +214,6 @@ userSchema.pre("save", async function (next) {
   
   next()
 });
-
-
 
 const User = mongoose.model('User', userSchema);
 

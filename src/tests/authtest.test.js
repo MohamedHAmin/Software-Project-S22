@@ -13,7 +13,9 @@ test('Check User Login with wrong password', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+      verified:true
+
 })
 const res=await request(app).post('/user/login')
 .send({
@@ -28,7 +30,8 @@ test('Check User Login with wrong email or username', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+    verified:true
 })
 const res=await request(app).post('/user/login')
 .send({
@@ -43,7 +46,8 @@ test('Check User Login with email', async ()=>{
         screenName:"user6",
         email:"user70@gmail.com",
         password:"123456",
-        tag:"tag6"
+        tag:"tag6",
+        verified:true
     })
     const res=await request(app).post('/user/login')
     .send({
@@ -58,7 +62,8 @@ test('Check User Login with username', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+    verified:true
     })
     const res=await request(app).post('/user/login')
     .send({
@@ -73,7 +78,8 @@ test('Check User Logout from one device ', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+    verified:true
     })
     const authtoken = await user1.generateAuthToken()
     
@@ -88,7 +94,8 @@ test('Check User Logout from All devices ', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+    verified:true
     })
 
     const destroytoken = await user1.generateAuthToken()
@@ -103,7 +110,8 @@ test('Check Admin Login ', async ()=>{
     await Admin.create({
         adminName:"coolAdmin24o",
         email:"cool23o4@gmail.com",
-        password:"123456"
+        password:"123456",
+        verified:true
 })
 const res=await request(app).post('/user/login')
 .send({

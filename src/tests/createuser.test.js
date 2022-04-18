@@ -1,15 +1,27 @@
 const request = require('supertest')
 const User = require('../models/User')
+const Userverification = require('../models/UserVerification')
+const bcrypt = require("bcryptjs"); //generating unique strings 
+
 const app = require('../app')
-  beforeEach(async ()=>{
+
+jest.mock('nodemailer', () => ({
+    createTransport: jest.fn().mockReturnValue({
+      sendMail: jest.fn().mockReturnValue((mailoptions, callback) => {})
+    })
+}));
+
+beforeEach(async ()=>{
       await User.deleteMany()
+      await Userverification.deleteMany()
+
  })
 //jest.setTimeout(25000);
 test('Check User Creation (Signup)', async ()=>{
     const res=await request(app).post('/user/signup')
     .send({
         screenName:"oz",
-    email:"oz123@gmail.com",
+    email:"mido.zanaty55@gmail.com",
     password:"123456",
     tag:"@oz174"
     })
@@ -22,7 +34,8 @@ test('Check Email Duplication', async ()=>{
         screenName:"user6",
         email:"oz123@gmail.com",
         password:"123456",
-        tag:"@oz174"
+        tag:"@oz174",
+        verified:true
     })
     const res=await request(app).post('/user/signup')
     .send({
@@ -38,14 +51,15 @@ test('Check Tag Duplication', async ()=>{
         screenName:"user6",
         email:"oz123@gmail.com",
         password:"123456",
-        tag:"@oz174"
+        tag:"@oz17499",
+        verified:true
     })
     const res=await request(app).post('/user/signup')
     .send({
         screenName:"user6",
     email:"oz124@gmail.com",
     password:"123456",
-    tag:"@oz174"
+    tag:"@oz17499"
     })
     .expect(400)
 })
@@ -106,4 +120,19 @@ test('Empty Tag', async ()=>{
     })
     .expect(400)
    
+})
+
+test('email verfication', async ()=>{
+    const res=await request(app).post('/user/signup')
+    .send({
+        screenName:"DDD",
+        user_name:"Superoz12",
+        email:"cool23@gmail.com",
+        password:"12345678",
+        tag:"tg1"
+    })
+    const uniqueString = await bcrypt.hash(res.body.user._id.toString(), 8);
+    const res2=await request(app).get('/user/verify/'+res.body.user._id.toString()+'/'+uniqueString.toString())
+    .expect(200)
+    
 })

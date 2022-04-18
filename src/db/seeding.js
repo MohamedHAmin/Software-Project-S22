@@ -1,4 +1,7 @@
 require("./mongoose");
+
+const mongoose =require('mongoose')
+
 const { faker } = require('@faker-js/faker');
 const assert = require("assert");
 const _ = require("lodash");
@@ -9,28 +12,34 @@ const User = require("../models/User");
 const seed = async () => {
   // make a bunch of users
   let users = [];
-  await User.deleteMany()
+
   for (let i = 0; i < 5; i += 1) {
       
     const screenName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const password = await bcrypt.hash("123456", 8);
     let newUser = {
-      email: faker.internet.email(screenName, 'Doe', 'gmail.com') ,
+      email: faker.internet.email(screenName, 'Doe', 'fake.com') ,
       screenName,
       birthDate: faker.date.past(10) ,
       tag: screenName+i,
       password,
+      location:{
+        place:"fake",
+        visability:false
+      }
     };
     users.push(newUser);
     // visual feedback always feels nice!
   
   }
 
-    users =await User.insertMany(users)
-     await User.deleteMany()
-    
-    for (let i = 0; i < users.length; i++) {
+      users =await User.insertMany(users)
+      const f=User.find({location:{ $elemMatch:{place:"fake"}}})
+      
+     const d= await User.deleteMany({"location.place":"fake"})
+     console.log(d)
+       for (let i = 0; i < users.length; i++) {
         const length= Math.round(Math.random() * users.length)
         const otherUser=_.sampleSize(users,length).filter((user)=>{
             return(users[i]._id!==user._id)

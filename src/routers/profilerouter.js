@@ -15,24 +15,20 @@ const router = new express.Router()
         throw new Error("no user found")
       }
       if(user.Location.visability===false)
-       {delete user.Location.console.Location;}
+       {delete user.Location;}
        if(user.birthDate.visability===false)
-       {delete user.Location.console.birthDate;}
-       delete userobject.ban
-       delete userobject.email
-       delete userobject.Notificationssetting
+       {delete user.Location;}
+       delete user.ban
+       delete user.email
+       delete user.Notificationssetting
       res.send(user);
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
   });
-  router.get("/me",auth("user"), async (req, res) => {
+  router.get("/:id/me",auth("user"), async (req, res) => {
     try {
-      const user=await User.findById(req.user._id)
-      if(!user){
-        throw new Error("no user found")
-      }
-      res.send(user);
+      res.send(req.user);
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
@@ -42,7 +38,7 @@ const router = new express.Router()
       const ismatch=await bcrypt.compare(req.body.currentPassword,req.user.password)
     
       if(!ismatch)
-      { throw new Error("no user found")}
+      { throw new Error("no wrong pass")}
         req.user.password=req.body.newPassword
       await req.user.save();
       res.send(req.user);
@@ -61,7 +57,7 @@ const router = new express.Router()
       );
     
       if (!isvalidoperation) {
-        return res.status(400).send("error in update");
+        throw new Error("you can not change this data");
       }
 
       updates.forEach((element) => (req.user[element] = req.body[element]));
