@@ -1,0 +1,10 @@
+.text p {
+  background-color: rgb(130, 207, 233);
+  text-align: center;
+}
+
+.text {
+  max-width: 50%;
+  /* align-items: center; */
+  /* object-position: center; */
+}
