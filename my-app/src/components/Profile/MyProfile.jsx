@@ -7,6 +7,10 @@ import { Button, Typography, Modal } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import MyProfileTabs from "./MyProfileTabs";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 function MyProfile({
   name,
@@ -21,11 +25,16 @@ function MyProfile({
   bio,
   location,
   website,
+  birthday,
   setName,
   setBio,
   setLocation,
   setWebsite,
   isFollowed,
+  isAdmin,
+  sameUserProf,
+  banDuration,
+  setBanDuration,
 }) {
   const [buttonPopup, setButtonPopup] = useState(false);
   const [buttonclosePopup, setButtonClosePopup] = useState(false);
@@ -34,11 +43,11 @@ function MyProfile({
   const [Bio, setBio1] = useState(bio);
   const [Location, setLocation1] = useState(location);
   const [Website, setWebsite1] = useState(website);
-  const [modalState, setModalState] = useState(false);
+  const [followModalState, setFollowModalState] = useState(false);
   const [IsFollowed, setIsFollowed] = useState(isFollowed);
   const [Followers, setFollowers1] = useState(followers);
-  const [sameUserProf, setSameUserProf] = useState(false);
-
+  const [optionsModalState, setOptionsModalState] = useState(false);
+  const [banDuration1, setBanDuration1] = useState(banDuration);
 
   function saveBtn(e) {
     e.preventDefault();
@@ -66,31 +75,39 @@ function MyProfile({
     else setButtonClosePopup(true);
   }
 
-  function handleButtonClick(){
-    if(IsFollowed)
-    {
-      setModalState(true);
-    }
-    else{
-      setFollowers(followers+1)
-      setFollowers1(followers+1)
+  function handleButtonClick() {
+    if (IsFollowed) {
+      setFollowModalState(true);
+    } else {
+      setFollowers(followers + 1);
+      setFollowers1(followers + 1);
       setIsFollowed(true);
     }
   }
 
-  function handleUnfollowAction(){
-
-    setFollowers(followers-1)
-    setFollowers1(followers-1)
-    setModalState(false);
+  function handleUnfollowAction() {
+    setFollowers(followers - 1);
+    setFollowers1(followers - 1);
+    setFollowModalState(false);
     setIsFollowed(false);
-
   }
 
-  function handleCancelAction(){
-    setModalState(false);
+  function handleOptionsClick() {
+    setOptionsModalState(true);
   }
-
+  function handleBanAction() {
+    setBanDuration(banDuration1);
+    setOptionsModalState(false);
+  }
+  function handleSelectChange(event) {
+    setBanDuration1(event.target.value);
+  }
+  function handleReportAction() {
+    setOptionsModalState(false);
+  }
+  function handleCancelAction() {
+    setFollowModalState(false);
+  }
   return (
     <div className="myProfile">
       <div className="myProfileName">
@@ -105,60 +122,149 @@ function MyProfile({
       />
       <div className="profileSetup">
         <Avatar className="profileImage" alt={name} src={picture} />
-        {sameUserProf ?         
-        <Button
-          className="setupProfileButton"
-          onClick={() => setButtonPopup(true)}
-          variant="outlined"
-          fullWidth
-        >
-          {picture || bio ? "Edit Profile" : "Set Up Profile"}
-        </Button> :
-        <Button
-        className="setupProfileButton"
-        id="btn1"
-        onClick={handleButtonClick}
-        >
-        {IsFollowed ? "Unfollow" : "Follow"}
-        </Button>
-       }
 
-  <Modal 
-  open={modalState}
-  onClose={handleCancelAction}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
-  keepMounted
-  >
-    <form 
-    className="editProfileCloseContainer" 
-    >
-      <Typography id="modal-modal-title" variant="h6" >
-        Unfollow @{userName}?
-      </Typography>
-      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        Their Tweets will no longer show up in your home timeline. You can still view their profile, unless their Tweets are protected.
-      </Typography>
-      <div style={{textAlign:"center"}}>
-        <Button 
-        onClick={handleUnfollowAction}
-        className="profileDiscardContainerButton"
-        >
-        Unfollow
-        </Button>
-      </div>
-      <div style={{ textAlign:"center"}}>
-        <Button
-        onClick={handleCancelAction}
-        className="profileCloseContainerButton"
-        >
-        Cancel
-        </Button>
-      </div>
-    </form>
-  </Modal>
+        {!sameUserProf ? (
+          isAdmin ? (
+            <Button
+              className="optionProfileButton"
+              variant="outlined"
+              onClick={handleOptionsClick}
+              fullWidth
+            >
+              Ban
+            </Button>
+          ) : (
+            <Button
+              className="optionProfileButton"
+              variant="outlined"
+              onClick={handleOptionsClick}
+              fullWidth
+            >
+              Report
+            </Button>
+          )
+        ) : null}
 
+        {sameUserProf ? (
+          <Button
+            className="setupProfileButton"
+            onClick={() => setButtonPopup(true)}
+            variant="outlined"
+            fullWidth
+          >
+            {picture || bio ? "Edit Profile" : "Set Up Profile"}
+          </Button>
+        ) : (
+          <Button className="FollowUnfollowButton" onClick={handleButtonClick}>
+            {IsFollowed ? "Unfollow" : "Follow"}
+          </Button>
+        )}
 
+        <Modal
+          open={optionsModalState}
+          onClose={handleCancelAction}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          keepMounted
+        >
+          {isAdmin ? (
+            <FormControl className="editProfileCloseContainer" fullWidth>
+              <Typography id="modal-modal-title" variant="h6">
+                Ban @{userName}?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 1 }}>
+                How long do you want to suspend @{userName}?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mb: 1 }}>
+                They won't be able to tweet, comment, or take other actions in
+                the chosen time frame.
+              </Typography>
+              <Select
+                value={banDuration1}
+                onChange={handleSelectChange}
+                autoWidth
+              >
+                <MenuItem value={1}>Day</MenuItem>
+                <MenuItem value={3}>3 Days</MenuItem>
+                <MenuItem value={7}>7 Days</MenuItem>
+                <MenuItem value={14}>14 Days</MenuItem>
+                <MenuItem value={28}>28 Days</MenuItem>
+              </Select>
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  onClick={handleBanAction}
+                  className="profileDiscardContainerButton"
+                >
+                  Ban
+                </Button>
+                <Button
+                  onClick={() => setOptionsModalState(false)}
+                  className="profileCloseContainerButton"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </FormControl>
+          ) : (
+            <FormControl className="editProfileCloseContainer">
+              <Typography id="modal-modal-title" variant="h6">
+                Report @{userName}?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Let the admins know what's wrong with this account. No one else
+                will see your name or the content of this report.
+              </Typography>
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  onClick={handleReportAction}
+                  className="profileDiscardContainerButton"
+                >
+                  Report
+                </Button>
+                <Button
+                  onClick={() => setOptionsModalState(false)}
+                  className="profileCloseContainerButton"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </FormControl>
+          )}
+        </Modal>
+
+        <Modal
+          open={followModalState}
+          onClose={handleCancelAction}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          keepMounted
+        >
+          <FormControl className="editProfileCloseContainer">
+            <Typography id="modal-modal-title" variant="h6">
+              Unfollow @{userName}?
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Their Tweets will no longer show up in your home timeline. You can
+              still view their profile, unless their Tweets are protected.
+            </Typography>
+            <div style={{ textAlign: "center" }}>
+              <Button
+                onClick={handleUnfollowAction}
+                className="profileDiscardContainerButton"
+              >
+                Unfollow
+              </Button>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <Button
+                onClick={handleCancelAction}
+                className="profileCloseContainerButton"
+              >
+                Cancel
+              </Button>
+            </div>
+          </FormControl>
+        </Modal>
 
         <Modal
           open={buttonPopup}
@@ -225,6 +331,7 @@ function MyProfile({
                 fullWidth
                 inputProps={{ maxLength: 100 }}
               />
+              
             </div>
             <Modal
               open={buttonclosePopup}
@@ -281,6 +388,7 @@ function MyProfile({
         bio={bio}
         location={location}
         website={website}
+        birthday={birthday}
       />
       <MyProfileTabs />
     </div>

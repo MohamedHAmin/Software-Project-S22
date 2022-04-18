@@ -34,7 +34,7 @@
 .moreInfo span .MuiSvgIcon-root {
   height: 20px !important;
   width: 20px !important;
-  margin-right: 1px;
+  margin-right: 3px;
 
   color: var(--color-mode);
   opacity: 0.8;

@@ -3,6 +3,7 @@ import "./Styles/ProfileInfo.css";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LinkIcon from "@mui/icons-material/Link";
+import CakeIcon from '@mui/icons-material/Cake';
 function ProfileInfo({
   name,
   userName,
@@ -12,6 +13,7 @@ function ProfileInfo({
   bio,
   location,
   website,
+  birthday
 }) {
   const websiteLength = website.length;
   return (
@@ -35,6 +37,13 @@ function ProfileInfo({
               {websiteLength < 26 ? website : website.substring(0, 25) + "..."}
             </span>
           </a>
+        ) : (
+          ""
+        )}
+        {birthday ? (
+          <span>
+            <CakeIcon /> Born in {birthday}
+          </span>
         ) : (
           ""
         )}

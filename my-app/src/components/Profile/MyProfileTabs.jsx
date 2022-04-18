@@ -7,16 +7,16 @@ function MyProfileTabs() {
     <Box className="myProfileTabs">
       <Tabs centered>
         <NavLink className="myProfileNavLink" to="/Profile">
-          <Tab className="myProfileTab" label="Tweets" />
+          <Tab value={0} className="myProfileTab" label="Tweets" />
         </NavLink>
         <NavLink className="myProfileNavLink" to="/Profile/with_replies">
-          <Tab className="myProfileTab" label="Tweets & replies" />
+          <Tab value={1} className="myProfileTab" label="Tweets & replies" />
         </NavLink>
         <NavLink className="myProfileNavLink" to="/Profile/media">
-          <Tab className="myProfileTab" label="Media" />
+          <Tab value={2} className="myProfileTab" label="Media" />
         </NavLink>
         <NavLink className="myProfileNavLink" to="/Profile/likes">
-          <Tab className="myProfileTab" label="Likes" />
+          <Tab value={3} className="myProfileTab" label="Likes" />
         </NavLink>
       </Tabs>
     </Box>
