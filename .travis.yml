@@ -1,0 +1,37 @@
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker network create mean
+  - docker build -t api -f ./api/Dockerfile.dev ./api
+
+
+script: 
+  - docker run --network mean --name database -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -p 27017:27017 -d mongo
+  - docker run --network mean -v /app/node_modules -v $(pwd)/api:/app -e MONGOCONNECT=mongodb://root:example@database:27017/ api npm run test
+
+
+# after_success:
+#   - docker build -t mostafaelnashar/multi-client ./client
+#   - docker build -t mostafaelnashar/multi-nginx ./nginx
+#   - docker build -t mostafaelnashar/multi-server ./server
+#   - docker build -t mostafaelnashar/multi-worker ./worker
+#   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+#   - docker push mostafaelnashar/multi-client
+#   - docker push mostafaelnashar/multi-nginx
+#   - docker push mostafaelnashar/multi-server
+#   - docker push mostafaelnashar/multi-worker
+
+# deploy:
+#   provider: elasticbeanstalk
+#   region: 'us-east-1'
+#   app: 'multi-docker'
+#   env: 'Multidocker-env'
+#   bucket_name: elasticbeanstalk-us-east-1-284489073366
+#   bucket_path: docker-multi
+#   on:
+#     branch: master
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_KEY
