@@ -1,22 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'sign_in_3rd_party_page.dart';
 import 'home_page.dart';
 
-class LoginPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  Map<String, String> credentials = {'Mohamed': '123', 'Ramy': '321'};
-
-  bool CheckSignIn(String username, String password) {
-    if (credentials.containsKey(username)) {
-      return credentials[username] == password;
-    }
-    return false;
-  }
+class Login3rdPartyPage extends StatelessWidget {
+  const Login3rdPartyPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +16,7 @@ class LoginPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
-          'Login',
+          '3rd Party Login',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -45,124 +33,12 @@ class LoginPage extends StatelessWidget {
         ),
       ),
       body: Column(
-        children: [
-          _buildForm(),
-          Container(
-            padding: EdgeInsets.only(top: 3, left: 3),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border(
-                  bottom: BorderSide(color: Colors.black),
-                  top: BorderSide(color: Colors.black),
-                  left: BorderSide(color: Colors.black),
-                  right: BorderSide(color: Colors.black),
-                )),
-            child: MaterialButton(
-              minWidth: double.infinity,
-              height: 60,
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  debugPrint('All validations passed!!!');
-                  if (CheckSignIn(
-                      _usernameController.text, _passwordController.text)) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  } else {
-                    return;
-                  }
-                } else
-                  return;
-              },
-              color: Color(0xff6d71ff),
-              // elevation: 0,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.deepPurpleAccent),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: const Text(
-                "Login",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 3, left: 3),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border(
-                  bottom: BorderSide(color: Colors.black),
-                  top: BorderSide(color: Colors.black),
-                  left: BorderSide(color: Colors.black),
-                  right: BorderSide(color: Colors.black),
-                )),
-            child: MaterialButton(
-              minWidth: double.infinity,
-              height: 60,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Login3rdPartyPage()));
-              },
-              color: Color(0xff6d71ff),
-              // elevation: 0,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.deepPurpleAccent),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: const Text(
-                "Login with 3rd Party",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              'Forgot Password?',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xff6d71ff),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Form _buildForm() {
-    return Form(
-      key: _formKey,
-      child: Column(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              maxLength: 16,
-              controller: _usernameController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Username field is required';
-                }
-                return null;
-              },
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Username or E-mail',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0)),
               ),
@@ -171,19 +47,83 @@ class LoginPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              maxLength: 16,
               obscureText: true,
-              controller: _passwordController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Password field is required';
-                }
-                return null;
-              },
               decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0)),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 3, left: 3),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border(
+                  bottom: BorderSide(color: Colors.black),
+                  top: BorderSide(color: Colors.black),
+                  left: BorderSide(color: Colors.black),
+                  right: BorderSide(color: Colors.black),
+                )),
+            child: MaterialButton(
+              minWidth: double.infinity,
+              height: 60,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              color: Color(0xff6d71ff),
+              // elevation: 0,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.deepPurpleAccent),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: const Text(
+                "Login with Google",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 3, left: 3),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border(
+                  bottom: BorderSide(color: Colors.black),
+                  top: BorderSide(color: Colors.black),
+                  left: BorderSide(color: Colors.black),
+                  right: BorderSide(color: Colors.black),
+                )),
+            child: MaterialButton(
+              minWidth: double.infinity,
+              height: 60,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              color: Color(0xff6d71ff),
+              // elevation: 0,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.deepPurpleAccent),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: const Text(
+                "Login with Facebook",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
