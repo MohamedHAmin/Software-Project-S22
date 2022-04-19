@@ -9,6 +9,9 @@ const tokenSchema = new mongoose.Schema({
     ownerId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
+    },
+    expiredAt:{
+        type:Date
     }
 },
 {

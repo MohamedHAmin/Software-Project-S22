@@ -3,7 +3,8 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken');
 const Token = require("./Token");
-const Admin = require("./Admin")
+const Admin = require("./Admin");
+const { now } = require("lodash");
 
 const userSchema = new mongoose.Schema({
   screenName: {
@@ -202,10 +203,15 @@ userSchema.methods.toJSON=function(){
 
 userSchema.methods.generateAuthToken=async function(){
     const user = this;
-    const token=jwt.sign({_id:user._id.toString()},process.env.SECRET)
+    const token=jwt.sign({_id:user._id.toString()},process.env.SECRET,{
+
+      expiresIn: '24h' // expires in 365 days
+
+ })
     const tokenObj=await Token.create({
       'token':token,
-      'ownerId':user._id
+      'ownerId':user._id,
+      'expiredAt':Date.now()+86400000  //24h
     })
     return tokenObj
 }
