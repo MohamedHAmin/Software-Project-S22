@@ -22,14 +22,16 @@ const sendVerificationEmail = async({_id,email},res)=>{
   //url to be used in the email 
   try{
   const currenturl = "http://localhost:3000/"
-     
-  const uniqueString = await bcrypt.hash(_id.toString(), 8);
+     const hashstring=_id.toString()+process.env.SECRET
+  const uniqueString = await bcrypt.hash(hashstring, 8);
+  const notaccepteduniqustreng=uniqueString
+   const accepteduniqueString=uniqueString.toString().replace('+','xMl3Jk').replace('/','Por21Ld').replace('=','Ml32')
   //hash the string 
   
     const newVerification = new UserVerification({
       userId : _id,
       email:email,
-      uniqueString: uniqueString,
+      uniqueString: notaccepteduniqustreng,
       createdAt: Date.now(),
       expiresAt: Date.now() + 21600000, //6 hrs in ms]
     })  
@@ -38,7 +40,7 @@ const sendVerificationEmail = async({_id,email},res)=>{
       to: email,
       subject : " Verify Your Email",
       html: `<p> Verify the email address to complete the signup and login to your account. </p> 
-      <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "/" + uniqueString}> here </a> to proceed </p>`
+      <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "/" + accepteduniqueString}> here </a> to proceed </p>`
       
     }
     
@@ -53,6 +55,7 @@ console.log(e);
 router.get("/verify/:userId/:uniqueString", async(req,res)=>{
   try{
     let {userId, uniqueString} = req.params 
+    uniqueString.toString().replace('xMl3Jk', '+' ).replace('Por21Ld', '/').replace('Ml32', '=');
     const result=await UserVerification.find({userId})
       if(result.length > 0 ){
 

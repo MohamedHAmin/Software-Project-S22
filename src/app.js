@@ -16,6 +16,7 @@ const profileRouter =require('./routers/profilerouter')
 const app=express()
 const port=process.env.PORT
 app.use(express.json())
+app.set('trust proxy', 1) 
 app.use('/user',userAuthRouter)
 app.use('/user',userRouter)
 app.use(tweetRouter)

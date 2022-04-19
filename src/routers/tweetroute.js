@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 const filter = require("../ethics/bad_words");
-const Tweet = require("../models/Tweet");
+const Tweet = require("../models/tweet");
 
 router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   //Creates a new tweet with the json data that the user sends
@@ -63,18 +63,17 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
           //and decrease index of loop
           tags.splice(i, 1);
           i--;
-        } else if (!/\S/.test(tags[i].tag)) {
-          //if tag is only whitespaces remove it from array
-          //and decrease index of loop
-          tags.splice(i, 1);
-          i--;
-        }
+        } 
       }
     }
     if (req.body.imageCheck === "true") {
       // const uploader = (path) => cloudinary.uploads(path, "Images");
       const urls = [];
       const files = req.files;
+      if (files.length > 4) {
+        e = "Image limit exceeded";
+        throw e;
+      }
       for (const file of files) {
         const path = file.path;
         const newPath = await cloudinary.uploader.upload(path);
@@ -163,7 +162,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
     } else {
       res.status(400);
     }
-    res.send({ error: e.toString() });
+    res.status(400).send({ error: e.toString() });
   }
 });
 
@@ -197,7 +196,6 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
         //if the like pending for removal is not the only one in the array
         //use splice and decrease count and update the tweet in the database
         ReqTweet.likes.splice(unlikedIndex, 1);
-        console.log(ReqTweet.likes.toString());
         ReqTweet.likeCount = ReqTweet.likeCount - 1;
         await ReqTweet.save();
         res.status(201);
@@ -211,7 +209,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
         ReqTweet.likeCount = 0;
         await ReqTweet.save();
         res.status(201);
-        res.send(ReqTweet.likes);
+        res.send({status:"success"});
       }
     } else if (unliked === false) {
       //if the unliked is false then add a like attribute with the id of the user that
@@ -220,15 +218,11 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
       ReqTweet.likeCount++;
       await ReqTweet.save();
       res.status(201);
-      res.send(ReqTweet.likes);
+      res.send({status:"success"});
     }
   } catch (e) {
     //catch and send back errors to the front end
-    if (e == "Error: Not Found") {
-      res.status(404);
-    } else {
       res.status(400);
-    }
     res.send({ error: e.toString() });
   }
 });
@@ -277,22 +271,6 @@ router.post("/retweet", auth("user"), async (req, res) => {
       //exceeds 10 tags refuse this post and send an error
       e = "tags exceeded limit";
       throw e;
-    } else if (tags && tags.length != 0 && tags.length <= 10) {
-      //if tags are not a null and don't exceed 10 tags then
-      //then enter a loop on all tag object inside tags
-      for (let i = 0; i < tags.length; i++) {
-        if (!tags[i].tag || tags[i].tag.trim().length === 0) {
-          //if tag is "" (empty) or null remove it from array
-          //and decrease index of loop
-          tags.splice(i, 1);
-          i--;
-        } else if (!/\S/.test(tags[i].tag)) {
-          //if tag is only whitespaces remove it from array
-          //and decrease index of loop
-          tags.splice(i, 1);
-          i--;
-        }
-      }
     }
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
@@ -336,11 +314,6 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
            },
         }]
     })
-    if (!tweets) {
-      e = "tweet not found";
-      throw e;
-    }
-
     res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -355,12 +328,9 @@ router.get("/timeline", auth("any"), async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 30;
 
- 
-    console.log(req.user)
     const followingsId=req.user.following.map(
         user=>{return user.followingId}
         )
-        console.log(followingsId)
     const user=req.user
   
        const followerTweet=await Tweet.find({authorId:{$in:followingsId}}).limit(limit).skip(skip).populate(
@@ -382,14 +352,6 @@ router.get("/timeline", auth("any"), async (req, res) => {
           select: "_id screenName tag followercount followingcount profileAvater.url",
         }
       )
-
-      console.log('finish1')
-
-    
-    if (!followerTweet) {
-      e = "tweet not found";
-      throw e;
-    }
 
     res.send(followerTweet);
   } catch (e) {

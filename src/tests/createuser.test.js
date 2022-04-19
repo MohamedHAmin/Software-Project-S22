@@ -131,10 +131,14 @@ test('email verfication', async ()=>{
         password:"12345678",
         tag:"tg1"
     })
-    const uniqueString = await bcrypt.hash(res.body.user._id.toString(), 8);
-    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ uniqueString", uniqueString.toString())
-    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ es.body.user._id", res.body.user._id.toString())
-    const res2=await request(app).get('/user/verify/'+res.body.user._id.toString()+'/'+uniqueString.toString())
+    const userverification2=await Userverification.findOne()
+
+    const userverification=await Userverification.findOne({email:"cool23@gmail.com"})
+
+    let s=userverification.uniqueString.replace('+','xMl3Jk').replace('/','Por21Ld').replace('=','Ml32');
+     s =s.replace("/","por21Ld")
+    
+    const res2=await request(app).get('/user/verify/'+res.body.user._id.toString()+'/'+s)
     .expect(200)
     
 })
