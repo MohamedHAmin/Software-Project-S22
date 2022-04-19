@@ -12,8 +12,13 @@ import Report from "./Report";
 import posts from "./Arrays/posts"
 import Retweet from './Retweet';
 import moment from 'moment';
+import comments from './Arrays/comments';
 
 function Homepage(){
+  const [numberOfRetweets,setNumberOfRetweets]=useState(0);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [deletedpostId,setdeletedpostId]=useState(-1);
+    function onimgSelectedChange(newimg) {  setSelectedImage(newimg);}
     //const [post,setPost] = useState("");
     //const [newtweet,setNewTweet]=useState(false);
     const [count,setCount]=useState(0);
@@ -26,33 +31,68 @@ function Homepage(){
         setCount(temp);
       }
     }
+
+    
+    const passdeletedTweet =(id)=>
+    {
+        const index= posts.map((post) => post.id).indexOf(id);
+        //const innerindex = posts[index];
+        const innerid=posts[index].innerpostid;
+        posts.splice(index,1);
+        if(innerid!==undefined)
+        {
+          var innertweetindex=posts.map((post)=>post.id).indexOf(innerid);
+          posts[innertweetindex].numberOfRetweets=(posts[innertweetindex].numberOfRetweets)-1;
+          //setNumberOfRetweets(posts[innertweetindex].numberOfRetweets);
+          //setCount(count-1);
+          console.log(posts[innertweetindex].numberOfRetweets);
+        }
+/*posts[index].numberOfRetweets.length*/
+        //var temp=posts.filter((post)=> post.innerpostid===id).length;
+        //setNumberOfRetweets(temp);
+        const listOfComments=comments.filter((comment)=> comment.postid===id);
+        if(listOfComments.length)
+        {
+          for(let i=0;i<listOfComments.length;i++)
+          {
+            const index2 =comments.map((comment)=> comment.id).indexOf(listOfComments[i].id);
+            comments.splice(index2,1);
+          }
+        }
+    }
+
     const postHandeler = () =>{
-    if(text!="")
+    if(text!="" || selectedImage!=null)
     {
       posts.push({
-        id:posts.length,
+        id:count,
         username:"Ahmed_Emad",
         displayName:"AhmedEmad71",
         content:text,
         posthour:moment().format('hh:mm'),
-        postdate:moment().format('DD/MM/YYYY')
+        postdate:moment().format('DD/MM/YYYY'),
+        images:selectedImage,
+        numberOfRetweets:0
       });
       var temp=count;
       temp++;
       setCount(temp);
+      setText("");
+      setSelectedImage(null);
     }
     }
     const [text,setText] = useState("");
     const onChangeHandeler = (event) =>{
     setText(event.target.value);
     }
+    //posts=keyIndex(posts,1);
   return (
     <div className="Homepage" onClick={checkretweets}>
       <SideBar Home/>
       <div className="postConatiner">
           <Header />
-          <Tweet onChangeHandeler={onChangeHandeler} />
-          <TweetBar postHandeler={postHandeler} />
+          <Tweet value={text} onChangeHandeler={onChangeHandeler} ali={selectedImage} />
+          <TweetBar postHandeler={postHandeler} onimgChange={onimgSelectedChange} />
           {posts?.length ? ( 
           posts.filter((post)=> post.innerpostid===undefined).map((post) =>
             <Post
@@ -63,6 +103,13 @@ function Homepage(){
               content={post.content}
               hour={post.posthour}
               date={post.postdate}
+              image={post.images}
+              passdeletedTweet={passdeletedTweet}
+              isPost={true}
+              count={count}
+              setCount={setCount}
+              numberOfRetweets={post.numberOfRetweets}
+              setNumberOfRetweets={setNumberOfRetweets}
             />)
           ):(<></>)}
           {posts?.length ? ( 
@@ -79,6 +126,14 @@ function Homepage(){
               innerusername={posts[post.innerpostid].username}
               innerdisplayName={posts[post.innerpostid].displayName}
               innercontent={posts[post.innerpostid].content}
+              passdeletedTweet={passdeletedTweet}
+              isPost={true}
+              count={count}
+              setCount={setCount}
+              numberOfRetweets={post.numberOfRetweets}
+              setNumberOfRetweets={setNumberOfRetweets}
+              innerpostimage={post.innerpostimage}
+              image={post.images}
             />)
           ):(<></>)}
           {/* <Retweet key={0}

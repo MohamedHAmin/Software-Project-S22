@@ -6,13 +6,13 @@ import PeopleIcon from '@mui/icons-material/People';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SportsScoreOutlinedIcon from '@mui/icons-material/SportsScoreOutlined';
 import Delete from '@mui/icons-material/DeleteOutlined';
-function privacyButton(){
+function privacyButton(props){
 return(
     <div className="input-group mb-3">
         <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true"><MoreHorizIcon /></button>
         <ul className="dropdown-menu">
         <li><a className="dropdown-item btn" href="/Report"><SportsScoreOutlinedIcon className="bo" /> Report</a></li>
-        <li><a className="dropdown-item btn" href="#"><Delete className="bo" />Delete</a> </li>
+        <li><a className="dropdown-item btn" href="#" onClick={props.onDeleteHandler}><Delete className="bo" />Delete</a> </li>
           
         </ul>
   </div>
