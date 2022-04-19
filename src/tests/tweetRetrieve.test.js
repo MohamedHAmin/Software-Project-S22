@@ -8,10 +8,10 @@ beforeEach(async () => {
     await Tweet.deleteMany();
     await User.deleteMany();
     user=await User.create({
-        screenName: "Youssef Hany",
-        tag: "YoussefHany",
+        screenName: "user1",
+        tag: "tag1",
         password: "123456",
-        email: "yousseftron@gmail.com",
+        email: "user1@gmail.com",
     });
     usertoken=await user.generateAuthToken()
 });
@@ -41,4 +41,39 @@ test('Tweet not found', async ()=>{
     .set('Authorization','Bearer '+usertoken.token)
     .expect(400)
     expect(res.body).toEqual({error:"tweet not found"});
+});
+
+test("Get all user's tweets", async ()=>{
+
+    const user2= await User.create({
+        screenName: "user2",
+        tag: "tag2",
+        password: "123456",
+        email: "user2@gmail.com",
+    })
+    const user2token= user2.generateAuthToken();
+
+    const tweet1= await Tweet.create({
+        authorId:user._id,
+        text:"new tweet 1"
+    });
+    const tweet2=await Tweet.create({
+        authorId:user._id,
+        text:"new tweet 2",
+        likes:[{like:user2._id}]
+    });
+    const tweet3=await Tweet.create({
+        authorId:user2._id,
+        text:"new tweet 3",
+        retweetCount:1
+    });
+    const tweet4=await Tweet.create({
+        authorId:user._id,
+        text:"new tweet 4",
+        retweetedTweet:tweet3._id,
+    });
+
+    const res=await request(app).get("/tweet/user/"+user._id)
+    .set("Authorization","Bearer "+usertoken.token)
+    .expect(200);
 });

@@ -310,7 +310,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
 router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
     const user=await User.findOne({ _id:req.params.id})
      const tweets=await user.populate(
@@ -336,11 +336,11 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
            },
         }]
     })
-    if (!tweets) {
+    if (tweets.length===0) {
       e = "tweet not found";
       throw e;
     }
-
+    console.log(user.Tweets);
     res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -387,7 +387,6 @@ router.get("/timeline", auth("any"), async (req, res) => {
       e = "tweet not found";
       throw e;
     }
-    console.log(followerTweet);
     res.send(followerTweet);
   } catch (e) {
     //here all caught errors are sent to the client
