@@ -340,8 +340,6 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
       e = "no tweets found";
       throw e;
     }
-    //console.log(tweets);
-    //console.log(user.Tweets);
     res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
