@@ -1,0 +1,25 @@
+.btn-group{
+    height: 50px;
+    margin-top: 50px;
+    outline: none;
+    box-shadow: inset -1px -1px 0 0 rgb(0 0 0 / 10%);
+    width:100% ;
+    padding-right: 15px;
+    justify-content: space-between;
+    align-items: center !important;
+}
+.sidexarTweet {
+background-color: var(--larry-color) !important;
+height: 20px !important;
+border-radius: 10px !important;
+margin: 5px;
+padding-top: 12px !important;
+padding-bottom: 12px !important;
+
+} 
+@media screen and (max-width: 1000px) {
+.Icon-control {
+display: none;
+}
+}
+  

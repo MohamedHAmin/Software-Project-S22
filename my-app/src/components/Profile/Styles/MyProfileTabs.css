@@ -1,0 +1,20 @@
+.myProfileTabs {
+  border-bottom: 2px solid var(--color-border) !important;
+}
+
+.myProfileTab {
+  text-transform: inherit !important;
+  color: var(--color-mode) !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  opacity: 0.9 !important;
+}
+
+.myProfileNavLink  {
+  text-decoration: none !important;
+}
+
+.myProfileTab:hover {
+  
+  background-color: #a9abad63;
+}
