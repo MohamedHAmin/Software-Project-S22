@@ -8,105 +8,113 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 20,
-              color: Colors.black,
-            ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 20,
+            color: Colors.black,
           ),
         ),
-        body: SingleChildScrollView(
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                height: MediaQuery.of(context).size.height - 50,
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "Sign up",
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "Create an account, It's free ",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[700]),
-                        )
-                      ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          height: MediaQuery.of(context).size.height - 50,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Text(
+                    "Sign up",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Column(
-                      children: <Widget>[
-                        _buildForm(),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 3, left: 3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border(
-                            bottom: BorderSide(color: Colors.black),
-                            top: BorderSide(color: Colors.black),
-                            left: BorderSide(color: Colors.black),
-                            right: BorderSide(color: Colors.black),
-                          )),
-                      child: MaterialButton(
-                        minWidth: double.infinity,
-                        height: 60,
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            debugPrint('All validations passed!!!');
-                            Navigator.pop(context);
-                          } else
-                            return;
-                        },
-                        color: Color(0xff6d71ff),
-                        // elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(50),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Create an account, It's free ",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[700]),
+                  )
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  _buildForm(),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 3, left: 3),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border(
+                      bottom: BorderSide(color: Colors.black),
+                      top: BorderSide(color: Colors.black),
+                      left: BorderSide(color: Colors.black),
+                      right: BorderSide(color: Colors.black),
+                    )),
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  height: 60,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      debugPrint('All validations passed!!!');
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Please check your E-mail'),
+                          content: Text(
+                              'Success!\nYour new account will be ready as soon as you verify your E-mail address.\nJust click the link.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.popUntil(
+                                    context, (route) => route.isFirst);
+                              },
+                            ),
+                          ],
                         ),
-                        child: const Text(
-                          "Create Account",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      );
+                    } else
+                      return;
+                  },
+                  color: Color(0xff6d71ff),
+                  // elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.deepPurpleAccent),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: const Text(
+                    "Create Account",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.white,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Already have an account?"),
-                        Text(
-                          "Back to Login",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        )
-                      ],
-                    )
-                  ],
-                ))));
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Form _buildForm() {

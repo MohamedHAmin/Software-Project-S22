@@ -46,82 +46,85 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Container(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: const AssetImage('assets/user_2.png'),
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfilePage2()));
-                    },
-                    child: Row(children: [
-                      Text('Username',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18))
-                    ])),
-                Text('@user_handle',
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: const AssetImage('assets/user_2.png'),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage2()));
+                      },
+                      child: Row(children: [
+                        Text('Username',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18))
+                      ])),
+                  Text('@user_handle',
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff9e9e9e))),
+                  Text(
+                    ' 23m',
                     style: TextStyle(
-                        fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff9e9e9e))),
+                        fontSize: 8,
+                        color: Color(0xff9e9e9e)),
+                  )
+                ]),
                 Text(
-                  ' 23m',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 8,
-                      color: Color(0xff9e9e9e)),
-                )
-              ]),
-              Text(
-                  'Tweet Content: this is only an example of the tweet text and will be updated later.'),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 75),
-                  child: Divider(
-                    color: Color(0xff6d71ff),
-                  )),
-              Row(children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: const AssetImage('assets/user_avatar.png'),
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfilePage()));
-                    }, //Action to be added later
-                    child: Row(children: [
-                      Text('Username',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18))
-                    ])),
-                Text('@user_handle',
+                    'Tweet Content: this is only an example of the tweet text and will be updated later.'),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 75),
+                    child: Divider(
+                      color: Color(0xff6d71ff),
+                    )),
+                Row(children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: const AssetImage('assets/user_avatar.png'),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
+                      }, //Action to be added later
+                      child: Row(children: [
+                        Text('Username',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18))
+                      ])),
+                  Text('@user_handle',
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff9e9e9e))),
+                  Text(
+                    ' 12m',
                     style: TextStyle(
-                        fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff9e9e9e))),
+                        fontSize: 8,
+                        color: Color(0xff9e9e9e)),
+                  )
+                ]),
                 Text(
-                  ' 12m',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 8,
-                      color: Color(0xff9e9e9e)),
-                )
+                    'Tweet 2 Content: this is only an example of the tweet text and will be updated later.')
               ]),
-              Text(
-                  'Tweet 2 Content: this is only an example of the tweet text and will be updated later.')
-            ]),
+        ),
 
         // this container is for tweets
       ),
