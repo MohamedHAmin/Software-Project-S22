@@ -14,11 +14,21 @@ const Input = styled('input')({
 });
 
 function TweetBar(props){
+    //const [selectedImage, setSelectedImage] = useState(null);
+    /*const [uploadCount,setuploadCount]=useState(0);
+    console.log(uploadCount);*/
     return(
        
     <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
         <label  htmlFor="icon-button-file">
-        <Input  accept="image/*" id="icon-button-file" type="file" />
+        <Input  accept="image/*" id="icon-button-file" type="file" name="myImage"
+         onChange={(event) => {
+          console.log(event.target.files[0]);
+          props.onimgChange(event.target.files[0]);
+          /*var temp2=uploadCount;
+          temp2++;
+          setuploadCount(temp2);*/
+        }} />
         <IconButton style ={{color:"#2b3dbc"}} aria-label="upload picture" component="span">
         <PhotoCamera  />
         </IconButton>
@@ -59,7 +69,7 @@ function TweetBar(props){
         </IconButton>
         </label>
 
-        <Button onClick={props.postHandeler} style={{fontSize:20}} className="sidexarTweet" variant="contained" href="#contained-buttons">
+        <Button onClick={props.postHandeler} style={{fontSize:20}} className="sidexarTweet" variant="contained">
           LAR
         </Button>
     </div>

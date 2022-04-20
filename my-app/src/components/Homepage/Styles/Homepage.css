@@ -1,18 +1,22 @@
 .Homepage
 {
     display: flex;
-      
+    margin-left: 24%;
+    
 }
 .postConatiner {
-    flex:0.5;
+    width: 60%;
     min-width: 350px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: var(--color-border);
-    border-left: 0px;
-    border-top: 0;
+    border-right: 2px solid var(--color-border);
   }
-@media screen and (max-width: 720px) {
+  .rightbar {
+    
+    position: sticky;
+    margin-right: 0%;
+    height: 100%;
+    min-width: 200px;
+  }
+@media screen and (max-width: 859px) {
     .searchbar
     {
       display: none;
@@ -24,36 +28,27 @@
   }
 .rightbar
   {
-    margin-left: 5%;
+    position:sticky;
     margin-right: 0%;
-    display: flex;
-    flex:0.3;
     height: 100vh;
-
     min-width: 200px;
-    width: 100%;
   }
 .searchbar
 {
   position: relative;
   top: 15px;
-  right: 5%;
+  left :5%;
   width: inherit;
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1060px) {
     .Homepage {
-      margin-left: 2%;
+      margin-left: 22%;
     }
 }
-* {
-  margin:0;
-}
-.settingsPageDiv {
-  flex: 0.8;
-}
-@media screen and (max-width: 703px) {
+@media screen and (max-width: 859px) {
     .Homepage {
       margin-right: 0;
+      margin-left: 29%;
     }
     .rightbar
     {

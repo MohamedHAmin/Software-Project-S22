@@ -1,9 +1,9 @@
 .settingsMenuOptionsLight {
   font-weight: 400 ;
-  font-size: 10px;
+  font-size: 10px !important;
   font-stretch: normal;
   display:flex;
-  align-items: center;
+  flex:0.97;
   cursor: pointer;
   padding-top: 2em;
   padding-bottom: 2em;
@@ -15,6 +15,7 @@
   font-size: 10px;
   font-stretch: normal;
   display:flex;
+  flex:0.97;
   align-items: center;
   cursor: pointer;
   padding-top: 2em;
@@ -22,20 +23,73 @@
   padding-left: 1.5em;
   color: rgb(255, 255, 255);
 }
-.settingsMenuOptionsLight:hover {
+.subtextsettingsMenuOptionsLight{
+  font-weight: 400 ;
+  font-size: 13px !important;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  cursor: pointer;
+  padding-left: 1.5em;
+  color: rgb(48, 48, 49);
+}
+.subtextsettingsMenuOptionsDark {
+  font-weight: 400;
+  font-size: 13px;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 1.5em;
+  color: rgb(255, 255, 255);
+}
+
+
+.WholeSettingOptionLight:hover {
   background-color: rgb(247, 246, 246);
   transition: background 100ms ease-in-out;
 }
-.settingsMenuOptionsLight--active {
+.WholeSettingOptionLight--active {
   background-color: rgb(247, 246, 246);
 }
-.settingsMenuOptionsDark:hover {
+
+.WholeSettingOptionDark:hover {
   background-color: rgb(53, 49, 77);
   transition: background 100ms ease-in-out;
 }
-.settingsMenuOptionsDark--active {
+.WholeSettingOptionDark--active {
   background-color: rgb(53, 49, 77);
 }
-.arrowIcon {
-  margin-right: 20px !important;
+.arrowIconLight {
+  float: right;
+  flex:0.03;
+  text-align:right !important;
+  color: rgb(48, 48, 49);
+}
+.arrowIconDark {
+  float: right;
+  flex:0.03;
+  text-align:right !important;
+  color:rgb(247, 246, 246) !important;
+  
+}
+
+.WholeSettingOptionLight{
+
+  display: flex;
+  align-items: center;
+}
+.WholeSettingOptionDark{
+
+  display: flex;
+  align-items: center;
+}
+
+.karim2{
+  display:flex;
+  flex:0.97;
+  flex-direction: column;
+  
+  
 }

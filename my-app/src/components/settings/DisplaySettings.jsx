@@ -107,18 +107,18 @@ function DisplaySettings(props) {
         <div className="settingsSubMenu">
         {/* if nothing clicked */}
             {isClickedDisplay==false &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Accessibility, display and languages</h1>)}
-            {isClickedDisplay==false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage how Twitter content is displayed to you.</p>)}
-            {isClickedDisplay==false &&(<div onClick={clickedDisplay} ><SettingsMenuOptions id="9" darkMode={props.isDarkMode} active={isClickedDisplay} Icon={PaletteIcon} text="Display" subtext="Manage your font size, color, and background. These settings affect all the Twitter accounts on this browser."/></div>)}
+            {isClickedDisplay==false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage how Larry content is displayed to you.</p>)}
+            {isClickedDisplay==false &&(<div onClick={clickedDisplay} ><SettingsMenuOptions id="10" darkMode={props.isDarkMode} active={isClickedDisplay} Icon={PaletteIcon} text="Display" subtext="Manage your font size, color, and background. These settings affect all the Larry accounts on this browser." isSubtextExist={true} /></div>)}
         {/* if Display clicked */}  
             {isClickedDisplay==true &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Display</h1>)}
-            {isClickedDisplay==true &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" } >Manage your font size, color, and background. These settings affect all the Twitter accounts on this browser.</p>)}
+            {isClickedDisplay==true &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" } >Manage your font size, color, and background. These settings affect all the Larry accounts on this browser.</p>)}
             {isClickedDisplay==true &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" } style={{fontSize:20}}> Light mode/ Dark mode</h1>)}
              {isClickedDisplay==true &&(<div onClick={clickedDarkMode} >{/*<Button variant="contained">Contained</Button> */}
-                <SwitchRoot className={clsx(stateClasses)}>
+                <SwitchRoot className={clsx(stateClasses)} >
                 <SwitchTrack>
                 <SwitchThumb className={clsx(stateClasses)} />
                 </SwitchTrack>
-                <SwitchInput {...getInputProps()} aria-label="Demo switch" />
+                <SwitchInput {...getInputProps()} aria-label="Demo switch" data-testid="switch-btn"/>
                 </SwitchRoot>
             </div>)}
         </div>

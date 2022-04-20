@@ -1,15 +1,17 @@
 import React from "react";
-import './Styles/ProfileName.css'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-function ProfileName(props) {
-  return(
+import "./Styles/ProfileName.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
+function ProfileName({ pName, tweetNum }) {
+  const navigate = useNavigate();
+  return (
     <div className="profileName">
-    <ArrowBackIcon/>
-    <div className="description" >
-    <h2>{props.pName}</h2>
-    <p>{props.tweetNum} Tweets</p>
+      <ArrowBackIcon onClick={() => navigate(-1)} />
+      <div className="description">
+        <h2>{pName}</h2>
+        <p>{tweetNum} Tweets</p>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
-export default ProfileName
+export default ProfileName;

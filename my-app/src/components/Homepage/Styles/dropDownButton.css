@@ -22,3 +22,7 @@
 .bo{
     align-items: center!important;
 }
+.dropdown-item.active, .dropdown-item:active {
+    background-color: white;
+    color: rgb(43, 61, 188);
+}

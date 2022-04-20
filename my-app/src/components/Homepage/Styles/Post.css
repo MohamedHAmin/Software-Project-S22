@@ -16,7 +16,7 @@
     border-top: 0px;
     border-left: 0px;
     border-right: 0px;
-    height: fit-content;
+    /*height: fit-content;*/
     padding:calc(2%);
     margin-top: 10px;
     margin-bottom: 10px;
@@ -31,12 +31,16 @@
     left:0px;
     cursor: pointer;
     float: left;
-    margin-right: 0%;
+}
+.loadmore
+{
+    text-align: center;
 }
 .tweetContent
 {
-    padding-block: calc(2%);
+    padding: calc(2%);
     float: left;
+    
 }
 .profileInfo
 {
@@ -49,12 +53,17 @@
 .tag
 {
     font-size: small;
-    color: grey;
+    color: var(--color-mode);
+    margin-left: 6%;
+
 }
 .username
 {
     font-size: medium;
     font-weight: bold;
+    color: var(--color-mode);
+text-decoration: none;
+margin-left: 6%;
 }
 .time
 {
@@ -69,8 +78,7 @@
 {
     display: flex;
     float:left;
-    /* margin-right: 0%; */
-    margin-left: 100;
+    margin-right: 100%;
     margin-bottom: 1%;
 }
 .comment

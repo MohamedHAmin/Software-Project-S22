@@ -1,14 +1,17 @@
 * {
   margin:0;
 }
+
+
 .AppLight {
   font-family: "Montserrat", "Verdana", "Times New Roman";
   --larry-color: #2b3dbc;
   --color-border: #2b3cbc13;
   --color-background: #ffffff;
   --color-hover: #6d71ff;
-  --color-mode: #000;
+  --color-mode: rgb(0, 0, 0);
   background-color: var(--color-background);
+  height: 100%;
 }
 .AppDark {
   --color-background: #192030;
@@ -18,6 +21,7 @@
   --color-hover: #6d71ff;
   --color-mode: #ffffff;
   background-color: var(--color-background);
+  height: 100vh;
 }
 .App-header {
   background-color: #282c34;

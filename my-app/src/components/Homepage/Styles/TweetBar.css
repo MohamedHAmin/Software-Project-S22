@@ -12,7 +12,7 @@
     align-items: center !important;
 }
 .sidexarTweet {
-background-color: var(--larry-color) !important;
+background-color: #2b3dbc !important;
 height: 20px !important;
 border-radius: 10px !important;
 margin: 5px;
@@ -33,11 +33,26 @@ display: none;
     padding-right: 15px;
     justify-content: space-between;
     align-items: center !important;
-    padding-top: 40px;
-}
-.sidexarTweet {
-    margin-bottom: 33px!important;
-    
+    padding-top: 9px;
 }
 }
-  
+@media screen and (min-width: 860px) and (max-width: 1000px) {
+    .btn-group{
+        padding-top: 1px;
+
+    }
+    .sidexarTweet {
+        margin-bottom: 0px!important;
+        
+    }
+}
+@media screen  and (max-width: 860px) {
+    .sidexarTweet {
+        margin-bottom: 0px!important;
+        
+    }
+    .btn-group{
+        padding-top: 0px;
+
+    }
+}

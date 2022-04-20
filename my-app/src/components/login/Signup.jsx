@@ -1,8 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import classes from "./Styles/Signup.module.css";
+import SignupwithGoogle from "./SignupwithGoogle";
+import emailjs, { send } from "emailjs-com";
 import Navbar from "./navbar";
-
+import './Styles/Modal.css'
 function Signup() {
 
     // State for registration
@@ -20,10 +23,25 @@ function Signup() {
     };
 
     // Handling the form submission
+    const Navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(formValues));
-        setIsSubmit(true);
+        // setIsSubmit(true);
+
+        //Email Verification (sending email)
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+            emailjs.sendForm('service_81snu6l', 'template_3vnfzxg', e.target, 'x3dQSIfufrsLHpVNo')
+                .then((result) => {
+                    console.log(result.text);
+                }, (error) => {
+                    console.log(error.text);
+                });
+
+            Navigate("/NextStepSignup");
+            window.location.reload(false);
+        }
+        // setFormValues("", "", "", "", "")
     };
     //validation for input
     const validate = (values) => {
@@ -50,6 +68,9 @@ function Signup() {
         else if (values.password.length > 12) {
             errors.password = "Password cannot exceed more than 12 characters";
         }
+        else {
+            setIsSubmit(true);
+        }
         return errors;
     };
 
@@ -64,15 +85,17 @@ function Signup() {
             <div className={classes.signupContainer}>
                 <div className={classes.title}>Signup Form </div>
 
-                {/* Showing success message OR error message if error is true */}
-                {Object.keys(formErrors).length === 0 && isSubmit ?
-                    (<p className="success">Signed in successfully</p>)
-                    : (<p className='failed'>Please complete the required info!</p>)}
+                <div className={classes.GoogleLogin}>
+                    <SignupwithGoogle />
+                </div>
+
+                
 
                 {/* Labels and inputs for form data */}
                 <form onSubmit={handleSubmit}>
                     <div className={classes.field}>
                         <input
+                            data-testid="UNs"
                             placeholder="Username"
                             type="text"
                             name="username"
@@ -81,9 +104,10 @@ function Signup() {
                         />
                         {/* <label>Username  </label> */}
                     </div>
-                    <p>{formErrors.username}</p>
+                    <p className={classes.paragraph}>{formErrors.username}</p>
                     <div className={classes.field}>
                         <input
+                            data-testid="Tag"
                             placeholder="Tag"
                             type="text"
                             name="Tag"
@@ -92,9 +116,10 @@ function Signup() {
                         />
                         {/* <label>Tag </label> */}
                     </div>
-                    <p>{formErrors.Tag}</p>
+                    <p className={classes.paragraph}>{formErrors.Tag}</p>
                     <div className={classes.field}>
                         <input
+                            data-testid="EM"
                             placeholder="E-mail"
                             type="text"
                             name="email"
@@ -103,9 +128,10 @@ function Signup() {
                         />
                         {/* <label>Email  </label> */}
                     </div>
-                    <p>{formErrors.email}</p>
+                    <p className={classes.paragraph}>{formErrors.email}</p>
                     <div className={classes.field}>
                         <input
+                            data-testid="PWs"
                             placeholder="Password"
                             type="password"
                             name="password"
@@ -114,17 +140,12 @@ function Signup() {
                         />
                         {/* <label>Password</label> */}
                     </div>
-                    <p>{formErrors.password}</p>
-                    <div className={classes.field}>
-                        <input
-                            type="date"
-                            name="Birthdate"
-                            value={formValues.date}
-                            onChange={handleChange}
-                        />
-                        {/* <label>Birthdate </label> */}
+                    <p className={classes.paragraph}>{formErrors.password}</p>
+                    
+                    
+                    <div>
+                        <button className={classes.btnsup} >Next </button>
                     </div>
-                    <button className={classes.button}>Signup</button>
                 </form>
             </div>
 

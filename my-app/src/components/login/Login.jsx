@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import classes from './Styles/Login.module.css';
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
-
+import LoginwithGoogle from "./LoginwithGoogle";
 
 function Login() {
 
@@ -70,15 +70,21 @@ function Login() {
             </div>
             <div className={classes.loginContainer}>
                 <div className={classes.title}>Login Form </div> 
+                
+                <div className={classes.GoogleLogin}>
+                    <LoginwithGoogle />
+                </div>
+
                 {/* Showing success message OR error message if error is true */} 
                 {Object.keys(formErrors).length === 0 && isSubmit ?
                     (<p className={classes.success}>Signed in successfully</p>)
-                    : (<p className={classes.failed}>Please complete the required info!</p>)}
+                    : (<p className={classes.failed}>OR, please complete the required info!</p>)}
 
      {/* Labels and inputs for form data */}
                 <form onSubmit={handleSubmit}>
                     <div className={classes.field}>
                         <input
+                            data-testid="UN"
                             placeholder="Username or E-mail"
                             type="text"
                             name="username"
@@ -90,6 +96,7 @@ function Login() {
                     <p className={classes.failed}>{formErrors.username}</p>
                     <div className={classes.field}>
                         <input
+                            data-testid="PW"
                             placeholder="Password"
                             type="password"
                             name="password"

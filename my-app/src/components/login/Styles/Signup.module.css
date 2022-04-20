@@ -9,6 +9,18 @@
   font-family: "Montserrat", "Verdana", "Times New Roman";
 }
 
+.GoogleLogin {
+  width: 50%;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 1000;
+  cursor: pointer;
+  outline: none;
+  margin-left: 100px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 .imageContainer {
   width: 40%;
   min-width: 320px;

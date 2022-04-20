@@ -1,43 +1,65 @@
-.profileInfo {
+.profileInfo2 {
   margin-left: 20px;
 }
 
-.profileInfo > h2 {
+.profileInfo2 > h2 {
   font-weight: 550;
   font-size: 19px;
+  margin-bottom: 3px;
 }
 
-.profileInfo > h6 {
-  margin-top: 2px;
-  font-weight: 500;
+.profileInfo2 > h6 {
+  font-weight: 550;
   font-size: 12px;
+  opacity: 0.7;
+  
 }
 
-.calenderInfo > p {
-  margin-top: 4px;
+.moreInfo {
+  margin-top: 6px;
+  margin-left: -3px;
+  margin-bottom: 8px;
   font-weight: 500;
   font-size: 14px;
 }
 
-.calenderInfo {
-  display: flex;
-  margin-top: 6px;
-  margin-left: -3px;
+.moreInfo > h5 {
+  color:var(--color-mode);
+  font-size: 15px;
+  margin-bottom: 8px;
+  margin-left: 4px;
+  word-break: break-all;
+}
+
+.moreInfo span .MuiSvgIcon-root {
+  height: 20px !important;
+  width: 20px !important;
+  margin-right: 3px;
+
+  color: var(--color-mode);
+  opacity: 0.8;
+}
+
+.moreInfo span {
+  align-items: center;
+  margin-right: 10px;
+  display:inline-flex;
+}
+
+.moreInfo a {
+  text-decoration: none;
 }
 
 .followInfo {
   display: flex;
 }
-.followInfo > p {
+.followInfo span {
   margin-right: 20px;
-  margin-top: 10px;
+  margin-top: 0px;
+  margin-left: 3px;
+  margin-bottom: 3px;
   font-size: 14px;
   font-weight: 450;
 }
 
-.calenderInfo > .MuiSvgIcon-root {
-  height: 20px !important;
-  width: 20px !important;
-  margin-right: 4px;
-  margin-top: 2px;
-}
+
