@@ -51,7 +51,7 @@ const router = new express.Router()
     try {
 
       const updates = Object.keys(req.body);
-      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting","Location"];
+      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting","Location","Biography","phoneNumber","darkMode"];
       const isvalidoperation = updates.every((update) =>
         allowtoupdate.includes(update)
       );

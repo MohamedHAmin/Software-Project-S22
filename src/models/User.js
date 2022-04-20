@@ -17,6 +17,17 @@ const userSchema = new mongoose.Schema({
      required:true,
      unique:true
   },
+  Biography:{
+    type:String,
+    maxlength:280
+  },
+  phoneNumber:{
+    type:Number
+  },
+  darkMode:{
+       type:Boolean,
+       default:false
+  },
   birthDate: {
    Date: {type: Date,},
    visability:{
@@ -180,12 +191,10 @@ userSchema.methods.toJSON=function(){
   const userobject=user.toObject()
   delete userobject.password
   delete userobject.tokens
- 
   delete userobject.googleId
   delete userobject.following
   delete userobject.facebookId
   return userobject
-
 }
 // TODO
 // userSchema.methods.isBanned=async function(){

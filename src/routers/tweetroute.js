@@ -122,7 +122,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 
     await tweet.populate({
       path: "authorId",
-      select: "_id screenName tag followercount followingcount",
+      select: "_id screenName tag followercount followingcount profileAvater.url",
     });
 
     if (tweet.retweetedTweet) {
@@ -133,8 +133,16 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
       });
     }
-
-    res.send(tweet);
+    let tweets=tweet
+    const isliked=tweet.likes.some(like=>like.like.toString()==req.user._id.toString())
+    if(isliked){
+    delete tweet._doc.likes
+       tweets={...tweet._doc,isliked:true}
+    }else{
+    delete tweet._doc.likes
+     tweets={...tweet._doc,isliked:false
+    }}
+    res.send(tweets);
   } catch (e) {
     //here all caught errors are sent to the client
 
@@ -198,8 +206,9 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
         ReqTweet.likes.splice(unlikedIndex, 1);
         ReqTweet.likeCount = ReqTweet.likeCount - 1;
         await ReqTweet.save();
+
         res.status(201);
-        res.send(ReqTweet.likes);
+        res.send({ReqTweet,isliked:false});
       } else if (ReqTweet.likeCount == 1) {
         //if the like pending for removal is the only one in the array return the likes array as
         //an empty array "[]" and make the count equal to zero and update tweet in the database
@@ -209,7 +218,8 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
         ReqTweet.likeCount = 0;
         await ReqTweet.save();
         res.status(201);
-        res.send({status:"success"});
+        res.send({ReqTweet,isliked:false});
+
       }
     } else if (unliked === false) {
       //if the unliked is false then add a like attribute with the id of the user that
@@ -218,7 +228,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
       ReqTweet.likeCount++;
       await ReqTweet.save();
       res.status(201);
-      res.send({status:"success"});
+      res.send({ReqTweet,isliked:true});
     }
   } catch (e) {
     //catch and send back errors to the front end
@@ -284,11 +294,11 @@ router.post("/retweet", auth("user"), async (req, res) => {
 
 
 
-
+ //tprofile tweets
 router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
     const user=await User.findOne({ _id:req.params.id})
      const tweets=await user.populate(
@@ -314,6 +324,18 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
            },
         }]
     })
+    if(!user.Tweets.length<1){
+      user.Tweets=user.Tweets.map(tweet=>{
+     const isliked=tweet.likes.some(like=>like.like.toString()==req.user._id.toString())
+    if(isliked){
+      delete tweet._doc.likes
+      const tweets={...tweet._doc,isliked:true}
+     return tweets
+    }else{
+      delete tweet._doc.likes
+      const tweets={...tweet._doc,isliked:false}
+      return tweets
+    }})}
     res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -326,14 +348,14 @@ router.get("/timeline", auth("any"), async (req, res) => {
   try {
     
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
     const followingsId=req.user.following.map(
         user=>{return user.followingId}
         )
     const user=req.user
   
-       const followerTweet=await Tweet.find({authorId:{$in:followingsId}}).limit(limit).skip(skip).populate(
+       let followerTweet=await Tweet.find({authorId:{$in:followingsId}}).limit(limit).skip(skip).populate(
         {
           path: "retweetedTweet",
           strictPopulate: false,
@@ -352,6 +374,18 @@ router.get("/timeline", auth("any"), async (req, res) => {
           select: "_id screenName tag followercount followingcount profileAvater.url",
         }
       )
+     if(!followerTweet.length<1){
+        followerTweet=followerTweet.map(tweet=>{
+       const isliked=tweet.likes.some(like=>like.like.toString()==req.user._id.toString())
+      if(isliked){
+      delete tweet._doc.likes
+        const tweets={...tweet._doc,isliked:true}
+       return tweets
+      }else{
+      delete tweet._doc.likes
+        const tweets={...tweet._doc,isliked:false}
+        return tweets
+      }})}
 
     res.send(followerTweet);
   } catch (e) {
