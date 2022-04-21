@@ -92,7 +92,7 @@ router.post("/signup",async (req, res) => {
       //don't generate token unless verified [with login now]
       res.status(201).send({ user});
     } catch (e) {
-1      res.status(400).send({ e });
+      res.status(400).send({ e });
     }
   });
              //~~~~~~~~~~~~Login~~~~~~~~~~~//
