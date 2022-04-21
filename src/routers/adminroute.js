@@ -21,30 +21,56 @@ router.post("/create",auth("admin"),async (req, res) => {
           //~~~~~~Report~~~~~~~~
 
 // TODO: IN NEXT PHASES
-// router.delete("/report/:id",auth("admin"),async (req, res) => {
-//   try {
-//     const newreport=await Report.findByIdAndDelete(req.params.id)
-//     res.status(200).json({newreport}).end()
+router.delete("/report/:id",auth("admin"),async (req, res) => {
+  try {
+    const deletedreport=await Report.findByIdAndDelete(req.params.id)
+    if(!deletedreport){throw Error("Not Found")}
+    res.status(200).json({deletedreport}).end()
 
-//   } catch (e) {
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
+router.get("/report/:pageNum",auth("admin"),async (req, res) => {
+  try {
+    const filter = req.query.filter ? {type:req.query.filter} : {};
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
+    const skip=(parseInt(req.params.pageNum)-1)*perPage;
+    let reports=await Report.find(filter)
+    .skip(skip).limit(perPage)
+    .sort({createdAt:-1});
+    reports= await Promise.all(reports.map(async(report)=>{
+      if(report.type==="User")
+      {
+        return await Report.populate(report,{path:'reportedId',model:User})
+      }
+      else if(report.type==="Tweet")
+      {
+        return await Report.populate(report,{path:'reportedId',model:Tweet})
+      }
+    }))
+    if(reports.length===0){throw Error("No Reports Found")}
+    res.status(200).json({reports}).end()
+
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
+router.get("/profile/:id",auth("admin"),async (req, res) => {
+  try {
+    const admin=await Admin.findById(req.params.id)
+    if(!admin){throw Error("Not Found")}
+    res.status(200).json({admin}).end()
+
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
 // router.post("/ban/:id",auth("admin"),async (req, res) => {
 //   try {
 //     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
 //     res.status(200).send({tempUser})
 //   } catch (e) {
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
-// router.get("/report",auth("admin"),async (req, res) => {
-//   try {
-//     const newreport=await Report.find().limit(req.query.perPage)
-//     res.status(200).json({newreport}).end()
-
-//   } catch (e) {
-//     console.log(e)
 //     res.status(400).send({error:e.toString()});
 //   }
 // });

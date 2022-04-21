@@ -14,6 +14,7 @@ const tweetSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref:'User',
       required: true,
+      strictPopulate:false
   },  
   text:{
       type:String,
@@ -65,6 +66,7 @@ const tweetSchema = new mongoose.Schema({
   timestamps:true,
   toJSON: {virtuals: true},
   toObject: { virtuals: true },
+  strictPopulate:false
   
 });
 

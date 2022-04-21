@@ -1,8 +1,10 @@
 const express = require("express");
 const auth = require("../middleware/auth");
 const bodyParser = require("body-parser");
-const upload = require("./multer");
-const cloudinary = require("./cloudinary");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
+const User = require("../models/User");
+
 const fs = require("fs");
 
 const router = new express.Router();
@@ -90,11 +92,10 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
         authorId: req.user._id,
         gallery: urls,
       });
-      res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
     } else {
       await Tweet.create({ ...req.body, authorId: req.user._id });
-      res.status(200).send({ AddedTweetStatus: "Tweet Stored" }).end();
     }
+    res.status(200).send({ AddedTweetStatus: "Tweet Stored" })
   } catch (e) {
     //here all exception caught sends their respective
     //error according to failed test
@@ -296,9 +297,170 @@ router.post("/retweet", auth("user"), async (req, res) => {
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
     await Retweetedtweet.save();
-    await Tweet.create({ ...req.body, authorId: req.user._id, text: text });
+    const tweet =await Tweet.create({ ...req.body, authorId: req.user._id, text: text });
     res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
   } catch (e) {
+    res.status(400).send({ error: e.toString() });
+  }
+});
+
+router.put("/tweet/:id/like", auth("user"), async (req, res) => {
+  try {
+    //likes or unlikes a tweet
+    let unliked = false;
+    let unlikedIndex;
+    //unliked determines if the put request is a like or an unlike(variable unliked)
+    //variable unlikedIndex determines which element is the like pending to be removed
+    const ReqTweet = await Tweet.findById(req.params.id);
+    if (!ReqTweet) {
+      //makes sure that tweet exists by making sure ReqTweet is not a null
+      e = "Error : Not Found";
+      throw e;
+    }
+    let likes = ReqTweet.likes;
+    for (let i = 0; i < ReqTweet.likeCount; i++) {
+      //searches if user liked this tweet before
+      // if true toggle unliked and get index of like of current user and break the loop
+      // if false continue loop and leave unliked as false and leave loop going till end of likes array
+      if (likes[i].like.equals(req.user._id)) {
+        unliked = true;
+        unlikedIndex = i;
+        break;
+      }
+    }
+    if (unliked === true) {
+      //if unliked is true there are 2 possiblities
+      if (ReqTweet.likeCount > 1) {
+        //if the like pending for removal is not the only one in the array
+        //use splice and decrease count and update the tweet in the database
+        ReqTweet.likes.splice(unlikedIndex, 1);
+        console.log(ReqTweet.likes.toString());
+        ReqTweet.likeCount = ReqTweet.likeCount - 1;
+        await ReqTweet.save();
+        res.status(201);
+        res.send(ReqTweet.likes);
+      } else if (ReqTweet.likeCount == 1) {
+        //if the like pending for removal is the only one in the array return the likes array as
+        //an empty array "[]" and make the count equal to zero and update tweet in the database
+        //? splice function doesn't work when it is required to remove the only element in an array
+        //? should i return the empty array as [] or is there something else to do?
+        ReqTweet.likes = [];
+        ReqTweet.likeCount = 0;
+        await ReqTweet.save();
+        res.status(201);
+        res.send(ReqTweet.likes);
+      }
+    } else if (unliked === false) {
+      //if the unliked is false then add a like attribute with the id of the user that
+      //liked the tweet into the likes array and update the tweet in the database
+      ReqTweet.likes = ReqTweet.likes.concat({ like: req.user._id });
+      ReqTweet.likeCount++;
+      await ReqTweet.save();
+      res.status(201);
+      res.send(ReqTweet.likes);
+    }
+  } catch (e) {
+    //catch and send back errors to the front end
+    if (e == "Error: Not Found") {
+      res.status(404);
+    } else {
+      res.status(400);
+    }
+    res.send({ error: e.toString() });
+  }
+});
+
+
+
+router.get("/tweet/user/:id", auth("any"), async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 30;
+
+    const user=await User.findOne({ _id:req.params.id})
+     const tweets=await user.populate(
+        {path: "Tweets",
+        options:{
+          limit: parseInt(limit), //to limit number of user 
+          skip: parseInt(skip),   },
+          populate:[{
+            path: "authorId",
+            strictPopulate: false,
+            select: "_id screenName tag followercount followingcount profileAvater.url",
+         },
+           {
+          //if it is a retweet view content of retweeted tweet
+          path: "retweetedTweet",
+          strictPopulate: false,
+          select:
+            "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+            populate:{
+              path: "authorId",
+              strictPopulate: false,
+              select: "_id screenName tag followercount followingcount profileAvater.url",
+           },
+        }]
+    })
+    if (!tweets) {
+      e = "tweet not found";
+      throw e;
+    }
+
+    res.send(user.Tweets);
+  } catch (e) {
+    //here all caught errors are sent to the client
+
+    //here for testing purposes if an unhandled error routerears
+    res.status(400).send({ error: e.toString() });
+  }
+});
+router.get("/timeline", auth("any"), async (req, res) => {
+  try {
+    
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 30;
+
+ 
+    console.log(req.user)
+    const followingsId=req.user.following.map(
+        user=>{return user.followingId}
+        )
+        console.log(followingsId)
+    const user=req.user
+  
+       const followerTweet=await Tweet.find({authorId:{$in:followingsId}}).limit(limit).skip(skip).populate(
+        {
+          path: "retweetedTweet",
+          strictPopulate: false,
+          select:
+            "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+            populate:{
+              path: "authorId",
+              strictPopulate: false,
+              select: "_id screenName tag followercount followingcount profileAvater.url",
+           },
+        }
+      ).populate(
+        {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag followercount followingcount profileAvater.url",
+        }
+      )
+
+      console.log('finish1')
+
+    
+    if (!followerTweet) {
+      e = "tweet not found";
+      throw e;
+    }
+
+    res.send(followerTweet);
+  } catch (e) {
+    //here all caught errors are sent to the client
+
+    //here for testing purposes if an unhandled error routerears
     res.status(400).send({ error: e.toString() });
   }
 });

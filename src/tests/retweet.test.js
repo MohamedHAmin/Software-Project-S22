@@ -1,5 +1,5 @@
 const request = require("supertest");
-const Tweet = require("../models/tweet");
+const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 const app = require("../app");
 let user;
@@ -28,7 +28,6 @@ test('Check New retweet Creation', async ()=>{
         retweetedTweet:newtweet._id.toString()
     })
     .expect(200)
-    expect(res.body).toEqual({AddedTweetStatus: "Retweet Stored"});
 });
 
 test('Check New retweet Creation without text', async ()=>{
@@ -43,7 +42,6 @@ test('Check New retweet Creation without text', async ()=>{
         retweetedTweet:newtweet._id.toString()
     })
     .expect(200)
-    expect(res.body).toEqual({AddedTweetStatus: "Retweet Stored"});
 });
 
 test('refuse nonexistent retweet', async ()=>{

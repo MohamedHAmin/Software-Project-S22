@@ -17,7 +17,21 @@ const userSchema = new mongoose.Schema({
      unique:true
   },
   birthDate: {
-    type: Date,
+   Date: {type: Date,},
+   visability:{
+    type:Boolean,
+    default:true
+   }
+  },
+  location:{
+    place:{
+      type:String,
+      default:null
+    },
+    visability:{
+      type:Boolean,
+      default:true
+     }
   },
   isPrivate:{
     type:Boolean,
@@ -32,6 +46,10 @@ const userSchema = new mongoose.Schema({
   ban:{
     type:Date,
     default:null
+  },
+  verified:{
+    type: Boolean,
+    default:false
   },
   email: {
     type: String,
@@ -111,15 +129,20 @@ const userSchema = new mongoose.Schema({
   timestamps:true,
   toJSON: {virtuals: true},
   toObject: { virtuals: true },
-  
+  strictPopulate:false
   
 });
  //to connect with tweet he tweet
-userSchema.virtual('Tweet',{
+userSchema.virtual('Tweets',{
   ref:'Tweet',
   localField:'_id',
   foreignField:'authorId'
 })
+// userSchema.virtual('Tweets-timeline',{
+//   ref:'Tweet',
+//   localField:'following.followingId',
+//   foreignField:'authorId'
+// })
 userSchema.virtual('follower',{
   ref:'User',
   localField:'_id',
@@ -138,7 +161,10 @@ userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
   // LET USER=AWAIT USER.FINDONE({EMAIL: EMAILORUSERNAME}) 
   if(!user){
     // user=await User.findOne({tag: emailorUsername})
-      throw new Error('unable to login')
+      throw new Error('unable to login as user is not found')
+  }
+  if( !user.verified){
+    throw new Error('unable to login as user is not verified')
   }
   const ismatch=await bcrypt.compare(password,user.password)
   if(!ismatch){
@@ -153,13 +179,10 @@ userSchema.methods.toJSON=function(){
   const userobject=user.toObject()
   delete userobject.password
   delete userobject.tokens
-  delete userobject.Notificationssetting
+ 
   delete userobject.googleId
   delete userobject.following
   delete userobject.facebookId
-  delete userobject.ban
-  delete userobject.email
-
   return userobject
 
 }
@@ -189,14 +212,13 @@ userSchema.methods.generateAuthToken=async function(){
 
 userSchema.pre("save", async function (next) {
   const user = this;
+  
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   
   next()
 });
-
-
 
 const User = mongoose.model('User', userSchema);
 

@@ -14,24 +14,33 @@ const router = new express.Router()
       if(!user){
         throw new Error("no user found")
       }
+      if(user.location.visability===false)
+       {delete user.Location;}
+       if(user.birthDate.visability===false)
+       {delete user.Location;}
+       delete user.ban
+       delete user.email
+       delete user.Notificationssetting
       res.send(user);
+    } catch (e) {
+      res.status(400).send({error:e.toString()});
+    }
+  });
+  router.get("/:id/me",auth("user"), async (req, res) => {
+    try {
+      res.send(req.user);
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
   });
   router.put("/:id/password", auth("user"), async (req, res) => {
     try {
-      console.log('first')
       const ismatch=await bcrypt.compare(req.body.currentPassword,req.user.password)
-      console.log('1')
-      console.log("🚀 ~ file: profilerouter.js ~ line 24 ~ router.put ~ ismatch", ismatch)
+    
       if(!ismatch)
-      { throw new Error("no user found")}
+      { throw new Error("no wrong pass")}
         req.user.password=req.body.newPassword
       await req.user.save();
-      console.log('first')
-      console.log("🚀 ~ file: profilerouter.js ~ line 27 ~ router.put ~ user", req.user)
-      
       res.send(req.user);
     } catch (e) {
       res.status(400);
@@ -40,14 +49,15 @@ const router = new express.Router()
   });
   router.put("/:id", auth("user"), async (req, res) => {
     try {
+
       const updates = Object.keys(req.body);
-      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting"];
+      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting","Location"];
       const isvalidoperation = updates.every((update) =>
         allowtoupdate.includes(update)
       );
     
       if (!isvalidoperation) {
-        return res.status(400).send("error in update");
+        throw new Error("you can not change this data");
       }
 
       updates.forEach((element) => (req.user[element] = req.body[element]));

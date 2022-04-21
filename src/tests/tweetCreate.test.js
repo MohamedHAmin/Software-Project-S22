@@ -30,7 +30,6 @@ test("Check New Tweet Creation", async () => {
       ],
     })
     .expect(200);
-  expect(res.body).toEqual({ AddedTweetStatus: "Tweet Stored" });
 });
 
 test("Enter a tweet without tags or likes", async () => {
@@ -42,7 +41,6 @@ test("Enter a tweet without tags or likes", async () => {
       text: "Lorem Ipsum",
     })
     .expect(200);
-  expect(res.body).toEqual({ AddedTweetStatus: "Tweet Stored" });
 });
 
 test("Create a tweet with an empty tag", async () => {
@@ -59,7 +57,6 @@ test("Create a tweet with an empty tag", async () => {
       ],
     })
     .expect(200);
-  expect(res.body).toEqual({ AddedTweetStatus: "Tweet Stored" });
 });
 
 test("Create a tweet with no tags", async () => {
@@ -75,7 +72,6 @@ test("Create a tweet with no tags", async () => {
       ],
     })
     .expect(200);
-  expect(res.body).toEqual({ AddedTweetStatus: "Tweet Stored" });
 });
 
 test("Create a tweet with no likes", async () => {
@@ -88,7 +84,6 @@ test("Create a tweet with no likes", async () => {
       tags: [{ tag: "AhmedTarek" }, { tag: "Noureldin" }],
     })
     .expect(200);
-  expect(res.body).toEqual({ AddedTweetStatus: "Tweet Stored" });
 });
 
 test("Refuse a tweet with no text", async () => {
@@ -132,7 +127,6 @@ test("Refuse a tweet that exceeds tag limit", async () => {
     .post("/tweet")
     .set("Authorization", "Bearer " + usertoken.token)
     .send({
-      authorId: user._id,
       text: "lorem ipsum",
       tags: [
         { tag: "Youssef" },
@@ -152,17 +146,12 @@ test("Refuse a tweet that exceeds tag limit", async () => {
   expect(res.body).toEqual({ error: "tags exceeded limit" });
 });
 
-test("post with images", async () => {
+ test("post with images", async () => {
   const res = await request(app)
     .post("/tweet")
     .set("Authorization", "Bearer " + usertoken.token)
-    // .field("text", "try this for size dude")
-    .attach("image", "src/tests/fixtures/mario_PNG125.png")
-    .attach("image", "src/tests/fixtures/sunflower.jpg")
-    // .field("imageCheck", "true")
-    // .expect(200);
-    .field('text', 'try this for size dude')
-
+    .field("text", "try this for size dude")
+    .attach('image','src/tests/fixtures/WhatsApp Image 2021-10-22 at 10.31.28 AM (5).jpeg')
+    .attach('image','src/tests/fixtures/WhatsApp Image 2021-10-22 at 10.31.28 AM (5).jpeg')
     .expect(200);
- expect(res.body).toEqual({ AddedTweetStatus: "Tweet Stored" });
 });
