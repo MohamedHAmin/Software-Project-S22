@@ -5,16 +5,16 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --runInBand --coverage"
+    "test": "env-cmd -f ./config/test.env jest --runInBand --watch"
   },
   "jest": {
     "testEnvironment": "node"
-    
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^6.1.2",
     "assert": "^2.0.0",
     "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
@@ -22,7 +22,6 @@
     "cloudinary": "^1.29.0",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.2",
-    "faker": "^6.6.6",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "method-override": "^3.0.0",
@@ -35,7 +34,6 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.1.2",
     "@types/express": "^4.17.13",
     "env-cmd": "^10.1.0",
     "jest": "^27.5.1",
