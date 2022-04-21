@@ -20,7 +20,7 @@ const router = new express.Router()
       if(user.location.visability===false)
        { user.Location=undefined;}
        if(user.birthDate.visability===false)
-       { user.Location=undefined;}
+       { user.birthDate=undefined;}
         user.ban=undefined
         user.email=undefined
         user.Notificationssetting=undefined
@@ -48,7 +48,7 @@ const router = new express.Router()
       res.send(req.user);
     } catch (e) {
       res.status(400);
-      res.send(e);
+      res.send({error: e.toString()});
     }
   });
   router.put("/:id", auth("user"), async (req, res) => {
@@ -70,7 +70,7 @@ const router = new express.Router()
       res.send(req.user);
     } catch (e) {
       res.status(400);
-      res.send(e);
+      res.send({error:e.toString()});
     }
   });
   router.put("/:id/avater",auth("any"),upload.single("image"), async (req, res) => {
