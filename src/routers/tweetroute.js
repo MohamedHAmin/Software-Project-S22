@@ -19,6 +19,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   //Creates a new tweet with the json data that the user sends
   // through req.body
   try {
+    await req.user.isBanned();
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use

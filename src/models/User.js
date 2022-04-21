@@ -197,18 +197,20 @@ userSchema.methods.toJSON=function(){
   return userobject
 }
 // TODO
-// userSchema.methods.isBanned=async function(){
-//   const user = this
-//   let now=new Date()
-//   if(user.ban>now){
-//     return true
-//   }
-//   else{
-//     user.ban=null
-//     await user.save()
-//     return false
-//   }
-// }
+userSchema.methods.isBanned=async function(){
+  const user = this;
+  if(!user.ban){return;} //if not ban return and move on normally
+  let banDays=new Date();
+  banDays=(user.ban-banDays)/(1000*60*60*24);
+  if(banDays>0){
+      throw new Error('User Banned for '+Math.floor(banDays)+' Days'); //if banned throw error with number of ban days
+    }
+    else{
+      user.ban=null;
+      await user.save();   
+      return;  //if banned but ban duration over nullify ban then move on normally
+    }
+}
 
 userSchema.methods.generateAuthToken=async function(){
     const user = this;

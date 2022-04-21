@@ -7,7 +7,6 @@
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
     "test": "env-cmd -f ./config/test.env jest --runInBand --coverage --forceExit",
     "Dtest": "env-cmd -f ./config/test.env jest --runInBand --forceExit"
-
   },
   "jest": {
     "testEnvironment": "node"
@@ -16,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^6.1.2",
     "assert": "^2.0.0",
     "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
@@ -37,7 +37,6 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.1.2",
     "@types/express": "^4.17.13",
     "env-cmd": "^10.1.0",
     "jest": "^27.5.1",

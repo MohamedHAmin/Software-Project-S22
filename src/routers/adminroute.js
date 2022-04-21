@@ -5,6 +5,7 @@ const Report = require("../models/Report");
 const Admin = require("../models/Admin")
 const auth = require("../middleware/auth");
 const { query } = require("express");
+const { now } = require("mongoose");
 const router = new express.Router();
 
 router.post("/create",auth("admin"),async (req, res) => {
@@ -42,15 +43,15 @@ router.get("/report/:pageNum",auth("admin"),async (req, res) => {
     reports= await Promise.all(reports.map(async(report)=>{
       if(report.type==="User")
       {
-        return await Report.populate(report,{path:'reportedId',model:User})
+        return await Report.populate(report,{path:'reportedId',model:User});
       }
       else if(report.type==="Tweet")
       {
-        return await Report.populate(report,{path:'reportedId',model:Tweet})
+        return await Report.populate(report,{path:'reportedId',model:Tweet});
       }
     }))
     if(reports.length===0){throw Error("No Reports Found")}
-    res.status(200).json({reports}).end()
+    res.status(200).json({reports}).end();
 
   } catch (e) {
     res.status(400).send({error:e.toString()});
@@ -58,22 +59,54 @@ router.get("/report/:pageNum",auth("admin"),async (req, res) => {
 });
 router.get("/profile/:id",auth("admin"),async (req, res) => {
   try {
-    const admin=await Admin.findById(req.params.id)
+    const admin=await Admin.findById(req.params.id);
     if(!admin){throw Error("Not Found")}
-    res.status(200).json({admin}).end()
+    res.status(200).json({admin}).end();
 
   } catch (e) {
     res.status(400).send({error:e.toString()});
   }
 });
-// router.post("/ban/:id",auth("admin"),async (req, res) => {
-//   try {
-//     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
-//     res.status(200).send({tempUser})
-//   } catch (e) {
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
+router.get("/users/:pageNum",auth("admin"),async (req, res) => {
+  try {
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
+    const skip=(parseInt(req.params.pageNum)-1)*perPage;
+    const users=await User.aggregate()
+    .lookup({
+      from:'reports',
+      localField:'_id',
+      foreignField:'reportedId',
+      as:'Reported'
+    })
+    .addFields({
+    'Reports':{$size:'$Reported'}
+    })
+    .project({
+      _id:1,
+      screenName:1,
+      tag:1,
+      Reports:1
+    })
+    .sort({Reports:-1})
+    .skip(skip).limit(perPage);
+    if(!users.length){throw Error("Not Found")}
+    res.status(200).json({users}).end();
+
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
+router.post("/ban/:id",async (req, res) => {
+  try {
+    const banDate=new Date();
+    const duration=Number(req.body.duration);
+    banDate.setDate(banDate.getDate()+duration);
+    const bannedUser=await User.findByIdAndUpdate(req.params.id,{ban:banDate},{new:true}).select({screenName:1,ban:1})
+    res.status(200).send({bannedUser})
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
 // router.get("/dashboard",auth("admin"),async (req, res) => {
 //   try {
 //     res.status(200).end("<h1>Placeholder<h1>")
