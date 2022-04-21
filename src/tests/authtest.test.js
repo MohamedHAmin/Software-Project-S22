@@ -107,15 +107,20 @@ test('Check User Logout from All devices ', async ()=>{
     .expect(200)
 })
 test('Check Admin Login ', async ()=>{
-    await Admin.create({
-        adminName:"coolAdmin24o",
-        email:"cool23o4@gmail.com",
+    const user1 = await User.create({
+        screenName:"admin",
+        email:"admin@gmail.com",
         password:"123456",
+        tag:"admin",
         verified:true
+        })  
+    await Admin.create({
+        adminName:"admin",
+        email:"admin@gmail.com",
 })
 const res=await request(app).post('/user/login')
 .send({
-   email_or_username:"cool23o4@gmail.com",
+   email_or_username:"admin@gmail.com",
    password:"123456"
 })
 .expect(200)

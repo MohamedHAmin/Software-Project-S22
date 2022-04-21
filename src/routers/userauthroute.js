@@ -55,18 +55,16 @@ console.log(e);
 router.get("/verify/:userId/:uniqueString", async(req,res)=>{
   try{
     let {userId, uniqueString} = req.params 
-    uniqueString.toString().replace('xMl3Jk', '+' ).replace('Por21Ld', '/').replace('Ml32', '=');
+    uniqueString =uniqueString.replace("por21Ld",'/')
+    uniqueString=uniqueString.replace('xMl3Jk','+')
+    uniqueString=uniqueString.replace('Ml32','=')
     const result=await UserVerification.find({userId})
       if(result.length > 0 ){
-
         const hasheduniqueString = result[0].uniqueString
             if(uniqueString===hasheduniqueString){
               await User.updateOne({_id:userId},{verified:true})            
                await UserVerification.deleteOne({userId})             
               }
-            else{
-              //console.log("Hashed String and Unique String mismatch");
-            }
         }
           res.send("Email sent , pending verification")
   } catch (e){
@@ -90,9 +88,12 @@ router.post("/signup",async (req, res) => {
        sendVerificationEmail(result,res)
       }
       //don't generate token unless verified [with login now]
-      res.status(201).send({ user});
+      res.status(201).send({ status:"success"});
     } catch (e) {
-      res.status(400).send({ e });
+       if(e.index){
+         res.status(400).send({ error:e });
+       }
+       res.status(400).send({error: e.toString()});
     }
   });
              //~~~~~~~~~~~~Login~~~~~~~~~~~//
@@ -102,7 +103,7 @@ router.post("/signup",async (req, res) => {
         req.body.email_or_username,
         req.body.password
       );
-      const token = await user.generateAuthToken();
+      const token = await user.user.generateAuthToken();
       res.send({ user, token });
     } catch (e) {
       res.status(400).send({ error: e.toString() });

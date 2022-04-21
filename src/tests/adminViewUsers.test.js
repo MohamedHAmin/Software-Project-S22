@@ -37,8 +37,7 @@ beforeEach(async ()=>{
     })
     admin=await Admin.create({
         adminName:"coolAdmin23",
-        email:"cool23@gmail.com",
-        password:"awesomeadmin"
+        email:"cool23@gmail.com"
     })
     admintoken=await admin.generateAuthToken();
     report1=await Report.create({

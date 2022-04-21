@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken');
 const Token = require("./Token");
 const Admin = require("./Admin");
-const { now } = require("lodash");
+const { now, cloneWith } = require("lodash");
 
 const userSchema = new mongoose.Schema({
   screenName: {
@@ -162,13 +162,7 @@ userSchema.virtual('follower',{
 })
 
 userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
-  let admin=await Admin.findOne({ email: emailorUsername })
-  if(admin){
-    const ismatch=await bcrypt.compare(password,admin.password)
-      if(ismatch){
-        return admin
-      }
-  }
+  
   let user=await User.findOne({ $or: [ {email: emailorUsername}, {tag: emailorUsername} ] })
   // LET USER=AWAIT USER.FINDONE({EMAIL: EMAILORUSERNAME}) 
   if(!user){
@@ -182,7 +176,12 @@ userSchema.statics.findByCredentials=async(emailorUsername,password)=>{
   if(!ismatch){
       throw new Error("unable to login")
   }
-  return user}
+  let admin=await Admin.findOne({ email: user.email })
+  let adminToken
+  if(admin){
+    adminToken = await admin.generateAuthToken();
+  }
+  return {user,adminToken}}
 
 
 ///delete data before send to client
@@ -197,6 +196,18 @@ userSchema.methods.toJSON=function(){
   return userobject
 }
 // TODO
+// userSchema.methods.isBanned=async function(){
+//   const user = this
+//   let now=new Date()
+//   if(user.ban>now){
+//     return true
+//   }
+//   else{
+//     user.ban=null
+//     await user.save()
+//     return false
+//   }
+// }
 userSchema.methods.isBanned=async function(){
   const user = this;
   if(!user.ban){return;} //if not ban return and move on normally

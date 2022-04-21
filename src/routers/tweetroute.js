@@ -177,6 +177,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
 
 router.put("/tweet/:id/like", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
     //likes or unlikes a tweet
     let unliked = false;
     let unlikedIndex;
@@ -240,6 +241,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
 
 router.post("/retweet", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
     //same as creating a new tweet but has an added retweet that
     //also increases the retweet count on the original tweet
     const Retweetedtweet = await Tweet.findById(req.body.retweetedTweet);

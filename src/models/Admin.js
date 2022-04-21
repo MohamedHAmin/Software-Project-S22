@@ -22,12 +22,6 @@ const adminSchema = new mongoose.Schema({
           }
         }
     },
-    password: {
-        type: String,
-        trim: true,
-        required: true,
-        minlength: 6,
-    }
 },
 {
     timestamps:true,
