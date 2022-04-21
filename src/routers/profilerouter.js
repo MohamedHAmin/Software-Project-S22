@@ -11,16 +11,20 @@ const router = new express.Router()
   router.get("/:id",auth("any"), async (req, res) => {
     try {
       const user=await User.findById(req.params.id)
+  
+    
+
       if(!user){
         throw new Error("no user found")
       }
       if(user.location.visability===false)
-       {delete user.Location;}
+       { user.Location=undefined;}
        if(user.birthDate.visability===false)
-       {delete user.Location;}
-       delete user.ban
-       delete user.email
-       delete user.Notificationssetting
+       { user.Location=undefined;}
+        user.ban=undefined
+        user.email=undefined
+        user.Notificationssetting=undefined
+
       res.send(user);
     } catch (e) {
       res.status(400).send({error:e.toString()});
