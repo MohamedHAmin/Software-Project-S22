@@ -7,10 +7,9 @@ const bcrypt = require("bcryptjs");
 
 const router = new express.Router()
 
-//*follow rout
   router.get("/:id",auth("any"), async (req, res) => {
     try {
-      const user=await User.findById(req.params.id)
+      let user=await User.findById(req.params.id)
   
     
 
@@ -25,7 +24,17 @@ const router = new express.Router()
         user.email=undefined
         user.Notificationssetting=undefined
 
-      res.send(user);
+        console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ user.following", user.following)
+
+        console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ req.user.following", req.user.following)
+        const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==user._id.toString())
+        if(isfollowed){
+          user.isfollowing=true
+        }else{
+          user.isfollowing=false
+        }
+      
+      res.send({user,isfollowing:true});
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
