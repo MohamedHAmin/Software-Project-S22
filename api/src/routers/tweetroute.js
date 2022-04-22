@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 const filter = require("../ethics/bad_words");
-const Tweet = require("../models/tweet");
+const Tweet = require("../models/Tweet");
 
 router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   //Creates a new tweet with the json data that the user sends
