@@ -1,0 +1,33 @@
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker network create mean
+  - docker build -t api -f ./api/Dockerfile.dev ./api
+
+
+script: 
+  - docker run --network mean --name database -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -p 27017:27017 -d mongo
+  - docker run --network mean -v /app/node_modules -v $(pwd)/api:/app -e MONGOCONNECT=mongodb://root:example@database:27017/ -e PORT=3000 -e SECRET=$SECRET -e CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME -e CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY -e CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET -e AUTH_EMAIL=$AUTH_EMAIL -e AUTH_PASS=$AUTH_PASS api npm run Dtest
+
+
+after_success:
+  - docker build -t mostafaelnashar/larry-api ./api
+  - docker build -t mostafaelnashar/larry-router ./router
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push mostafaelnashar/larry-api
+  - docker push mostafaelnashar/larry-router
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'larry'
+  env: 'Larry-env'
+  bucket: elasticbeanstalk-us-east-1-284489073366
+  bucket_path: larry
+  on:
+    branch: deployment
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
