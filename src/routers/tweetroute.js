@@ -20,7 +20,8 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   // through req.body
   try {
     await req.user.isBanned();
-    let text = req.body.text.trim();
+    let text = req.body.text;
+
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
     if (text.length == 0) {
@@ -304,6 +305,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
     const user=await User.findOne({ _id:req.params.id})
+    const sort = [{createdAt:-1}];
      const tweets=await user.populate(
         {path: "Tweets",
         options:{
@@ -325,7 +327,9 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
               strictPopulate: false,
               select: "_id screenName tag followercount followingcount profileAvater.url",
            },
-        }]
+        }],
+
+        options: { sort}
     })
     if(!user.Tweets.length<1){
       user.Tweets=user.Tweets.map(tweet=>{
@@ -357,8 +361,10 @@ router.get("/timeline", auth("any"), async (req, res) => {
         user=>{return user.followingId}
         )
     const user=req.user
-  
-       let followerTweet=await Tweet.find({authorId:{$in:followingsId}}).limit(limit).skip(skip).populate(
+    console.log('1')
+     followingsId.push(req.user._id)
+     console.log(followingsId)
+       let followerTweet=await Tweet.find({authorId:{$in:followingsId}}).sort({createdAt:-1}).limit(limit).skip(skip).populate(
         {
           path: "retweetedTweet",
           strictPopulate: false,
@@ -389,6 +395,8 @@ router.get("/timeline", auth("any"), async (req, res) => {
         const tweets={...tweet._doc,isliked:false}
         return tweets
       }})}
+    console.log('2')
+
 
     res.send(followerTweet);
   } catch (e) {

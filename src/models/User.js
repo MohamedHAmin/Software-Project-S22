@@ -19,14 +19,17 @@ const userSchema = new mongoose.Schema({
   },
   Biography:{
     type:String,
-    maxlength:280
+    maxlength:280,
+    default:""
   },
   website:{
     type:String,
-    maxlength:280
+    maxlength:280,
+    default:""
   },
   phoneNumber:{
-    type:Number
+    type:Number,
+    default:0
   },
   darkMode:{
        type:Boolean,
@@ -61,7 +64,7 @@ const userSchema = new mongoose.Schema({
   },
   ban:{
     type:Date,
-    default:null
+    default:Date.now()
   },
   verified:{
     type: Boolean,
