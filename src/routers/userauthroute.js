@@ -21,7 +21,7 @@ let transporter = nodemailer.createTransport({
 const sendVerificationEmail = async({_id,email},res)=>{
   //url to be used in the email 
   try{
-  const currenturl = "http://localhost:3000/"
+  const currenturl = process.env.CURRENTURL
      const hashstring=_id.toString()+process.env.SECRET
   const uniqueString = await bcrypt.hash(hashstring, 8);
   const notaccepteduniqustreng=uniqueString

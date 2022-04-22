@@ -152,8 +152,8 @@ test("Refuse a tweet that exceeds tag limit", async () => {
     .set("Authorization", "Bearer " + usertoken.token)
     .field("text", "try this for size dude")
     .field("imageCheck", "true")
-    .attach('image','src/tests/fixtures/WhatsApp Image 2021-10-22 at 10.31.28 AM (5).jpeg')
-    .attach('image','src/tests/fixtures/WhatsApp Image 2021-10-22 at 10.31.28 AM (5).jpeg')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
     .expect(200);
 });
 test("post with images", async () => {

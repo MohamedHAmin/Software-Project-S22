@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type:String,
     maxlength:280
   },
+  website:{
+    type:String,
+    maxlength:280
+  },
   phoneNumber:{
     type:Number
   },
