@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'side_menu.dart';
-
-import 'settings_page.dart';
-import 'create_post_page.dart';
-
-import 'profile_page.dart';
-import 'profile_page_2.dart';
-import 'admin_page.dart';
-import 'tweet_page_2.dart';
+import 'home_page.dart';
 import 'quote_post_page.dart';
+
+class TweetViewPage2 extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _TweetViewPage2State();
+  }
+}
 
 class _tweet extends StatefulWidget {
   final Widget? embedded;
@@ -23,6 +22,7 @@ class _tweet extends StatefulWidget {
 class _tweetState extends State<_tweet> {
   bool liked = false;
   bool deleted = false;
+  bool reported = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +30,12 @@ class _tweetState extends State<_tweet> {
       children: [
         Row(children: <Widget>[
           CircleAvatar(
-            backgroundImage: const AssetImage('assets/user_2.png'),
+            backgroundImage: const AssetImage('assets/user_avatar.png'),
           ),
           TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfilePage2()));
-              }, //Action to be added later
+                /*MISSING PATH*/
+              },
               child: Row(children: [
                 Text('Username',
                     style: TextStyle(
@@ -80,26 +79,10 @@ class _tweetState extends State<_tweet> {
             alignment: Alignment.centerRight,
             child: Row(children: [
               ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TweetViewPage2()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    primary: Colors.white,
-                    fixedSize: Size(35, 35),
-                  ),
-                  child: Icon(
-                    Icons.dvr,
-                    size: 20,
-                    color: Colors.black,
-                  )),
-              ElevatedButton(
                 onPressed: () {
                   setState(() {
                     liked = !liked;
+                    /*MISSING PATH*/
                   });
                 },
                 style: ElevatedButton.styleFrom(
@@ -153,9 +136,49 @@ class _tweetState extends State<_tweet> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    deleted = !deleted;
-                  });
+                  if (!deleted) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Delete?'),
+                        content:
+                            Text('Are you sure you want to delete this tweet?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              setState(() {
+                                deleted = true;
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Report?'),
+                        content: Text('You have already reported this tweet'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
@@ -175,6 +198,63 @@ class _tweetState extends State<_tweet> {
                       color: Colors.black,
                     ),
                   ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (!reported) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Report?'),
+                        content:
+                            Text('Are you sure you want to report this tweet?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              setState(() {
+                                reported = true;
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Report?'),
+                        content: Text('You have already reported this tweet'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: Colors.white,
+                  fixedSize: Size(20, 20),
+                ),
+                child: Icon(
+                  Icons.outlined_flag,
+                  color: reported ? Colors.red : Color(0xff6d71ff),
+                  size: 20.0,
                 ),
               ),
             ])),
@@ -210,34 +290,9 @@ class _tweetState extends State<_tweet> {
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _HomePageState();
-  }
-}
-
-class _HomePageState extends State<HomePage> {
-  var currentPage = DrawerSections.home;
-
+class _TweetViewPage2State extends State<TweetViewPage2> {
   @override
   Widget build(BuildContext context) {
-    if (currentPage == DrawerSections.profile) {
-      Future.delayed(Duration.zero, () async {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
-      });
-    } else if (currentPage == DrawerSections.admin) {
-      Future.delayed(Duration.zero, () async {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AdminPage()));
-      });
-    } else if (currentPage == DrawerSections.settings) {
-      Future.delayed(Duration.zero, () async {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SettingsPageUI()));
-      });
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xffffffff),
@@ -254,67 +309,39 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _tweet(
-                  embedded: GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    children: [
-                      Image(
-                        image: NetworkImage(
-                            'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
-                        fit: BoxFit.fitWidth,
-                        width: 40,
-                        height: double.infinity,
-                      ),
-                      Image(
-                        image: NetworkImage(
-                            'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
-                        fit: BoxFit.fitWidth,
-                        width: 40,
-                        height: double.infinity,
-                      ),
-                    ],
-                  ),
-                ),
-                _tweet(
-                  embedded: null,
-                ),
-                _tweet(
-                  embedded: _tweet(embedded: null),
-                  reTweet: true,
-                ),
-                _tweet(
-                  embedded: null,
-                ),
-              ]),
-        ),
-      ),
-      drawer: Drawer(
-        child: SingleChildScrollView(
           child: Container(
             child: Column(
-              children: [
-                MyHeaderDrawer(),
-                MyDrawerList(),
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _tweet(
+                    embedded: GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      children: [
+                        Image(
+                          image: NetworkImage(
+                              'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
+                          fit: BoxFit.fitWidth,
+                          width: 40,
+                          height: double.infinity,
+                        ),
+                        Image(
+                          image: NetworkImage(
+                              'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
+                          fit: BoxFit.fitWidth,
+                          width: 40,
+                          height: double.infinity,
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreatePostScreenUI()));
-        },
-        backgroundColor: Color(0xff6d71ff),
-        child: Icon(Icons.add_sharp),
       ),
       bottomNavigationBar: BottomAppBar(
         color: const Color(0xffffffff),
@@ -348,74 +375,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Widget MyDrawerList() {
-    return Container(
-      padding: EdgeInsets.only(
-        top: 15,
-      ),
-      child: Column(
-        // shows the list of menu drawer
-        children: [
-          menuItem(1, "Profile", Icons.account_circle,
-              currentPage == DrawerSections.profile ? true : false),
-          menuItem(2, "Admin Page", Icons.admin_panel_settings,
-              currentPage == DrawerSections.admin ? true : false),
-          menuItem(3, "Settings", Icons.settings,
-              currentPage == DrawerSections.settings ? true : false),
-        ],
-      ),
-    );
-  }
-
-  Widget menuItem(int id, String title, IconData icon, bool selected) {
-    return Material(
-      color: selected ? Colors.grey[300] : Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-          setState(() {
-            if (id == 1) {
-              currentPage = DrawerSections.profile;
-            } else if (id == 2) {
-              currentPage = DrawerSections.admin;
-            } else if (id == 3) {
-              currentPage = DrawerSections.settings;
-            }
-          });
-        },
-        child: Padding(
-          padding: EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: Colors.black,
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-enum DrawerSections {
-  home,
-  profile,
-  admin,
-  settings,
 }

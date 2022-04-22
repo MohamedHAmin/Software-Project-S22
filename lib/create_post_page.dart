@@ -1,16 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'home_page.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({Key? key}) : super(key: key);
+class CreatePostScreenUI extends StatefulWidget {
+  const CreatePostScreenUI({Key? key}) : super(key: key);
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<CreatePostScreenUI> createState() => _CreatePostScreenUIState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
   String _postText = '_';
   bool _loading = false;
+  File? image;
+
+  handleImageFromGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +59,7 @@ class _CreatePostState extends State<CreatePost> {
             Row(
               children: <Widget>[
                 const CircleAvatar(
-                  backgroundImage: const AssetImage('assets/user_avatar.png'),
+                  backgroundImage: AssetImage('assets/user_2.png'),
                 ),
                 TextButton(
                   onPressed: null, //Action to be added later
@@ -64,13 +80,11 @@ class _CreatePostState extends State<CreatePost> {
                         color: Color(0xff9e9e9e))),
               ],
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             TextField(
               maxLength: 280,
               maxLines: 7,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter your Post Text',
               ),
               onChanged: (value) {
@@ -78,7 +92,46 @@ class _CreatePostState extends State<CreatePost> {
                 _postText = value;
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 10),
+            /////////////////////////////////////////////////////////////////////////////
+            Center(
+              child: image != null
+                  ? Image.file(
+                      image!,
+                      width: 160,
+                      height: 160,
+                      fit: BoxFit.cover,
+                    )
+                  : const FlutterLogo(
+                      size: 0.5,
+                    ),
+            ),
+            const SizedBox(height: 10),
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            Center(
+              child: GestureDetector(
+                onTap: handleImageFromGallery,
+                child: Container(
+                  height: 50,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Color(0xff6d71ff),
+                      width: 3,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt,
+                    size: 35,
+                    color: Color(0xff6d71ff),
+                  ),
+                ),
+              ),
+            ),
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////
+            const SizedBox(height: 20),
             Center(
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
@@ -90,12 +143,14 @@ class _CreatePostState extends State<CreatePost> {
                 onPressed: () async {
                   setState(() {
                     _loading = true;
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
                   });
-                  Navigator.pop(context);
                 },
                 child: const Text(
                   "Post",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 20, letterSpacing: 5, color: Colors.white),
                 ),
               ),
             ),
@@ -112,9 +167,10 @@ class _CreatePostState extends State<CreatePost> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
-                icon: Icon(Icons.home),
+                icon: const Icon(Icons.home),
                 iconSize: 35,
               ),
               const IconButton(

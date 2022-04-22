@@ -1,32 +1,48 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:project_sw/NetworkHandler.dart';
+import 'package:provider/provider.dart';
+import 'theme.dart';
 import 'sign_in_page.dart';
 import 'sign_up_page.dart';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: HomePage(),
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, ThemeNotifier notifier, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: notifier.darkTheme ? dark : light,
+            home: MainPage(),
+          );
+        },
+      ),
+    ),
+  );
 }
 
-class HomePage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: Container(
-      width: double.infinity, //double.infinity makes it as big as possible
-      height: MediaQuery.of(context)
-          .size
-          .height, // MediaQuery  makes it big as per screen
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Column(
+      body: SafeArea(
+        child: Container(
+          width: double.infinity, //double.infinity makes it as big as possible
+          height: MediaQuery.of(context)
+              .size
+              .height, // MediaQuery  makes it big as per screen
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+          child: Column(
             children: <Widget>[
               Text(
                 "See what's happening in the world right now.",
@@ -87,11 +103,28 @@ class HomePage extends StatelessWidget {
                     ),
                   )
                 ],
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                  child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          NetworkHandler.mocked = !NetworkHandler.mocked;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.developer_mode,
+                        color:
+                            NetworkHandler.mocked ? Colors.green : Colors.black,
+                      )),
+                ),
               )
             ],
-          )
-        ],
+          ),
+        ),
       ),
-    )));
+    );
   }
 }

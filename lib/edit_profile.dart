@@ -1,0 +1,251 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'settings_page.dart';
+
+class EditProfilePage extends StatefulWidget {
+  @override
+  _EditProfilePageState createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  bool showPassword = false;
+  File? profileimage;
+  File? bannerimage;
+
+  handleImageFromGallery1() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() => this.profileimage = imageTemporary);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  handleImageFromGallery2() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() => this.bannerimage = imageTemporary);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xff6d71ff),
+        title: const Text(
+          "Edit Profile",
+          style: TextStyle(fontSize: 22),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      body: Container(
+        padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Center(
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 400,
+                      height: 130,
+                      child: bannerimage != null
+                          ? Image.file(
+                              bannerimage!,
+                              width: 400,
+                              height: 130,
+                              fit: BoxFit.cover,
+                            )
+                          : Ink.image(
+                              image: AssetImage('assets/img.png'),
+                            ),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 4,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            color: Color(0xff6d71ff),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              handleImageFromGallery2();
+                            },
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Center(
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 130,
+                      height: 130,
+                      child: profileimage != null
+                          ? Image.file(
+                              profileimage!,
+                              fit: BoxFit.cover,
+                            )
+                          : Ink.image(
+                              image: AssetImage('assets/user_avatar.png'),
+                            ),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 4,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            color: Color(0xff6d71ff),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              handleImageFromGallery1();
+                            },
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+              ),
+              buildTextField("Full Name", 'Enter your Full Name', false),
+              buildTextField("E-mail", 'Enter your E-mail', false),
+              buildTextField("Birthday", 'd/m/y', false),
+              //buildTextField("Password", "********", true),
+              buildTextField("Location", 'city, country', false),
+              const SizedBox(
+                height: 35,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OutlineButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingsPageUI()));
+                    },
+                    child: const Text("CANCEL",
+                        style: const TextStyle(
+                            fontSize: 14,
+                            letterSpacing: 2.2,
+                            color: Colors.black)),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingsPageUI()));
+                    },
+                    color: Color(0xff6d71ff),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: const Text(
+                      "SAVE",
+                      style: TextStyle(
+                          fontSize: 14,
+                          letterSpacing: 2.2,
+                          color: Colors.white),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTextField(
+      String labelText, String placeholder, bool isPasswordTextField) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 35.0),
+      child: TextField(
+        obscureText: isPasswordTextField ? showPassword : false,
+        decoration: InputDecoration(
+            suffixIcon: isPasswordTextField
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.remove_red_eye,
+                      color: Colors.grey,
+                    ),
+                  )
+                : null,
+            contentPadding: const EdgeInsets.only(bottom: 3),
+            labelText: labelText,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: placeholder,
+            hintStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            )),
+      ),
+    );
+  }
+}

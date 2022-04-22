@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'NetworkHandler.dart';
 
 import 'package:flutter/material.dart';
 import 'sign_in_3rd_party_page.dart';
@@ -8,15 +9,6 @@ class LoginPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Map<String, String> credentials = {'Mohamed': '123', 'Ramy': '321'};
-
-  bool CheckSignIn(String username, String password) {
-    if (credentials.containsKey(username)) {
-      return credentials[username] == password;
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +52,20 @@ class LoginPage extends StatelessWidget {
             child: MaterialButton(
               minWidth: double.infinity,
               height: 60,
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   debugPrint('All validations passed!!!');
-                  if (CheckSignIn(
-                      _usernameController.text, _passwordController.text)) {
+
+                  debugPrint(NetworkHandler.mocked.toString());
+
+                  if (await NetworkHandler.login(
+                          _usernameController.text, _passwordController.text) ==
+                      true) {
+                    debugPrint(NetworkHandler.responseBody.toString());
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));
                   } else {
+                    debugPrint(NetworkHandler.responseBody.toString());
                     return;
                   }
                 } else
@@ -131,7 +129,9 @@ class LoginPage extends StatelessWidget {
             height: 20,
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              /*MISSING PATH*/
+            },
             child: Text(
               'Forgot Password?',
               style: TextStyle(
@@ -153,7 +153,6 @@ class LoginPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              maxLength: 16,
               controller: _usernameController,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -171,7 +170,6 @@ class LoginPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              maxLength: 16,
               obscureText: true,
               controller: _passwordController,
               validator: (value) {

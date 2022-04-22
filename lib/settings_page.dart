@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'theme.dart';
+import 'edit_profile.dart';
 
-import 'sign_in_page.dart';
-
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsPageUI extends StatefulWidget {
+  const SettingsPageUI({Key? key}) : super(key: key);
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsPageUI> createState() => _SettingsPageUIState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsPageUIState extends State<SettingsPageUI> {
+  //////////////////////////////////////////////////////////////////////////////
   bool valNotify1 = false;
 
   onChangeFunction1(bool newvalue1) {
@@ -18,6 +20,16 @@ class _SettingsState extends State<Settings> {
       valNotify1 = newvalue1;
     });
   }
+
+  /////////////////////////////////////////////////////////////////////////////
+  bool valNotify2 = false;
+
+  onChangeFunction2(bool newvalue2) {
+    setState(() {
+      valNotify2 = newvalue2;
+    });
+  }
+  ///////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +75,13 @@ class _SettingsState extends State<Settings> {
             const SizedBox(
               height: 10,
             ),
-            account(context, "Account Status"),
+            ////////////////////////////////////////////////////////////////////
+            EditProfile('Edit Profile'),
+            sliderbtn('Private Account Status', valNotify1, onChangeFunction1),
+            sliderbtn('Hide Personal Data', valNotify2, onChangeFunction2),
+            ///////////////////////////////////////////////////////////////////
             const SizedBox(
-              height: 40,
+              height: 30,
             ),
             Row(
               children: const [
@@ -87,13 +103,9 @@ class _SettingsState extends State<Settings> {
             const SizedBox(
               height: 10,
             ),
-
-            ////////////////////////////////////////////////////////
-
-            themes("Dark Theme", valNotify1, onChangeFunction1),
-
-            /////////////
-
+            //////////////////////////////////////////////////////
+            changetheme("Dark Theme"),
+            /////////////////////////////////////////////////////
             const SizedBox(height: 10),
             Center(
               child: OutlinedButton(
@@ -137,81 +149,9 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
-}
 
-Padding themes(String title, bool value, Function onChangeMethode) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[600],
-          ),
-        ),
-        Transform.scale(
-          scale: 0.7,
-          child: CupertinoSwitch(
-            activeColor: Color(0xff6d71ff),
-            trackColor: Colors.grey,
-            value: value,
-            onChanged: (bool newValue) {
-              onChangeMethode(newValue);
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-GestureDetector account(BuildContext context, String title) {
-  return GestureDetector(
-    onTap: () {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(title),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text(
-                    "Private",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  ),
-                  Divider(
-                    height: 20,
-                    thickness: 1,
-                  ),
-                  Text(
-                    "Public",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Close"),
-                ),
-              ],
-            );
-          });
-    },
-    child: Padding(
+  Padding changetheme(String title) {
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -224,12 +164,82 @@ GestureDetector account(BuildContext context, String title) {
               color: Colors.grey[600],
             ),
           ),
-          const Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.grey,
+          Transform.scale(
+            scale: 0.7,
+            child: Consumer<ThemeNotifier>(
+              builder: (context, notifier, child) => CupertinoSwitch(
+                activeColor: Color(0xff6d71ff),
+                trackColor: Colors.grey,
+                value: notifier.darkTheme,
+                onChanged: (val) {
+                  notifier.toggleTheme();
+                },
+              ),
+            ),
           ),
         ],
       ),
-    ),
-  );
+    );
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  Padding sliderbtn(String title, bool value, Function onChangeMethode) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+            ),
+          ),
+          Transform.scale(
+            scale: 0.7,
+            child: CupertinoSwitch(
+              activeColor: Color(0xff6d71ff),
+              trackColor: Colors.grey,
+              value: value,
+              onChanged: (bool newValue) {
+                onChangeMethode(newValue);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  ///////////////////////////////////////////////////////////////////////////
+
+  GestureDetector EditProfile(String title) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EditProfilePage()));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[600],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:project_sw/NetworkHandler.dart';
+
+DateTime _birthDay = DateTime.now();
 
 class SignupPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +60,7 @@ class SignupPage extends StatelessWidget {
               Column(
                 children: <Widget>[
                   _buildForm(),
+                  BirthDate(),
                 ],
               ),
               Container(
@@ -71,26 +76,39 @@ class SignupPage extends StatelessWidget {
                 child: MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       debugPrint('All validations passed!!!');
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Please check your E-mail'),
-                          content: Text(
-                              'Success!\nYour new account will be ready as soon as you verify your E-mail address.\nJust click the link.'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('OK'),
-                              onPressed: () {
-                                Navigator.popUntil(
-                                    context, (route) => route.isFirst);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+                      debugPrint(NetworkHandler.mocked.toString());
+
+                      if (await NetworkHandler.signup(
+                              _usernameController.text,
+                              _emailController.text,
+                              _passwordController.text,
+                              _birthDay) ==
+                          true) {
+                        debugPrint(NetworkHandler.responseBody.toString());
+
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Please check your E-mail'),
+                            content: Text(
+                                'Success!\nYour new account will be ready as soon as you verify your E-mail address.\nJust click the link.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.popUntil(
+                                      context, (route) => route.isFirst);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        debugPrint(NetworkHandler.responseBody.toString());
+                      }
                     } else
                       return;
                   },
@@ -126,6 +144,7 @@ class SignupPage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               maxLength: 16,
+              controller: _usernameController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Username cannot be empty';
@@ -142,6 +161,7 @@ class SignupPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
+              controller: _emailController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Email cannot be empty!';
@@ -207,5 +227,56 @@ class SignupPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class BirthDate extends StatefulWidget {
+  @override
+  State<BirthDate> createState() => _BirthDateState();
+}
+
+class _BirthDateState extends State<BirthDate> {
+  DateTime Birthdate = DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        helpText: 'Enter your Birthdate',
+        context: context,
+        initialDate: Birthdate,
+        firstDate: DateTime(1950, 1),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != Birthdate) {
+      setState(() {
+        Birthdate = picked;
+        _birthDay = Birthdate;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      SizedBox(
+        height: 80,
+        width: 100,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("${Birthdate.toLocal()}".split(' ')[0]),
+            const SizedBox(
+              height: 10.0,
+            ),
+            ElevatedButton(
+                onPressed: () => _selectDate(context),
+                child: Icon(Icons.date_range),
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xff6d71ff),
+                    fixedSize: Size(800, 20),
+                    shape: StadiumBorder())
+                //Text('Select date'),
+                ),
+          ],
+        ),
+      ),
+    ]);
   }
 }

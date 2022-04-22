@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'tweet_page_2.dart';
+import 'quote_post_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -56,7 +58,7 @@ class _tweetState extends State<_tweet> {
               width: 15,
             ),
             Icon(
-              Icons.loop,
+              Icons.repeat,
               color: Colors.grey[800],
               size: 20,
             ),
@@ -73,7 +75,9 @@ class _tweetState extends State<_tweet> {
             ),
           ],
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              /*MISSING PATH*/
+            },
             style: ElevatedButton.styleFrom(
               shape: CircleBorder(),
               primary: Colors.white,
@@ -93,7 +97,26 @@ class _tweetState extends State<_tweet> {
           children: [
             ElevatedButton(
               onPressed: () {
-                /* MaterialPageRoute(builder: (context) => HomePage()); */
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreatePostScreenUI2()));
+              },
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                primary: Colors.white,
+                fixedSize: Size(15, 15),
+              ),
+              child: Icon(
+                Icons.repeat,
+                color: Colors.black,
+                size: 20,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TweetViewPage2()));
               },
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
@@ -110,6 +133,7 @@ class _tweetState extends State<_tweet> {
               onPressed: () {
                 setState(() {
                   liked = !liked;
+                  /*MISSING PATH*/
                 });
               },
               style: ElevatedButton.styleFrom(
