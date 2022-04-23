@@ -28,13 +28,14 @@ const router = new express.Router()
 
         console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ req.user.following", req.user.following)
         const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==user._id.toString())
+        let isfollowing
         if(isfollowed){
-          user.isfollowing=true
+          isfollowing=true
         }else{
-          user.isfollowing=false
+          isfollowing=false
         }
       
-      res.send({user,isfollowing:true});
+      res.send({user,isfollowing:isfollowing});
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
