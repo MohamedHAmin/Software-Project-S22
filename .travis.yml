@@ -5,8 +5,8 @@ services:
 
 before_install:
   - docker network create mean
-  - docker build -t api -f ./api/Dockerfile.dev ./api
   - docker build -t client -f ./client/Dockerfile.dev ./client
+  - docker build -t api -f ./api/Dockerfile.dev ./api
 
 
 script: 
