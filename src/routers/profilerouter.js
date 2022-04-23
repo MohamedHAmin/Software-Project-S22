@@ -24,9 +24,9 @@ const router = new express.Router()
         user.email=undefined
         user.Notificationssetting=undefined
 
-        console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ user.following", user.following)
+        //console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ user.following", user.following)
 
-        console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ req.user.following", req.user.following)
+        //console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ req.user.following", req.user.following)
         const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==user._id.toString())
         if(isfollowed){
           user.isfollowing=true
@@ -67,10 +67,10 @@ const router = new express.Router()
       const isvalidoperation2 = updates.every((update) =>
       vdata.includes(update)
     );
-    console.log(req.body.birth)
+    //console.log(req.body.birth)
     if(req.body.birth){
       req.user.birth.visability=req.body.birth.visability
-      console.log('1')
+      //console.log('1')
     }
     else if(req.body.location&&!req.body.location.place){
       req.user.location.visability=req.body.location.visability

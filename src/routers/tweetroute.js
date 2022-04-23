@@ -361,9 +361,9 @@ router.get("/timeline", auth("any"), async (req, res) => {
         user=>{return user.followingId}
         )
     const user=req.user
-    console.log('1')
+    //console.log('1')
      followingsId.push(req.user._id)
-     console.log(followingsId)
+     //console.log(followingsId)
        let followerTweet=await Tweet.find({authorId:{$in:followingsId}}).sort({createdAt:-1}).limit(limit).skip(skip).populate(
         {
           path: "retweetedTweet",
@@ -395,7 +395,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
         const tweets={...tweet._doc,isliked:false}
         return tweets
       }})}
-    console.log('2')
+    //console.log('2')
 
 
     res.send(followerTweet);
