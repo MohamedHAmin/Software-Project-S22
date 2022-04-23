@@ -33,19 +33,19 @@ beforeEach(async () => {
     user2token=await user2.generateAuthToken()
 });
 
-test('check profile',async ()=>{
+// test('check profile',async ()=>{
    
-    const res=await request(app).get('/profile/'+user1._id.toString())
-    .set('Authorization','Bearer '+user1token.token)
-    .expect(200)
+//     const res=await request(app).get('/profile/'+user1._id.toString())
+//     .set('Authorization','Bearer '+user1token.token)
+//     .expect(200)
     
-    expect(res.body.screenName).toEqual(user1.screenName)
+//     expect(res.body.screenName).toEqual(user1.screenName)
 
     
-    await request(app).get('/profile/'+"6246378467b2fc4cc39ae714")
-    .set('Authorization','Bearer '+user1token.token)
-    .expect(400)
-});
+//     await request(app).get('/profile/'+"6246378467b2fc4cc39ae714")
+//     .set('Authorization','Bearer '+user1token.token)
+//     .expect(400)
+// });
 
 test('check profile',async ()=>{
        
