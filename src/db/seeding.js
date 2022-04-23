@@ -6,7 +6,6 @@ const { faker } = require('@faker-js/faker');
 const assert = require("assert");
 const _ = require("lodash");
 const bcrypt = require("bcryptjs");
-
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 const seed = async () => {
@@ -14,7 +13,7 @@ const seed = async () => {
   let users = [];
 
   for (let i = 0; i < 10; i += 1) {
-      
+      //cc
     const screenName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const password = await bcrypt.hash("123456", 8);
