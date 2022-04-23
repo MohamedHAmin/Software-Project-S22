@@ -6,19 +6,22 @@ services:
 before_install:
   - docker network create mean
   - docker build -t api -f ./api/Dockerfile.dev ./api
+  - docker build -t client -f ./client/Dockerfile.dev ./client
 
 
 script: 
   - docker run --network mean --name database -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -p 27017:27017 -d mongo
   - docker run --network mean -v /app/node_modules -v $(pwd)/api:/app -e MONGOCONNECT=mongodb://root:example@database:27017/ -e PORT=3000 -e SECRET=$SECRET -e CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME -e CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY -e CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET -e AUTH_EMAIL=$AUTH_EMAIL -e AUTH_PASS=$AUTH_PASS -e CURRENTURL-$CURRENTURL api npm run Dtest
-
+  - docker run -e CI=true client npm run test
 
 after_success:
   - docker build -t mostafaelnashar/larry-api ./api
+  - docker build -t mostafaelnashar/larry-client ./client
   - docker build -t mostafaelnashar/larry-router ./router
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push mostafaelnashar/larry-api
   - docker push mostafaelnashar/larry-router
+  - docker push mostafaelnashar/larry-client
 
 deploy:
   provider: elasticbeanstalk

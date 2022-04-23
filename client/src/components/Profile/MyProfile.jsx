@@ -1,0 +1,595 @@
+import React, { useEffect, useState } from "react";
+import "./Styles/MyProfile.css";
+import ProfileName from "./ProfileName";
+import Avatar from "@mui/material/Avatar";
+import ProfileInfo from "./ProfileInfo";
+import { Button, Typography, Modal } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import CloseIcon from "@mui/icons-material/Close";
+import MyProfileTabs from "./MyProfileTabs";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+//TO DO (hopefully dah ma3 yosef law fady ya3ny w trage3 3al code elly ana 3amlo.. ana kont bazabbat feeh ma3 kimo ya3ny bas yosef ye3raf aktar akid)
+//e3mel isAdmin (lazem 3ashan el report wel ban yetzabbato)
+//line 77 zabbat request el edit profile feeh ba3d ma tkallem 7ad backend
+//e3mel parse lel data createdAt 3ashan beteegy shabah keda: ISODate("2022-04-21T10:34:37.095Z") => enta 3awezha keda: April 2022
+//e3mel map lel tweets hena... leeha route men el backend w mary betzabbatha fel homepage w hatsa3dak isA
+
+function MyProfile({}) {
+  const [profileData, setProfileData] = useState([]);
+  let { id } = useParams();
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [sameUserProf, setSameUserProf] = useState(false);
+  //var sameUserProf;
+  let userID = localStorage.getItem("userId");
+  let isAdmin = localStorage.getItem("adminToken");
+
+  const [joinedDate, setJoinedDate] = useState("");
+  const navigate = useNavigate();
+  const [buttonPopup, setButtonPopup] = useState(false);
+  const [buttonclosePopup, setButtonClosePopup] = useState(false);
+  const [NameError, setNameError] = useState(false);
+  const [followModalState, setFollowModalState] = useState(false);
+  const [optionsModalState, setOptionsModalState] = useState(false);
+  const [userTweets, setUserTweets] = useState([]);
+  const [coverImage, setCoverImage] = useState("");
+  const [Tag, setTag] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState("");
+  const [Following, setFollowing] = useState(0);
+  const [birthDate, setBirthDate] = useState("");
+  const [Name, setName] = useState("");
+  const [Bio, setBio] = useState("");
+  const [Location, setLocation] = useState("");
+
+  //const [Website, setWebsite] = useState(profileData.user.website);
+  const [Name1, setName1] = useState(Name);
+  const [Bio1, setBio1] = useState(Bio);
+  const [Location1, setLocation1] = useState(Location);
+
+  const [Followers, setFollowers] = useState(0);
+
+  const [banDuration, setBanDuration] = useState("");
+  const [banDuration1, setBanDuration1] = useState("");
+  // function fetchData() {
+  //   setName(profileData.screenName);
+  //   setBio(profileData.Biography);
+  //   setLocation(profileData.location.place);
+  //   setJoinedDate(profileData.createdAt);
+  //   setFollowers(profileData.followercount);
+  //   setCoverImage(profileData.banner.url);
+  //   setTag(profileData.tag);
+  //   setBanDuration(profileData.ban);
+  //   setProfilePhoto(profileData.profileAvater.url);
+  //   setFollowing(profileData.followingcount);
+  //   setBirthDate(profileData.birth.date.Date);
+  // }
+  
+  useEffect(() => {
+    if (id == userID) {
+      setSameUserProf(true);
+    }
+    console.log(sameUserProf)
+    if  (id === userID) {
+        axios.get(
+            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
+            { headers: { Authorization: localStorage.getItem("accessToken") } }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setProfileData(res.data);
+              setName(res.data.screenName);
+              setBio(res.data.Biography);
+              setLocation(res.data.location.place);
+              setJoinedDate(res.data.createdAt);
+              setFollowers(res.data.followercount);
+              setCoverImage(res.data.banner.url);
+              setTag(res.data.tag);
+              setBanDuration(res.data.ban);
+              setProfilePhoto(res.data.profileAvater.url);
+              setFollowing(res.data.followingcount);
+              setBirthDate(res.data.birth.date.Date);
+            }
+          }) 
+        }
+        else
+        {
+          axios.get(
+            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
+            { headers: { Authorization: localStorage.getItem("accessToken") } }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setProfileData(res.data);
+              setName(res.data.user.screenName);
+              setBio(res.data.user.Biography);
+              setLocation(res.data.user.location.place);
+              setJoinedDate(res.data.user.createdAt);
+              setFollowers(res.data.user.followercount);
+              setCoverImage(res.data.user.banner.url);
+              setTag(res.data.user.tag);
+              setBanDuration(res.data.user.ban);
+              setProfilePhoto(res.data.user.profileAvater.url);
+              setFollowing(res.data.user.followingcount);
+              setBirthDate(res.data.user.birth.date.Date);
+              setIsFollowed(res.data.isfollowing);
+            }
+          })
+        };
+
+    // let obj = profileData.following.find((o) => o.id === id);
+    // if (obj) {
+    //   setIsFollowed(true);
+    // }
+
+    // axios
+    //   .get(
+    //     `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}/me`,
+    //     { headers: { Authorization: localStorage.getItem("accessToken") } }
+    //   )
+    //   .then((res) => {
+    //     setUserTweets(res.data);
+    //   });
+  }, [userID]);
+
+  function saveBtn(e) {
+    e.preventDefault();
+    let data = {
+      screenName: Name1,
+      Biography: Bio1,
+      //location: { place: Location1 }
+    };
+    console.log(Name1);
+    setNameError(false);
+    if (Name1 === "") {
+      setNameError(true);
+    } else {
+      // setName(Name1);
+      // setBio(Bio1);
+      // setLocation(Location1);
+      console.log(data);
+      axios
+        .put(
+          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
+          data,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            alert("Something wrong happened!");
+          } else {
+            setName(Name1);
+            setBio(Bio1);
+            //setLocation(Location1);
+          }
+        });
+    }
+    //setWebsite(Website);
+    if (Name1 !== "") setButtonPopup(false);
+  }
+
+  function handleDiscard() {
+    setName(Name);
+    setBio(Bio);
+    setLocation(Location);
+  }
+  function closeBtn() {
+    if (
+      Name === Name1 &&
+      Bio === Bio1 &&
+      Location === Location1
+      // &&Website === website
+    )
+      setButtonPopup(false);
+    else {
+      setButtonClosePopup(true);
+      // setName(profileData.screenName);
+      // setBio(profileData.biography);
+      // setLocation(profileData.location);
+    }
+  }
+
+  function handleButtonClick() {
+    console.log(isFollowed)
+    if (isFollowed) {
+      setFollowModalState(true);
+    } else {
+      axios
+        .post(
+          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${id}`,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          if (res.error.Error) {
+            alert("Something wrong happened!");
+          } else {
+            setFollowers(Followers + 1);
+            //profileData.followercount=Followers+1
+            setIsFollowed(true);
+            console.log(res);
+          }
+          
+        }).catch(err => {alert("already followed")
+        setFollowModalState(true); // 'Oops!'
+        });;
+    }
+  }
+  //console.log(isFollowed);
+  //console.log(userID);
+  //console.log(id);
+  function handleUnfollowAction() {
+    axios
+      .post(
+        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${id}`,
+        { headers: { Authorization: localStorage.getItem("accessToken") } }
+      )
+      .then((res) => {
+        console.log(res);
+        setFollowers(Followers - 1);
+        setFollowModalState(false);
+        setIsFollowed(false);
+      }).catch(err => {alert("already unfollowed");}) // 'Oops!';
+  }
+
+  function handleOptionsClick() {
+    navigate(`/Report/Profile/${userID}`);
+  }
+  function handleBanAction() {
+    axios
+      .post(
+        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`
+      )
+      .then((res) => {
+        if (res.error.Error) {
+          console.log(
+            "An error occured while attempting to ban the user, please try again"
+          );
+        }
+        setBanDuration(banDuration1);
+        alert("The user has been banned");
+      });
+    setOptionsModalState(false);
+  }
+  function handleSelectChange(event) {
+    setBanDuration(event.target.value);
+  }
+  function handleReportAction() {
+    setOptionsModalState(false);
+  }
+  function handleCancelAction() {
+    setFollowModalState(false);
+  }
+  // function toMonthName() {
+  //   const date = new Date();
+  //   date.setMonth(joinedDate.getMonth() - 1);
+
+  //   return date.toLocaleString("en-US", {
+  //     month: "long",
+  //   });
+  // }
+  // console.log(userID);
+  // console.log(id);
+  // console.log(profileData);
+  // //console.log(sameUserProf);
+  // console.log(Name);
+  if (profileData !== []) {
+    return (
+      <div className="myProfile">
+        <div className="myProfileName">
+          <ProfileName pName={Name} pID={Tag} />
+        </div>
+        <Avatar
+          className="coverImage"
+          variant="square"
+          sx={{ width: "auto", height: 180 }}
+          alt={Name}
+          src={coverImage}
+        />
+        <div className="profileSetup">
+          <Avatar className="profileImage" alt={Name} src={profilePhoto} />
+
+          {!sameUserProf ? (
+            isAdmin != "" ? (
+              <Button
+                className="optionProfileButton"
+                variant="outlined"
+                onClick={handleOptionsClick}
+                fullWidth
+              >
+                Ban
+              </Button>
+            ) : (
+              <Button
+                className="optionProfileButton"
+                variant="outlined"
+                onClick={handleOptionsClick}
+                fullWidth
+              >
+                Report
+              </Button>
+            )
+          ) : null}
+
+          {sameUserProf ? (
+            <Button
+              className="setupProfileButton"
+              onClick={() => setButtonPopup(true)}
+              variant="outlined"
+              fullWidth
+              data-testid="Edit-Profile-Button"
+            >
+              {profilePhoto || Bio ? "Edit Profile" : "Set Up Profile"}
+            </Button>
+          ) : (
+            <Button
+              className="FollowUnfollowButton"
+              onClick={handleButtonClick}
+              data-testid="Follow-Profile-Button"
+            >
+              {isFollowed ? "Unfollow" : "Follow"}
+            </Button>
+          )}
+
+          <Modal
+            open={optionsModalState}
+            onClose={handleCancelAction}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            keepMounted
+          >
+            {isAdmin != "" ? (
+              <FormControl className="editProfileCloseContainer">
+                <Typography id="modal-modal-title" variant="h6">
+                  Ban @{Tag}?
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 1 }}>
+                  How long do you want to suspend @{Tag}?
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mb: 1 }}>
+                  They won't be able to tweet, comment, or take other actions in
+                  the chosen time frame.
+                </Typography>
+                <Select
+                  value={banDuration1}
+                  onChange={handleSelectChange}
+                  autoWidth
+                >
+                  <MenuItem value={1}>Day</MenuItem>
+                  <MenuItem value={3}>3 Days</MenuItem>
+                  <MenuItem value={7}>7 Days</MenuItem>
+                  <MenuItem value={14}>14 Days</MenuItem>
+                  <MenuItem value={28}>28 Days</MenuItem>
+                </Select>
+                <div style={{ textAlign: "center" }}>
+                  <Button
+                    onClick={handleBanAction}
+                    className="profileDiscardContainerButton"
+                  >
+                    Ban
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setOptionsModalState(false);
+                      setBanDuration(banDuration);
+                    }}
+                    className="profileCloseContainerButton"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </FormControl>
+            ) : (
+              <FormControl className="editProfileCloseContainer">
+                <Typography id="modal-modal-title" variant="h6">
+                  Report @{Tag}?
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Let the admins know what's wrong with this account. No one
+                  else will see your name or the content of this report.
+                </Typography>
+
+                <div style={{ textAlign: "center" }}>
+                  <Button
+                    onClick={handleReportAction}
+                    className="profileDiscardContainerButton"
+                  >
+                    Report
+                  </Button>
+                  <Button
+                    onClick={() => setOptionsModalState(false)}
+                    className="profileCloseContainerButton"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </FormControl>
+            )}
+          </Modal>
+
+          <Modal
+            open={followModalState}
+            onClose={handleCancelAction}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            keepMounted
+          >
+            <FormControl className="editProfileCloseContainer">
+              <Typography id="modal-modal-title" variant="h6">
+                Unfollow @{Tag}?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Their Tweets will no longer show up in your home timeline. You
+                can still view their profile, unless their Tweets are protected.
+              </Typography>
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  onClick={handleUnfollowAction}
+                  className="profileDiscardContainerButton"
+                  data-testid="Follow-Profile-Pop-Button"
+                >
+                  Unfollow
+                </Button>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  onClick={handleCancelAction}
+                  className="profileCloseContainerButton"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </FormControl>
+          </Modal>
+
+          <Modal
+            open={buttonPopup}
+            onClose={() => setButtonPopup(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className="editProfileModal"
+            keepMounted
+          >
+            <form
+              className="editProfileContainer"
+              noValidate
+              autoComplete="off"
+              onSubmit={saveBtn}
+            >
+              <div className="editProfileHeader">
+                <CloseIcon className="closeIcon" onClick={closeBtn} />
+                <Typography variant="h6" color="black">
+                  Edit Profile
+                </Typography>
+                <Button
+                  className="saveProfileButton"
+                  type="submit"
+                  variant="outlined"
+                  fullWidth
+                >
+                  Save
+                </Button>
+              </div>
+              <div className="editProfileInputs">
+                <TextField
+                  className="editProfileField"
+                  label="Name"
+                  onChange={(e) => setName1(e.target.value)}
+                  defaultValue={Name}
+                  required
+                  fullWidth
+                  inputProps={
+                    ({ maxLength: 50 }, { "data-testid": "editProfile-Name" })
+                  }
+                  error={NameError}
+                />
+                <TextField
+                  className="editProfileField"
+                  label="Bio"
+                  onChange={(e) => setBio1(e.target.value)}
+                  defaultValue={Bio}
+                  fullWidth
+                  multiline
+                  rows={3}
+                  inputProps={
+                    ({ maxLength: 160 }, { "data-testid": "editProfile-Bio" })
+                  }
+                />
+                <TextField
+                  className="editProfileField"
+                  label="Location"
+                  onChange={(e) => setLocation1(e.target.value)}
+                  defaultValue={Location}
+                  fullWidth
+                  inputProps={
+                    ({ maxLength: 30 },
+                    { "data-testid": "editProfile-Location" })
+                  }
+                />
+                {/* <TextField
+                className="editProfileField"
+                label="Website"
+                onChange={(e) => setWebsite1(e.target.value)}
+                defaultValue={website}
+                fullWidth
+                inputProps={
+                  ({ maxLength: 100 }, { "data-testid": "editProfile-Website" })
+                }
+              /> */}
+              </div>
+              <Modal
+                open={buttonclosePopup}
+                onClose={() => setButtonClosePopup}
+                className="closeEditProfileModal"
+              >
+                <form
+                  className="editProfileCloseContainer"
+                  noValidate
+                  autoComplete="off"
+                >
+                  <Typography
+                    variant="h6"
+                    color="black"
+                    fontSize={18}
+                    fontWeight={600}
+                  >
+                    Discard Changes?
+                  </Typography>
+                  <Typography
+                    variant="p"
+                    color="black"
+                    fontSize={15}
+                    fontWeight={400}
+                  >
+                    This can't be undone and you 'll lose your changes.
+                  </Typography>
+                  <Button
+                    className="profileDiscardContainerButton"
+                    onClick={() => {
+                      setButtonClosePopup(false);
+                      setButtonPopup(false);
+                      handleDiscard();
+                    }}
+                  >
+                    Discard
+                  </Button>
+                  <Button
+                    className="profileCloseContainerButton"
+                    onClick={() => setButtonClosePopup(false)}
+                  >
+                    Cancel
+                  </Button>
+                </form>
+              </Modal>
+            </form>
+          </Modal>
+        </div>
+        <ProfileInfo
+          name={Name}
+          userName={Tag}
+          date={joinedDate}
+          followers={Followers}
+          following={Following}
+          bio={Bio}
+          location={Location}
+          //website={Website}
+          birthday={birthDate}
+        />
+        <MyProfileTabs />
+      </div>
+    );
+  } else {
+    return null;
+  }
+}
+
+export default MyProfile;

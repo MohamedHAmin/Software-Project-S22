@@ -1,0 +1,16 @@
+.ReportsView
+{
+    border: 2px solid var(--color-border);
+    padding: 3%;
+    max-width:inherit;
+    width:100%;
+}
+.reportedtweet
+{
+    border: 2px solid var(--color-border);
+    padding: 3%;
+}
+.DeleteReport
+{
+    float:right;
+}

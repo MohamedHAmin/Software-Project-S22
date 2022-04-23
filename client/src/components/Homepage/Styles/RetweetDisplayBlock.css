@@ -1,0 +1,62 @@
+.userInfo
+{
+    margin-right: 100%;
+    display: flex;
+}
+.comments
+{
+    border-width: 2px; 
+    border-style: solid;
+    border-color: var(--color-border);
+    height: fit-content;
+    padding:calc(2%);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    width: 100%;
+    color: var(--color-mode);
+}
+.uploadedimage
+{
+    max-height: 300px;
+    height: auto;
+    max-width: inherit;
+    width: auto;
+    margin-right: 100%;
+}
+.profilePic
+{
+    position: relative;
+    top:0px;
+    left:0px;
+    cursor: pointer;
+    float: left;
+    margin-right: 0%;
+}
+.tweetContent
+{
+    padding-block: calc(2%);
+    float: left;
+}
+.profileInfo
+{
+    float: left;
+    cursor: pointer;
+    margin-right: 45%;
+    margin-left: 0%;
+    margin-bottom: 2%;
+}
+.tag
+{
+    font-size: small;
+    color: var(--color-mode);
+    margin-left: 6%;    
+}
+.username
+{
+    font-size: medium;
+    font-weight: bold;
+    color: var(--color-mode);
+    text-decoration: none;
+    margin-left: 6%;
+}

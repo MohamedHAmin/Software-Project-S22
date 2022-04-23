@@ -1,0 +1,40 @@
+.search 
+{
+    position: relative;
+    background: lightgrey;
+    border-radius: 1000em;
+    padding: 3px;
+    display:inline-block;
+}
+.searchbox
+{
+    position: relative;
+    display: inherit;
+    border-radius: inherit;
+    border-width: 2px;
+    border-style: solid;
+    border-color: lightgrey;
+    background-color: white;
+    padding: 12 3em;
+    width: inherit;
+    margin: 0;
+}
+.search:hover
+{
+    background: linear-gradient(21deg, #6D71FF,rgba(43, 61, 188, 1));
+}
+.searchIcon
+{
+    color: lightgrey;
+}
+.searchIcon:hover
+{
+    color: #6D71FF;
+    cursor: pointer;
+}
+@media screen and (max-width: 1000px) {
+    .searchIcon
+    {
+        margin-top: 25px;
+    }
+}
