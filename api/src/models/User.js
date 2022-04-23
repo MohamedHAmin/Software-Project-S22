@@ -35,17 +35,21 @@ const userSchema = new mongoose.Schema({
        type:Boolean,
        default:false
   },
-  birthDate: {
-   Date: {type: Date,},
-   visability:{
-    type:Boolean,
-    default:true
-   }
-  },
+  
   location:{
     place:{
       type:String,
       default:null
+    },
+    visability:{
+      type:Boolean,
+      default:true
+     }
+  },
+  birth:{
+    date:{
+      type:Date,
+    default:Date.now()
     },
     visability:{
       type:Boolean,
