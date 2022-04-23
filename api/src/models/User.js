@@ -36,15 +36,6 @@ const userSchema = new mongoose.Schema({
        default:false
   },
 
-  birthDate: {
-   Date: {type: Date, default:Date.now()},
-   visability:{
-    type:Boolean,
-    default:true
-   }
-  },
-  
-
   location:{
     place:{
       type:String,
