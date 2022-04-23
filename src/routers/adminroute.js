@@ -46,17 +46,17 @@ router.get("/report/:pageNum",auth("admin"),async (req, res) => {
     const filter = req.query.filter ? {type:req.query.filter} : {};
     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
     const skip=(parseInt(req.params.pageNum)-1)*perPage;
-    let reports=await Report.find(filter)
+    let reports=await Report.find(filter).populate({path:'reporterId',select:'tag'})
     .skip(skip).limit(perPage)
     .sort({createdAt:-1});
     reports= await Promise.all(reports.map(async(report)=>{
       if(report.type==="User")
       {
-        return await Report.populate(report,{path:'reportedId',model:User})
+        return await Report.populate(report,{path:'reportedId',select:'screenName tag profileAvater',model:User})
       }
       else if(report.type==="Tweet")
       {
-        return await Report.populate(report,{path:'reportedId',model:Tweet})
+        return await Report.populate(report,{path:'reportedId',populate:{path:'authorId',select:'screenName tag profileAvater'},select:'text authorId likeCount replyCount retweetCount gallery',model:Tweet})
       }
     }))
     if(reports.length===0){throw Error("No Reports Found")}
@@ -76,7 +76,7 @@ router.get("/profile/:id",auth("admin"),async (req, res) => {
     res.status(400).send({error:e.toString()});
   }
 });
-router.post("/ban/:id",async (req, res) => {
+router.post("/ban/:id",auth("admin"),async (req, res) => {
   try {
     const banDate=new Date();
     const duration=Number(req.body.duration);
@@ -117,14 +117,39 @@ router.get("/users/:pageNum",auth("admin"),async (req, res) => {
     res.status(400).send({error:e.toString()});
   }
 });
-// router.post("/ban/:id",auth("admin"),async (req, res) => {
-//   try {
-//     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
-//     res.status(200).send({tempUser})
-//   } catch (e) {
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
+router.get("/tweets/:pageNum",auth("admin"),async (req, res) => {
+  try {
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
+    const skip=(parseInt(req.params.pageNum)-1)*perPage;
+    let tweets=await Tweet.aggregate()
+    .lookup({
+      from:'reports',
+      localField:'_id',
+      foreignField:'reportedId',
+      as:'Reported'
+    })
+    .addFields({
+    'Reports':{$size:'$Reported'}
+    })
+    .project({
+      Reports:1,
+      text:1,
+      authorId:1,
+      likeCount:1,
+      replyCount:1,
+      retweetCount:1,
+      gallery:1
+    })
+    .sort({Reports:-1})
+    .skip(skip).limit(perPage);
+    await Tweet.populate(tweets,{path:"authorId",select:"screenName tag profileAvater"});
+    if(!tweets.length){throw Error("Not Found")}
+    res.status(200).json({tweets}).end();
+
+  } catch (e) {
+    res.status(400).send({error:e.toString()});
+  }
+});
 // router.get("/dashboard",auth("admin"),async (req, res) => {
 //   try {
 //     res.status(200).end("<h1>Placeholder<h1>")
