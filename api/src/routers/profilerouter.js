@@ -68,11 +68,11 @@ const router = new express.Router()
       vdata.includes(update)
     );
     console.log(req.body.birth)
-    if(req.body.birth&&req.user.birth.visability){
+    if(req.body.birth){
       req.user.birth.visability=req.body.birth.visability
       console.log('1')
     }
-    else if(req.body.location&&req.body.location.visability){
+    else if(req.body.location&&!req.body.location.place){
       req.user.location.visability=req.body.location.visability
     }else if(req.body.location&&req.body.location.place){
       req.user.location.place=req.body.location.place
