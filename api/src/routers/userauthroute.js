@@ -25,7 +25,8 @@ const sendVerificationEmail = async({_id,email},res)=>{
      const hashstring=_id.toString()+process.env.SECRET
   const uniqueString = await bcrypt.hash(hashstring, 8);
   const notaccepteduniqustreng=uniqueString
-   const accepteduniqueString=uniqueString.toString().replace('+','xMl3Jk').replace('/','Por21Ld').replace('=','Ml32')
+  const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
+
   //hash the string 
   
     const newVerification = new UserVerification({
@@ -55,9 +56,8 @@ console.log(e);
 router.get("/verify/:userId/:uniqueString", async(req,res)=>{
   try{
     let {userId, uniqueString} = req.params 
-    uniqueString =uniqueString.replace("por21Ld",'/')
-    uniqueString=uniqueString.replace('xMl3Jk','+')
-    uniqueString=uniqueString.replace('Ml32','=')
+    uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
+
     const result=await UserVerification.find({userId})
       if(result.length > 0 ){
         const hasheduniqueString = result[0].uniqueString
