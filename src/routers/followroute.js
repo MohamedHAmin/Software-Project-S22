@@ -94,11 +94,11 @@ const router = new express.Router()
  
         isfollowed=req.user.following.some(followed=>followed.followingId.toString()==follow.followingId._id.toString())
         if(isfollowed){
-          const foll={...follow._doc,isfollowing:true}
-         return foll
+          const userFollower={...follow._doc,isfollowing:true}
+         return userFollower
         }else{
-          const foll={...follow._doc,isfollowing:false}
-          return foll
+          const userFollower={...follow._doc,isfollowing:false}
+          return userFollower
         }
       })}
       res.send(user.following);
@@ -126,11 +126,11 @@ const router = new express.Router()
         const isfollowed=user.following.some(followed=>followed.followingId.toString()==follow._id.toString())
         delete follow._doc.following
         if(isfollowed){
-          follow={...follow._doc,isfollowing:true}
-         return follow
+          userFollower={...follow._doc,isfollowing:true}
+         return userFollower
         }else{
-          follow={...follow._doc,isfollowing:false}
-          return follow
+          userFollower={...follow._doc,isfollowing:false}
+          return userFollower
         }
       })}
       res.send(user.follower);

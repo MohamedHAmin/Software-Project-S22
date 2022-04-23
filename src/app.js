@@ -1,5 +1,5 @@
 const express=require('express')
-
+var cors = require('cors')
 require('./db/mongoose')//? if you seed comment this line    
 
 //require('./db/seeding')  //? if want to seed uncomment this line
@@ -14,8 +14,10 @@ const profileRouter =require('./routers/profilerouter')
 
 
 const app=express()
+app.use(cors())
 const port=process.env.PORT
 app.use(express.json())
+app.set('trust proxy', 1) 
 app.use('/user',userAuthRouter)
 app.use('/user',userRouter)
 app.use(tweetRouter)

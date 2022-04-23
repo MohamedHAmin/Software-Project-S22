@@ -78,6 +78,12 @@ tweetSchema.virtual('replies',{
 })
 
 
+tweetSchema.methods.toJSON=function(){
+  const tweet = this
+  const tweetobject=tweet.toObject()
+  delete tweetobject.likes
+  return tweetobject
+}
 const Tweet = mongoose.model('Tweet', tweetSchema);
 
 module.exports = Tweet

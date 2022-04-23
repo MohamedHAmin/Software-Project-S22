@@ -19,7 +19,6 @@ module.exports = multer({
     }
     cb(null, true);
   }catch (e){
-    console.log(e)
     cb(null, false);
   }
 },

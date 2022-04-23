@@ -1,6 +1,8 @@
 const jwt=require('jsonwebtoken')
 const User=require('../models/User')
 const Admin=require('../models/Admin.js')
+const Token=require('../models/Token.js')
+
 
 
 const auth =(role)=>{
@@ -8,6 +10,10 @@ const auth =(role)=>{
         try{
             const token =req.header('Authorization').replace('Bearer ','')
             const decoded =jwt.verify(token,process.env.SECRET)
+             const tokenIn=await Token.findOne({token:token})
+
+             
+             if (!tokenIn){ throw new Error()}
             let user;
             if(role==="admin"||role==="any")
             {

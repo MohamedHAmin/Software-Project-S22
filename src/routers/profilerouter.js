@@ -7,21 +7,34 @@ const bcrypt = require("bcryptjs");
 
 const router = new express.Router()
 
-//*follow rout
   router.get("/:id",auth("any"), async (req, res) => {
     try {
-      const user=await User.findById(req.params.id)
+      let user=await User.findById(req.params.id)
+  
+    
+
       if(!user){
         throw new Error("no user found")
       }
       if(user.location.visability===false)
-       {delete user.Location;}
-       if(user.birthDate.visability===false)
-       {delete user.Location;}
-       delete user.ban
-       delete user.email
-       delete user.Notificationssetting
-      res.send(user);
+       { user.Location=undefined;}
+       if(user.birth.visability===false)
+       { user.birth=undefined;}
+        user.ban=undefined
+        user.email=undefined
+        user.Notificationssetting=undefined
+
+        //console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ user.following", user.following)
+
+        //console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ req.user.following", req.user.following)
+        const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==user._id.toString())
+        if(isfollowed){
+          user.isfollowing=true
+        }else{
+          user.isfollowing=false
+        }
+      
+      res.send({user,isfollowing:true});
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
@@ -44,14 +57,28 @@ const router = new express.Router()
       res.send(req.user);
     } catch (e) {
       res.status(400);
-      res.send(e);
+      res.send({error: e.toString()});
     }
   });
   router.put("/:id", auth("user"), async (req, res) => {
     try {
-
       const updates = Object.keys(req.body);
-      const allowtoupdate = ["screenName", "tag", "isPrivate", "birthDate","Notificationssetting","Location"];
+      const vdata=["birth"]
+      const isvalidoperation2 = updates.every((update) =>
+      vdata.includes(update)
+    );
+    //console.log(req.body.birth)
+    if(req.body.birth){
+      req.user.birth.visability=req.body.birth.visability
+      //console.log('1')
+    }
+    else if(req.body.location&&!req.body.location.place){
+      req.user.location.visability=req.body.location.visability
+    }else if(req.body.location&&req.body.location.place){
+      req.user.location.place=req.body.location.place
+    }
+    else{
+      const allowtoupdate = ["screenName", "tag", "isPrivate", "website",,"Notificationssetting","location","Biography","phoneNumber","darkMode"];
       const isvalidoperation = updates.every((update) =>
         allowtoupdate.includes(update)
       );
@@ -61,12 +88,15 @@ const router = new express.Router()
       }
 
       updates.forEach((element) => (req.user[element] = req.body[element]));
+    }
+     
+      
       await req.user.save();
   
       res.send(req.user);
     } catch (e) {
       res.status(400);
-      res.send(e);
+      res.send({error:e.toString()});
     }
   });
   router.put("/:id/avater",auth("any"),upload.single("image"), async (req, res) => {

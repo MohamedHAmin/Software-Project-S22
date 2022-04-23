@@ -20,14 +20,12 @@ beforeEach(async ()=>{
 test('Check User Creation (Signup)', async ()=>{
     const res=await request(app).post('/user/signup')
     .send({
-        screenName:"oz",
+    screenName:"oz",
     email:"mido.zanaty55@gmail.com",
     password:"123456",
     tag:"@oz174"
     })
     .expect(201)
-    expect(res.body.user.screenName).toEqual("oz")
-    expect(res.body.user.tag).toEqual("@oz174")
 })
 test('Check Email Duplication', async ()=>{
     await User.create({
@@ -131,10 +129,16 @@ test('email verfication', async ()=>{
         password:"12345678",
         tag:"tg1"
     })
-    const uniqueString = await bcrypt.hash(res.body.user._id.toString(), 8);
-    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ uniqueString", uniqueString.toString())
-    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ es.body.user._id", res.body.user._id.toString())
-    const res2=await request(app).get('/user/verify/'+res.body.user._id.toString()+'/'+uniqueString.toString())
+    const userverification2=await Userverification.findOne()
+
+    const userverification=await Userverification.findOne({email:"cool23@gmail.com"})
+    let s=userverification.uniqueString.toString()
+     s=s.replace('+','xMl3Jk')
+     s=s.replace('/','Por21Ld')
+     s=s.replace('=','Ml32')
+    //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ s", s)
+     
+    const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'/'+s)
     .expect(200)
     
 })
