@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'theme.dart';
 import 'edit_profile.dart';
+import 'NetworkHandler.dart';
 
 class SettingsPageUI extends StatefulWidget {
   const SettingsPageUI({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _SettingsPageUIState extends State<SettingsPageUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff6d71ff),
+        //backgroundColor: Color(0xff6d71ff),
         title: const Text(
           "Settings",
           style: TextStyle(fontSize: 22),
@@ -115,8 +116,13 @@ class _SettingsPageUIState extends State<SettingsPageUI> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                onPressed: () async {
+                  if (await NetworkHandler.logout_1() == true) {
+                    debugPrint(NetworkHandler.responseBody.toString());
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  } else {
+                    debugPrint(NetworkHandler.responseBody.toString());
+                  }
                 },
                 child: const Text(
                   "Logout from this Device",
@@ -134,8 +140,13 @@ class _SettingsPageUIState extends State<SettingsPageUI> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                onPressed: () async {
+                  if (await NetworkHandler.logout_2() == true) {
+                    debugPrint(NetworkHandler.responseBody.toString());
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  } else {
+                    debugPrint(NetworkHandler.responseBody.toString());
+                  }
                 },
                 child: const Text(
                   "Logout from all Devices",

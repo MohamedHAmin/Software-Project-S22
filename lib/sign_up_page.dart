@@ -13,10 +13,10 @@ class SignupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

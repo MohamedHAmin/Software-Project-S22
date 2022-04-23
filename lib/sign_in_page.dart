@@ -14,11 +14,11 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         title: Text(
           'Login',
           style: TextStyle(

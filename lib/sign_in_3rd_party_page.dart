@@ -10,11 +10,11 @@ class Login3rdPartyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         title: Text(
           '3rd Party Login',
           style: TextStyle(

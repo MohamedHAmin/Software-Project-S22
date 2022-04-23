@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'home_page.dart';
+import 'NetworkHandler.dart';
 
 class CreatePostScreenUI extends StatefulWidget {
   const CreatePostScreenUI({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff6d71ff),
+        //backgroundColor: Color(0xff6d71ff),
         centerTitle: true,
         title: const Text(
           'Post',
@@ -141,11 +142,15 @@ class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
                     ),
                     backgroundColor: Color(0xff6d71ff)),
                 onPressed: () async {
-                  setState(() {
-                    _loading = true;
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  });
+                  if (await NetworkHandler.create_post(
+                          _postText, !(image == null), image!) ==
+                      true) {
+                    setState(() {
+                      _loading = true;
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    });
+                  }
                 },
                 child: const Text(
                   "Post",
@@ -158,7 +163,7 @@ class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xffffffff),
+        //color: const Color(0xffffffff),
         child: Container(
           margin: const EdgeInsets.only(left: 30.0, right: 30.0),
           child: Row(

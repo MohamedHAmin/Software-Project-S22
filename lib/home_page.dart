@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'NetworkHandler.dart';
 import 'side_menu.dart';
 
 import 'settings_page.dart';
@@ -11,18 +12,32 @@ import 'tweet_page_2.dart';
 import 'quote_post_page.dart';
 
 class _tweet extends StatefulWidget {
-  final Widget? embedded;
+  Widget? embedded;
+  final bool liked;
   final bool reTweet;
-  const _tweet({Key? key, this.embedded, this.reTweet = false})
+  final String? text;
+  final String? name;
+  final String? tag;
+
+  _tweet(
+      {Key? key,
+      this.embedded,
+      this.liked = false,
+      this.reTweet = false,
+      @required this.text,
+      @required this.name,
+      @required this.tag})
       : super(key: key);
 
   @override
-  State<_tweet> createState() => _tweetState();
+  State<_tweet> createState() => _tweetState(liked);
 }
 
 class _tweetState extends State<_tweet> {
   bool liked = false;
   bool deleted = false;
+
+  _tweetState(this.liked);
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +53,13 @@ class _tweetState extends State<_tweet> {
                     MaterialPageRoute(builder: (context) => ProfilePage2()));
               }, //Action to be added later
               child: Row(children: [
-                Text('Username',
+                Text('${widget.name}',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 18))
               ])),
-          Text('@user_handle',
+          Text('@${widget.tag}',
               style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
@@ -74,8 +89,7 @@ class _tweetState extends State<_tweet> {
             )
           ],
         ]),
-        Text(
-            'Tweet Content: this is only an example of the tweet text and will be updated later.'),
+        Text(widget.text ?? ''),
         Align(
             alignment: Alignment.centerRight,
             child: Row(children: [
@@ -220,6 +234,51 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var currentPage = DrawerSections.home;
 
+  Future<Column> tweetList() async {
+    if (await NetworkHandler.getTimeline() == true) {
+      List<Widget> tweets = [];
+      for (Map<dynamic, dynamic> tweet in NetworkHandler.responseBody) {
+        _tweet newTweet = _tweet(
+            text: tweet['text'],
+            name: tweet['authorId']['screenName'],
+            tag: tweet['authorId']['tag'],
+            liked: tweet['isliked']);
+
+        List<Widget> images = [];
+
+        for (Map<dynamic, dynamic> image in tweet['gallery']) {
+          images.add(Image(
+            image: NetworkImage(image['photo']),
+            fit: BoxFit.fitWidth,
+            width: 40,
+            height: double.infinity,
+          ));
+        }
+
+        if (images.isNotEmpty) {
+          newTweet.embedded = GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            children: [...images],
+          );
+        }
+        tweets.add(newTweet);
+      }
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...tweets,
+        ],
+      );
+    } else {
+      return Column();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (currentPage == DrawerSections.profile) {
@@ -240,7 +299,7 @@ class _HomePageState extends State<HomePage> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffffffff),
+        //backgroundColor: const Color(0xffffffff),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -254,46 +313,15 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _tweet(
-                  embedded: GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    children: [
-                      Image(
-                        image: NetworkImage(
-                            'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
-                        fit: BoxFit.fitWidth,
-                        width: 40,
-                        height: double.infinity,
-                      ),
-                      Image(
-                        image: NetworkImage(
-                            'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
-                        fit: BoxFit.fitWidth,
-                        width: 40,
-                        height: double.infinity,
-                      ),
-                    ],
-                  ),
-                ),
-                _tweet(
-                  embedded: null,
-                ),
-                _tweet(
-                  embedded: _tweet(embedded: null),
-                  reTweet: true,
-                ),
-                _tweet(
-                  embedded: null,
-                ),
-              ]),
+          child: FutureBuilder<Widget>(
+              future: tweetList(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data ?? Column();
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
         ),
       ),
       drawer: Drawer(
@@ -317,7 +345,7 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add_sharp),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xffffffff),
+        //color: const Color(0xffffffff),
         child: Container(
           margin: const EdgeInsets.only(left: 30.0, right: 30.0),
           child: Row(

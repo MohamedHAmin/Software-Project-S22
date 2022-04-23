@@ -38,11 +38,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  /////////////////////////////////////////////////////////////////////////////
+  String fullname = '_';
+  onChangeFunction1(String newvalue1) {
+    fullname = newvalue1;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  String email = '_';
+  onChangeFunction2(String newvalue2) {
+    email = newvalue2;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  String birthday = '_';
+  onChangeFunction3(String newvalue3) {
+    birthday = newvalue3;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  String password = '_';
+  onChangeFunction4(String newvalue4) {
+    password = newvalue4;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  String location = '_';
+  onChangeFunction5(String newvalue5) {
+    location = newvalue5;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff6d71ff),
+        //backgroundColor: Color(0xff6d71ff),
         title: const Text(
           "Edit Profile",
           style: TextStyle(fontSize: 22),
@@ -160,11 +192,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", 'Enter your Full Name', false),
-              buildTextField("E-mail", 'Enter your E-mail', false),
-              buildTextField("Birthday", 'd/m/y', false),
-              //buildTextField("Password", "********", true),
-              buildTextField("Location", 'city, country', false),
+              buildTextField("Full Name", 'Enter your Full Name', fullname,
+                  onChangeFunction1, false),
+              buildTextField("E-mail", 'Enter your E-mail', email,
+                  onChangeFunction2, false),
+              buildTextField(
+                  "Birthday", 'd/m/y', birthday, onChangeFunction3, false),
+              buildTextField(
+                  "Password", "********", password, onChangeFunction4, true),
+              buildTextField("Location", 'city, country', location,
+                  onChangeFunction5, false),
               const SizedBox(
                 height: 35,
               ),
@@ -216,11 +253,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+  Widget buildTextField(String labelText, String placeholder, String newValue,
+      Function onChangeMethode, bool isPasswordTextField) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        onChanged: (newValue) {
+          onChangeMethode(newValue);
+        },
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
@@ -242,7 +282,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             hintText: placeholder,
             hintStyle: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.bold,
+              //fontWeight: FontWeight.,
               color: Colors.black,
             )),
       ),

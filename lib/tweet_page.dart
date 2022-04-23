@@ -110,7 +110,7 @@ class _TweetViewPageState extends State<TweetViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffffffff),
+        //backgroundColor: const Color(0xffffffff),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -137,7 +137,7 @@ class _TweetViewPageState extends State<TweetViewPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xffffffff),
+        //color: const Color(0xffffffff),
         child: Container(
           margin: const EdgeInsets.only(left: 30.0, right: 30.0),
           child: Row(

@@ -31,7 +31,7 @@ class _CreatePostScreenUI2State extends State<CreatePostScreenUI2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff6d71ff),
+        //backgroundColor: Color(0xff6d71ff),
         centerTitle: true,
         title: const Text(
           'Post',
@@ -203,7 +203,7 @@ class _CreatePostScreenUI2State extends State<CreatePostScreenUI2> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xffffffff),
+        //color: const Color(0xffffffff),
         child: Container(
           margin: const EdgeInsets.only(left: 30.0, right: 30.0),
           child: Row(

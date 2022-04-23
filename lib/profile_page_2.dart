@@ -198,7 +198,7 @@ class _ProfilePage2State extends State<ProfilePage2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffffffff),
+        //backgroundColor: const Color(0xffffffff),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -234,7 +234,7 @@ class _ProfilePage2State extends State<ProfilePage2> {
             pinned: true,
             snap: false,
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
+            //backgroundColor: Colors.white,
             toolbarHeight: 100,
             title: Column(
               children: [
@@ -501,7 +501,7 @@ class _ProfilePage2State extends State<ProfilePage2> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xffffffff),
+        //color: const Color(0xffffffff),
         child: Container(
           margin: const EdgeInsets.only(left: 30.0, right: 30.0),
           child: Row(

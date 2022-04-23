@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -8,7 +9,9 @@ class NetworkHandler {
       'http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api';
 
   static bool mocked = false;
-  static Map<dynamic, dynamic> responseBody = {};
+  static dynamic responseBody = {};
+
+  static Map<dynamic, dynamic> userToken = {};
 
   static final http.Client _client = http.Client();
   static final http.Client _mockClient =
@@ -100,8 +103,8 @@ class NetworkHandler {
       Uri.parse('$BaseURL/user/login'),
     );
     request.body = json.encode({
-      "email_or_username": "$username",
-      "password": "$password",
+      "email_or_username": username,
+      "password": password,
     });
     request.headers.addAll({
       "Content-Type": "application/json",
@@ -111,6 +114,10 @@ class NetworkHandler {
         await (mocked ? _mockClient.send(request) : _client.send(request)));
 
     responseBody = json.decode(response.body);
+
+    /**/
+    userToken = responseBody['token'];
+    /**/
 
     return response.statusCode == 200;
   }
@@ -122,10 +129,10 @@ class NetworkHandler {
       Uri.parse('$BaseURL/user/signup'),
     );
     request.body = json.encode({
-      "screenName": "$username",
-      "email": "$email",
-      "password": "$password",
-      "tag": "$username"
+      "screenName": username,
+      "email": email,
+      "password": password,
+      "tag": username
     });
     request.headers.addAll({
       "Content-Type": "application/json",
@@ -137,5 +144,86 @@ class NetworkHandler {
     responseBody = json.decode(response.body);
 
     return response.statusCode == 201;
+  }
+
+  static Future<bool> logout_1() async {
+    http.Request request = http.Request(
+      'DELETE',
+      Uri.parse('$BaseURL/user/logout'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> logout_2() async {
+    http.Request request = http.Request(
+      'DELETE',
+      Uri.parse('$BaseURL/user/logoutall'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> getTimeline() async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/timeline'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> create_post(
+      String text, bool imageCheck, File image) async {
+    http.MultipartRequest request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$BaseURL/tweet'),
+    );
+    request.fields.addAll({
+      "text": text,
+      "imageCheck": imageCheck.toString(),
+    });
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+    request.files.add(await http.MultipartFile.fromPath('image', image.path));
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
   }
 }
