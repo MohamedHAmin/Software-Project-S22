@@ -120,25 +120,25 @@ test('Empty Tag', async ()=>{
    
 })
 
-// test('email verfication', async ()=>{
-//     const res=await request(app).post('/user/signup')
-//     .send({
-//         screenName:"DDD",
-//         user_name:"Superoz12",
-//         email:"cool23@gmail.com",
-//         password:"12345678",
-//         tag:"tg1"
-//     })
-//     const userverification2=await Userverification.findOne()
+test('email verfication', async ()=>{
+    const res=await request(app).post('/user/signup')
+    .send({
+        screenName:"DDD",
+        user_name:"Superoz12",
+        email:"cool23@gmail.com",
+        password:"12345678",
+        tag:"tg1"
+    })
+    const userverification2=await Userverification.findOne()
 
-//     const userverification=await Userverification.findOne({email:"cool23@gmail.com"})
-//     let s=userverification.uniqueString.toString()
-//      s=s.replace('+','xMl3Jk')
-//      s=s.replace('/','Por21Ld')
-//      s=s.replace('=','Ml32')
-//     console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ s", s)
+    const userverification=await Userverification.findOne({email:"cool23@gmail.com"})
+    let s=userverification.uniqueString.toString()
+     s=s.replace('+','xMl3Jk')
+     s=s.replace('/','Por21Ld')
+     s=s.replace('=','Ml32')
+    console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ s", s)
      
-//     const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'/'+s)
-//     .expect(200)
+    const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'/'+s)
+    .expect(200)
     
-// })
+})
