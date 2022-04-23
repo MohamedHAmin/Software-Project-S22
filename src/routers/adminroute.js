@@ -117,6 +117,7 @@ router.get("/users/:pageNum",auth("admin"),async (req, res) => {
     res.status(400).send({error:e.toString()});
   }
 });
+
 // router.post("/ban/:id",auth("admin"),async (req, res) => {
 //   try {
 //     const tempUser=await User.findByIdAndUpdate(req.params.id,{ban:req.body.banUntil})
