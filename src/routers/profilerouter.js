@@ -62,9 +62,23 @@ const router = new express.Router()
   });
   router.put("/:id", auth("user"), async (req, res) => {
     try {
-
       const updates = Object.keys(req.body);
-      const allowtoupdate = ["screenName", "tag", "isPrivate", "website","birthDate","Notificationssetting","Location","Biography","phoneNumber","darkMode"];
+      const vdata=["birth"]
+      const isvalidoperation2 = updates.every((update) =>
+      vdata.includes(update)
+    );
+    console.log(req.body.birth)
+    if(req.body.birth&&req.user.birth.visability){
+      req.user.birth.visability=req.body.birth.visability
+      console.log('1')
+    }
+    else if(req.body.location&&req.body.location.visability){
+      req.user.location.visability=req.body.location.visability
+    }else if(req.body.location&&req.body.location.place){
+      req.user.location.place=req.body.location.place
+    }
+    else{
+      const allowtoupdate = ["screenName", "tag", "isPrivate", "website",,"Notificationssetting","location","Biography","phoneNumber","darkMode"];
       const isvalidoperation = updates.every((update) =>
         allowtoupdate.includes(update)
       );
@@ -74,6 +88,9 @@ const router = new express.Router()
       }
 
       updates.forEach((element) => (req.user[element] = req.body[element]));
+    }
+     
+      
       await req.user.save();
   
       res.send(req.user);
