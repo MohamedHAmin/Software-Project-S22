@@ -18,8 +18,8 @@ const router = new express.Router()
       }
       if(user.location.visability===false)
        { user.Location=undefined;}
-       if(user.birthDate.visability===false)
-       { user.birthDate=undefined;}
+       if(user.birth.visability===false)
+       { user.birth=undefined;}
         user.ban=undefined
         user.email=undefined
         user.Notificationssetting=undefined
@@ -28,13 +28,13 @@ const router = new express.Router()
 
         console.log("🚀 ~ file: profilerouter.js ~ line 30 ~ router.get ~ req.user.following", req.user.following)
         const isfollowed=req.user.following.some(followed=>followed.followingId.toString()==user._id.toString())
+        let isfollowing
         if(isfollowed){
-          user.isfollowing=true
+          isfollowing=true
         }else{
-          user.isfollowing=false
+          isfollowing=false
         }
-      
-      res.send({user,isfollowing:true});
+        res.send({user,isfollowing:isfollowing});
     } catch (e) {
       res.status(400).send({error:e.toString()});
     }
@@ -68,11 +68,11 @@ const router = new express.Router()
       vdata.includes(update)
     );
     console.log(req.body.birth)
-    if(req.body.birth&&req.user.birth.visability){
+    if(req.body.birth){
       req.user.birth.visability=req.body.birth.visability
       console.log('1')
     }
-    else if(req.body.location&&req.body.location.visability){
+    else if(req.body.location&&!req.body.location.place){
       req.user.location.visability=req.body.location.visability
     }else if(req.body.location&&req.body.location.place){
       req.user.location.place=req.body.location.place

@@ -39,7 +39,7 @@ test('check profile',async ()=>{
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
     
-    expect(res.body.screenName).toEqual(user1.screenName)
+    expect(res.body.user.screenName).toEqual(user1.screenName)
 
     
     await request(app).get('/profile/'+"6246378467b2fc4cc39ae714")
@@ -53,7 +53,6 @@ test('check profile',async ()=>{
      res=await request(app).get('/profile/'+user1._id.toString()+'/me')
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
-    expect(res.body.screenName).toEqual(user1.screenName)
 
 
 });

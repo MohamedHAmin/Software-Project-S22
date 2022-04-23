@@ -19,6 +19,7 @@
     "assert": "^2.0.0",
     "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
     "browserslist": "^4.20.2",
     "cloudinary": "^1.29.0",
     "cookie-parser": "^1.4.6",

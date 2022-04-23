@@ -1,7 +1,7 @@
 const express=require('express')
 var cors = require('cors')
 require('./db/mongoose')//? if you seed comment this line    
-
+const bodyParser = require('body-parser')
 //require('./db/seeding')  //? if want to seed uncomment this line
 
 const adminRouter =require('./routers/adminroute')
@@ -11,9 +11,13 @@ const tweetRouter =require('./routers/tweetroute')
 const followRouter =require('./routers/followroute')
 const profileRouter =require('./routers/profilerouter')
 
-
+const jsonErrorHandler = (err, req, res, next) => {
+    res.status(500).send({ error: err });
+  }
 
 const app=express()
+app.use(bodyParser.json())
+//app.use(jsonErrorHandler)
 app.use(cors())
 const port=process.env.PORT
 app.use(express.json())

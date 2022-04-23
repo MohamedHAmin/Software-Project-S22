@@ -69,15 +69,21 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       }
     }
     if (req.body.imageCheck === "true") {
+      console.log('first')
       // const uploader = (path) => cloudinary.uploads(path, "Images");
       const urls = [];
+      
       const files = req.files;
+      console.log("🚀 ~ file: tweetroute.js ~ line 77 ~ router.post ~ req.files", req.files)
+      console.log("🚀 ~ file: tweetroute.js ~ line 77 ~ router.post ~ files.length", files.length)
+
       if (files.length > 4) {
         e = "Image limit exceeded";
         throw e;
       }
       for (const file of files) {
         const path = file.path;
+        console.log("🚀 ~ file: tweetroute.js ~ line 82 ~ router.post ~ path", path)
         const newPath = await cloudinary.uploader.upload(path);
         const newUrl = { photo: newPath.secure_url };
         urls.push(newUrl);

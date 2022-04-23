@@ -31,7 +31,7 @@ const router = new express.Router()
       await req.user.save()
       user.followercount++
       await user.save()
-      res.send(req.user.following);
+      res.send({sccuss:true});
     } catch (e) {
 
       res.status(400).send({error:e.toString()});
