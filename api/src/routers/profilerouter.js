@@ -18,8 +18,8 @@ const router = new express.Router()
       }
       if(user.location.visability===false)
        { user.Location=undefined;}
-       if(user.birthDate.visability===false)
-       { user.birthDate=undefined;}
+       if(user.birth.visability===false)
+       { user.birth=undefined;}
         user.ban=undefined
         user.email=undefined
         user.Notificationssetting=undefined
