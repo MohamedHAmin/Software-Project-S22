@@ -135,6 +135,17 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       });
     }
 
+    await tweet.populate({
+      path: "replies",
+      select: "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+      populate: {
+        path: "authorId",
+        strictPopulate: false,
+        select:
+          "_id screenName tag followercount followingcount profileAvater.url",
+      },
+    });
+
     res.send(tweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -308,9 +319,9 @@ router.post("/retweet", auth("user"), async (req, res) => {
   }
 });
 
-router.post("/tweet/:id/reply", auth("user"), async (req, res) => {
+router.post("/reply", auth("user"), async (req, res) => {
   try {
-    let repliedOnTweet = await Tweet.findById(req.params.id);
+    let repliedOnTweet = await Tweet.findById(req.body.replyingTo);
     if (!repliedOnTweet) {
       e = "Error: tweet not found";
       throw e;
@@ -319,13 +330,6 @@ router.post("/tweet/:id/reply", auth("user"), async (req, res) => {
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
-
-    if (!text || text.length == 0) {
-      //in case of retweet with no text replace here place holder to be
-      //removed while getting
-
-      text = "No-text";
-    }
 
     if (text.length > 280) {
       //checks if post exceeded 280 characters
