@@ -56,10 +56,11 @@ console.log(e);
 }
 
 }
-router.get("/verify/?userId/?uniqueString", async(req,res)=>{
+router.get("/verify/:userId", async(req,res)=>{
   try{
-    let {userId, uniqueString} = req.params 
-    uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
+    let userId=req.params.userId;
+    let uniqueString = req.query.hash; 
+    //uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
 
     const result=await UserVerification.find({userId})
       if(result.length > 0 ){
