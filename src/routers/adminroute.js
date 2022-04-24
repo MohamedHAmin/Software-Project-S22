@@ -7,7 +7,7 @@ const auth = require("../middleware/auth");
 const { query } = require("express");
 const router = new express.Router();
 
-router.post("/create",async (req, res) => {
+router.post("/create",auth("admin"),async (req, res) => {
    
     try {
       const deletedUser =await User.deleteOne({$and:[{email:req.body.email},{verified:false}]})
@@ -34,19 +34,23 @@ router.post("/create",async (req, res) => {
 router.delete("/report/:id",auth("admin"),async (req, res) => {
   try {
     let deletedreports;
-    if(req.query.IDType==='Report')
+    const idType=req.query.IDType?req.query.IDType:null;
+    if(idType==='Report')
     {
       deletedreports=await Report.findByIdAndDelete(req.params.id)
       if(!deletedreports){throw Error("Not Found")}
       res.status(200).json({deletedreports}).end()
     }
-    else if(req.query.IDType==='Reported')
+    else if(idType==='Reported')
     {
       deletedreports=await Report.deleteMany({reportedId:req.params.id});
-      if(!deletedreports){throw Error("Not Found")}
+      if(!deletedreports.deletedCount){throw Error("Not Found")}
       res.status(200).json({deletedreports}).end()
     }
-
+    else
+    {
+      throw Error('Wrong Query Parameter')
+    }
   } catch (e) {
     res.status(400).send({error:e.toString()});
   }
