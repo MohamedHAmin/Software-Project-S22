@@ -11,9 +11,6 @@ const nodemailer = require("nodemailer")
 const {v4: uuidv4 } = require("uuid")
 const { urlencoded } = require("express")
 require('env-cmd')
-<<<<<<< HEAD
-
-=======
 //nodemailer setup [less secure option on ]
 let transporter = nodemailer.createTransport({
   service:"gmail",
@@ -78,7 +75,6 @@ router.get("/verify/:userId/:uniqueString", async(req,res)=>{
   }
   
 })
->>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
 
             //~~~~~~~~~~~~Signup~~~~~~~~~~~//
 router.post("/signup",async (req, res) => {
@@ -143,92 +139,7 @@ router.post("/signup",async (req, res) => {
     }
   })
   // ~~~~~~~~Email Verification~~~~~~~~~~~~//
-  let transporter = nodemailer.createTransport({
-    service:"gmail",
-    auth:{
-      user: process.env.AUTH_EMAIL,
-      pass: process.env.AUTH_PASS,
-    }
-  })
-  transporter.verify((error,success)=>{
-    if(error){
-      console.log(error);
-    }else {
-      console.log("Ready for messages ");
-      console.log(success);
-    }
-  })
-  const sendVerificationEmail = async({_id,email},res)=>{
-    //url to be used in the email 
-    try{
-    const currenturl = "http://localhost:3000/"
-    const uniqueString = _id.toString() //mongo's genrated ID 
-  
-    //hash the string 
-    
-      const newVerification = new UserVerification({
-        userId : _id,
-        uniqueString: uniqueString,
-        // createdAt: Date.now(),
-        // expiresAt: Date.now() + 21600000, //6 hrs in ms]
-      })  
-      const mailOptions = {
-        from : process.env.AUTH_EMAIL,
-        to: email,
-        subject : " Verify Your Email",
-        html: `<p> Verify the email address to complete the signup and login to your account. </p> 
-        <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "/" + uniqueString}> here </a> to proceed </p>`
-        
-      }
-      
-      newVerification
-      .save()
-      .then(()=>{
-        transporter.sendMail(mailOptions)
-      })
-    
-  }catch(e){
-  console.log(e);
-  }
-  
-  }
-  router.get("/verify/:userId/:uniqueString", async(req,res)=>{
-    try{
-      let {userId, uniqueString} = req.params
-      
-      const result=await UserVerification.find({userId})
-   
-      
-        if(result.length > 0 ){
-  
-          
-          const hasheduniqueString = result[0].uniqueString
-          
-      
-            const isMatch = await bcrypt.compare(uniqueString,hasheduniqueString)
-  
-               
-              
-              if(isMatch){
-                 await User.updateOne({_id:userId},{verified:true})
-               
-                 await UserVerification.deleteOne({userId})
-                  
-                }
-                
-              
-              else{
-              
-                
-                console.log("Hashed String and Unique String mismatch");
-              }
-          }
-            res.send("Email sent , pending verification")
-    } catch (e){
-     res.send(e)
-    }
-    
-  })
+ 
   
   //~~~~~~~~~~~Forget Password~~~~~~~~~~~~~~~~//
   //post req received from FE 
