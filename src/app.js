@@ -25,25 +25,7 @@ app.use('/user',userAuthRouter)
 app.use('/user',userRouter)
 app.use(tweetRouter)
 app.use(followRouter)
-<<<<<<< HEAD
-app.use(profileRouter)
-app.use(passport.initialize())
-app.use(passport.session())
-
-app.use(cors({
-    origin:"http://localhost:3000",
-    methods: "GET,POST,PUT,DELETE",
-    credentials : true,
-}
-))
-app.use(cookieSession({
-    name:"session",
-    keys:["Larry"],
-    maxAge: 24*60*60*100
-}))
-=======
 app.use('/profile',profileRouter)
->>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
 app.use('/admin',adminRouter)
 
 module.exports =app

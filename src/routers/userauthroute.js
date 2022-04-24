@@ -56,7 +56,7 @@ console.log(e);
 }
 
 }
-router.get("/verify/:userId/:uniqueString", async(req,res)=>{
+router.get("/verify/?userId/?uniqueString", async(req,res)=>{
   try{
     let {userId, uniqueString} = req.params 
     uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
@@ -66,7 +66,7 @@ router.get("/verify/:userId/:uniqueString", async(req,res)=>{
         const hasheduniqueString = result[0].uniqueString
             if(uniqueString===hasheduniqueString){
               await User.updateOne({_id:userId},{verified:true})            
-               await UserVerification.deleteOne({userId})             
+              await UserVerification.deleteOne({userId})             
               }
         }
           res.send("Email sent , pending verification")

@@ -31,13 +31,8 @@ test('Check User Login with wrong email or username', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-<<<<<<< HEAD
-    verified:true,
-    tag:"tag6"
-=======
     tag:"tag6",
     verified:true
->>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
 })
 const res=await request(app).post('/user/login')
 .send({
@@ -87,13 +82,8 @@ test('Check User Login with email', async ()=>{
         screenName:"user6",
         email:"user70@gmail.com",
         password:"123456",
-<<<<<<< HEAD
-        verified: true,
-        tag:"tag6"
-=======
         tag:"tag6",
         verified:true
->>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
     })
     const res=await request(app).post('/user/login')
     .send({
@@ -108,13 +98,8 @@ test('Check User Login with username', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-<<<<<<< HEAD
-    verified: true,
-    tag:"tag6"
-=======
     tag:"tag6",
     verified:true
->>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
     })
     const res=await request(app).post('/user/login')
     .send({
