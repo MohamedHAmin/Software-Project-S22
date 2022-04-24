@@ -132,13 +132,13 @@ test('email verfication', async ()=>{
     const userverification2=await Userverification.findOne()
 
     const userverification=await Userverification.findOne({email:"cool23@gmail.com"})
-    let s=userverification.uniqueString.toString()
-     s=s.replace('+','xMl3Jk')
-     s=s.replace('/','Por21Ld')
-     s=s.replace('=','Ml32')
+    //let s=userverification.uniqueString.toString()
+    //s=s.replace('+','xMl3Jk')
+    //s=s.replace('/','Por21Ld')
+    //s=s.replace('=','Ml32')
     //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ s", s)
      
-    const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'/'+s)
+    const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'?hash='+userverification.uniqueString)
     .expect(200)
     
 })
