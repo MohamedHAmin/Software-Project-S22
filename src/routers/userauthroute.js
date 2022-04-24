@@ -91,15 +91,15 @@ router.post("/signup",async (req, res) => {
       const currenturl = process.env.CURRENTURL
          const hashstring=_id.toString()+process.env.SECRET
       const uniqueString = await bcrypt.hash(hashstring, 8);
-      const notaccepteduniqustreng=uniqueString
-      const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
+    // const notaccepteduniqustreng=uniqueString
+      //const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
     
       //hash the string 
       
         const newVerification = new UserVerification({
           userId : _id,
           email:email,
-          uniqueString: notaccepteduniqustreng,
+          uniqueString: uniqueString,
           createdAt: Date.now(),
           expiresAt: Date.now() + 21600000, //6 hrs in ms]
         })  
@@ -108,7 +108,7 @@ router.post("/signup",async (req, res) => {
           to: email,
           subject : " Verify Your Email",
           html: `<p> Verify the email address to complete the signup and login to your account. </p> 
-          <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "?hash=" + accepteduniqueString}> here </a> to proceed </p>`
+          <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "?hash=" + uniqueString}> here </a> to proceed </p>`
           
         }
         
@@ -120,7 +120,7 @@ router.post("/signup",async (req, res) => {
     }
     
     }
-    router.get("/verify/:userId", async(req,res)=>{
+    router.get("/verify/:userId/", async(req,res)=>{
       try{
         let userId=req.params.userId;
         let uniqueString = req.query.hash; 
@@ -128,7 +128,7 @@ router.post("/signup",async (req, res) => {
     
         const result=await UserVerification.find({userId})
           if(result.length > 0 ){
-            const hasheduniqueString = result[0].uniqueString
+            let hasheduniqueString = result[0].uniqueString
                 if(uniqueString===hasheduniqueString){
                   await User.updateOne({_id:userId},{verified:true})            
                   await UserVerification.deleteOne({userId})             
