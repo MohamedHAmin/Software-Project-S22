@@ -1,5 +1,4 @@
 const express=require('express')
-var cors = require('cors')
 require('./db/mongoose')//? if you seed comment this line    
 
 //require('./db/seeding')  //? if want to seed uncomment this line
