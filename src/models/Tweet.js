@@ -71,12 +71,20 @@ const tweetSchema = new mongoose.Schema({
 });
 
 
-tweetSchema.virtual('replies',{
+// tweetSchema.virtual('replies',{
+//   ref:'Tweet',
+//   localField:'_id',
+//   foreignField:'replyingTo'
+// })
+
+
+
+
+tweetSchema.virtual('reply',{
   ref:'Tweet',
   localField:'_id',
   foreignField:'replyingTo'
 })
-
 
 tweetSchema.methods.toJSON=function(){
   const tweet = this
