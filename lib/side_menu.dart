@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
+  final String? name;
+  final String? tag;
+  final String? avatarURL;
+
+  const MyHeaderDrawer(
+      {Key? key,
+      @required this.name,
+      @required this.tag,
+      @required this.avatarURL})
+      : super(key: key);
+
   @override
   _MyHeaderDrawerState createState() => _MyHeaderDrawerState();
 }
@@ -21,17 +32,21 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             height: 70,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage('assets/user_avatar.png'),
-              ),
+              image: (widget.avatarURL != null)
+                  ? DecorationImage(
+                      image: NetworkImage((widget.avatarURL)!),
+                    )
+                  : const DecorationImage(
+                      image: AssetImage('assets/user_avatar.png'),
+                    ),
             ),
           ),
           Text(
-            "Username",
+            "${widget.name}",
             style: TextStyle(color: Color(0xff2b3dbc), fontSize: 20),
           ),
           Text(
-            "@user_handle",
+            "@${widget.tag}",
             style: TextStyle(
               color: Color(0xff6d71ff),
               fontSize: 14,

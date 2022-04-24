@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'quote_post_page.dart';
 
-class TweetViewPage2 extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _TweetViewPage2State();
-  }
-}
-
 class _tweet extends StatefulWidget {
   final Widget? embedded;
   final bool reTweet;
@@ -287,6 +280,13 @@ class _tweetState extends State<_tweet> {
         ],
       ],
     );
+  }
+}
+
+class TweetViewPage2 extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _TweetViewPage2State();
   }
 }
 

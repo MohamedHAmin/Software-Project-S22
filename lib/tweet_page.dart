@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 
-class TweetViewPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _TweetViewPageState();
-  }
-}
-
 class _tweet extends StatefulWidget {
   final Widget? embedded;
   final bool reTweet;
@@ -102,6 +95,13 @@ class _tweetState extends State<_tweet> {
         ],
       ],
     );
+  }
+}
+
+class TweetViewPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _TweetViewPageState();
   }
 }
 

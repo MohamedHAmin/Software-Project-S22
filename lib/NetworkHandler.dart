@@ -12,6 +12,7 @@ class NetworkHandler {
   static dynamic responseBody = {};
 
   static Map<dynamic, dynamic> userToken = {};
+  static Map<dynamic, dynamic> adminToken = {};
 
   static final http.Client _client = http.Client();
   static final http.Client _mockClient =
@@ -116,7 +117,8 @@ class NetworkHandler {
     responseBody = json.decode(response.body);
 
     /**/
-    userToken = responseBody['token'];
+    userToken = responseBody['token'] ?? {};
+    adminToken = responseBody['user']['adminToken'] ?? {};
     /**/
 
     return response.statusCode == 200;
@@ -160,7 +162,10 @@ class NetworkHandler {
     http.Response response = await http.Response.fromStream(
         await (mocked ? _mockClient.send(request) : _client.send(request)));
 
-    responseBody = json.decode(response.body);
+    /**/
+    //responseBody = json.decode(response.body);
+    responseBody = {'success': response.statusCode == 200};
+    /**/
 
     return response.statusCode == 200;
   }
@@ -179,7 +184,10 @@ class NetworkHandler {
     http.Response response = await http.Response.fromStream(
         await (mocked ? _mockClient.send(request) : _client.send(request)));
 
-    responseBody = json.decode(response.body);
+    /**/
+    //responseBody = json.decode(response.body);
+    responseBody = {'success': response.statusCode == 200};
+    /**/
 
     return response.statusCode == 200;
   }
@@ -203,8 +211,46 @@ class NetworkHandler {
     return response.statusCode == 200;
   }
 
+  static Future<bool> getTweet(String id) async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/tweet/$id'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> getMyProfile(String id) async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/profile/$id/me'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
   static Future<bool> create_post(
-      String text, bool imageCheck, File image) async {
+      String text, bool imageCheck, List<File?> images) async {
     http.MultipartRequest request = http.MultipartRequest(
       'POST',
       Uri.parse('$BaseURL/tweet'),
@@ -217,7 +263,13 @@ class NetworkHandler {
       "Content-Type": "application/json",
       "Authorization": userToken['token'],
     });
-    request.files.add(await http.MultipartFile.fromPath('image', image.path));
+
+    for (File? image in images) {
+      if (image != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', image.path));
+      }
+    }
 
     http.Response response = await http.Response.fromStream(
         await (mocked ? _mockClient.send(request) : _client.send(request)));
@@ -225,5 +277,80 @@ class NetworkHandler {
     responseBody = json.decode(response.body);
 
     return response.statusCode == 200;
+  }
+
+  static Future<bool> quote_post(String text, String quotedTweetID,
+      bool imageCheck, List<File?> images) async {
+    http.Request request = http.Request(
+      'POST',
+      Uri.parse('$BaseURL/retweet'),
+    );
+    request.body = json.encode({
+      "text": text,
+      "retweetedTweet": quotedTweetID,
+    });
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  /*
+  static Future<bool> quote_post(String text, String quotedTweetID,
+      bool imageCheck, List<File?> images) async {
+    http.MultipartRequest request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$BaseURL/retweet'),
+    );
+    request.fields.addAll({
+      "text": text,
+      "retweetedTweet": quotedTweetID,
+      "imageCheck": imageCheck.toString(),
+    });
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    for (File? image in images) {
+      if (image != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', image.path));
+      }
+    }
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+  */
+
+  static Future<bool> toggleTweetLike(String id) async {
+    http.Request request = http.Request(
+      'PUT',
+      Uri.parse('$BaseURL/tweet/$id/like'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 201;
   }
 }
