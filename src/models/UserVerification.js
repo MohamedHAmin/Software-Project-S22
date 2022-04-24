@@ -10,17 +10,16 @@ const userverificationschema = new mongoose.Schema({
   },
   email:{
     type:String
+  },
+  createdAt: {
+    type:Date
+  },
+  expiresAt:{
+    type:Date
   }
+
 });
 
-userverificationschema.pre("save", async function (next) {
-    const userVerify = this;
-
-      userVerify.uniqueString = await bcrypt.hash(userVerify.uniqueString, 10);
-      
-    
-    next()
-  });
 
 const UserVerification = mongoose.model('UserVerification', userverificationschema);
 

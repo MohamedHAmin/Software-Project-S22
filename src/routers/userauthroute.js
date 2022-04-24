@@ -11,7 +11,74 @@ const nodemailer = require("nodemailer")
 const {v4: uuidv4 } = require("uuid")
 const { urlencoded } = require("express")
 require('env-cmd')
+<<<<<<< HEAD
 
+=======
+//nodemailer setup [less secure option on ]
+let transporter = nodemailer.createTransport({
+  service:"gmail",
+  auth:{
+    user: process.env.AUTH_EMAIL,
+    pass: process.env.AUTH_PASS,
+  }
+})
+//  transporter.verify((error,success)=>{
+//  })
+const sendVerificationEmail = async({_id,email},res)=>{
+  //url to be used in the email 
+  try{
+  const currenturl = process.env.CURRENTURL
+     const hashstring=_id.toString()+process.env.SECRET
+  const uniqueString = await bcrypt.hash(hashstring, 8);
+  const notaccepteduniqustreng=uniqueString
+  const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
+
+  //hash the string 
+  
+    const newVerification = new UserVerification({
+      userId : _id,
+      email:email,
+      uniqueString: notaccepteduniqustreng,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 21600000, //6 hrs in ms]
+    })  
+    const mailOptions = {
+      from : process.env.AUTH_EMAIL,
+      to: email,
+      subject : " Verify Your Email",
+      html: `<p> Verify the email address to complete the signup and login to your account. </p> 
+      <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "/" + accepteduniqueString}> here </a> to proceed </p>`
+      
+    }
+    
+    await newVerification.save()
+      transporter.sendMail(mailOptions)
+  
+}catch(e){
+console.log(e);
+}
+
+}
+router.get("/verify/:userId/:uniqueString", async(req,res)=>{
+  try{
+    let {userId, uniqueString} = req.params 
+    uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
+
+    const result=await UserVerification.find({userId})
+      if(result.length > 0 ){
+        const hasheduniqueString = result[0].uniqueString
+            if(uniqueString===hasheduniqueString){
+              await User.updateOne({_id:userId},{verified:true})            
+               await UserVerification.deleteOne({userId})             
+              }
+        }
+          res.send("Email sent , pending verification")
+  } catch (e){
+   res.send(e)
+  }
+  
+})
+>>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
 
             //~~~~~~~~~~~~Signup~~~~~~~~~~~//
 router.post("/signup",async (req, res) => {
@@ -19,17 +86,21 @@ router.post("/signup",async (req, res) => {
     //if the verified att is false , delete both 
   
     try {
-      await User.deleteOne({email:req.body.email},{verified:false})
-      await UserVerification.deleteOne({email:req.body.email})
-      const user = new User(req.body);
+      const deletedUser =await User.deleteOne({$and:[{email:req.body.email},{verified:false}]})
+      if(deletedUser)
+      {  await UserVerification.deleteOne({email:req.body.email})}
+      const user = new User({...req.body,verified:false});
       const result = await user.save()
       if(result){
-        sendVerificationEmail(result,res)
+       sendVerificationEmail(result,res)
       }
       //don't generate token unless verified [with login now]
-      res.status(201).send({ user});
+      res.status(201).send({ status:"success"});
     } catch (e) {
-      res.status(400).send({ error: e.toString() });
+       if(e.index){
+         res.status(400).send({ error:e });
+       }
+       res.status(400).send({error: e.toString()});
     }
   });
              //~~~~~~~~~~~~Login~~~~~~~~~~~//
@@ -39,7 +110,7 @@ router.post("/signup",async (req, res) => {
         req.body.email_or_username,
         req.body.password
       );
-      const token = await user.generateAuthToken();
+      const token = await user.user.generateAuthToken();
       res.send({ user, token });
     } catch (e) {
       res.status(400).send({ error: e.toString() });

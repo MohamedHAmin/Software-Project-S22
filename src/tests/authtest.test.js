@@ -31,8 +31,13 @@ test('Check User Login with wrong email or username', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
+<<<<<<< HEAD
     verified:true,
     tag:"tag6"
+=======
+    tag:"tag6",
+    verified:true
+>>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
 })
 const res=await request(app).post('/user/login')
 .send({
@@ -82,8 +87,13 @@ test('Check User Login with email', async ()=>{
         screenName:"user6",
         email:"user70@gmail.com",
         password:"123456",
+<<<<<<< HEAD
         verified: true,
         tag:"tag6"
+=======
+        tag:"tag6",
+        verified:true
+>>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
     })
     const res=await request(app).post('/user/login')
     .send({
@@ -98,8 +108,13 @@ test('Check User Login with username', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
+<<<<<<< HEAD
     verified: true,
     tag:"tag6"
+=======
+    tag:"tag6",
+    verified:true
+>>>>>>> 0870e8b0a32a26245a1279286b72bbe448e8bda2
     })
     const res=await request(app).post('/user/login')
     .send({
@@ -114,7 +129,8 @@ test('Check User Logout from one device ', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+    verified:true
     })
     const authtoken = await user1.generateAuthToken()
     
@@ -129,7 +145,8 @@ test('Check User Logout from All devices ', async ()=>{
     screenName:"user6",
     email:"user70@gmail.com",
     password:"123456",
-    tag:"tag6"
+    tag:"tag6",
+    verified:true
     })
 
     const destroytoken = await user1.generateAuthToken()
@@ -141,14 +158,20 @@ test('Check User Logout from All devices ', async ()=>{
     .expect(200)
 })
 test('Check Admin Login ', async ()=>{
+    const user1 = await User.create({
+        screenName:"admin",
+        email:"admin@gmail.com",
+        password:"123456",
+        tag:"admin",
+        verified:true
+        })  
     await Admin.create({
-        adminName:"coolAdmin24o",
-        email:"cool23o4@gmail.com",
-        password:"123456"
+        adminName:"admin",
+        email:"admin@gmail.com",
 })
 const res=await request(app).post('/user/login')
 .send({
-   email_or_username:"cool23o4@gmail.com",
+   email_or_username:"admin@gmail.com",
    password:"123456"
 })
 .expect(200)

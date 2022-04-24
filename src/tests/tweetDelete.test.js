@@ -92,6 +92,6 @@ test('Check Non-existing ID', async ()=>{
     const res=await request(app).delete('/tweet/'+tweet._id)
     .set('Authorization','Bearer '+user1token.token)
     .send({})
-    .expect(404)
+    .expect(400)
     expect(res.text).toMatch("Not Found")
 })

@@ -22,12 +22,6 @@ const adminSchema = new mongoose.Schema({
           }
         }
     },
-    password: {
-        type: String,
-        trim: true,
-        required: true,
-        minlength: 6,
-    }
 },
 {
     timestamps:true,
@@ -37,10 +31,16 @@ const adminSchema = new mongoose.Schema({
  
  adminSchema.methods.generateAuthToken=async function(){
   const admin = this;
-  const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET)
+  const token=jwt.sign({_id:admin._id.toString()},process.env.SECRET,{
+
+    expiresIn: '24h' // expires in 1 day
+
+})
   const tokenObj=await Token.create({
     'token':token,
-    'ownerId':admin._id
+    'ownerId':admin._id,
+    'expiredAt':Date.now()+86200000  //24h
+
   })
   return tokenObj
 }

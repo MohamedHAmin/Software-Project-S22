@@ -49,6 +49,7 @@ const router = new express.Router()
         }
         const lengthBefore=req.user.following.length
        
+        //*unfollow
       req.user.following = req.user.following.filter((follow) => {
         return follow.followingId !=req.params.id;
       });
@@ -87,16 +88,17 @@ const router = new express.Router()
 
         user.following=user.following.filter((follow)=> {
           return follow.followingId!=null})
+          
         if(!user.following.length<1){
           user.following=user.following.map(follow=>{
  
         isfollowed=req.user.following.some(followed=>followed.followingId.toString()==follow.followingId._id.toString())
         if(isfollowed){
-          const foll={...follow._doc,isfollowing:true}
-         return foll
+          const userFollower={...follow._doc,isfollowing:true}
+         return userFollower
         }else{
-          const foll={...follow._doc,isfollowing:false}
-          return foll
+          const userFollower={...follow._doc,isfollowing:false}
+          return userFollower
         }
       })}
       res.send(user.following);
@@ -124,11 +126,11 @@ const router = new express.Router()
         const isfollowed=user.following.some(followed=>followed.followingId.toString()==follow._id.toString())
         delete follow._doc.following
         if(isfollowed){
-          follow={...follow._doc,isfollowing:true}
-         return follow
+          userFollower={...follow._doc,isfollowing:true}
+         return userFollower
         }else{
-          follow={...follow._doc,isfollowing:false}
-          return follow
+          userFollower={...follow._doc,isfollowing:false}
+          return userFollower
         }
       })}
       res.send(user.follower);
