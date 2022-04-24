@@ -2,11 +2,14 @@ const express = require("express")
 const auth = require("../middleware/auth")
 const User = require("../models/User")
 const UserVerification = require("../models/UserVerification")
+const generator = require('generate-password')
 const Token = require("../models/Token")
+const passport = require("passport")
 const router = new express.Router()
 const bcrypt = require("bcryptjs"); //generating unique strings 
 const nodemailer = require("nodemailer")
 const {v4: uuidv4 } = require("uuid")
+const { urlencoded } = require("express")
 require('env-cmd')
 //nodemailer setup [less secure option on ]
 let transporter = nodemailer.createTransport({
@@ -18,64 +21,10 @@ let transporter = nodemailer.createTransport({
 })
 //  transporter.verify((error,success)=>{
 //  })
-const sendVerificationEmail = async({_id,email},res)=>{
-  //url to be used in the email 
-  try{
-  const currenturl = process.env.CURRENTURL
-     const hashstring=_id.toString()+process.env.SECRET
-  const uniqueString = await bcrypt.hash(hashstring, 8);
-  const notaccepteduniqustreng=uniqueString
-  const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
 
-  //hash the string 
-  
-    const newVerification = new UserVerification({
-      userId : _id,
-      email:email,
-      uniqueString: notaccepteduniqustreng,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 21600000, //6 hrs in ms]
-    })  
-    const mailOptions = {
-      from : process.env.AUTH_EMAIL,
-      to: email,
-      subject : " Verify Your Email",
-      html: `<p> Verify the email address to complete the signup and login to your account. </p> 
-      <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "/" + accepteduniqueString}> here </a> to proceed </p>`
-      
-    }
-    
-    await newVerification.save()
-      transporter.sendMail(mailOptions)
-  
-}catch(e){
-console.log(e);
-}
-
-}
-router.get("/verify/:userId/:uniqueString", async(req,res)=>{
-  try{
-    let {userId, uniqueString} = req.params 
-    uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
-
-    const result=await UserVerification.find({userId})
-      if(result.length > 0 ){
-        const hasheduniqueString = result[0].uniqueString
-            if(uniqueString===hasheduniqueString){
-              await User.updateOne({_id:userId},{verified:true})            
-               await UserVerification.deleteOne({userId})             
-              }
-        }
-          res.send("Email sent , pending verification")
-  } catch (e){
-   res.send(e)
-  }
-  
-})
-
-            //~~~~~~~~~~~~Signup~~~~~~~~~~~//
+//~~~~~~~~~~~~Signup~~~~~~~~~~~//
 router.post("/signup",async (req, res) => {
-    //new signup is to check if that email is found and if the verification is true , delete the user verification 
+  //new signup is to check if that email is found and if the verification is true , delete the user verification 
     //if the verified att is false , delete both 
   
     try {
@@ -90,8 +39,8 @@ router.post("/signup",async (req, res) => {
       //don't generate token unless verified [with login now]
       res.status(201).send({ status:"success"});
     } catch (e) {
-       if(e.index){
-         res.status(400).send({ error:e });
+      if(e.index){
+        res.status(400).send({ error:e });
        }
        res.status(400).send({error: e.toString()});
     }
@@ -109,33 +58,88 @@ router.post("/signup",async (req, res) => {
       res.status(400).send({ error: e.toString() });
     }
   });
- 
+  
   //token is put in header [in postman]
   router.delete("/logout" ,auth('any'),async (req, res) => {
-      try{
+    try{
       await Token.deleteMany({ token: req.token })
-   
+      
       res.status(200).end("Success")}
       
       
       catch (e) {
       res.status(400).send({ error: e.toString() });
       }
-  })
-
-  router.delete("/logoutall",auth('any'), async (req, res) => {
+    })
+    
+    router.delete("/logoutall",auth('any'), async (req, res) => {
       try{
-      await Token.deleteMany({ 
-        ownerId: req.user._id
-      })
-      res.status(200).end("Success")
-      
+        await Token.deleteMany({ 
+          ownerId: req.user._id
+        })
+        res.status(200).end("Success")
+        
       }
       catch (e) {
-      res.status(400).send({ error: e.toString() });
-    }
-  })
-
+        res.status(400).send({ error: e.toString() });
+      }
+    })
+    // ~~~~~~~~Email Verification~~~~~~~~~~~~//
+    const sendVerificationEmail = async({_id,email},res)=>{
+      //url to be used in the email 
+      try{
+      const currenturl = process.env.CURRENTURL
+         const hashstring=_id.toString()+process.env.SECRET
+      const uniqueString = await bcrypt.hash(hashstring, 8);
+    // const notaccepteduniqustreng=uniqueString
+      //const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
+    
+      //hash the string 
       
+        const newVerification = new UserVerification({
+          userId : _id,
+          email:email,
+          uniqueString: uniqueString,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + 21600000, //6 hrs in ms]
+        })  
+        const mailOptions = {
+          from : process.env.AUTH_EMAIL,
+          to: email,
+          subject : " Verify Your Email",
+          html: `<p> Verify the email address to complete the signup and login to your account. </p> 
+          <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "?hash=" + uniqueString}> here </a> to proceed </p>`
+          
+        }
+        
+        await newVerification.save()
+          transporter.sendMail(mailOptions)
+      
+    }catch(e){
+    console.log(e);
+    }
+    
+    }
+    router.get("/verify/:userId/", async(req,res)=>{
+      try{
+        let userId=req.params.userId;
+        let uniqueString = req.query.hash; 
+        //uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
+    
+        const result=await UserVerification.find({userId})
+          if(result.length > 0 ){
+            let hasheduniqueString = result[0].uniqueString
+                if(uniqueString===hasheduniqueString){
+                  await User.updateOne({_id:userId},{verified:true})            
+                  await UserVerification.deleteOne({userId})             
+                  }
+            }
+              res.send("Email sent , pending verification")
+      } catch (e){
+       res.send(e)
+      }
+      
+    })
 
-  module.exports = router 
+module.exports = router;
+  
