@@ -7,7 +7,7 @@ const auth = require("../middleware/auth");
 const { query } = require("express");
 const router = new express.Router();
 
-router.post("/create",auth("admin"),async (req, res) => {
+router.post("/create",async (req, res) => {
    
     try {
       const deletedUser =await User.deleteOne({$and:[{email:req.body.email},{verified:false}]})
@@ -33,9 +33,19 @@ router.post("/create",auth("admin"),async (req, res) => {
 // TODO: IN NEXT PHASES
 router.delete("/report/:id",auth("admin"),async (req, res) => {
   try {
-    const deletedreport=await Report.findByIdAndDelete(req.params.id)
-    if(!deletedreport){throw Error("Not Found")}
-    res.status(200).json({deletedreport}).end()
+    let deletedreports;
+    if(req.query.IDType==='Report')
+    {
+      deletedreports=await Report.findByIdAndDelete(req.params.id)
+      if(!deletedreports){throw Error("Not Found")}
+      res.status(200).json({deletedreports}).end()
+    }
+    else if(req.query.IDType==='Reported')
+    {
+      deletedreports=await Report.deleteMany({reportedId:req.params.id});
+      if(!deletedreports){throw Error("Not Found")}
+      res.status(200).json({deletedreports}).end()
+    }
 
   } catch (e) {
     res.status(400).send({error:e.toString()});
