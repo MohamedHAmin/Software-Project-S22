@@ -72,8 +72,10 @@ class Login3rdPartyPage extends StatelessWidget {
               minWidth: double.infinity,
               height: 60,
               onPressed: () {
+                /*
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));
+                    */
               },
               color: Color(0xff6d71ff),
               // elevation: 0,

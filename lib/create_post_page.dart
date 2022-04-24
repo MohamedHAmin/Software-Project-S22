@@ -13,8 +13,21 @@ class CreatePostScreenUI extends StatefulWidget {
 
 class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
   String _postText = '_';
-  bool _loading = false;
   File? image;
+  String? name;
+  String? tag;
+  String? avatarURL;
+
+  Future<bool> updateProfile() async {
+    if (await NetworkHandler.getMyProfile(
+            NetworkHandler.userToken['ownerId']) ==
+        true) {
+      name = NetworkHandler.responseBody['screenName'];
+      tag = NetworkHandler.responseBody['tag'];
+      avatarURL = NetworkHandler.responseBody['profileAvater']['url'];
+    }
+    return true;
+  }
 
   handleImageFromGallery() async {
     try {
@@ -57,30 +70,43 @@ class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                const CircleAvatar(
-                  backgroundImage: AssetImage('assets/user_2.png'),
-                ),
-                TextButton(
-                  onPressed: null, //Action to be added later
-                  child: Row(
-                    children: const [
-                      Text('Username',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18))
-                    ],
-                  ),
-                ),
-                const Text('@user_handle',
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff9e9e9e))),
-              ],
-            ),
+            FutureBuilder<bool>(
+                future: updateProfile(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          foregroundImage: (avatarURL != null)
+                              ? NetworkImage(avatarURL!)
+                              : null,
+                          backgroundImage: AssetImage('assets/user_avatar.png'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18)),
+                              Text('@$tag',
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff9e9e9e))),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
+
             const SizedBox(height: 5),
             TextField(
               maxLength: 280,
@@ -143,13 +169,10 @@ class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
                     backgroundColor: Color(0xff6d71ff)),
                 onPressed: () async {
                   if (await NetworkHandler.create_post(
-                          _postText, !(image == null), image!) ==
+                          _postText, ![image].contains(null), [image]) ==
                       true) {
-                    setState(() {
-                      _loading = true;
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                    });
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
                   }
                 },
                 child: const Text(

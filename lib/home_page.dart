@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'NetworkHandler.dart';
 import 'side_menu.dart';
 
@@ -12,19 +13,29 @@ import 'tweet_page_2.dart';
 import 'quote_post_page.dart';
 
 class _tweet extends StatefulWidget {
-  Widget? embedded;
+  Widget? image;
+  Widget? embeddedTweet;
+  bool reTweet;
   final bool liked;
-  final bool reTweet;
+  final String? id;
+  final String? ownerid;
   final String? text;
+  final DateTime? postDate;
+  final String? avatarURL;
   final String? name;
   final String? tag;
 
   _tweet(
       {Key? key,
-      this.embedded,
+      this.image,
+      this.embeddedTweet,
       this.liked = false,
       this.reTweet = false,
+      @required this.id,
+      @required this.ownerid,
       @required this.text,
+      @required this.postDate,
+      @required this.avatarURL,
       @required this.name,
       @required this.tag})
       : super(key: key);
@@ -35,7 +46,6 @@ class _tweet extends StatefulWidget {
 
 class _tweetState extends State<_tweet> {
   bool liked = false;
-  bool deleted = false;
 
   _tweetState(this.liked);
 
@@ -45,35 +55,67 @@ class _tweetState extends State<_tweet> {
       children: [
         Row(children: <Widget>[
           CircleAvatar(
-            backgroundImage: const AssetImage('assets/user_2.png'),
+            foregroundImage: (widget.avatarURL != null)
+                ? NetworkImage((widget.avatarURL)!)
+                : null,
+            backgroundImage:
+                (widget.ownerid != NetworkHandler.userToken['ownerId'])
+                    ? const AssetImage('assets/user_2.png')
+                    : const AssetImage('assets/user_avatar.png'),
           ),
           TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfilePage2()));
+                if (widget.ownerid != NetworkHandler.userToken['ownerId']) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage2()));
+                } else {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                }
               }, //Action to be added later
-              child: Row(children: [
+              child: Column(children: [
                 Text('${widget.name}',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18))
+                        fontSize: 18)),
+                Text('@${widget.tag}',
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff9e9e9e))),
               ])),
-          Text('@${widget.tag}',
-              style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff9e9e9e))),
-          Text(
-            ' 23m',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 8,
-                color: Color(0xff9e9e9e)),
-          ),
-          if (widget.reTweet == true) ...[
+          if (widget.postDate != null) ...[
             SizedBox(
-              width: 20,
+              width: 10,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  DateFormat("EEE, MMMM d, yyyy")
+                      .format(widget.postDate!.toLocal()),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 8,
+                      color: Color(0xff9e9e9e)),
+                ),
+                Text(
+                  DateFormat("hh:mm aaa '" +
+                          widget.postDate!.toLocal().timeZoneName +
+                          "'")
+                      .format(widget.postDate!.toLocal()),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 8,
+                      color: Color(0xff9e9e9e)),
+                ),
+              ],
+            )
+          ],
+          if (widget.embeddedTweet != null) ...[
+            SizedBox(
+              width: 50,
             ),
             Icon(
               Icons.loop,
@@ -81,7 +123,7 @@ class _tweetState extends State<_tweet> {
               size: 20,
             ),
             Text(
-              ' Retweeted',
+              ' Retweet',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 10,
@@ -90,119 +132,10 @@ class _tweetState extends State<_tweet> {
           ],
         ]),
         Text(widget.text ?? ''),
-        Align(
-            alignment: Alignment.centerRight,
-            child: Row(children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TweetViewPage2()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    primary: Colors.white,
-                    fixedSize: Size(35, 35),
-                  ),
-                  child: Icon(
-                    Icons.dvr,
-                    size: 20,
-                    color: Colors.black,
-                  )),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    liked = !liked;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  primary: Colors.white,
-                  fixedSize: Size(15, 15),
-                ),
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.thumb_up,
-                      color: liked ? Color(0xff6d71ff) : Colors.white,
-                      size: 20,
-                    ),
-                    Icon(
-                      Icons.thumb_up_outlined,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreatePostScreenUI2()));
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  primary: Colors.white,
-                  fixedSize: Size(15, 15),
-                ),
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.repeat_on,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    Icon(
-                      Icons.repeat,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    deleted = !deleted;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  primary: Colors.white,
-                  fixedSize: Size(15, 15),
-                ),
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.delete_rounded,
-                      color: deleted ? Colors.deepPurpleAccent : Colors.white,
-                      size: 20,
-                    ),
-                    Icon(
-                      Icons.delete_outline_outlined,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-            ])),
         SizedBox(
           height: 15,
         ),
-        if (widget.embedded == null) ...[
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 75),
-            child: Divider(
-              color: Color(0xff6d71ff),
-            ),
-          )
-        ] else ...[
+        if (widget.image != null) ...[
           Container(
             padding: EdgeInsets.all(8),
             margin: EdgeInsets.all(8),
@@ -210,7 +143,97 @@ class _tweetState extends State<_tweet> {
               border: Border.all(),
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
-            child: widget.embedded,
+            child: widget.image,
+          ),
+        ],
+        if (widget.embeddedTweet != null) ...[
+          Container(
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: widget.embeddedTweet,
+          ),
+        ],
+        if (widget.reTweet != true) ...[
+          Align(
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TweetViewPage2()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      primary: Colors.white,
+                      fixedSize: Size(35, 35),
+                    ),
+                    child: Icon(
+                      Icons.comment,
+                      size: 20,
+                      color: Colors.black,
+                    )),
+                ElevatedButton(
+                  onPressed: () {
+                    _tweet quotedTweet = widget;
+                    quotedTweet.reTweet = true;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreatePostScreenUI2(
+                                  quotedTweet: quotedTweet,
+                                  quotedTweetID: quotedTweet.id,
+                                )));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    primary: Colors.white,
+                    fixedSize: Size(15, 15),
+                  ),
+                  child: Icon(
+                    Icons.repeat,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (await NetworkHandler.toggleTweetLike(widget.id!) ==
+                        true) {
+                      setState(() {
+                        liked = !liked;
+                      });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    primary: Colors.white,
+                    fixedSize: Size(15, 15),
+                  ),
+                  child: Stack(
+                    children: [
+                      Icon(
+                        Icons.thumb_up,
+                        color: liked ? Colors.green : Colors.white,
+                        size: 20,
+                      ),
+                      Icon(
+                        Icons.thumb_up_outlined,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 75),
@@ -233,40 +256,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var currentPage = DrawerSections.home;
+  String? name;
+  String? tag;
+  String? avatarURL;
+
+  Future<bool> updateProfile() async {
+    if (await NetworkHandler.getMyProfile(
+            NetworkHandler.userToken['ownerId']) ==
+        true) {
+      name = NetworkHandler.responseBody['screenName'];
+      tag = NetworkHandler.responseBody['tag'];
+      avatarURL = NetworkHandler.responseBody['profileAvater']['url'];
+    }
+    return true;
+  }
 
   Future<Column> tweetList() async {
     if (await NetworkHandler.getTimeline() == true) {
+      List<dynamic> listoftweetsinfo = NetworkHandler.responseBody;
       List<Widget> tweets = [];
-      for (Map<dynamic, dynamic> tweet in NetworkHandler.responseBody) {
-        _tweet newTweet = _tweet(
-            text: tweet['text'],
-            name: tweet['authorId']['screenName'],
-            tag: tweet['authorId']['tag'],
-            liked: tweet['isliked']);
-
-        List<Widget> images = [];
-
-        for (Map<dynamic, dynamic> image in tweet['gallery']) {
-          images.add(Image(
-            image: NetworkImage(image['photo']),
-            fit: BoxFit.fitWidth,
-            width: 40,
-            height: double.infinity,
-          ));
-        }
-
-        if (images.isNotEmpty) {
-          newTweet.embedded = GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            children: [...images],
-          );
-        }
-        tweets.add(newTweet);
+      for (Map<dynamic, dynamic> tweetinfo in listoftweetsinfo) {
+        tweets.add(createNewTweet(tweetinfo, false));
       }
+
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,6 +289,66 @@ class _HomePageState extends State<HomePage> {
     } else {
       return Column();
     }
+  }
+
+  _tweet createNewTweet(Map<dynamic, dynamic> tweetinfo, bool isRetweet) {
+    _tweet newTweet = _tweet(
+        id: tweetinfo['_id'],
+        ownerid: tweetinfo['authorId']['_id'],
+        text: tweetinfo['text'],
+        postDate: DateTime.tryParse(tweetinfo['createdAt'] ?? ''),
+        avatarURL: tweetinfo['authorId']['profileAvater']['url'],
+        name: tweetinfo['authorId']['screenName'],
+        tag: tweetinfo['authorId']['tag'],
+        liked: isRetweet ? false : tweetinfo['isliked'],
+        reTweet: isRetweet);
+
+    List<Widget> images = [];
+
+    for (Map<dynamic, dynamic> image in tweetinfo['gallery']) {
+      images.add(
+        GestureDetector(
+          child: Image(
+            image: NetworkImage(image['photo']),
+            fit: BoxFit.fitWidth,
+            width: 40,
+            height: double.infinity,
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                backgroundColor: Colors.black54,
+                content: Image(
+                  image: NetworkImage(image['photo']),
+                  fit: BoxFit.fitWidth,
+                  width: 1000,
+                  height: double.infinity,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    if (images.isNotEmpty) {
+      newTweet.image = GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5,
+        children: [...images],
+      );
+    }
+
+    if (tweetinfo['retweetedTweet'] != null) {
+      newTweet.embeddedTweet =
+          createNewTweet(tweetinfo['retweetedTweet'], true);
+    }
+
+    return newTweet;
   }
 
   @override
@@ -324,18 +396,27 @@ class _HomePageState extends State<HomePage> {
               }),
         ),
       ),
-      drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                MyHeaderDrawer(),
-                MyDrawerList(),
-              ],
-            ),
-          ),
-        ),
-      ),
+      drawer: FutureBuilder<bool>(
+          future: updateProfile(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Drawer(
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      children: [
+                        MyHeaderDrawer(
+                            name: name, tag: tag, avatarURL: avatarURL),
+                        MyDrawerList(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
@@ -387,8 +468,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           menuItem(1, "Profile", Icons.account_circle,
               currentPage == DrawerSections.profile ? true : false),
-          menuItem(2, "Admin Page", Icons.admin_panel_settings,
-              currentPage == DrawerSections.admin ? true : false),
+          if (NetworkHandler.adminToken.isNotEmpty) ...[
+            menuItem(2, "Admin Page", Icons.admin_panel_settings,
+                currentPage == DrawerSections.admin ? true : false)
+          ],
           menuItem(3, "Settings", Icons.settings,
               currentPage == DrawerSections.settings ? true : false),
         ],
