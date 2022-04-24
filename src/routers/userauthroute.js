@@ -23,9 +23,9 @@ router.post("/signup",async (req, res) => {
       await UserVerification.deleteOne({email:req.body.email})
       const user = new User(req.body);
       const result = await user.save()
-      // if(result){
-      //   sendVerificationEmail(result,res)
-      // }
+      if(result){
+        sendVerificationEmail(result,res)
+      }
       //don't generate token unless verified [with login now]
       res.status(201).send({ user});
     } catch (e) {
@@ -164,18 +164,20 @@ router.post("/signup",async (req, res) => {
   //There's a request to send an email which is called forgot password 
   router.post('/forgotpassword' , async(req,res)=>{
     //email to be sent link to and redirect url will be put in the email , he will be directed on that page on FE 
-    const {email} = req.body
+    const {email,screenName} = req.body
     try{
-      //check if the email already exists in the user 
-      const user = await User.find({email})
+      //check if the email already exists in the user collection 
+      const user = await User.find({screenName:screenName , email: email})
       if(user.length>0){
         if(user[0].verified){
             SendResetEmail(user[0])
             res.send("Email sent , and password has been reset")
         }
         else{
-          res.send("Email hasn't been verified yet ")
+          res.send("Email hasn't been verified yet  ")
         }
+      } else{
+        res.send("User and email don't match")
       }
   }
     catch(e) {

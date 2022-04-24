@@ -3,12 +3,12 @@ const request = require('supertest')
 const User = require('../models/User')
 const UserVerification = require('../models/UserVerification')
 const app = require('../app')
-jest.mock('nodemailer', () => ({
-    createTransport: jest.fn().mockReturnValue({
-      sendMail: jest.fn().mockReturnValue((mailoptions, callback) => {}),
-      verify: jest.fn().mockReturnValue((error,success)=>{})
-    })
-  }));
+// jest.mock('nodemailer', () => ({
+//     createTransport: jest.fn().mockReturnValue({
+//       sendMail: jest.fn().mockReturnValue((mailoptions, callback) => {}),
+//       verify: jest.fn().mockReturnValue((error,success)=>{})
+//     })
+//   }));
   beforeEach(async ()=>{
       await User.deleteMany()
       await UserVerification.deleteMany()
@@ -148,3 +148,5 @@ test('Successful Email Verification', async ()=>{
     const res=await request(app).get('/user/verify/' + user._id.toString() + '/dummyUniqueString')
     .expect(200)
 })
+
+
