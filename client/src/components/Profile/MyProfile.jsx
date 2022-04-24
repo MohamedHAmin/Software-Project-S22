@@ -12,6 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Post from "../Homepage/Post";
+import { FallingLines } from "react-loader-spinner";
 
 //TO DO (hopefully dah ma3 yosef law fady ya3ny w trage3 3al code elly ana 3amlo.. ana kont bazabbat feeh ma3 kimo ya3ny bas yosef ye3raf aktar akid)
 //e3mel isAdmin (lazem 3ashan el report wel ban yetzabbato)
@@ -19,7 +21,7 @@ import axios from "axios";
 //e3mel parse lel data createdAt 3ashan beteegy shabah keda: ISODate("2022-04-21T10:34:37.095Z") => enta 3awezha keda: April 2022
 //e3mel map lel tweets hena... leeha route men el backend w mary betzabbatha fel homepage w hatsa3dak isA
 
-function MyProfile({}) {
+function MyProfile(props) {
   const [profileData, setProfileData] = useState([]);
   let { id } = useParams();
   const [isFollowed, setIsFollowed] = useState(false);
@@ -67,64 +69,77 @@ function MyProfile({}) {
   //   setFollowing(profileData.followingcount);
   //   setBirthDate(profileData.birth.date.Date);
   // }
-  
+
   useEffect(() => {
+    axios
+      .get(
+        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+        { headers: { Authorization: localStorage.getItem("accessToken") } }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          setUserTweets(res.data);
+        }
+      });
     if (id == userID) {
       setSameUserProf(true);
     }
-    console.log(sameUserProf)
-    if  (id === userID) {
-        axios.get(
-            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
-            { headers: { Authorization: localStorage.getItem("accessToken") } }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setProfileData(res.data);
-              setName(res.data.screenName);
-              setBio(res.data.Biography);
-              setLocation(res.data.location.place);
-              setJoinedDate(res.data.createdAt);
-              setFollowers(res.data.followercount);
-              setCoverImage(res.data.banner.url);
-              setTag(res.data.tag);
-              setBanDuration(res.data.ban);
-              setProfilePhoto(res.data.profileAvater.url);
-              setFollowing(res.data.followingcount);
-              setBirthDate(res.data.birth.date.Date);
-            }
-          }) 
-        }
-        else
-        {
-          axios.get(
-            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
-            { headers: { Authorization: localStorage.getItem("accessToken") } }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setProfileData(res.data);
-              setName(res.data.user.screenName);
-              setBio(res.data.user.Biography);
-              setLocation(res.data.user.location.place);
-              setJoinedDate(res.data.user.createdAt);
-              setFollowers(res.data.user.followercount);
-              setCoverImage(res.data.user.banner.url);
-              setTag(res.data.user.tag);
-              setBanDuration(res.data.user.ban);
-              setProfilePhoto(res.data.user.profileAvater.url);
-              setFollowing(res.data.user.followingcount);
-              setBirthDate(res.data.user.birth.date.Date);
-              setIsFollowed(res.data.isfollowing);
-            }
-          })
-        };
+    console.log(sameUserProf);
+    if (id === userID) {
+      axios
+        .get(
+          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setProfileData(res.data);
+            setName(res.data.screenName);
+            setBio(res.data.Biography);
+            setLocation(res.data.location.place);
+            setJoinedDate(res.data.createdAt);
+            setFollowers(res.data.followercount);
+            setCoverImage(res.data.banner.url);
+            setTag(res.data.tag);
+            setBanDuration(res.data.ban);
+            setProfilePhoto(res.data.profileAvater.url);
+            setFollowing(res.data.followingcount);
+            setBirthDate(res.data.birth.date.Date);
+          }
+        });
+    } else {
+      axios
+        .get(
+          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setProfileData(res.data);
+            setName(res.data.user.screenName);
+            setBio(res.data.user.Biography);
+            setLocation(res.data.user.location.place);
+            setJoinedDate(res.data.user.createdAt);
+            setFollowers(res.data.user.followercount);
+            setCoverImage(res.data.user.banner.url);
+            setTag(res.data.user.tag);
+            setBanDuration(res.data.user.ban);
+            setProfilePhoto(res.data.user.profileAvater.url);
+            setFollowing(res.data.user.followingcount);
+            setBirthDate(res.data.user.birth.date.Date);
+            setIsFollowed(res.data.isfollowing);
+          }
+        });
+    }
 
     // let obj = profileData.following.find((o) => o.id === id);
     // if (obj) {
@@ -139,14 +154,52 @@ function MyProfile({}) {
     //   .then((res) => {
     //     setUserTweets(res.data);
     //   });
-  }, [userID]);
+  }, [id]);
+
+  const passdeletedTweet = (id) => {
+    axios
+      .delete(
+        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
+        { headers: { Authorization: localStorage.getItem("accessToken") } }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error || !res.data === "success") {
+          alert("something went wrong");
+        } else {
+          window.location.reload();
+          axios
+            .get(
+              `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+              {
+                headers: { Authorization: localStorage.getItem("accessToken") },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+              if (res.error) {
+                console.log("Error");
+              } else {
+                setUserTweets(res.data);
+                window.location.reload();
+                window.location.reload();
+              }
+            });
+        }
+        //retweetCount();
+      })
+      .catch((err) => {
+        //err.message; // 'Oops!'
+        alert("Error occured while deleting");
+        console.log(err);
+      });
+  };
 
   function saveBtn(e) {
     e.preventDefault();
     let data = {
       screenName: Name1,
       Biography: Bio1,
-      //location: { place: Location1 }
     };
     console.log(Name1);
     setNameError(false);
@@ -156,7 +209,9 @@ function MyProfile({}) {
       // setName(Name1);
       // setBio(Bio1);
       // setLocation(Location1);
+      console.log("---------------------------");
       console.log(data);
+      console.log("---------------------------");
       axios
         .put(
           `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
@@ -168,9 +223,27 @@ function MyProfile({}) {
           if (res.error) {
             alert("Something wrong happened!");
           } else {
-            setName(Name1);
-            setBio(Bio1);
-            //setLocation(Location1);
+            axios
+              .put(
+                `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
+                { location: { place: Location1 } },
+                {
+                  headers: {
+                    Authorization: localStorage.getItem("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+                if (res.error) {
+                  alert("Something wrong happened!");
+                } else {
+                  setName(Name1);
+                  setBio(Bio1);
+                  setLocation(Location1);
+                  window.location.reload();
+                }
+              });
           }
         });
     }
@@ -200,28 +273,27 @@ function MyProfile({}) {
   }
 
   function handleButtonClick() {
-    console.log(isFollowed)
+    console.log(isFollowed);
     if (isFollowed) {
       setFollowModalState(true);
     } else {
       axios
         .post(
           `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${id}`,
+          null,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
         .then((res) => {
-          if (res.error.Error) {
-            alert("Something wrong happened!");
-          } else {
-            setFollowers(Followers + 1);
-            //profileData.followercount=Followers+1
-            setIsFollowed(true);
-            console.log(res);
-          }
-          
-        }).catch(err => {alert("already followed")
-        setFollowModalState(true); // 'Oops!'
-        });;
+          setFollowers(Followers + 1);
+          //profileData.followercount=Followers+1
+          setIsFollowed(true);
+          console.log(res);
+        })
+        .catch((err) => {
+          debugger;
+          alert(err.response.data.error);
+          setFollowModalState(true); // 'Oops!'
+        });
     }
   }
   //console.log(isFollowed);
@@ -231,6 +303,7 @@ function MyProfile({}) {
     axios
       .post(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${id}`,
+        null,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
@@ -238,7 +311,11 @@ function MyProfile({}) {
         setFollowers(Followers - 1);
         setFollowModalState(false);
         setIsFollowed(false);
-      }).catch(err => {alert("already unfollowed");}) // 'Oops!';
+      })
+      .catch((err) => {
+        debugger;
+        alert("already unfollowed");
+      }); // 'Oops!';
   }
 
   function handleOptionsClick() {
@@ -272,7 +349,7 @@ function MyProfile({}) {
   // function toMonthName() {
   //   const date = new Date();
   //   date.setMonth(joinedDate.getMonth() - 1);
-
+  //   console.log(joinedDate);
   //   return date.toLocaleString("en-US", {
   //     month: "long",
   //   });
@@ -282,7 +359,7 @@ function MyProfile({}) {
   // console.log(profileData);
   // //console.log(sameUserProf);
   // console.log(Name);
-  if (profileData !== []) {
+  if (Name) {
     return (
       <div className="myProfile">
         <div className="myProfileName">
@@ -585,11 +662,27 @@ function MyProfile({}) {
           birthday={birthDate}
         />
         <MyProfileTabs />
+        {userTweets?.length ? (
+          userTweets.map((post) => (
+            <Post
+              post={post}
+              passdeletedTweet={passdeletedTweet}
+              isAdmin={props.isAdmin}
+              isPost={true}
+              //path={`/Profile/${userID}`}
+            />
+          ))
+        ) : (
+          <></>
+        )}
       </div>
     );
   } else {
-    return null;
+    return (
+      <div className="Loader">
+        <FallingLines height={120} width={150} color="var(--color-mode)" />
+      </div>
+    );
   }
 }
-
 export default MyProfile;

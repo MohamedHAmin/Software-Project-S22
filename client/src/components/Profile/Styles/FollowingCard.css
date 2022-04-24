@@ -1,0 +1,31 @@
+.Following {
+  height: auto;
+}
+
+.FollowingData {
+  font-size: 14px;
+}
+
+.FollowingCard {
+  display: flex;
+  padding: 10px;
+  height: auto;
+}
+
+.followButton {
+  background-color: var(--larry-color) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 30px !important;
+  width: auto !important;
+  position: absolute !important;
+  right: 20px !important;
+}
+
+.FollowingData a {
+  text-decoration: none;
+}

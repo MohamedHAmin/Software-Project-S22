@@ -15,7 +15,7 @@ return(
         <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true"><MoreHorizIcon /></button>
         <ul className="dropdown-menu">
         <li >{!props.sameuser && !props.isAdmin && <NavLink className="dropdown-item btn" to={`/Report/Lar/${props.postid}`}><SportsScoreOutlinedIcon className="bo" /> Report</NavLink>}</li>
-        <li >{(props.sameuser || props.isAdmin) && <NavLink className="dropdown-item btn" to="/Home" onClick={props.onDeleteHandler}><Delete className="bo" />Delete</NavLink>} </li>
+        <li >{(props.sameuser || props.isAdmin) && <NavLink className="dropdown-item btn" to={window.location.pathname} onClick={props.onDeleteHandler}><Delete className="bo" />Delete</NavLink>} </li>
           
         </ul>
         

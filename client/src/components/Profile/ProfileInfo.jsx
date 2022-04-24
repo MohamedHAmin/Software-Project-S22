@@ -4,6 +4,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LinkIcon from "@mui/icons-material/Link";
 import CakeIcon from "@mui/icons-material/Cake";
+import { NavLink, useParams } from "react-router-dom";
 function ProfileInfo({
   name,
   userName,
@@ -12,9 +13,20 @@ function ProfileInfo({
   following,
   bio,
   location,
- // website,
+  // website,
   birthday,
 }) {
+  function toMonthName() {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+    return date.toLocaleString("en-US", {
+      month: "long",
+    });
+  }
+  let { id } = useParams();
+  const date1 = new Date(date);
+  const date2 = toMonthName();
+  console.log(date2);
   //const websiteLength = website.length;
   return (
     <div className="profileInfo2">
@@ -48,7 +60,7 @@ function ProfileInfo({
           ""
         )}
         <span>
-          <CalendarMonthIcon /> Joined {date}
+          <CalendarMonthIcon /> Joined {date2} {date1.getFullYear()}
         </span>
       </div>
 
@@ -57,8 +69,12 @@ function ProfileInfo({
       </div>
 
       <div className="followInfo">
-        <span>{following} Following </span>
-        <span data-testid="Followers-Profile">{followers} Followers</span>
+        <NavLink to={`/Profile/${id}/Following`}>
+          <span>{following} Following </span>
+        </NavLink>
+        <NavLink to={`/Profile/${id}/Followers`}>
+          <span data-testid="Followers-Profile">{followers} Followers</span>
+        </NavLink>
       </div>
     </div>
   );

@@ -140,7 +140,7 @@ function Reacts (props) {
                 <textarea type="text" variant="standard" value={value} className="Retweettext" onChange={(e)=>{setValue(e.target.value)}} placeholder="Add Comment"/>
                 {selectedImage? (
             <div>
-            <img alt="not found" width={"inherit"} src={new Blob([selectedImage.photo], {type: "application/zip"})} />
+            <img alt="not found" width={"inherit"} key={props.image._id} src={props.image.photo} />
             <br />
             </div>):<></>}
                 <CommentDisplayBlock className="retweetinnerblock" key={props.id}

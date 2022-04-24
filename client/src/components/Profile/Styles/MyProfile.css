@@ -215,6 +215,12 @@ opacity: 0.80;
   text-decoration: none;
 }
 
+.Loader {
+  margin-top: 25%;
+  margin-left: 30%;
+  margin-right:14.7%;
+}
+
 @media only screen and (max-width: 859px) {
   .myProfile {
     margin-left:27.5%;

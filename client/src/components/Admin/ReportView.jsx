@@ -7,21 +7,33 @@ import "./Styles/ReportView.css"
 import RetweetDisplayBlock from "../Homepage/RetweetDisplayBlock";
 function ReportsView(props)
 {
+    const [tmppost,settmppost]=useState([]);
+    function setpost()
+    {
+        let post=[{
+            retweetCount:props.tweet.retweetCount,
+            replyCount: props.tweet.replyCount,
+            authorId:{
+                screenName:props.tweet.reporter.screenName,
+                tag:props.tweet.reporter.tag
+            }   
+        }]
+    }
     return(
         <React.Fragment>
             <div className="ReportsView">
                 <Button variant="outlined" color="error" className="DeleteReport" onClick={props.ondeletereport}>Delete</Button>
                 <Stack spacing={2} direction="row" alignItems="baseline">
                     <h6>Reported by:</h6>
-                    <NavLink className="tag" to='/Profile' >@tagname</NavLink>
+                    <NavLink className="tag" to={`/Profile/${props.authorId._id}`} >{"@" + props.reporter}</NavLink>
                     {/* <Stack direction="column" alignItems="flex-end">
                         <p>trial</p>
                     </Stack> */}
                 </Stack>
-                <Stack spacing={2} direction="row" alignItems="baseline">
+                {props.reason && <Stack spacing={2} direction="row" alignItems="baseline">
                     <h6>Report Reason:</h6>
                     <div>{props.reason}</div>
-                </Stack>
+                </Stack>}
                 <Stack spacing={2} direction="row" alignItems="baseline">
                     <h6>Number Of Reports:</h6>
                     <div>{props.times}</div>

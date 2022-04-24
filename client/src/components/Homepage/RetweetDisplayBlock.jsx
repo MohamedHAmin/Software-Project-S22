@@ -18,7 +18,7 @@ function RetweetDisplayBlock(props) {
             </div>
         </div>
         <div className="tweetContent">{props.content}</div>
-        {props.image? (<img className="uploadedimage" alt="not found" src={new Blob([props.image.photo], {type: "application/zip"})}/>):<></>}
+        {props.image? (<img className="uploadedimage" alt="not found" key={props.image._id} src={props.image.photo}/>):<></>}
     </div>
 </React.Fragment>
     );

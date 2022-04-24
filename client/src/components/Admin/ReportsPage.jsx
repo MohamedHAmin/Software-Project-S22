@@ -10,14 +10,14 @@ function ReportsPage(props)
     const [userReports,setuserReports]=useState([]);
     const [tweetReports,settweetReports]=useState([]);
     useEffect(()=>{
-        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/report/:1&filter=Tweet`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
         console.log(res);
         if (res.error){console.log("Error")}
         else {
           settweetReports(res.data);
         }
     })
-        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/report/:1&filter=User`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
         console.log(res);
         if (res.error){console.log("Error")}
         else {
@@ -46,8 +46,22 @@ function ReportsPage(props)
                         <Button variant="text" onClick={clickHandler}>Reported Tweets</Button>
                         <Button variant="text" onClick={click2Handler}>Reported Profiles</Button>
                     </Stack>
-                    {/*clicked && <ReportsView reason="spam" times="5" info="trial" isTweet={true}/>}
-                    {!clicked && <ReportsView reason="spam" times="5" info="trial" isTweet={false}/>*/}
+
+                    {/* {clicked && tweetReports.length? (
+                        tweetReports.map((tweet)=>
+                        {
+                            </>
+                        })
+                    )} */}
+                    {/*clicked && tweetReports?.length ? ( 
+                        tweetReports.map((tweet) =>
+                            <ReportsView
+                                times={tweet.Reports}
+                                reporter={tweet.authorId}
+                                isTweet={true}
+                                tweet={tweet}/>)
+                    ):(<></>)*/}
+                    {/*!clicked && <ReportsView reason="spam" times="5" info="trial" isTweet={false}/>*/}
                 </div>
             </div>
         </React.Fragment>

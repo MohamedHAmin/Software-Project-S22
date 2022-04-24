@@ -1,0 +1,20 @@
+.myFollowing {
+  border-right: 2px solid var(--color-border);
+  position: relative;
+  width: 60%;
+}
+
+@media only screen and (max-width: 859px) {
+  .myFollowing {
+    margin-left: 27.5%;
+    border-right: none;
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 860px) and (max-width: 1060px) {
+  .myFollowing {
+    margin-left: 21%;
+    min-width: 430px;
+  }
+}

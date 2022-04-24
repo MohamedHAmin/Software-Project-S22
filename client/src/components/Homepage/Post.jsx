@@ -17,8 +17,8 @@ import { NavLink } from "react-router-dom";
 import axios from 'axios';
 
 function Post(props) {
-//const [isdeletedtweet,setdeletedtweet]=useState(false);
-//   deletepost(()=>{
+  //const [isdeletedtweet,setdeletedtweet]=useState(false);
+  //   deletepost(()=>{
   //     setdeletedtweet(true)
   //     },[])
   const [postId]=useState(props.post._id);
@@ -146,7 +146,7 @@ function deletepost(){
         {/* <button onClick={deletepost}>karimm</button> */}
         {/* <img className="logo" src={Logo}/> */}
         {/* <div className="deleteIcon">{isAdmin==true && React.createElement(Delete)}</div> */}
-        <div className="deleteIcon" onClick={checkifsameuser}><NavLink to={`/Report/Lar/${postId}`}><Button onDeleteHandler={deletepost} postid={postId} sameuser={sameuser} isAdmin={isAdmin}/></NavLink></div>
+        <div className="deleteIcon" onClick={checkifsameuser}><NavLink to={`/Report/Lar/${postId}`}><Button /*path={props.path}*/ onDeleteHandler={deletepost} postid={postId} sameuser={sameuser} isAdmin={isAdmin}/></NavLink></div>
         <div className="userInfo">
             <Avatar className="profilePic" src={props.post.authorId.profileAvater.url}/>
             <div className="profileInfo">
@@ -155,7 +155,7 @@ function deletepost(){
             </div>
         </div>
         {tweetcontent!=="No-text" && <div className="tweetContent">{tweetcontent}</div>}
-        {props.post.gallery[0]? (<img className="uploadedimage" alt="not found" src={new Blob([props.post.gallery[0].photo], {type: "image/jpeg"})}/>):<></>}
+        {props.post.gallery[0]? (<img className="uploadedimage" alt="not found" key={props.post.gallery[0]._id} src={props.post.gallery[0].photo}/>):<></>}
         {props.post.retweetedTweet && <RetweetDisplayBlock key={props.post.retweetedTweet._id}
               username={props.post.retweetedTweet.authorId.screenName}
               tagName={props.post.retweetedTweet.authorId.tag}

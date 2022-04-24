@@ -1,0 +1,6 @@
+.menuOfChoosenSetting {
+  margin-top: 118.5px;
+  flex: 0.4;
+  min-width: 350px;
+  grid-row-start: auto;
+}

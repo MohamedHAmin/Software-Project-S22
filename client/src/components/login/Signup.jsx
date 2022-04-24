@@ -9,7 +9,7 @@ import SignupwithGoogle from "./SignupwithGoogle";
 import Navbar from "./navbar";
 import './Styles/Modal.css'
 
-const Signup = (props) => {
+const Signup = () => {
     const [error2, setError2] = useState(false);
     const [error1, setError1] = useState(false);
     const [next,setNext] = useState(false);
@@ -61,19 +61,23 @@ const validationSchema1 = Yup.object().shape({
         data.tag=userData.tag; ///////////
 
         console.log(data);
-        axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/signup", data).then((res) => {
-            if (res.error.keyPattern.tag==1) {
-                    setError2("tag already used")
-                    setNext(false);
-            } 
-            if (res.error.keyPattern.email==1) {
-                setError1("email already used")
-                setNext(false);
-            } 
+        axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/signup",
+         data)
+        .then((res) => {
+            console.log(res)    
             alert("Please check your email")
             // navigate to login
-            Navigate("/Login")
-        })
+            Navigate("/")
+        }).catch(err => { 
+            console.log(err.response.data.error);
+            if (err.response.data.error.includes('tag')) {
+            setError2("tag already used")
+            setNext(false);
+            } else {
+            setError1("email already used")
+            setNext(false);
+            }
+         })
     };
   
 
@@ -135,14 +139,14 @@ const validationSchema1 = Yup.object().shape({
                                     </div>
                                     <ErrorMessage name='birthDate' component="span" className={classes.error}/>
                                 <div className={classes.field}>
-                                <Field name="phoneNumber" autoComplete="off"></Field>
+                                <Field name="phoneNumber" placeholder="Phone Number" autoComplete="off"></Field>
                                     
                                     {/* <label>Phone Number </label> */}
                                 </div>
                         
                                 <ErrorMessage name='phoneNumber' component="span" className={classes.error}/>
                                 <div className={classes.field}>
-                                <Field  name="Biography" autoComplete="off"></Field>
+                                <Field  name="Biography" placeholder="Biography" autoComplete="off"></Field>
                                 
                                 </div>
                                 <ErrorMessage name='Biography' component="span" className={classes.error}/>

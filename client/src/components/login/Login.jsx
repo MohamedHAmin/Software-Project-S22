@@ -65,7 +65,7 @@ const Login = () => {
                     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} className={classes.form}> 
                         <Form>
                             <div className={classes.field}>
-                                <Field className={classes.userinput} name="email_or_username" placeholder="email" autoComplete="off" />
+                                <Field className={classes.userinput} name="email_or_username" placeholder="Email or Username" autoComplete="off" />
                             </div>
                             <ErrorMessage name='email_or_username' component="span" className={classes.error}/>
                             {error === false ? <span></span> : <span className={classes.error}>{error}</span>}

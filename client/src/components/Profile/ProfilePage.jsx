@@ -34,7 +34,7 @@ function ProfilePage(props) {
   return (
     <div className="ProfilePage">
       <SideBar Profile isAdmin={props.isAdmin}/>
-      <MyProfile />
+      <MyProfile isAdmin={props.isAdmin}/>
       <div className="rightbar">
         <div className="searchbar">
           <Searchbar />
