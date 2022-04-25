@@ -202,17 +202,17 @@ function MyProfile(props) {
         console.log(err);
       });
   };
-
+  console.log(Website);
   function saveBtn(e) {
     e.preventDefault();
+
     let data = {
-      screenName: Name1,
-      Biography: Bio1,
-      website: Website1,
+      screenName: document.getElementById("editNameProfileField").value,
+      Biography: document.getElementById("editBioProfileField").value,
+      website: document.getElementById("editWebsiteProfileField").value,
     };
-    console.log(Name1);
     setNameError(false);
-    if (Name1 === "") {
+    if (!document.getElementById("editNameProfileField").value) {
       setNameError(true);
     } else {
       // setName(Name1);
@@ -235,7 +235,12 @@ function MyProfile(props) {
             axios
               .put(
                 `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
-                { location: { place: Location1 } },
+                {
+                  location: {
+                    place: document.getElementById("editLocationProfileField")
+                      .value,
+                  },
+                },
                 {
                   headers: {
                     Authorization: localStorage.getItem("accessToken"),
@@ -247,10 +252,14 @@ function MyProfile(props) {
                 if (res.error) {
                   alert("Something wrong happened!");
                 } else {
-                  setName(Name1);
-                  setBio(Bio1);
-                  setWebsite(Website1);
-                  setLocation(Location1);
+                  console.log(data);
+                  setName(data.screenName);
+                  setBio(data.Biography);
+                  setWebsite(data.website);
+                  console.log(Website);
+                  setLocation(
+                    document.getElementById("editLocationProfileField").value
+                  );
                   window.location.reload();
                 }
               });
@@ -258,7 +267,10 @@ function MyProfile(props) {
         });
     }
     //setWebsite(Website);
-    if (Name1 !== "") setButtonPopup(false);
+    console.log(Name1);
+    console.log(Name);
+    if (document.getElementById("editNameProfileField").value)
+      setButtonPopup(false);
   }
 
   function handleDiscard() {
@@ -269,10 +281,10 @@ function MyProfile(props) {
   }
   function closeBtn() {
     if (
-      Name === Name1 &&
-      Bio === Bio1 &&
-      Location === Location1 &&
-      Website === Website1
+      Name === document.getElementById("editNameProfileField").value &&
+      Bio === document.getElementById("editBioProfileField").value &&
+      Location === document.getElementById("editLocationProfileField").value &&
+      Website === document.getElementById("editWebsiteProfileField").value
       // &&Website === website
     )
       setButtonPopup(false);
@@ -331,12 +343,9 @@ function MyProfile(props) {
   }
 
   function handleOptionsClick() {
-    if(!isAdmin)
-    {
+    if (!isAdmin) {
       navigate(`/Report/Profile/${userID}`);
-    }
-    else
-    {
+    } else {
       setOptionsModalState(true);
     }
   }
@@ -344,8 +353,8 @@ function MyProfile(props) {
     axios
       .post(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`,
-        {duration:banDuration1},
-        {headers: {Authorization: localStorage.getItem("adminToken")}}
+        { duration: banDuration1 },
+        { headers: { Authorization: localStorage.getItem("adminToken") } }
       )
       .then((res) => {
         console.log(res);
@@ -353,9 +362,7 @@ function MyProfile(props) {
           console.log(
             "An error occured while attempting to ban the user, please try again"
           );
-        }
-        else
-        {
+        } else {
           setBanDuration(banDuration1);
           alert("The user has been banned");
         }
@@ -585,7 +592,7 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Name"
-                  onChange={(e) => setName1(e.target.value)}
+                  id="editNameProfileField"
                   defaultValue={Name}
                   required
                   fullWidth
@@ -597,7 +604,7 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Bio"
-                  onChange={(e) => setBio1(e.target.value)}
+                  id="editBioProfileField"
                   defaultValue={Bio}
                   fullWidth
                   multiline
@@ -609,7 +616,7 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Location"
-                  onChange={(e) => setLocation1(e.target.value)}
+                  id="editLocationProfileField"
                   defaultValue={Location}
                   fullWidth
                   inputProps={
@@ -620,7 +627,7 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Website"
-                  onChange={(e) => setWebsite1(e.target.value)}
+                  id="editWebsiteProfileField"
                   defaultValue={Website}
                   fullWidth
                   inputProps={

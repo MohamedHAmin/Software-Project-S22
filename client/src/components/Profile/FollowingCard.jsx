@@ -133,7 +133,7 @@ function FollowingCard(props) {
           </div>
         </FormControl>
       </Modal>
-      {props.contact._id !== userID ? (
+      {props.contact.followingId._id !== userID ? (
         <Button
           onClick={handleButtonClick}
           className={

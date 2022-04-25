@@ -44,7 +44,7 @@ function ProfileInfo({
 
       <div className="moreInfo">
         {bio ? <h5 data-testid="Edit-Profile-Bio-Element">{bio}</h5> : ""}
-        {locationVisability ? (
+        {locationVisability && location ? (
           <span data-testid="Edit-Profile-Location-Element">
             <LocationOnIcon /> {location}
           </span>
@@ -61,7 +61,7 @@ function ProfileInfo({
         ) : (
           ""
         )}
-        {birthdayVisability ? (
+        {birthdayVisability && birthday.date ? (
           <span data-testid="Edit-Profile-Birthday-Element">
             <CakeIcon /> Born in {monthNames[birthdate.getMonth()]}{" "}
             {birthdate.getDate()}
