@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 
 function FollowerCard(props) {
   let { id } = useParams();
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing);
   const [followModalState, setFollowModalState] = useState(false);
   let userID = localStorage.getItem("userId");
   const [Followers, setFollowers] = useState(0);
@@ -58,37 +58,49 @@ function FollowerCard(props) {
   function handleCancelAction() {
     setFollowModalState(false);
   }
+  console.log(props.contact);
   return (
     <div className="FollowerCard">
-      {/* <Avatar style={{ marginRight: "4px" }} src={props.contact.imgURL} /> */}
+      <NavLink to={`/Profile/${props.contact._id}`}>
+        <div className="FollowingCard">
+          <div>
+            <Avatar
+              style={{ marginRight: "4px" }}
+              src={props.contact.profileAvater.url}
+              alt={props.contact.screenName}
+            />{" "}
+          </div>
 
-      <div className="FollowerData">
-        <NavLink to={`/Profile/${props.contact._id}`}>
-          <p style={{ margin: "0px 0px 4px 4px", color: "var(--color-mode)" }}>
-            <b>{props.contact.screenName}</b>
-          </p>
+          <div className="FollowerData">
+            <p
+              style={{ margin: "0px 0px 4px 4px", color: "var(--color-mode)" }}
+            >
+              <b>{props.contact.screenName}</b>
+            </p>
 
-          <p
-            style={{
-              margin: "-7px 0px 4px 4px",
-              fontSize: "13px",
-              color: "var(--color-mode)",
-              opacity: "0.8",
-            }}
-          >
-            @{props.contact.tag}
-          </p>
-        </NavLink>
-        {/* <h6
-          style={{
-            margin: "0px 0px 4px 4px",
-            fontSize: "13px",
-            color: "var(--color-mode)",
-          }}
-        >
-          {props.contact.bio}
-        </h6> */}
-      </div>
+            <p
+              style={{
+                margin: "-7px 0px 4px 4px",
+                fontSize: "13px",
+                color: "var(--color-mode)",
+                opacity: "0.8",
+              }}
+            >
+              @{props.contact.tag}
+            </p>
+
+            <h6
+              style={{
+                margin: "0px 0px 4px 4px",
+                fontSize: "13px",
+                color: "var(--color-mode)",
+              }}
+            >
+              {props.contact.Biography}
+            </h6>
+          </div>
+        </div>
+      </NavLink>
 
       <Modal
         open={followModalState}
@@ -124,10 +136,16 @@ function FollowerCard(props) {
           </div>
         </FormControl>
       </Modal>
-
-      <Button onClick={handleButtonClick} className="followButton">
-        {props.contact.isfollowing ? "Following" : "Follow"}
-      </Button>
+      {props.contact._id !== userID ? (
+        <Button
+          onClick={handleButtonClick}
+          className={
+            props.contact.isfollowing ? "followButton1" : "followButton2"
+          }
+        >
+          {props.contact.isfollowing ? "Following" : "Follow"}
+        </Button>
+      ) : null}
     </div>
   );
 }

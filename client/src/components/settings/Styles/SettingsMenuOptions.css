@@ -69,7 +69,24 @@
   padding-left: 1.5em;
   color: rgb(255, 255, 255);
 }
-
+.WholeSettingsAddPhoneOption{
+  display: flex;
+  align-items: center;
+}
+.WholeSettingsAddPhoneOption:hover {
+  background-color: var(--color-hover);
+  transition: background 100ms ease-in-out;
+}
+.WholeSettingsDeletePhoneOption{
+  display: flex;
+  align-items: center;
+  text-align:center;
+  
+}
+.WholeSettingsDeletePhoneOption:hover {
+  background-color: rgb(254, 167, 167);
+  transition: background 100ms ease-in-out;
+}
 
 .WholeSettingOptionLight:hover {
   background-color: rgb(247, 246, 246);
@@ -118,4 +135,31 @@
 }
 .borderHorizontal{
   border-bottom: 2px solid var(--color-border);
+}
+.buttonSettings{
+background-color: #2b3dbc !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 500 !important;
+  font-size: 17px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 7.5% !important;
+  margin-top: 5px !important;
+  width: 40% !important;
+}
+.buttonSettingsDisabled{
+  background-color: var(--color-border) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500 !important;
+    font-size: 17px !important;
+    text-transform: inherit !important;
+    border-radius: 40px !important;
+    height: 7.5% !important;
+    margin-top: 5px !important;
+    width: 40% !important;
+  }
+.buttonSettings:hover {
+  background-color: #6d71ff !important;
 }

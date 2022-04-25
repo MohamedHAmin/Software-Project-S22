@@ -6,32 +6,64 @@ import Typography from '@mui/material/Typography';
 import "./Styles/SettingsModals.css"
 import './Styles/SettingsMenu.css'
 import './Styles/SettingsMenuOptions.css'
+import axios from 'axios';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-function TemplateFormEditAccInfo(props) {
+function ChangeUserTag(props) {
   const [newValue, setnewValue] = useState('');
   const [isValueChanged, setIsValueChanged] = useState(false);
   const [newValueError, setValueNewError] = useState(false);
   const [newValueTypeError, setValueNewTypeError] = useState(0);
   //modal
   const [buttonPopup, setButtonPopup] = useState(false);
+  //related to request to back end
+  const userId=localStorage.getItem("userId");
   const  handleSubmit =(e) =>{
     e.preventDefault()
-    const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+   
     setValueNewError(false);
-    if(!newValue || regex.test(newValue) === false){
+    if(newValue.length<4){
       setValueNewTypeError(1);
       setValueNewError(true);
         return false;
     }
     //check if email already used by request to back end
-    else if(newValue==="karimy@gmail.com"){
+    else if(newValue===props.oldValue){
       setValueNewTypeError(2);
       setValueNewError(true);
       return false;
     }
     else{
-      setButtonPopup(true);//show message
+      
       //send request to backend to givee them new email
+      let data={
+        tag:newValue
+      }
+      //
+      axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+
+        headers: {
+          Authorization: localStorage.getItem("accessToken")
+        }
+
+      }).then((res)=>{
+      console.log(res);
+      
+        if(res.error){
+          
+          //error
+
+        }
+        else{
+          //evreything is correct
+          setButtonPopup(true);//show message
+          
+        }
+      })
+      .catch(err => {
+        setValueNewTypeError(2);
+      setValueNewError(true);
+        
+      });
     }
   }
   const handleChange =(e) =>{
@@ -42,16 +74,16 @@ function TemplateFormEditAccInfo(props) {
   const handleClose = () => setButtonPopup(false);
     return ( 
       <div style={{marginTop:28}}>
-        <h2 className={!props.darkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Change {props.text}</h2>
+        <h2 className={!props.darkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Change username</h2>
         <form noValidate autoComplete='off' onSubmit={handleSubmit}>
         <div className="TextFieldStyling">
           <TextField
            InputLabelProps={{className:props.darkMode?"forceChangePasswordMUIDarkMode":""} }
             onChange={(e)=> handleChange(e)}
             id="editData"  
-            type="email"
+            
             variant="outlined"
-            label={props.text} 
+            label="Username" 
             color="primary" 
             defaultValue={props.oldValue}  
             inputProps={{"data-testid":"New-Email-AccInfoSpage",className:props.darkMode?"forceChangePasswordMUIDarkMode":"" }}
@@ -60,7 +92,7 @@ function TemplateFormEditAccInfo(props) {
             // helperText={confirmPassValueError &&("The password you entered was incorrect.")}
 
             error={newValueError}
-          helperText={newValueError &&(  newValueTypeError===1?  ("Incorrect email"):("Email already used"))}
+          helperText={newValueError &&(  newValueTypeError===1?  ("Your username must be longer than 3 characters."):("Username already used."))}
 
           />
           </div>
@@ -69,9 +101,9 @@ function TemplateFormEditAccInfo(props) {
         type='submit'
         variant="contained" 
         disabled={!isValueChanged}
-        className={props.darkMode?"forceChangePasswordMUIDarkMode":""} 
+        className={!isValueChanged?"buttonSettingsDisabled":"buttonSettings" } 
         style={{marginTop:24}}>
-          save
+          Save
         </Button>
         </div>
         </form>
@@ -85,7 +117,7 @@ function TemplateFormEditAccInfo(props) {
                 <div style={{verticalAlign:'middle'}}>
                 <form className={!props.darkMode? 'protectYourLarsLight':'protectYourLarsDark'} onSubmit={handleSubmit}>
                       <Typography  className={!props.darkMode? "settingsModalHeaderCenteredLight":"settingsModalHeaderCenteredDark" } style={{ textAlign:"center"}} id="modal-modal-title" variant="h6" component="h2" >
-                        Email changed!
+                        Username changed!
                       </Typography>
                       <div style={{ textAlign:"center"}}>
                       <Button
@@ -104,4 +136,4 @@ function TemplateFormEditAccInfo(props) {
      );
 }
 
-export default TemplateFormEditAccInfo;
+export default ChangeUserTag;

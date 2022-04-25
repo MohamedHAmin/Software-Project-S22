@@ -181,6 +181,11 @@ function Homepage(props) {
             //   console.log(posts);
             //   console.log(count);
           }
+        })
+        .catch((err) => {
+          //err.message; // 'Oops!'
+          alert("You can't post tweets currently, you got banned by admins");
+          console.log(err);
         });
 
       setText("");

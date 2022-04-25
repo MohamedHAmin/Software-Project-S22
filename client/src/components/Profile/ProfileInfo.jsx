@@ -5,6 +5,20 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LinkIcon from "@mui/icons-material/Link";
 import CakeIcon from "@mui/icons-material/Cake";
 import { NavLink, useParams } from "react-router-dom";
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 function ProfileInfo({
   name,
   userName,
@@ -13,21 +27,16 @@ function ProfileInfo({
   following,
   bio,
   location,
-  // website,
+  website,
   birthday,
+  birthdayVisability,
+  locationVisability,
 }) {
-  function toMonthName() {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
-    return date.toLocaleString("en-US", {
-      month: "long",
-    });
-  }
   let { id } = useParams();
-  const date1 = new Date(date);
-  const date2 = toMonthName();
-  console.log(date2);
-  //const websiteLength = website.length;
+  const joinDate = new Date(date);
+  const birthdate = new Date(birthday);
+
+  const websiteLength = website.length;
   return (
     <div className="profileInfo2">
       <h2 data-testid="Edit-Profile-Name-Element">{name}</h2>
@@ -35,14 +44,14 @@ function ProfileInfo({
 
       <div className="moreInfo">
         {bio ? <h5 data-testid="Edit-Profile-Bio-Element">{bio}</h5> : ""}
-        {location ? (
+        {locationVisability ? (
           <span data-testid="Edit-Profile-Location-Element">
             <LocationOnIcon /> {location}
           </span>
         ) : (
           ""
         )}
-        {/* {website ? (
+        {website ? (
           <a href={website}>
             <span data-testid="Edit-Profile-Website-Element">
               <LinkIcon />{" "}
@@ -51,16 +60,20 @@ function ProfileInfo({
           </a>
         ) : (
           ""
-        )} */}
-        {birthday ? (
+        )}
+        {birthdayVisability ? (
           <span data-testid="Edit-Profile-Birthday-Element">
-            <CakeIcon /> Born in {birthday}
+            <CakeIcon /> Born in {monthNames[birthdate.getMonth()]}{" "}
+            {birthdate.getDate()}
+            {", "}
+            {birthdate.getUTCFullYear()}
           </span>
         ) : (
           ""
         )}
         <span>
-          <CalendarMonthIcon /> Joined {date2} {date1.getFullYear()}
+          <CalendarMonthIcon /> Joined {monthNames[joinDate.getMonth()]}{" "}
+          {joinDate.getFullYear()}
         </span>
       </div>
 

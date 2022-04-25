@@ -49,7 +49,7 @@ function MakeBDvisible(props) {
                     alert("error nothing changed!")
                 }
                 else{
-                    alert("changed successfully!")
+                    
                     setChecked(!checked);
                 }
             })   

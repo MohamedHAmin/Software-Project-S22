@@ -1,8 +1,12 @@
-import { PropaneSharp } from "@mui/icons-material";
 import FollowerCard from "./FollowerCard";
-
+import { NavLink } from "react-router-dom";
+import "./Styles/CreateFollower.css";
 function CreateFollower(props) {
-  return <FollowerCard contact={props.contact} />;
+  return (
+    <div className="CreateFollower">
+      <FollowerCard contact={props.contact} />
+    </div>
+  );
 }
 
 export default CreateFollower;
