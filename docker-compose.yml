@@ -19,7 +19,7 @@ services:
       - /app/node_modules
       - ./api:/app
     environment:
-      - MONGOCONNECT=mongodb://root:example@database:27017/
+      - MONGOCONNECT=mongodb://root:example@mongo:27017/
       - PORT=3000
       - SECRET=${SECRET}
       - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
