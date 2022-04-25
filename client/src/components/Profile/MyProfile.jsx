@@ -72,6 +72,7 @@ function MyProfile(props) {
   //   setBirthDate(profileData.birth.date.Date);
   // }
 
+  
   useEffect(() => {
     axios
       .get(

@@ -71,7 +71,7 @@ function Reacts (props) {
         })
         .catch((err) => {
             //err.message; // 'Oops!'
-            alert("You can't like or dislike tweets currently, you got banned by admins");
+            alert(err.response.data.error);
             console.log(err);
           });
     }
@@ -122,7 +122,7 @@ function Reacts (props) {
     })
     .catch((err) => {
         //err.message; // 'Oops!'
-        alert("You can't retweet currently, you got banned by admins");
+        alert(err.response.data.error);
         console.log(err);
       });
 }

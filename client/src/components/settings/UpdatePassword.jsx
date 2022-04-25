@@ -32,7 +32,7 @@ function UpdatePassword(props) {
       if(confirmPassValue && newPassValue1 && newPassValue2){
         // if(confirmPassValue==="karim"){
         //   setIsConfirmPassCorrect(1)
-          if(newPassValue1.length<6){
+          if(newPassValue1.length<6 && newPassValue1.length>16){
             setValueNewPass1Error(true);
           }
           else if(newPassValue1===newPassValue2){

@@ -16,12 +16,33 @@ function Homepage(props) {
   const [count, setCount] = useState(0);
   const [userData, setuserdata] = useState([]);
   const [newtweets, setnewtweets] = useState([]);
+  const [token,setToken]=useState(localStorage.getItem("accessToken"));
   const [text, setText] = useState("");
+  console.log(token);
+  const tokensetter=()=>
+  {
+    if(props.isAdmin)
+    {
+      setToken(localStorage.getItem("adminToken"));
+      console.log(token);
+    }
+    else
+    {
+      setToken(localStorage.getItem("accessToken"));
+      console.log(token);
+    }
+  }
+
+  const tokenreset=()=>
+  {
+      setToken(localStorage.getItem("accessToken"));
+    }
   const getposts = () => {
+    tokenreset();
     axios
       .get(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/timeline`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
+        { headers: { Authorization: token } }
       )
       .then((res) => {
         if (res.error) {
@@ -35,6 +56,7 @@ function Homepage(props) {
   };
   useEffect(() => {
     getposts();
+    
   }, []);
   //const [numberOfRetweets,setNumberOfRetweets]=useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -59,10 +81,11 @@ function Homepage(props) {
   // }
 
   const passdeletedTweet = (id) => {
+    tokensetter();
     axios
       .delete(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
+        { headers: { Authorization: token } }
       )
       .then((res) => {
         console.log(res);
@@ -184,7 +207,7 @@ function Homepage(props) {
         })
         .catch((err) => {
           //err.message; // 'Oops!'
-          alert("You can't post tweets currently, you got banned by admins");
+          alert(err.response.data.error);
           console.log(err);
         });
 
@@ -232,10 +255,10 @@ function Homepage(props) {
               //setNumberOfRetweets={setNumberOfRetweets}
             />
           ))
-        ) : (
-          <div className="Loader">
-            <FallingLines height={120} width={150} color="var(--color-mode)" />
-          </div>
+        ) : (<></>
+          // <div className="Loader">
+          //   <FallingLines height={120} width={150} color="var(--color-mode)" />
+          // </div>
         )}
         {/* {posts?.length ? ( 
           posts.filter((post)=> post.innerpostid!==undefined).map((post) =>

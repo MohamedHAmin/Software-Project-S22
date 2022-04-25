@@ -16,7 +16,7 @@ const Login = () => {
     }
     const Navigate = useNavigate();
     const validationSchema = Yup.object().shape({
-        password: Yup.string().min(6).max(12).required("Enter Your Password"),
+        password: Yup.string().min(6).max(16).required("Enter Your Password"),
         email_or_username: Yup.string().min(3).required("Enter Your Email or Tag.")
     })
     const onSubmit = (data) => {

@@ -35,7 +35,6 @@ function ProfileInfo({
   let { id } = useParams();
   const joinDate = new Date(date);
   const birthdate = new Date(birthday);
-
   const websiteLength = website.length;
   return (
     <div className="profileInfo2">
@@ -61,7 +60,7 @@ function ProfileInfo({
         ) : (
           ""
         )}
-        {birthdayVisability && birthday.date ? (
+        {(birthdayVisability && birthday) ? (
           <span data-testid="Edit-Profile-Birthday-Element">
             <CakeIcon /> Born in {monthNames[birthdate.getMonth()]}{" "}
             {birthdate.getDate()}
