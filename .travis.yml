@@ -11,8 +11,20 @@ before_install:
 
 script: 
   #- docker run -e CI=true client npm run test
-  - docker run --network mean --name database -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -p 27017:27017 -d mongo
-  - docker run --network mean -v /app/node_modules -v $(pwd)/api:/app -e MONGOCONNECT=mongodb://root:example@database:27017/ -e PORT=3000 -e SECRET=$SECRET -e CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME -e CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY -e CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET -e AUTH_EMAIL=$AUTH_EMAIL -e AUTH_PASS=$AUTH_PASS -e CURRENTURL-$CURRENTURL api npm run Dtest
+  - export MONGOCONNECT=mongodb://root:example@database:27017/
+  - export PORT=3000
+  # - export SECRET=$SECRET
+  # - export CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
+  # - export CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+  # - export CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
+  # - export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+  # - export GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+  # - export AUTH_EMAIL=$AUTH_EMAIL
+  # - export AUTH_PASS=$AUTH_PASS
+  # - export CURRENTURL-$CURRENTURL
+  - docker-compose up --exit-code-from api
+  # - docker run --network mean --name database -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -p 27017:27017 -d mongo
+  # - docker run --network mean -v /app/node_modules -v $(pwd)/api:/app -e MONGOCONNECT=mongodb://root:example@database:27017/ -e PORT=3000 -e SECRET=$SECRET -e CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME -e CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY -e CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET -e AUTH_EMAIL=$AUTH_EMAIL -e AUTH_PASS=$AUTH_PASS -e CURRENTURL-$CURRENTURL api npm run Dtest
   - docker build -t mostafaelnashar/larry-client ./client
   - docker build -t mostafaelnashar/larry-api ./api
   - docker build -t mostafaelnashar/larry-router ./router

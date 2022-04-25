@@ -17,30 +17,30 @@ services:
       - /app/node_modules
       - ./api:/app
     environment:
-      - PORT=3000
-      - MONGOCONNECT=mongodb://root:example@mongo:27017/
-      - SECRET=login
-      - CLOUDINARY_CLOUD_NAME=dj0etpud8
-      - CLOUDINARY_API_KEY=728893195766624
-      - CLOUDINARY_API_SECRET=Dn-9q_I2WR9mhVpGXhlJ1W1wZd0
-      - GOOGLE_CLIENT_ID=393474879688-eem1gfj9i7adj80emgungdtcasjkafes.apps.googleusercontent.com
-      - GOOGLE_CLIENT_SECRET=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
-      - AUTH_EMAIL=larryteam70@gmail.com
-      - AUTH_PASS=larry@2020
+      - MONGOCONNECT=${MONGOCONNECT}
+      - SECRET=$SECRET
+      - CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
+      - CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
+      - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+      - AUTH_EMAIL=$AUTH_EMAIL
+      - AUTH_PASS=$AUTH_PASS
+      - CURRENTURL-$CURRENTURL
 
-  client:
-    stdin_open: true
-    build:
-      dockerfile: 'Dockerfile.dev'
-      context: './client'
-    volumes:
-     - /app/node_modules
-     - ./client:/app
+  # client:
+  #   stdin_open: true
+  #   build:
+  #     dockerfile: 'Dockerfile.dev'
+  #     context: './client'
+  #   volumes:
+  #    - /app/node_modules
+  #    - ./client:/app
 
-  router:
-    restart: always
-    build:
-      dockerfile: 'Dockerfile.dev'
-      context: './router'
-    ports:
-      - '3050:80'
+  # router:
+  #   restart: always
+  #   build:
+  #     dockerfile: 'Dockerfile.dev'
+  #     context: './router'
+  #   ports:
+  #     - '3050:80'
