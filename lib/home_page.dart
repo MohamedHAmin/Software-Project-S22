@@ -53,7 +53,7 @@ class _tweetState extends State<_tweet> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(children: <Widget>[
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
           CircleAvatar(
             foregroundImage: (widget.avatarURL != null)
                 ? NetworkImage((widget.avatarURL)!)
@@ -66,8 +66,11 @@ class _tweetState extends State<_tweet> {
           TextButton(
               onPressed: () {
                 if (widget.ownerid != NetworkHandler.userToken['ownerId']) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfilePage2()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProfilePage2(userID: widget.ownerid)));
                 } else {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ProfilePage()));
@@ -86,9 +89,6 @@ class _tweetState extends State<_tweet> {
                         color: Color(0xff9e9e9e))),
               ])),
           if (widget.postDate != null) ...[
-            SizedBox(
-              width: 10,
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -114,9 +114,6 @@ class _tweetState extends State<_tweet> {
             )
           ],
           if (widget.embeddedTweet != null) ...[
-            SizedBox(
-              width: 50,
-            ),
             Icon(
               Icons.loop,
               color: Colors.grey[800],
@@ -168,7 +165,21 @@ class _tweetState extends State<_tweet> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => TweetViewPage2()));
+                              builder: (context) => TweetViewPage2(
+                                    viewedTweet: _tweet(
+                                        image: widget.image,
+                                        embeddedTweet: widget.embeddedTweet,
+                                        id: widget.id,
+                                        ownerid: widget.ownerid,
+                                        text: widget.text,
+                                        postDate: widget.postDate,
+                                        avatarURL: widget.avatarURL,
+                                        name: widget.name,
+                                        tag: widget.tag,
+                                        liked: false,
+                                        reTweet: true),
+                                    viewedTweetID: widget.id,
+                                  )));
                     },
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
@@ -182,14 +193,23 @@ class _tweetState extends State<_tweet> {
                     )),
                 ElevatedButton(
                   onPressed: () {
-                    _tweet quotedTweet = widget;
-                    quotedTweet.reTweet = true;
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreatePostScreenUI2(
-                                  quotedTweet: quotedTweet,
-                                  quotedTweetID: quotedTweet.id,
+                                  quotedTweet: _tweet(
+                                      image: widget.image,
+                                      embeddedTweet: widget.embeddedTweet,
+                                      id: widget.id,
+                                      ownerid: widget.ownerid,
+                                      text: widget.text,
+                                      postDate: widget.postDate,
+                                      avatarURL: widget.avatarURL,
+                                      name: widget.name,
+                                      tag: widget.tag,
+                                      liked: false,
+                                      reTweet: true),
+                                  quotedTweetID: widget.id,
                                 )));
                   },
                   style: ElevatedButton.styleFrom(
@@ -207,6 +227,9 @@ class _tweetState extends State<_tweet> {
                   onPressed: () async {
                     if (await NetworkHandler.toggleTweetLike(widget.id!) ==
                         true) {
+                      if (liked == NetworkHandler.responseBody['isliked']) {
+                        await NetworkHandler.toggleTweetLike(widget.id!);
+                      }
                       setState(() {
                         liked = !liked;
                       });
@@ -372,14 +395,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: const Color(0xffffffff),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/Logo_no_bg.png',
-              height: 100,
-            ),
-          ],
+        centerTitle: true,
+        title: Image.asset(
+          'assets/Logo_no_bg.png',
+          height: 100,
         ),
       ),
       body: SingleChildScrollView(

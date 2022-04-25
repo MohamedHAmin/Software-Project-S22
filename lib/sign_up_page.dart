@@ -189,11 +189,9 @@ class SignupPage extends StatelessWidget {
                   return 'Password cannot be empty!';
                 } else if (value.length < 6) {
                   return 'Password must be at least 6 characters long!';
-                } else if (value.length == 6) {
+                } else if (value.length >= 6 && value.length < 10) {
                   return 'Password is weak! Write a stronger one.';
-                } else if (value.length > 6 && value.length < 10) {
-                  return 'Password is weak! Write a stronger one.';
-                } else if (value.length > 10 && value.length < 13) {
+                } else if (value.length >= 10 && value.length < 13) {
                   return 'Password is Average. Make it stronger!';
                 }
                 return null;

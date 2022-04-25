@@ -211,10 +211,10 @@ class NetworkHandler {
     return response.statusCode == 200;
   }
 
-  static Future<bool> getTweet(String id) async {
+  static Future<bool> getProfileTweets(String id) async {
     http.Request request = http.Request(
       'GET',
-      Uri.parse('$BaseURL/tweet/$id'),
+      Uri.parse('$BaseURL/tweet/user/$id'),
     );
     request.body = json.encode({});
     request.headers.addAll({
@@ -234,6 +234,82 @@ class NetworkHandler {
     http.Request request = http.Request(
       'GET',
       Uri.parse('$BaseURL/profile/$id/me'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> getUserProfile(String id) async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/profile/$id'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> getTweet(String id) async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/tweet/$id'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> getFollowers(String id) async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/user/$id/follower'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> getFollowings(String id) async {
+    http.Request request = http.Request(
+      'GET',
+      Uri.parse('$BaseURL/user/$id/following'),
     );
     request.body = json.encode({});
     request.headers.addAll({
@@ -302,6 +378,50 @@ class NetworkHandler {
     return response.statusCode == 200;
   }
 
+  static Future<bool> delete_post(String id) async {
+    http.Request request = http.Request(
+      'DELETE',
+      Uri.parse('$BaseURL/tweet/$id'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    /**/
+    //responseBody = json.decode(response.body);
+    responseBody = {'success': response.statusCode == 200};
+    /**/
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> delete_post_admin(String id) async {
+    http.Request request = http.Request(
+      'DELETE',
+      Uri.parse('$BaseURL/tweet/$id'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": adminToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    /**/
+    //responseBody = json.decode(response.body);
+    responseBody = {'success': response.statusCode == 200};
+    /**/
+
+    return response.statusCode == 200;
+  }
+
   /*
   static Future<bool> quote_post(String text, String quotedTweetID,
       bool imageCheck, List<File?> images) async {
@@ -352,5 +472,83 @@ class NetworkHandler {
     responseBody = json.decode(response.body);
 
     return response.statusCode == 201;
+  }
+
+  static Future<bool> toggleUserFollow(
+      String followerid, String followingid, bool isfollowing) async {
+    http.Request request = http.Request(
+      'POST',
+      Uri.parse(
+          '$BaseURL/user/$followerid/${(isfollowing) ? 'unfollow' : 'follow'}/$followingid'),
+    );
+    request.body = json.encode({});
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> banUser_admin(String id, int duration) async {
+    http.Request request = http.Request(
+      'POST',
+      Uri.parse('$BaseURL/admin/ban/$id'),
+    );
+    request.body = json.encode({
+      "duration": duration,
+    });
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": adminToken['token'],
+    });
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> change_user_data(
+      String id,
+      String birth,
+      String password,
+      String location,
+      String screenName,
+      String email,
+      File profileAvater,
+      File banner) async {
+    http.MultipartRequest request = http.MultipartRequest(
+      'PUT',
+      Uri.parse('$BaseURL/profile/$id'),
+    );
+    request.fields.addAll({
+      "birth": birth,
+      "password": password,
+      "location": location,
+      "screenName": screenName,
+      "email": email,
+    });
+    request.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": userToken['token'],
+    });
+    request.files
+        .add(await http.MultipartFile.fromPath('image', profileAvater.path));
+    request.files.add(await http.MultipartFile.fromPath('image', banner.path));
+
+    http.Response response = await http.Response.fromStream(
+        await (mocked ? _mockClient.send(request) : _client.send(request)));
+
+    responseBody = json.decode(response.body);
+
+    return response.statusCode == 200;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'quote_post_page.dart';
 
 class _tweet extends StatefulWidget {
   final Widget? embedded;
@@ -14,6 +15,7 @@ class _tweet extends StatefulWidget {
 class _tweetState extends State<_tweet> {
   bool liked = false;
   bool deleted = false;
+  bool reported = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,189 @@ class _tweetState extends State<_tweet> {
         ]),
         Text(
             'Tweet Content: this is only an example of the tweet text and will be updated later.'),
+        Align(
+            alignment: Alignment.centerRight,
+            child: Row(children: [
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    liked = !liked;
+                    /*MISSING PATH*/
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: Colors.white,
+                  fixedSize: Size(15, 15),
+                ),
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.thumb_up,
+                      color: liked ? Color(0xff6d71ff) : Colors.white,
+                      size: 20,
+                    ),
+                    Icon(
+                      Icons.thumb_up_outlined,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreatePostScreenUI2()));
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: Colors.white,
+                  fixedSize: Size(15, 15),
+                ),
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.repeat_on,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    Icon(
+                      Icons.repeat,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (!deleted) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Delete?'),
+                        content:
+                            Text('Are you sure you want to delete this tweet?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              setState(() {
+                                deleted = true;
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Report?'),
+                        content: Text('You have already reported this tweet'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: Colors.white,
+                  fixedSize: Size(15, 15),
+                ),
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.delete_rounded,
+                      color: deleted ? Colors.deepPurpleAccent : Colors.white,
+                      size: 20,
+                    ),
+                    Icon(
+                      Icons.delete_outline_outlined,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (!reported) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Report?'),
+                        content:
+                            Text('Are you sure you want to report this tweet?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              setState(() {
+                                reported = true;
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Report?'),
+                        content: Text('You have already reported this tweet'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: Colors.white,
+                  fixedSize: Size(20, 20),
+                ),
+                child: Icon(
+                  Icons.outlined_flag,
+                  color: reported ? Colors.red : Color(0xff6d71ff),
+                  size: 20.0,
+                ),
+              ),
+            ])),
         SizedBox(
           height: 15,
         ),
@@ -111,14 +296,10 @@ class _TweetViewPageState extends State<TweetViewPage> {
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: const Color(0xffffffff),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/Logo_no_bg.png',
-              height: 100,
-            ),
-          ],
+        centerTitle: true,
+        title: Image.asset(
+          'assets/Logo_no_bg.png',
+          height: 100,
         ),
       ),
       body: SingleChildScrollView(
@@ -130,7 +311,29 @@ class _TweetViewPageState extends State<TweetViewPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _tweet(
-                    embedded: null,
+                    embedded: GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      children: [
+                        Image(
+                          image: NetworkImage(
+                              'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
+                          fit: BoxFit.fitWidth,
+                          width: 40,
+                          height: double.infinity,
+                        ),
+                        Image(
+                          image: NetworkImage(
+                              'https://i.kym-cdn.com/photos/images/newsfeed/001/839/575/d69.jpg'),
+                          fit: BoxFit.fitWidth,
+                          width: 40,
+                          height: double.infinity,
+                        ),
+                      ],
+                    ),
                   ),
                 ]),
           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'settings_page.dart';
+import 'NetworkHandler.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -11,8 +12,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   bool showPassword = false;
-  File? profileimage;
-  File? bannerimage;
+  File? profileAvater;
+  File? banner;
 
   handleImageFromGallery1() async {
     try {
@@ -20,7 +21,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (image == null) return;
 
       final imageTemporary = File(image.path);
-      setState(() => this.profileimage = imageTemporary);
+      setState(() => this.profileAvater = imageTemporary);
     } catch (e) {
       print(e);
     }
@@ -32,38 +33,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (image == null) return;
 
       final imageTemporary = File(image.path);
-      setState(() => this.bannerimage = imageTemporary);
+      setState(() => this.banner = imageTemporary);
     } catch (e) {
       print(e);
     }
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  String fullname = '_';
+  String screenName = '';
   onChangeFunction1(String newvalue1) {
-    fullname = newvalue1;
+    screenName = newvalue1;
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  String email = '_';
+  String email = '';
   onChangeFunction2(String newvalue2) {
     email = newvalue2;
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  String birthday = '_';
+  String birth = '';
   onChangeFunction3(String newvalue3) {
-    birthday = newvalue3;
+    birth = newvalue3;
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  String password = '_';
+  String password = '';
   onChangeFunction4(String newvalue4) {
     password = newvalue4;
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  String location = '_';
+  String location = '';
   onChangeFunction5(String newvalue5) {
     location = newvalue5;
   }
@@ -106,15 +107,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Container(
                       width: 400,
                       height: 130,
-                      child: bannerimage != null
+                      child: banner != null
                           ? Image.file(
-                              bannerimage!,
+                              banner!,
                               width: 400,
                               height: 130,
                               fit: BoxFit.cover,
                             )
                           : Ink.image(
-                              image: AssetImage('assets/img.png'),
+                              image: AssetImage('assets/Logo_no_bg.png'),
                             ),
                     ),
                     Positioned(
@@ -153,13 +154,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Container(
                       width: 130,
                       height: 130,
-                      child: profileimage != null
-                          ? Image.file(
-                              profileimage!,
-                              fit: BoxFit.cover,
+                      child: profileAvater != null
+                          ? CircleAvatar(
+                              radius: 10,
+                              backgroundImage: FileImage(profileAvater!),
                             )
-                          : Ink.image(
-                              image: AssetImage('assets/user_avatar.png'),
+                          : const CircleAvatar(
+                              radius: 10,
+                              backgroundImage:
+                                  AssetImage('assets/user_avatar.png'),
                             ),
                     ),
                     Positioned(
@@ -192,16 +195,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", 'Enter your Full Name', fullname,
-                  onChangeFunction1, false),
+              buildTextField("Full Name", 'Enter your Full Name', screenName,
+                  onChangeFunction1, false, null),
               buildTextField("E-mail", 'Enter your E-mail', email,
-                  onChangeFunction2, false),
+                  onChangeFunction2, false, null),
               buildTextField(
-                  "Birthday", 'd/m/y', birthday, onChangeFunction3, false),
-              buildTextField(
-                  "Password", "********", password, onChangeFunction4, true),
+                  "Birthday", 'd/m/y', birth, onChangeFunction3, false, null),
+              buildTextField("Password", "********", password,
+                  onChangeFunction4, true, 16),
               buildTextField("Location", 'city, country', location,
-                  onChangeFunction5, false),
+                  onChangeFunction5, false, null),
               const SizedBox(
                 height: 35,
               ),
@@ -219,17 +222,41 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               builder: (context) => SettingsPageUI()));
                     },
                     child: const Text("CANCEL",
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 14,
                             letterSpacing: 2.2,
                             color: Colors.black)),
                   ),
                   RaisedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SettingsPageUI()));
+                    onPressed: () async {
+                      /*if (await NetworkHandler.uploud_avatar(
+                              NetworkHandler.userToken['ownerId'],
+                              profileimage!) ==
+                          true) {}
+
+                      if (await NetworkHandler.uploud_banner(
+                              NetworkHandler.userToken['ownerId'],
+                              bannerimage!) ==
+                          true) {}
+
+                      if (await NetworkHandler.change_password(
+                              NetworkHandler.userToken['ownerId'], password) ==
+                          true) {}*/
+                      if (await NetworkHandler.change_user_data(
+                              NetworkHandler.userToken['ownerId'],
+                              birth,
+                              password,
+                              location,
+                              screenName,
+                              email,
+                              profileAvater!,
+                              banner!) ==
+                          true) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SettingsPageUI()));
+                      }
                     },
                     color: Color(0xff6d71ff),
                     padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -254,13 +281,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget buildTextField(String labelText, String placeholder, String newValue,
-      Function onChangeMethode, bool isPasswordTextField) {
+      Function onChangeMethode, bool isPasswordTextField, int? limit) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
         onChanged: (newValue) {
           onChangeMethode(newValue);
         },
+        maxLength: limit,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
@@ -278,12 +306,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 : null,
             contentPadding: const EdgeInsets.only(bottom: 3),
             labelText: labelText,
+            labelStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: placeholder,
             hintStyle: const TextStyle(
               fontSize: 16,
-              //fontWeight: FontWeight.,
-              color: Colors.black,
+              color: Colors.grey,
             )),
       ),
     );

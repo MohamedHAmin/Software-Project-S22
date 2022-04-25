@@ -12,7 +12,7 @@ class CreatePostScreenUI extends StatefulWidget {
 }
 
 class _CreatePostScreenUIState extends State<CreatePostScreenUI> {
-  String _postText = '_';
+  String _postText = '';
   File? image;
   String? name;
   String? tag;

@@ -58,14 +58,10 @@ class _AdminPageState extends State<AdminPage> {
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: const Color(0xffffffff),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/Logo_no_bg.png',
-              height: 100,
-            ),
-          ],
+        centerTitle: true,
+        title: Image.asset(
+          'assets/Logo_no_bg.png',
+          height: 100,
         ),
       ),
       body: SingleChildScrollView(
