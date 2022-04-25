@@ -311,6 +311,8 @@ router.post("/retweet", auth("user"), async (req, res) => {
 
 router.post("/reply", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
+
     let repliedOnTweet = await Tweet.findById(req.body.replyingTo);
     if (!repliedOnTweet) {
       e = "Error: tweet not found";
