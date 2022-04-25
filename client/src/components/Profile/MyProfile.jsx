@@ -619,8 +619,10 @@ function MyProfile(props) {
                   id="editLocationProfileField"
                   defaultValue={Location}
                   fullWidth
+                  multiline
+                  rows={1}
                   inputProps={
-                    ({ maxLength: 30 },
+                    ({ maxLength: 160 },
                     { "data-testid": "editProfile-Location" })
                   }
                 />
@@ -630,6 +632,8 @@ function MyProfile(props) {
                   id="editWebsiteProfileField"
                   defaultValue={Website}
                   fullWidth
+                  multiline
+                  rows={1}
                   inputProps={
                     ({ maxLength: 100 },
                     { "data-testid": "editProfile-Website" })
