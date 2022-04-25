@@ -1,0 +1,2 @@
+#!/bin/bash
+export PORT=3000; export MONGOCONNECT=mongodb://root:example@mongo:27017/; export SECRET=login; export CLOUDINARY_CLOUD_NAME=dj0etpud8; export CLOUDINARY_API_KEY=728893195766624; export CLOUDINARY_API_SECRET=Dn-9q_I2WR9mhVpGXhlJ1W1wZd0; export GOOGLE_CLIENT_ID=393474879688-eem1gfj9i7adj80emgungdtcasjkafes.apps.googleusercontent.com; export GOOGLE_CLIENT_SECRET=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; export AUTH_EMAIL=larryteam70@gmail.com; export AUTH_PASS=larry@2020

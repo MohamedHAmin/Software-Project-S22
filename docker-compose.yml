@@ -10,6 +10,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
 
   api:
+    depends_on:
+      - "mongo"
     build:
       dockerfile: 'Dockerfile.dev'
       context: './api'
@@ -19,15 +21,15 @@ services:
     environment:
       - MONGOCONNECT=mongodb://root:example@database:27017/
       - PORT=3000
-      - SECRET=$SECRET
-      - CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
-      - CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
-      - CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
-      - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
-      - GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
-      - AUTH_EMAIL=$AUTH_EMAIL
-      - AUTH_PASS=$AUTH_PASS
-      - CURRENTURL-$CURRENTURL
+      - SECRET=${SECRET}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - AUTH_EMAIL=${AUTH_EMAIL}
+      - AUTH_PASS=${AUTH_PASS}
+      - CURRENTURL=${CURRENTURL}
 
   # client:
   #   stdin_open: true
