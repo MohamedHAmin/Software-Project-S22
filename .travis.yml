@@ -3,16 +3,16 @@ language: generic
 services:
   - docker
 
-before_install:
-  - docker network create mean
-  #- docker build -t client -f ./client/Dockerfile.dev ./client
-  - docker build -t api -f ./api/Dockerfile.dev ./api
+# before_install:
+  # - docker network create mean
+  # #- docker build -t client -f ./client/Dockerfile.dev ./client
+  # - docker build -t api -f ./api/Dockerfile.dev ./api
 
 
 script: 
   #- docker run -e CI=true client npm run test
-  - export MONGOCONNECT=mongodb://root:example@database:27017/
-  - export PORT=3000
+  # - export MONGOCONNECT=mongodb://root:example@database:27017/
+  # - export PORT=3000
   # - export SECRET=$SECRET
   # - export CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
   # - export CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
