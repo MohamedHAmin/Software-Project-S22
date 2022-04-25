@@ -135,14 +135,26 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         path: "retweetedTweet",
         select:
           "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select:
+            "_id screenName tag followercount followingcount profileAvater.url",
+        },
       });
     }
 
     await tweet.populate({
       path: "reply",
-      select: "_id authorId text likeCount",
+      select: "_id authorId tags text likeCount",
+      strictPopulate: false,
+      populate: {
+        path: "authorId",
+        strictPopulate: false,
+        select:
+          "_id screenName tag followercount followingcount profileAvater.url",
+      },
     });
-
 
     const isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
@@ -171,6 +183,12 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
     }
     const B = targettweet.authorId.equals(req.user._id);
     if (req.admin || B) {
+      if (targettweet.retweetCount > 0) {
+        await Tweet.deleteMany({ retweetedTweet: req.params.id });
+      }
+      if (targettweet.replyCount > 0) {
+        await Tweet.deleteMany({ replyingTo: req.params.id });
+      }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
       res.status(200).end("Success");
     } else {
@@ -467,8 +485,14 @@ router.get("/timeline", auth("any"), async (req, res) => {
       })
       .populate({
         path: "reply",
-        select: "_id authorId text likeCount",
+        select: "_id authorId tags text likeCount",
         strictPopulate: false,
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select:
+            "_id screenName tag followercount followingcount profileAvater.url",
+        },
       })
       .populate({
         path: "authorId",
@@ -476,7 +500,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
         select:
           "_id screenName tag followercount followingcount profileAvater.url",
       });
-      let i=-1;
+    let i = -1;
     if (!followerTweet.length < 1) {
       followerTweet = followerTweet.map((tweet) => {
         i++;
@@ -485,11 +509,19 @@ router.get("/timeline", auth("any"), async (req, res) => {
         );
         if (isliked) {
           delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: true ,reply:followerTweet[i].reply};
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+            reply: followerTweet[i].reply,
+          };
           return tweets;
         } else {
           delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: false ,reply:followerTweet[i].reply};
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+            reply: followerTweet[i].reply,
+          };
           return tweets;
         }
       });
@@ -502,6 +534,11 @@ router.get("/timeline", auth("any"), async (req, res) => {
     //here for testing purposes if an unhandled error routerears
     res.status(400).send({ error: e.toString() });
   }
+});
+
+router.get("/search/:searchedItem", auth("any"), async () => {
+  let searchedItem = req.params.searchedItem;
+  //TODO implement searching
 });
 
 module.exports = router;
