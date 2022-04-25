@@ -541,4 +541,54 @@ router.get("/search/:searchedItem", auth("any"), async () => {
   //TODO implement searching
 });
 
+router.get("/profile/likedtweets", auth("user"), async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+
+    let likedtweets = await Tweet.aggregate([
+      { $match: { "likes.like": req.user._id } },
+      { $project: { likes: 0 } },
+    ])
+      .limit(limit)
+      .skip(skip)
+      // .populate({
+      //   path: "retweetedTweet",
+      //   strictPopulate: false,
+      //   select:
+      //     "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+      //   populate: {
+      //     path: "authorId",
+      //     strictPopulate: false,
+      //     select:
+      //       "_id screenName tag followercount followingcount profileAvater.url",
+      //   },
+      // })
+      // .populate({
+      //   path: "reply",
+      //   select: "_id authorId tags text likeCount",
+      //   strictPopulate: false,
+      //   populate: {
+      //     path: "authorId",
+      //     strictPopulate: false,
+      //     select:
+      //       "_id screenName tag followercount followingcount profileAvater.url",
+      //   },
+      // })
+      // .populate({
+      //   path: "authorId",
+      //   strictPopulate: false,
+      //   select:
+      //     "_id screenName tag followercount followingcount profileAvater.url",
+      // });
+    // if (likedtweets.length <= 0) {
+    //   e = "no liked tweets found";
+    //   throw e;
+    // }
+    res.send(likedtweets);
+  } catch(e) {
+    res.status(400).send({ error: e.toString() });
+  }
+});
+
 module.exports = router;
