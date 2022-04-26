@@ -33,10 +33,24 @@ router.post("/create",auth("admin"),async (req, res) => {
 // TODO: IN NEXT PHASES
 router.delete("/report/:id",auth("admin"),async (req, res) => {
   try {
-    const deletedreport=await Report.findByIdAndDelete(req.params.id)
-    if(!deletedreport){throw Error("Not Found")}
-    res.status(200).json({deletedreport}).end()
-
+    let deletedreports;
+    const idType=req.query.IDType?req.query.IDType:null;
+    if(idType==='Report')
+    {
+      deletedreports=await Report.findByIdAndDelete(req.params.id)
+      if(!deletedreports){throw Error("Not Found")}
+      res.status(200).json({deletedreports}).end()
+    }
+    else if(idType==='Reported')
+    {
+      deletedreports=await Report.deleteMany({reportedId:req.params.id});
+      if(!deletedreports.deletedCount){throw Error("Not Found")}
+      res.status(200).json({deletedreports}).end()
+    }
+    else
+    {
+      throw Error('Wrong Query Parameter')
+    }
   } catch (e) {
     res.status(400).send({error:e.toString()});
   }

@@ -35,7 +35,6 @@ test('check follow',async ()=>{
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
     
-
    ///not put user id
     await request(app).post('/user/'+user1._id.toString()+'/follow/')
     .set('Authorization','Bearer '+user1token.token)
@@ -83,6 +82,7 @@ test('check following',async ()=>{
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
 
+  
     await request(app).get('/user/'+"552222222"+'/following/')
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
