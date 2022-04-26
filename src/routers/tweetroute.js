@@ -411,6 +411,10 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
     const user = await User.findOne({ _id: req.params.id });
+    if (!user) {
+      e = "user doesn't exist";
+      throw e;
+    }
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
