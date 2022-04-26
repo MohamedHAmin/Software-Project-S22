@@ -1,0 +1,28 @@
+.ReportsPage
+{
+    color: var(--color-mode);
+    margin-right: 4%;
+    display: flex;
+    margin-left: 24%;
+    /* max-width: inherit;
+    width:100%;
+    height: inherit; */
+}
+.ReportsContainer
+{
+    flex:0.8;
+}
+@media screen and (max-width: 1060px) {
+    .ReportsPage
+    {
+        margin-left: 22%;
+    }
+}
+
+@media screen and (max-width: 859px) {
+    .ReportsPage
+    {
+        margin-left: 29%;
+        width: 92%;
+    }
+}

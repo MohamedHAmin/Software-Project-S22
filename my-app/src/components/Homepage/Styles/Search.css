@@ -32,3 +32,9 @@
     color: #6D71FF;
     cursor: pointer;
 }
+@media screen and (max-width: 1000px) {
+    .searchIcon
+    {
+        margin-top: 25px;
+    }
+}

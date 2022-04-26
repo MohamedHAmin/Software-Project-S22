@@ -1,12 +1,17 @@
 import React from "react";
 import { Tabs, Tab, Box } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import "./Styles/MyProfileTabs.css";
+/**
+ *
+ * @returns Returns the tabs appearing on the profile page.
+ */
 function MyProfileTabs() {
+  let { id } = useParams();
   return (
     <Box className="myProfileTabs">
       <Tabs centered>
-        <NavLink className="myProfileNavLink" to="/Profile">
+        <NavLink className="myProfileNavLink" to={`/Profile/${id}`}>
           <Tab value={0} className="myProfileTab" label="Tweets" />
         </NavLink>
         <NavLink className="myProfileNavLink" to="/Profile/with_replies">

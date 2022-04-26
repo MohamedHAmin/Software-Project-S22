@@ -8,12 +8,26 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import LarryIcon from "../../Images/Logo Default.png";
+import DashboardIcon from "@mui/icons-material/DashboardRounded";
 import LarryIconDark from "../../Images/Logo Dark Mode.png";
 import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { NavLink } from "react-router-dom";
-
-function SideBar({ Home, Search, Notifications, Profile, Settings, Logout }) {
+/**
+ *
+ * @param {props} props Getting which page is active and if it's the admin.
+ * @returns Returns the SideBar
+ */
+function SideBar({
+  Home,
+  Search,
+  Notifications,
+  Profile,
+  Settings,
+  Logout,
+  isAdmin,
+}) {
+  let id = localStorage.getItem("userId");
   return (
     <div className="sidebar">
       <img className="sideBarLarryIcon" alt="Larry Icon" src={LarryIcon} />
@@ -30,13 +44,24 @@ function SideBar({ Home, Search, Notifications, Profile, Settings, Logout }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/Home">
-            <SideBarIcon
-              active={Notifications}
-              text="Notifications"
-              Icon={NotificationsIcon}
-            />
-          </NavLink>
+          {isAdmin && (
+            <NavLink to="/ReportsPage">
+              <SideBarIcon
+                active={Notifications}
+                text="Reports"
+                Icon={NotificationsIcon}
+              />
+            </NavLink>
+          )}
+          {!isAdmin && (
+            <NavLink to="/Home">
+              <SideBarIcon
+                active={Notifications}
+                text="Notifications"
+                Icon={NotificationsIcon}
+              />
+            </NavLink>
+          )}
         </li>
         <li>
           <NavLink to="/Settings">
@@ -48,7 +73,7 @@ function SideBar({ Home, Search, Notifications, Profile, Settings, Logout }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/Profile">
+          <NavLink to={`/Profile/${id}`}>
             <SideBarIcon
               active={Profile}
               text="Profile"
@@ -57,9 +82,11 @@ function SideBar({ Home, Search, Notifications, Profile, Settings, Logout }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/Home">
-            <SideBarIcon text="More" Icon={MoreHorizIcon} />
-          </NavLink>
+          {isAdmin && (
+            <NavLink to="/Home">
+              <SideBarIcon text="Dashboard" Icon={DashboardIcon} />
+            </NavLink>
+          )}
         </li>
       </ul>
       <Button className="sideBarTweet" variant="outlined" fullWidth>

@@ -1,123 +1,104 @@
-import {React, pushState} from "react";
-import { useState, useEffect } from "react";
+import { React } from "react";
+import { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import axios from 'axios'
 import classes from './Styles/Login.module.css';
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
+import LoginwithGoogle from "./LoginwithGoogle";
 
-
-function Login() {
-
-    // State for registration
-    const initialValues = { username: "", password: "" };
-    const [formValues, setFormValues] = useState(initialValues);
-
-    // States for checking the errors
-    const [isSubmit, setIsSubmit] = useState(false);
-    const [formErrors, setFormErrors] = useState({});
-
-    //Handling the name or password change
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormValues({ ...formValues, [name]: value });
-    };
-
-    // Handling the form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setFormErrors(validate(formValues));
-        
-    };
-
-    // To navigate to home page after clicking the button
-    const Navigate = useNavigate();
-    const home = () => {
-        if (isSubmit === true) {
-            
-            Navigate("/Home");
-            window.location.reload(false);
-        }
-        else if(isSubmit===false){
-            Navigate("/")
-        }
+const Login = () => {
+    const [error, setError] = useState(false);
+    const initialValues = {
+        email_or_username: "",
+        password: ""
     }
-    //validation for input
-    const validate = (values) => {
-        const errors = {};
-        if (!values.username && !values.email) {
-            errors.username = "It is a required field";
-        }
-        if (!values.password) {
-            errors.password = "Password is required";
-        }
-        else if (values.password.length < 6) {
-            errors.password = "Password must be more than 5 characters";
-        }
-        else if (values.password.length > 12) {
-            errors.password = "Password cannot exceed more than 12 characters";
-        }
-        else{
-            setIsSubmit(true); 
-        }
-        return errors;
-    };
-
+    const Navigate = useNavigate();
+    const validationSchema = Yup.object().shape({
+        password: Yup.string().min(6).max(12).required("Enter Your Password"),
+        email_or_username: Yup.string().min(3).required("Enter Your Email or Tag.")
+    })
+    const onSubmit = (data) => {
+        console.log(data);
+        axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/login", data).then((res) => {
+            console.log(res);
+            // if (res.error) {
+            //     if (res.error === "Error: unable to login as user is not verified") {
+            //         alert("Please verify your email")
+            //     } else if (res.error === "Error: unable to login") {
+            //         setError("Wrong userName OR Password");
+            //     }
+            // } else {
+                localStorage.setItem("accessToken", res.data.token.token);
+                localStorage.setItem("userId", res.data.user.user._id);
+                if (res.data.user.adminToken) {
+                    localStorage.setItem("adminToken", res.data.user.adminToken.token);
+                }
+                else {
+                    localStorage.setItem("adminToken", "");
+                }
+                Navigate("/Home");
+                Navigate(0);
+            }
+        ).catch(err => {
+          console.log(err.response.data.error);
+          if (err.response.data.error == "Error: unable to login as user is not verified") {
+            alert("Please verify your email")
+          } else {
+            setError("Wrong username OR password");
+          }
+    })};
+    const clickHandeler = () => {
+        Navigate("/SignUp")
+    }
+    //color: #4158D0
     return (
         <div>
-        <Navbar />        
-        <div className={classes.container}>
-            <div className={classes.imageContainer}>
-                <img src="https://cdn.discordapp.com/attachments/949620839647698964/954738917968609290/d5acdefc-2d8c-41a4-b067-706cf76ee3aa.jpg"></img>
-            </div>
-            <div className={classes.loginContainer}>
-                <div className={classes.title}>Login Form </div> 
-                {/* Showing success message OR error message if error is true */} 
-                {Object.keys(formErrors).length === 0 && isSubmit ?
-                    (<p className={classes.success}>Signed in successfully</p>)
-                    : (<p className={classes.failed}>Please complete the required info!</p>)}
+            <Navbar />
+            <div className={classes.container}>
+                <div className={classes.imageContainer}>
+                    <img src="https://cdn.discordapp.com/attachments/949620839647698964/954738917968609290/d5acdefc-2d8c-41a4-b067-706cf76ee3aa.jpg"></img>
+                </div>
+                <div className={classes.loginContainer}>
+                    <div className={classes.title}>Login Form </div>
 
-     {/* Labels and inputs for form data */}
-                <form onSubmit={handleSubmit}>
-                    <div className={classes.field}>
-                        <input
-                            placeholder="Username or E-mail"
-                            type="text"
-                            name="username"
-                            value={formValues.username}
-                            onChange={handleChange}
-                        />
-                        {/* <label> Email or Username </label> */}
-                    </div>
-                    <p className={classes.failed}>{formErrors.username}</p>
-                    <div className={classes.field}>
-                        <input
-                            placeholder="Password"
-                            type="password"
-                            name="password"
-                            value={formValues.password}
-                            onChange={handleChange}
-                        />
-                        {/* <label>Password</label> */}
-                    </div>
-                    <p className={classes.failed}>{formErrors.password}</p>
-
-                    <div className={classes.content}>
-                        <div className={classes.checkbox}>
-                            <input type="checkbox" id="remember-me" />
-                            <label for="remember-me">Remember me</label>
-                        </div>
-                        <div className={classes.passLink}>
-                            <a href="#">Forgot password?</a>
-                        </div>
+                    <div className={classes.GoogleLogin}>
+                        <LoginwithGoogle />
                     </div>
 
-                    <button className={classes.button} onClick={home} >Login</button>
-                    <div className={classes.signupLink}>
-                        Not a member? <a href="/SignUp">Signup now</a>
-                    </div>
-                </form>
+                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} className={classes.form}>
+                        <Form>
+                            <div className={classes.field}>
+                                <Field className={classes.userinput} name="email_or_username" placeholder="Email or Tag" autoComplete="off" />
+                            </div>
+                            <ErrorMessage name='email_or_username' component="span" className={classes.error} />
+                            {error === false ? <span></span> : <span className={classes.error}>{error}</span>}
+
+                            <div className={classes.field}>
+                                <Field type="password" className={classes.userinput} name="password" placeholder="password" autoComplete="off" />
+                            </div>
+                            <ErrorMessage name='password' component="span" className={classes.error} />
+                            {error === false ? <span></span> : <span className={classes.error}>{error}</span>}
+
+                            <div className={classes.content}>
+                                <div className={classes.checkbox}>
+                                    <input type="checkbox" id="remember-me" />
+                                    <label for="remember-me">Remember me</label>
+                                </div>
+                                <div className={classes.passLink}>
+                                    <a href="#">Forgot password?</a>
+                                </div>
+                            </div>
+                            <button className={classes.button} type="submit" >Login</button>
+                            <div className={classes.signupLink}>
+                                Not a member? <a onClick={clickHandeler}>Signup now</a>
+                            </div>
+                        </Form>
+                    </Formik>
+                </div>
             </div>
-            </div>
-        </div>
+        </div >
     );
 }
 export default Login;

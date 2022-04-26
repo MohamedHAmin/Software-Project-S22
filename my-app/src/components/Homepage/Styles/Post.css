@@ -10,10 +10,13 @@
 }
 .tweet
 {
-    border-width: 2px;
+    /* border-width: 2px; */
     border-style: solid;
-    border-color: lightgray;
-    height: fit-content;
+    border-color: var(--color-border);
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    /*height: fit-content;*/
     padding:calc(2%);
     margin-top: 10px;
     margin-bottom: 10px;
@@ -28,12 +31,16 @@
     left:0px;
     cursor: pointer;
     float: left;
-    margin-right: 0%;
+}
+.loadmore
+{
+    text-align: center;
 }
 .tweetContent
 {
-    padding-block: calc(2%);
+    padding: calc(2%);
     float: left;
+    
 }
 .profileInfo
 {
@@ -46,12 +53,17 @@
 .tag
 {
     font-size: small;
-    color: grey;
+    color: var(--color-mode);
+    margin-left: 6%;
+
 }
 .username
 {
     font-size: medium;
     font-weight: bold;
+    color: var(--color-mode);
+text-decoration: none;
+margin-left: 6%;
 }
 .time
 {
@@ -75,10 +87,10 @@
     display: flex;
     width: 100%;
 }
-.tweet:hover
+/* .tweet:hover
 {
     border-color: rgba(109, 113, 255, 1);
-}
+} */
 .deleteIcon
 {
     float: right;
@@ -86,4 +98,7 @@
 .deleteIcon:hover
 {
     color: red;
+}
+.nothingClass{
+display: none;
 }

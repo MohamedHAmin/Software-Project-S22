@@ -80,6 +80,18 @@
   justify-content: space-around;
 }
 
+.GoogleLogin {
+  width: 50%;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 1000;
+  cursor: pointer;
+  outline: none;
+  margin-left: 100px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 .content .checkbox {
   display: flex;
   align-items: center;
@@ -157,6 +169,6 @@ form .signupLink a:hover {
 .success{
   color: rgb(7,217,7);
 }
-.failed{
+.error {
   color: rgb(221,28,28);
 }

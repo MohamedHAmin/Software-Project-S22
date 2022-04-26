@@ -1,149 +1,190 @@
 import React, { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import axios from 'axios'
+import "./Styles/SettingsModals.css"
 import "./Styles/SettingsMenu.css"
 function UpdatePassword(props) {
-    const [values, setValues] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-      });
-      const [values2, setValues2] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-      });
-      const [values3, setValues3] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-      });
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
+    const [confirmPassValue, setValueConfirmPass] = useState('');
+    const [newPassValue1, setValueNewPass1] = useState('');
+    const [newPassValue2, setValueNewPass2] = useState('');
+    const [isAllPassCorrect, setIsAllPassCorrect] = useState(0);
+    const [isConfirmPassCorrect, setIsConfirmPassCorrect] = useState(0);
+    //errors vars
+    const [newPassValue1Error, setValueNewPass1Error] = useState(false);
+    const [newPassValue2Error, setValueNewPass2Error] = useState(false);
+    const [confirmPassValueError, setValueConfirmPassError] = useState(false);
+    //modal
+    const [buttonPopup, setButtonPopup] = useState(false);
+    //related to request to back end
+    const userId=localStorage.getItem("userId");
     
-      const handleClickShowPassword = () => {
-        setValues({
-          ...values,
-          showPassword: !values.showPassword,
-        });
-      };
+    const  handleSubmit =(e) =>{
+      e.preventDefault()
+      
+      setValueConfirmPassError(false);
+      setValueNewPass1Error(false);
+      setValueNewPass2Error(false);
+      
+      
+      if(confirmPassValue && newPassValue1 && newPassValue2){
+        // if(confirmPassValue==="karim"){
+        //   setIsConfirmPassCorrect(1)
+          if(newPassValue1.length<6){
+            setValueNewPass1Error(true);
+          }
+          else if(newPassValue1===newPassValue2){
+            //setIsAllPassCorrect(2);commented 20/4
+            //evreything is correct
+            //add request to backed end here TODO***
+            //setButtonPopup(true);//show message commented 20/4
+            let data={
+              currentPassword:confirmPassValue,
+              newPassword:newPassValue1
+            }
+            //
+            axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}/password`,data, {
 
-      const handleChange2 = (prop) => (event) => {
-        setValues2({ ...values2, [prop]: event.target.value });
-      };
+              headers: {
+                Authorization: localStorage.getItem("accessToken")
+              }
+      
+            }).then((res)=>{
+            console.log(res);
+            console.log(res);
+              if(res.error){
+                
+                //old pass incorrect
+                setIsConfirmPassCorrect(-1);
+                setValueConfirmPassError(true);
+              }
+              else{
+                //evreything is correct
+                setIsAllPassCorrect(2);
+                setButtonPopup(true);
+              }
+            })
+            .catch(err => {
+              
+              setIsConfirmPassCorrect(-1);
+                setValueConfirmPassError(true);
+            });
+          }
+          else{
+            setIsAllPassCorrect(-2);
+            //password does not match
+            setValueNewPass2Error(true);
+          }
+      }
+    }
+    const styles = () => ({
+      notchedOutline: {
+        borderWidth: "3px",
+        borderColor: "white !important"
+      }
+    });
+    const handleClose = () => setButtonPopup(false);
     
-      const handleClickShowPassword2 = () => {
-        setValues2({
-          ...values2,
-          showPassword: !values2.showPassword,
-        });
-      };
 
-      const handleChange3 = (prop) => (event) => {
-        setValues3({ ...values3, [prop]: event.target.value });
-      };
-    
-      const handleClickShowPassword3 = () => {
-        setValues3({
-          ...values3,
-          showPassword: !values3.showPassword,
-        });
-      };
-    
-      const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-      };
   return ( 
-    <div className="settingsSubMenu">
-          <div ><FormControl sx={{ m: 1, width: '40ch' }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password" className={props.darkMode &&('forceChangePasswordMUIDarkMode')}>Current password</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl></div>
-          <div ><FormControl sx={{ m: 1, width: '40ch' }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password" className={props.darkMode &&('forceChangePasswordMUIDarkMode')}>New password</InputLabel>
-            <OutlinedInput
-              id2="outlined-adornment-password"
-              type2={values2.showPassword ? 'text' : 'password'}
-              value2={values2.password}
-              onChange2={handleChange2('password')}
-              endAdornment={
-                <InputAdornment position2="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword2}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values2.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl></div>
-          <div>
-          <FormControl sx={{ m: 1, width: '40ch' }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password" className={props.darkMode &&('forceChangePasswordMUIDarkMode')}>Confirm password</InputLabel>
-            <OutlinedInput
-              id3="outlined-adornment-password3"
-              type3={values3.showPassword ? 'text' : 'password'}
-              value3={values3.password}
-              onChange3={handleChange3('password')}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword3}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values3.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-          </div>
-          <div>
-          <Button variant="outlined" disabled className={props.darkMode &&('forceChangePasswordMUIDarkMode')} style={{marginLeft:320,marginTop:24}}>
-          save
-        </Button>
-          </div>
-        
-    </div>
+    <div >
+      <div >
+         <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+           <div className="TextFieldStyling">
 
+         <TextField 
+         InputLabelProps={{className:props.darkMode?"forceChangePasswordMUIDarkMode":""} }
+         onChange={(e)=> setValueConfirmPass(e.target.value)}
+        //  data-testid="old-pass"
+         id="confirmpass1"  
+         label="Current password" 
+         variant="outlined" 
+         color="primary" 
+         required   
+         type="password"
+         fullWidth
+         error={confirmPassValueError}
+         helperText={confirmPassValueError &&("The password you entered was incorrect.")}
+         inputProps={{"data-testid": "Current-password-updatepage" ,className:props.darkMode?"forceChangePasswordMUIDarkMode":"" }}
+         />
+         </div>
+         <div className="TextFieldStyling">
+          <TextField 
+          InputLabelProps={{className:props.darkMode?"forceChangePasswordMUIDarkMode":""} }
+          onChange={(e)=> setValueNewPass1(e.target.value)}
+          id="newpass1" 
+          label="New password" 
+          variant="outlined" 
+          color="primary" 
+          required 
+          type="password" 
+          fullWidth
+          error={newPassValue1Error}
+          helperText={newPassValue1Error &&("Your password needs to be at least 6 characters. Please enter a longer one.")}
+          inputProps={{"data-testid": "New-password-updatepage" ,className:props.darkMode?"forceChangePasswordMUIDarkMode":"" }}
+          />
+          
+          </div>
+          <div className="TextFieldStyling">
+          <TextField 
+          InputLabelProps={{className:props.darkMode?"forceChangePasswordMUIDarkMode":""} }
+          onChange={(e)=> setValueNewPass2(e.target.value)}
+          id="newpass2" 
+          label="Confirm password" 
+          variant="outlined" 
+          color="primary" 
+          required 
+          type="password" 
+          fullWidth
+          error={newPassValue2Error}
+          helperText={newPassValue2Error &&("Passwords do not match.")}
+          inputProps={{"data-testid": "New-password2-updatepage" ,className:props.darkMode?"forceChangePasswordMUIDarkMode":"" }}
+          />
+          </div>
+          
+         <div style={{textAlign:'right',marginRight:15,marginTop:20}}>
+            <Button 
+              type="submit" 
+              disabled={confirmPassValue.length===0 || newPassValue1.length===0 || newPassValue2.length===0}
+              variant="contained"  
+              className="buttonSettingsModal"
+              style={{marginTop:20}}
+            >
+              save
+            </Button>
+            </div>
+        </form>
+        </div>
+        <div>
+          <Modal 
+              open={buttonPopup}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+              keepMounted
+              >
+                <div style={{verticalAlign:'middle'}}>
+                <form className={!props.darkMode? 'protectYourLarsLight':'protectYourLarsDark'} onSubmit={handleSubmit}>
+                      <Typography  className={!props.darkMode? "settingsModalHeaderCenteredLight":"settingsModalHeaderCenteredDark" } id="modal-modal-title" variant="h6" component="h2" >
+                      New password saved!
+                      </Typography>
+                      <div style={{ textAlign:"center"}}>
+                      <Button
+                      variant="contained" 
+                      style={{marginTop:7, width:200}}
+                      onClick={handleClose}
+                      className="profileCloseContainerButton"
+                      >
+                      Close
+                      </Button>
+                      </div>
+                </form>
+                </div>
+          </Modal>
+        </div>
+    </div>
      );
 }
 export default UpdatePassword;

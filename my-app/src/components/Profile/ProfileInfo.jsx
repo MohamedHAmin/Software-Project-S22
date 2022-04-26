@@ -4,6 +4,26 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LinkIcon from "@mui/icons-material/Link";
 import CakeIcon from "@mui/icons-material/Cake";
+import { NavLink, useParams } from "react-router-dom";
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+/**
+ *
+ * @param {props} props Getting all the needed information for the profile.
+ * @returns Returns the information of the profile.
+ */
 function ProfileInfo({
   name,
   userName,
@@ -14,7 +34,13 @@ function ProfileInfo({
   location,
   website,
   birthday,
+  birthdayVisability,
+  locationVisability,
 }) {
+  let { id } = useParams();
+  const joinDate = new Date(date);
+  const birthdate = new Date(birthday);
+
   const websiteLength = website.length;
   return (
     <div className="profileInfo2">
@@ -23,7 +49,7 @@ function ProfileInfo({
 
       <div className="moreInfo">
         {bio ? <h5 data-testid="Edit-Profile-Bio-Element">{bio}</h5> : ""}
-        {location ? (
+        {locationVisability && location ? (
           <span data-testid="Edit-Profile-Location-Element">
             <LocationOnIcon /> {location}
           </span>
@@ -40,15 +66,19 @@ function ProfileInfo({
         ) : (
           ""
         )}
-        {birthday ? (
+        {birthdayVisability && birthday.date ? (
           <span data-testid="Edit-Profile-Birthday-Element">
-            <CakeIcon /> Born in {birthday}
+            <CakeIcon /> Born in {monthNames[birthdate.getMonth()]}{" "}
+            {birthdate.getDate()}
+            {", "}
+            {birthdate.getUTCFullYear()}
           </span>
         ) : (
           ""
         )}
         <span>
-          <CalendarMonthIcon /> Joined {date}
+          <CalendarMonthIcon /> Joined {monthNames[joinDate.getMonth()]}{" "}
+          {joinDate.getFullYear()}
         </span>
       </div>
 
@@ -57,8 +87,12 @@ function ProfileInfo({
       </div>
 
       <div className="followInfo">
-        <span>{following} Following </span>
-        <span data-testid="Followers-Profile">{followers} Followers</span>
+        <NavLink to={`/Profile/${id}/Following`}>
+          <span>{following} Following </span>
+        </NavLink>
+        <NavLink to={`/Profile/${id}/Followers`}>
+          <span data-testid="Followers-Profile">{followers} Followers</span>
+        </NavLink>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
-.comment 
+/*.comment 
 {
     position: relative;
     background: lightgrey;
     border-radius: 1000em;
     padding: 1px;
-}
+}*/
 .textbox
 {
     position: relative;
@@ -14,10 +14,10 @@
     padding: 0 1.5em;
     width: inherit;
 }
-.comment:hover
+/*.comment:hover
 {
     background: linear-gradient(21deg, #6D71FF,rgba(43, 61, 188, 1));
-}
+}*/
 .emoji
 {
     color: lightgrey;

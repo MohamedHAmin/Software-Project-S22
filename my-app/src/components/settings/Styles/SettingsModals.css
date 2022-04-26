@@ -1,0 +1,145 @@
+.protectYourLarsLight{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 25px;
+}
+.protectYourLarsDark{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    height: 250px;
+    background-color: rgb(53, 49, 77);
+    border-radius: 25px;
+}
+.AddPhoneLight{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 400px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 25px;
+}
+.AddPhoneDark{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 400px;
+  background-color: rgb(53, 49, 77);
+  border-radius: 25px;
+}
+.settingsModalParagraphLight {
+    font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    padding-left: 20px !important;
+    margin-bottom: 5px !important;
+  }
+  
+.settingsModalParagraphDark {
+    font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    padding-left: 20px !important;
+    color: #ffffff !important;
+    margin-bottom: 7px !important;
+}
+  .settingsModalHeaderLight {
+    font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 500 !important;
+    font-size: 22px !important;
+    padding-left: 20px !important;
+    margin-top: 12px !important;
+    margin-bottom: 10px !important;
+  }
+  .settingsModalHeaderDark {
+    font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 500 !important;
+    font-size: 22px !important;
+    margin-top: 12px !important;
+    color: #ffffff !important;
+    padding-left: 20px !important;
+    margin-bottom: 10px !important;
+  }
+  .settingsModalHeaderCenteredLight {
+    font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 500 !important;
+    font-size: 22px !important;
+    text-align:center !important;
+    margin-top:65px !important;
+    margin-bottom: 10px !important;
+  }
+  .settingsModalHeaderCenteredDark {
+    font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 500 !important;
+    font-size: 22px !important;
+    margin-top:65px !important;
+    color: #ffffff !important;
+    text-align:center !important;
+    margin-bottom: 10px !important;
+  } 
+  .closeEditProfileModal {
+    position: absolute;
+    width: 500px;
+  }
+  .profileDiscardContainerButton {
+    background-color: red !important;
+    border: none !important;
+    color: rgb(255, 255, 255) !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    text-transform: inherit !important;
+    border-radius: 40px !important;
+    height: 40px !important;
+    width: 90% !important;
+    position: relative !important;
+    margin-top: 20px;
+  }
+  .profileDiscardContainerButton:hover {
+    background-color: rgba(250, 134, 134, 0.9) !important;
+    opacity: 0.80;
+    }
+    .profileCloseContainerButton {
+      background-color: #eeeded !important;
+      border: none !important;
+      color: rgb(0, 0, 0) !important;
+      font-weight: 700 !important;
+      font-size: 14px !important;
+      text-transform: inherit !important;
+      border-radius: 40px !important;
+      height: 40px !important;
+      width:90% !important;
+      position: relative !important;
+      margin-top: 20px !important;
+      
+    }
+    
+   .profileCloseContainerButton:hover {
+    background-color: rgba(233, 233, 233, 0.9) !important;
+    opacity: 0.80;
+    }
+    .buttonSettingsModal{
+      background-color: #2b3dbc !important;
+        border: none !important;
+        color: white !important;
+        font-weight: 500 !important;
+        font-size: 17px !important;
+        text-transform: inherit !important;
+        border-radius: 40px !important;
+        height: 7.5% !important;
+        margin-top: 5px !important;
+        width: 90% !important;
+      }
+    .buttonSettingsModal:hover {
+      background-color: #6d71ff !important;
+    }

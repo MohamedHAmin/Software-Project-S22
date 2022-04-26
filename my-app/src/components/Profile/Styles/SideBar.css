@@ -38,11 +38,13 @@ ul {
   border-radius: 40px !important;
   height: 7.5% !important;
   margin-top: 20px !important;
-  width: 85% !important;
-  margin-bottom:40% !important;
-  
+  width: 85% !important;  
 }
-
+.logoutIcon{
+  position:absolute;
+  bottom: 30px;
+  width: 100%;
+}
 
 .sideBarTweet:hover {
   background-color: var(--color-hover) !important;

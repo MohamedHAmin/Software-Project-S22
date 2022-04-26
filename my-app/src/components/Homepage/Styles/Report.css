@@ -1,0 +1,165 @@
+.Report{
+    margin-left: 24%;
+    display:flex;
+    
+}
+.subrebdiv{
+    flex: 0.8;
+    flex-direction: column;
+    color: var(--color-mode);
+
+}
+.subsubrepdiv{
+    display: flex;
+    flex-direction: row;
+    color: var(--color-mode);
+
+}
+.H3{
+    padding-top: 20px;
+    font-family: 'Roboto', sans-serif!important;
+    font-weight: bold!important;
+    color: var(--color-mode);
+
+}
+.H33{
+    padding-top: 20px;
+    /* position: relative;
+    top: 70px; */
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-mode);
+    /* height: 70px;
+    right: 25%; */
+}
+.btngroupofrepp{
+    border-radius: 0!important;
+    border-top: 1px!important;
+    /* border-bottom: px!important; */
+    border-left: 0!important;
+    border-right: 0!important;
+    border-style: solid!important;
+    border-color: black!important;
+    /* padding-top: 50px!important; */
+    font-size: 30px !important;
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none!important;
+    color: var(--color-mode);
+
+}
+.btngroupofreppp{
+    border-radius: 0!important;
+    /* border-top: 1px!important; */
+    border-bottom: 1px!important;
+    border-left: 0!important;
+    border-right: 0!important;
+    border-style: solid!important;
+    border-color: black!important;
+    /* padding-top: 50px!important; */
+    font-size: 30px !important;
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none!important;
+    color: var(--color-mode);
+
+}
+/* a{
+    color: var(--color-hover);
+}
+a:hover{
+    color: var(--color-hover);
+} */
+.btngroupofrep{
+    /* padding-top: 50px!important; */
+    font-size: 30px !important;
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none!important;
+    color: var(--color-mode);
+
+}
+.subsubrepdiv .MuiSvgIcon-root {
+    height: 21px !important;
+    width: 30px !important;
+    margin-right: 30px !important;
+    margin-left: 13px !important;
+    cursor: pointer !important;
+    margin-top: 20px !important;
+    margin-bottom: 0 !important;
+    color: var(--color-mode) !important;
+  }
+  
+.subsubrepdiv .MuiSvgIcon-root:hover {
+    background-color: var(--color-hover);
+    border-radius: 40px;
+    color: white;
+    transition: color 100ms ease-out;
+    padding: auto;
+  }
+  .MuiButtonGroup:hover{
+      color: black;
+  }
+.hehe{
+    width: 84.5%!important;
+    color: var(--color-mode);
+
+}
+.pos{
+    /* border-top: 1px;
+    border-bottom: 1px;
+    border-left: 0;
+    border-right: 0;
+    border-style: solid; */
+    padding-top: 55px;
+    align-self: center;
+    color: var(--color-mode);
+
+}
+.Repbtnanchor{
+    /* color: black!important; */
+    text-decoration: none;
+    color: var(--color-mode);
+
+}
+.Repbtnanchor:hover{
+    color:var(--color-mode) ;
+}
+.repanch{
+    padding-top: 80px!important;
+    color: var(--color-mode);
+
+}
+@media (min-width: 707px) and (max-width: 1338px) {
+    .H33{
+        top: 100px;
+    }
+   
+  }
+
+  @media (max-width: 707px) {
+    .H33{
+        top: 130px;
+    }
+    .hehe{
+        margin-left: 9%;
+    }
+  }
+  @media (min-width: 707px)and (max-width: 860px) {
+    .hehe{
+        margin-left: 9%;
+    }
+  }  
+  @media (min-width: 860px)and (max-width: 1060px) {
+.H33{
+    left: 30%!important;
+}  
+.Report{
+    margin-left: 22%;
+
+}
+}
+@media (max-width: 860px) {
+    .H33{
+        margin-left: 9%;
+    } 
+    .subsubrepdiv{
+        margin-left: 10%;
+    }
+}

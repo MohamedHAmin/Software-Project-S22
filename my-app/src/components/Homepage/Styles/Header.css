@@ -7,24 +7,31 @@ header {
    padding-left: 2%;
    padding-top: 1vh;
    height:  27.27px;
+   width:100%;
+   background-color: var(--color-background);
+   color: var(--color-mode);
+   z-index: 500;
    position: sticky;
-  width:100%;
-  color: var(--color-mode);
   }
 .Header{
    display: inline-block;
-  height: 27.27px;
-    box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
+  height: 44px;
+    /* box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1); */
     width: 100%;
     top:0;
+    opacity: 0.8;
+    color: var(--color-mode);
     position: sticky;
-    
+    /* background: rgba(170, 187, 97, 0.5); */
+    /* background-color: white; */
 }
 .AutoAwsPhoto{
 position: relative;
 right:2%;
 float:right;
 padding-top: 1%;
+color: var(--color-mode);
+
 }
 @media screen and (max-width: 1000px) {
     .Header {

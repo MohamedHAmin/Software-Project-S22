@@ -18,7 +18,7 @@
 .moreInfo {
   margin-top: 6px;
   margin-left: -3px;
-  margin-bottom: 8px;
+  
   font-weight: 500;
   font-size: 14px;
 }
@@ -26,7 +26,7 @@
 .moreInfo > h5 {
   color:var(--color-mode);
   font-size: 15px;
-  margin-bottom: 8px;
+  
   margin-left: 4px;
   word-break: break-all;
 }
@@ -50,8 +50,19 @@
   text-decoration: none;
 }
 
+.followInfo a {
+  text-decoration: none;
+  color:var(--color-mode);
+}
+
+.followInfo a:hover {
+  text-decoration: underline;
+  
+}
+
 .followInfo {
   display: flex;
+  margin-top: -10px;
 }
 .followInfo span {
   margin-right: 20px;
