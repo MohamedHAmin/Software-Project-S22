@@ -388,8 +388,8 @@ router.post("/reply", auth("user"), async (req, res) => {
       text: text,
     });
     res.status(200).send({ AddedTweetStatus: "Reply Stored" }).end();
-  } catch {
-    res.status(400).send({ error: e.toString() });
+  } catch (e){
+    res.status(400).send({ error: e.toString() }).end();
   }
 });
 
