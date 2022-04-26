@@ -549,44 +549,117 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": req.user._id } },
       { $project: { likes: 0 } },
+      {
+        $lookup: {
+          from: User.collection.name,
+          localField: "authorId",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                _id: 1,
+                screenName: 1,
+                tag: 1,
+                followercount: 1,
+                followingcount: 1,
+                "profileAvater.url": 1,
+                reply: 1,
+              },
+            },
+          ],
+          as: "authorId",
+        },
+      },
+      {
+        $lookup: {
+          from: Tweet.collection.name,
+          localField: "retweetedTweet",
+          pipeline: [
+            {
+              $project: {
+                _id: 1,
+                replyingTo: 1,
+                authorId: 1,
+                text: 1,
+                tags: 1,
+                likeCount: 1,
+                retweetCount: 1,
+                gallery: 1,
+                reply: 1,
+              },
+            },
+            {
+              $lookup: {
+                from: User.collection.name,
+                localField: "authorId",
+                foreignField: "_id",
+                pipeline: [
+                  {
+                    $project: {
+                      _id: 1,
+                      screenName: 1,
+                      tag: 1,
+                      followercount: 1,
+                      followingcount: 1,
+                      "profileAvater.url": 1,
+                    },
+                  },
+                ],
+                as: "authorId",
+              },
+            },
+          ],
+          foreignField: "_id",
+          as: "retweetedTweet",
+        },
+      },
+      {
+        $lookup: {
+          from: Tweet.collection.name,
+          localField: "_id",
+          foreignField: "replyingTo",
+          as: "reply",
+          pipeline: [
+            {
+              $project: { _id: 1, authorId: 1, tags: 1, text: 1, likeCount: 1 },
+            },
+            {
+              $lookup: {
+                from: User.collection.name,
+                localField: "authorId",
+                foreignField: "_id",
+                pipeline: [
+                  {
+                    $project: {
+                      _id: 1,
+                      screenName: 1,
+                      tag: 1,
+                      followercount: 1,
+                      followingcount: 1,
+                      "profileAvater.url": 1,
+                    },
+                  },
+                ],
+                as: "authorId",
+              },
+            },
+          ],
+        },
+      },
     ])
       .limit(limit)
-      .skip(skip)
-      // .populate({
-      //   path: "retweetedTweet",
-      //   strictPopulate: false,
-      //   select:
-      //     "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
-      //   populate: {
-      //     path: "authorId",
-      //     strictPopulate: false,
-      //     select:
-      //       "_id screenName tag followercount followingcount profileAvater.url",
-      //   },
-      // })
-      // .populate({
-      //   path: "reply",
-      //   select: "_id authorId tags text likeCount",
-      //   strictPopulate: false,
-      //   populate: {
-      //     path: "authorId",
-      //     strictPopulate: false,
-      //     select:
-      //       "_id screenName tag followercount followingcount profileAvater.url",
-      //   },
-      // })
-      // .populate({
-      //   path: "authorId",
-      //   strictPopulate: false,
-      //   select:
-      //     "_id screenName tag followercount followingcount profileAvater.url",
-      // });
-    // if (likedtweets.length <= 0) {
-    //   e = "no liked tweets found";
-    //   throw e;
-    // }
+      .skip(skip);
+    for (let i = 0; i < likedtweets.length; i++) {
+      if (
+        !Array.isArray(likedtweets[i].retweetedTweet) ||
+        !likedtweets[i].retweetedTweet.length
+      ) {
+        likedtweets[i].retweetedTweet = null;
+      }
+    }
+
     res.send(likedtweets);
-  } catch(e) {
+  } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
 });
