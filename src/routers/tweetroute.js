@@ -342,7 +342,6 @@ router.post("/reply", auth("user"), async (req, res) => {
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
 
-
     if (text.length == 0) {
       //checks if user sent Text parameter empty
       //if true the post will be rejected and sends an error
@@ -469,6 +468,9 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
           return tweets;
         }
       });
+    } else {
+      e = "user has no tweets";
+      throw e;
     }
     res.send(user.Tweets);
   } catch (e) {
