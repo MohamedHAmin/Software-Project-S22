@@ -656,6 +656,10 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
       ) {
         likedtweets[i].retweetedTweet = null;
       }
+      if(!Array.isArray(likedtweets[i].reply) ||
+      !likedtweets[i].reply.length){
+        delete likedtweets[i].reply;
+      }
     }
 
     res.send(likedtweets);
