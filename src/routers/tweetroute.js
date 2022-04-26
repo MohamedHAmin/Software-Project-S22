@@ -109,6 +109,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
+    await req.user.isBanned();
     const tweet = await Tweet.findById(req.params.id);
     let sentTweet;
     if (!tweet) {
@@ -177,6 +178,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 
 router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
+    await req.user.isBanned();
     const targettweet = await Tweet.findById(req.params.id);
     if (!targettweet) {
       throw new Error("Not Found");
@@ -329,6 +331,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
 
 router.post("/reply", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
     let repliedOnTweet = await Tweet.findById(req.body.replyingTo);
     if (!repliedOnTweet) {
       e = "Error: tweet not found";
@@ -338,6 +341,14 @@ router.post("/reply", auth("user"), async (req, res) => {
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
+
+
+    if (text.length == 0) {
+      //checks if user sent Text parameter empty
+      //if true the post will be rejected and sends an error
+      e = "Empty Post";
+      throw e;
+    }
 
     if (text.length > 280) {
       //checks if post exceeded 280 characters
@@ -396,6 +407,7 @@ router.post("/reply", auth("user"), async (req, res) => {
 //tprofile tweets
 router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
+    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -468,6 +480,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 });
 router.get("/timeline", auth("any"), async (req, res) => {
   try {
+    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -547,13 +560,14 @@ router.get("/timeline", auth("any"), async (req, res) => {
   }
 });
 
-router.get("/search/:searchedItem", auth("any"), async () => {
-  let searchedItem = req.params.searchedItem;
-  //TODO implement searching
-});
+// router.get("/search/:searchedItem", auth("any"), async () => {
+//   let searchedItem = req.params.searchedItem;
+//   //TODO implement searching
+// });
 
 router.get("/profile/likedtweets", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -670,12 +684,6 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
         !likedtweets[i].retweetedTweet.length
       ) {
         likedtweets[i].retweetedTweet = null;
-      }
-      if (
-        !Array.isArray(likedtweets[i].reply) ||
-        !likedtweets[i].reply.length
-      ) {
-        delete likedtweets[i].reply;
       }
     }
 
