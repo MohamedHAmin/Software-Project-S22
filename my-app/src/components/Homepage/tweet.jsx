@@ -1,6 +1,10 @@
 import React ,{ useState } from "react";
 import "./Styles/tweet.css";
-
+/**
+ * this function renders the text area where tweet will be written
+ * @param {props} props setting the value of the the tweet 
+ * @returns the text area
+ */
 function Tweet(props){
     console.log(props);
     return(

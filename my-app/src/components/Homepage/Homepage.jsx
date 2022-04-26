@@ -11,17 +11,60 @@ import axios from "axios";
 import moment from "moment";
 import { FallingLines } from "react-loader-spinner";
 
+/**
+ * Homepage containing area to post tweets and timeline tweets (your tweets and tweets of people you follow)
+ * it also contains sidebar to navigate through pages and it also contains searchbar
+ * @component 
+ * @param {boolean} isAdmin indicates whether or not this home is an admin's home or a normal user's home
+ * @returns {div}
+ *        <Homepage isAdmin={isAdmin}/>
+ */
 function Homepage(props) {
   const [posts, setposts] = useState([]);
   const [count, setCount] = useState(0);
   const [userData, setuserdata] = useState([]);
   const [newtweets, setnewtweets] = useState([]);
+  const [token,setToken]=useState(localStorage.getItem("accessToken"));
   const [text, setText] = useState("");
+  console.log(token);
+  /**
+   * sets access token needed while authorization when calling backend services while deleting a post
+   * admin has two tokens: adminToken -> authorize the admin to delete post of any user in his home
+   *                       accessToken -> authorize the admin or any user to post tweets or delete his tweets 
+   * @returns {void}
+   */
+  const tokensetter=()=>
+  {
+    if(props.isAdmin)
+    {
+      setToken(localStorage.getItem("adminToken"));
+      console.log(token);
+    }
+    else
+    {
+      setToken(localStorage.getItem("accessToken"));
+      console.log(token);
+    }
+  }
+
+  /**
+   * sets token with access token for admin to call BE services of a normal user (example: get pots for timeline, post a tweet, retweet)
+   * @returns {void}
+   */
+  const tokenreset=()=>
+  {
+      setToken(localStorage.getItem("accessToken"));
+  }
+  /**
+   * calls BE to get posts for timeline (your tweets and tweets of people you follow) and sets them in posts state
+   * @returns {void}
+   */
   const getposts = () => {
+    tokenreset();
     axios
       .get(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/timeline`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
+        { headers: { Authorization: token } }
       )
       .then((res) => {
         if (res.error) {
@@ -35,10 +78,16 @@ function Homepage(props) {
   };
   useEffect(() => {
     getposts();
+    
   }, []);
   //const [numberOfRetweets,setNumberOfRetweets]=useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
   //const [deletedpostId,setdeletedpostId]=useState(-1);
+ /**
+  * sets image if an image is uploaded to be posted inside the tweet
+  * @param {file} newimg if an image is uploaded to be posted
+  * @returns {void}
+  */
   function onimgSelectedChange(newimg) {
     //selectedImage.push(newimg);
     //console.log(newimg);
@@ -58,11 +107,17 @@ function Homepage(props) {
   //   }
   // }
 
+  /**
+   * takes the id of the tweet to be deleted from its child component <Post/> an call BE services 
+   * @param {string} id 
+   * @returns {void}
+   */
   const passdeletedTweet = (id) => {
+    tokensetter();
     axios
       .delete(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
+        { headers: { Authorization: token } }
       )
       .then((res) => {
         console.log(res);
@@ -109,7 +164,10 @@ function Homepage(props) {
           }
         }
     }*/
-
+  /**
+   * calls BE if post button is pressed and a text was written or an image was uploaded or both to post a new tweet
+   * @returns {void}
+   */
   const postHandeler = () => {
     if (text != "" || selectedImage) {
       /*posts.push({
@@ -184,7 +242,7 @@ function Homepage(props) {
         })
         .catch((err) => {
           //err.message; // 'Oops!'
-          alert("You can't post tweets currently, you got banned by admins");
+          alert(err.response.data.error);
           console.log(err);
         });
 
@@ -232,10 +290,10 @@ function Homepage(props) {
               //setNumberOfRetweets={setNumberOfRetweets}
             />
           ))
-        ) : (
-          <div className="Loader">
-            <FallingLines height={120} width={150} color="var(--color-mode)" />
-          </div>
+        ) : (<></>
+          // <div className="Loader">
+          //   <FallingLines height={120} width={150} color="var(--color-mode)" />
+          // </div>
         )}
         {/* {posts?.length ? ( 
           posts.filter((post)=> post.innerpostid!==undefined).map((post) =>

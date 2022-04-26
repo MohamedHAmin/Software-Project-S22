@@ -7,7 +7,11 @@ import classes from './Styles/Login.module.css';
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import LoginwithGoogle from "./LoginwithGoogle";
-
+/**
+ *
+ *
+ * @returns Returns Login form and its fields [tag, password] and login button
+ */
 const Login = () => {
     const [error, setError] = useState(false);
     const initialValues = {
@@ -23,13 +27,13 @@ const Login = () => {
         console.log(data);
         axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/login", data).then((res) => {
             console.log(res);
-            // if (res.error) {
-            //     if (res.error === "Error: unable to login as user is not verified") {
-            //         alert("Please verify your email")
-            //     } else if (res.error === "Error: unable to login") {
-            //         setError("Wrong userName OR Password");
-            //     }
-            // } else {
+            if (res.error) {
+                if (res.error === "Error: unable to login as user is not verified") {
+                    alert("Please verify your email")
+                } else if (res.error === "Error: unable to login") {
+                    setError("Wrong userName OR Password");
+                }
+            } else {
                 localStorage.setItem("accessToken", res.data.token.token);
                 localStorage.setItem("userId", res.data.user.user._id);
                 if (res.data.user.adminToken) {
@@ -41,18 +45,11 @@ const Login = () => {
                 Navigate("/Home");
                 Navigate(0);
             }
-        ).catch(err => {
-          console.log(err.response.data.error);
-          if (err.response.data.error == "Error: unable to login as user is not verified") {
-            alert("Please verify your email")
-          } else {
-            setError("Wrong username OR password");
-          }
-    })};
+        })
+    };
     const clickHandeler = () => {
         Navigate("/SignUp")
     }
-    //color: #4158D0
     return (
         <div>
             <Navbar />
@@ -90,6 +87,7 @@ const Login = () => {
                                     <a href="#">Forgot password?</a>
                                 </div>
                             </div>
+
                             <button className={classes.button} type="submit" >Login</button>
                             <div className={classes.signupLink}>
                                 Not a member? <a onClick={clickHandeler}>Signup now</a>

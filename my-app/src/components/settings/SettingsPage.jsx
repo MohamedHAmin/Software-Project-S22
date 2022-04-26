@@ -7,10 +7,34 @@ import DisplaySettings from "./DisplaySettings";
 import SideBar from "../Profile/SideBar";
 import PrivacySettings from "./PrivacySettings";
 
+/**
+ * Component for rendering the main Settings menu and the sub menu of the choosen option.
+ * @component
+ * @param {boolean} isDark 
+ * @param {boolean} isAdmin
+ * @param {function} onDarkModeChange
+ * @example
+ * prop.isDark = true
+ * prop.isAdmin = false
+ * const idItemSelected = 1 (Account settings)
+ * return (
+ * <div>
+ *    <SideBar>
+ *    <SettingsMenu>
+ *    <AccountSettings>
+ * </div>
+ * )
+ */
 function SettingsPage(props) {
+  /**
+   * prop isDark to identify which mode the user wants dark/light.
+   */
   const [isSelectedDarkMode, setDarkModeActive] = useState(props.isDark);
   function selectedDarkMode() {
     setDarkModeActive(!isSelectedDarkMode);
+   /**
+    * prop function onDarkModeChange() return the value of darkMode var to the App componenet.
+    */
     props.onDarkModeChange(!isSelectedDarkMode);
   }
   // dark mode var and its functions used to identify the state od display :Light or Dark

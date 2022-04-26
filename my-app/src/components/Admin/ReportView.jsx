@@ -5,6 +5,27 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import "./Styles/ReportView.css"
 import RetweetDisplayBlock from "../Homepage/RetweetDisplayBlock";
+/**
+ * reusable component used to display tweet reports as well as user reports
+ * @param {number} times number of reports on a certain user or tweet
+ * @param {boolean} isTweet indicated whether this report is on a tweet or user
+ * @param {object} tweet an object that contains all the needed details about the reported tweet
+ * @param {object} user an object that contains all the needed details about the reported user
+ * @param {object} passdeletedTweet takes the id of the tweet to be deleted from the child and pass it to the parent (reportspage) to call BE
+ * @param {object} ondelete passes the id of the tweet or user to delete all reports on the meant user or tweet
+ * @returns {div}
+ *          <ReportsView
+            ondelete={ondeletetweetreport}
+            times={tweet.Reports}
+            passdeletedTweet={passdeletedTweet}
+            isTweet={true}
+            tweet={tweet}/>
+            <ReportsView
+            ondelete={ondeleteuserreport}
+            times={user.Reports}
+            isTweet={false}
+            user={user}/>
+ */
 function ReportsView(props)
 {
     function ondeletereport()

@@ -6,7 +6,16 @@ import ReportsView from './ReportView';
 import axios from 'axios'
 import "./Styles/ReportsPage.css";
 import { FallingLines } from "react-loader-spinner";
-
+/**
+ * reports page for the admin view where it displays by default when first opened a list of reported tweets and then admin can toggle between two options (reprted tweets and reported users)
+ * it displays the reported tweets/users and indicates the total number of reports on each one 
+ * delete button deletes all reports on the reported tweet/user present in the database
+ * if the tweet contains an offending content onclick on three dots present inside the tweet th admin can delete the meant post
+ * if the user have high number of reports the admin can go to his profile and ban the meant user for X period
+ * the tweets or users are displayed descendingly according to the number of reports 
+ * @param {boolean} isAdmin passed from the App.jsx to all components to be passed to the sidebar and used if needed in component
+ * @returns {div}
+ */
 function ReportsPage(props)
 {
     const [userReports,setuserReports]=useState([]);

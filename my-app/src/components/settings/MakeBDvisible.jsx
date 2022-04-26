@@ -1,17 +1,28 @@
 import React, { useState,useEffect } from 'react';
-import SettingsMenuOptions from './SettingsMenuOptions';
-import PeopleIcon from '@mui/icons-material/People';
 import "./Styles/SettingsMenuOptions.css"
 import "./Styles/SettingsMenu.css"
 import Checkbox from '@mui/material/Checkbox';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import "./Styles/SettingsModals.css"
-import { textAlign } from '@mui/system';
 import axios from 'axios'
 
+/**
+ * component to let the user change the visibility of the birth date
+ * @component
+ * @param {boolean} darkMode
+ * @param {Array} profileData all the profile data of the user
+ * @example
+ * props.darkMode = true
+ * props.profileData.birth.visability = false
+ * props.profileData.birth.date = "20-8-2001"
+ * return (
+ * <div>
+ *    <div>Make birthdate visible</div>
+ *    <span>20-8-2001</span>
+ *    <Checkbox>
+ * </div>
+ * )
+ *  
+ */
 
 function MakeBDvisible(props) {
     //request to back end

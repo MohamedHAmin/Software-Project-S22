@@ -3,6 +3,23 @@ import SettingsMenuOptions from './SettingsMenuOptions';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EmailIcon from '@mui/icons-material/Email';
 import "./Styles/SettingsMenu.css"
+
+/**
+ * component to let the user change the notification settings
+ * @component
+ * @param {boolean} isDarkMode
+ * @example
+ * props.isDarkMode = true
+ * return (
+ * <div>
+ *    <h1>Notifications prefrences</h1>
+ *    <p>Select your preferences by notification type.</p>
+ *    <SettingsMenuOptions "Push notification"/>
+ *    <SettingsMenuOptions "Email notification"/>
+ * </div>
+ * )
+ *  
+ */
 function NotificationSettings(props) {
     const [isClickedPushNotification,setPushNotificationActive]=useState(false);
     const [isClickedEmailNotification,setEmailNotificationActive]=useState(false);

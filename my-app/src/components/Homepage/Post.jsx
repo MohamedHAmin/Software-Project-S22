@@ -1,31 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState ,useEffect } from "react";
 import Reacts from "./Reacts";
-import moment from "moment";
+import moment from 'moment';
 import Comment from "./Comment";
-import Avatar from "@mui/material/Avatar";
-import Logo from "../../Images/Logo Title Page.png";
-import Delete from "@mui/icons-material/DeleteOutlined";
+import Avatar from '@mui/material/Avatar';
+import Logo from "../../Images/Logo Title Page.png"
+import Delete from '@mui/icons-material/DeleteOutlined';
 import "./Styles/Post.css";
-import Button from "./dropDownButton";
-import comments from "./Arrays/comments";
-import RetweetDisplayBlock from "./RetweetDisplayBlock";
-import LoadMore from "@mui/icons-material/MoreHoriz";
-import LoadingButton from "@mui/lab/LoadingButton";
-import posts from "./Arrays/posts";
+import Button from "./dropDownButton"
+import comments from "./Arrays/comments"
+import RetweetDisplayBlock from './RetweetDisplayBlock';
+import LoadMore from '@mui/icons-material/MoreHoriz';
+import LoadingButton from '@mui/lab/LoadingButton';
+import posts from "./Arrays/posts"
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
-
+import axios from 'axios';
+/**
+ * post component that is called to map tweets or retweets (it contains structure of tweet or retweet as well as reactsbar where users can comment, retweet or like the tweet)
+ * @component
+ * @param {object} post an object that contains all needed details about a certain post
+ * @param {boolean} isAdmin indicates whether or not this user is an admin to be passed in drpdownbutton component (to display delete option not report option)
+ * @param {boolean} isPost indicates whether this post is a tweet/retweet or if is is a comment on a post
+ * @param {object} passdeletedTweet a function that takes id of tweet from child component (post) and pass it to the parent component (homepage) to call BE
+ * @returns {div}
+ *           <Post
+              post={post}
+              passdeletedTweet={passdeletedTweet}
+              isAdmin={props.isAdmin}
+              isPost={true}>
+ */
 function Post(props) {
   //const [isdeletedtweet,setdeletedtweet]=useState(false);
   //   deletepost(()=>{
   //     setdeletedtweet(true)
   //     },[])
-  const [postId] = useState(props.post._id);
-  const date = new Date(props.post.createdAt);
-  const [isAdmin] = useState(props.isAdmin);
-  const [hasimage, sethasimage] = useState(false);
-  const [canretweet, setcanretweet] = useState(true);
+  const [postId]=useState(props.post._id);
+  const date=new Date(props.post.createdAt);
+  const [isAdmin]=useState(props.isAdmin);
+  const [hasimage,sethasimage]=useState(false);
+  const [canretweet,setcanretweet]=useState(true);
   //var binaryData = [];
   /*if(props.post.gallery || props.post.gallery?.length)
   {
@@ -33,29 +46,28 @@ function Post(props) {
       sethasimage(true);
   }*/
   //{
-  //binaryData.push(props.post.gallery[0]);
+    //binaryData.push(props.post.gallery[0]);
   //}
-  //var index=posts.map((post)=>post.id).indexOf(postId);
-  /*posts[index].numberOfRetweets.length*/
-  const [numberOfRetweets, setNumberOfRetweets] = useState(
-    props.post.retweetCount
-  );
-  const [commentsperpost, setcommentsperpost] = useState(props.post.replyCount);
-  const [username] = useState(props.post.authorId.screenName);
-  const [tweetcontent] = useState(props.post.text);
-  const [displayName] = useState(props.post.authorId.tag);
-  const [sameuser, setsameuser] = useState(false);
-  useEffect(() => {
-    if (tweetcontent === "No-text" && !props.post.gallery[0]) {
-      setcanretweet(false);
-    }
-  }, []);
-  //const [content, setContent] = useState("");
-  //const [displaylimit,setdisplaylimit] = useState(5);
-  //const [displayload,setdisplayload] = useState(false);
-  //const [loading, setLoading] = useState(false);
-  //console.log(comments);
-  /*function handleClick() {
+//var index=posts.map((post)=>post.id).indexOf(postId);
+/*posts[index].numberOfRetweets.length*/
+const [numberOfRetweets,setNumberOfRetweets]=useState(props.post.retweetCount);
+const [commentsperpost,setcommentsperpost]=useState(props.post.replyCount);
+const [username]=useState(props.post.authorId.screenName);
+const [tweetcontent]=useState(props.post.text);
+const [displayName]=useState(props.post.authorId.tag);
+const [sameuser,setsameuser]=useState(false);
+useEffect(()=>{
+  if(tweetcontent==="No-text" && !props.post.gallery[0])
+  {
+    setcanretweet(false);
+  }
+},[])
+//const [content, setContent] = useState("");
+//const [displaylimit,setdisplaylimit] = useState(5);
+//const [displayload,setdisplayload] = useState(false);
+//const [loading, setLoading] = useState(false);
+//console.log(comments);
+/*function handleClick() {
     setLoading(true);
     if(commentsperpost > displaylimit)
     {
@@ -69,11 +81,11 @@ function Post(props) {
     }
     setLoading(false);
 }*/
-  //const [count,setCount]=useState(props.count);
-  //let tmp=comments.filter((comment) => comment.postid === postId);
-  //console.log(tmp);
-  //to get the content of the comments from the comment component
-  /*const passData = (data) => {
+//const [count,setCount]=useState(props.count);
+//let tmp=comments.filter((comment) => comment.postid === postId);
+//console.log(tmp);
+//to get the content of the comments from the comment component
+/*const passData = (data) => {
     setContent(data);
     comments.push({
         id:comments.length,
@@ -84,10 +96,10 @@ function Post(props) {
         commenthour:moment().format('hh:mm'),
         commentdate:moment().format('DD/MM/YYYY')
     });*/
-  /*var temp=count;
+    /*var temp=count;
     temp++;
     setCount(temp);*/
-  /*var temp=commentsperpost;
+    /*var temp=commentsperpost;
     temp++;
     setcommentsperpost(temp);
     if (commentsperpost > displaylimit)
@@ -95,15 +107,17 @@ function Post(props) {
         setdisplayload(true);
     }
   };*/
-  function checkifsameuser() {
-    if (props.post.authorId._id === localStorage.getItem("userId")) {
-      setsameuser(true);
+  function checkifsameuser()
+  {
+    if(props.post.authorId._id===localStorage.getItem("userId"))
+    {
+        setsameuser(true);
     }
   }
 
-  function deletepost() {
-    props.passdeletedTweet(postId);
-  }
+function deletepost(){   
+  props.passdeletedTweet(postId);
+}
   /*else
   {
     console.log(postId);
@@ -116,11 +130,11 @@ function Post(props) {
     console.log(temp);
   }
 } */
-  // const retweetCount=()=>
-  //     {
-  //         var temp=posts.filter((post)=> post.innerpostid===postId).length;
-  //         setNumberOfRetweets(temp);
-  //     }
+// const retweetCount=()=>
+//     {
+//         var temp=posts.filter((post)=> post.innerpostid===postId).length;
+//         setNumberOfRetweets(temp);
+//     }
   /*const [text,setText] =useState("");
   const [displayComments,setdisplayComments]=useState(false);
   const CommentHandler=()=>
@@ -128,10 +142,10 @@ function Post(props) {
       setdisplayComments(!displayComments);
   }*/
 
-  /*const passdeletedComment =(id)=>
+    /*const passdeletedComment =(id)=>
     {
     }*/
-  /*const checkDelete=()=>
+    /*const checkDelete=()=>
     {
       if(isdeletedtweet)
         setdeletedtweet(false);
@@ -139,81 +153,34 @@ function Post(props) {
 
   return (
     <React.Fragment>
-      <div className="tweet">
+ 
+    <div className="tweet">
         {/* <button onClick={deletepost}>karimm</button> */}
         {/* <img className="logo" src={Logo}/> */}
         {/* <div className="deleteIcon">{isAdmin==true && React.createElement(Delete)}</div> */}
-        <div className="deleteIcon" onClick={checkifsameuser}>
-          <NavLink to={`/Report/Lar/${postId}`}>
-            <Button
-              /*path={props.path}*/ onDeleteHandler={deletepost}
-              postid={postId}
-              sameuser={sameuser}
-              isAdmin={isAdmin}
-            />
-          </NavLink>
-        </div>
+        <div className="deleteIcon" onClick={checkifsameuser}><NavLink to={`/Report/Lar/${postId}`}><Button /*path={props.path}*/ onDeleteHandler={deletepost} postid={postId} sameuser={sameuser} isAdmin={isAdmin}/></NavLink></div>
         <div className="userInfo">
-          <Avatar
-            className="profilePic"
-            src={props.post.authorId.profileAvater.url}
-          />
-          <div className="profileInfo">
-            <div className="username">
-              <NavLink
-                className="username"
-                to={`/Profile/${props.post.authorId._id}`}
-              >
-                {username}
-              </NavLink>
+            <Avatar className="profilePic" src={props.post.authorId.profileAvater.url}/>
+            <div className="profileInfo">
+                <div className="username"><NavLink className="username" to={`/Profile/${props.post.authorId._id}`} >{username}</NavLink></div>
+                <div className="tag"><NavLink className="tag" to={`/Profile/${props.post.authorId._id}`} >{"@" + displayName}</NavLink></div>
             </div>
-            <div className="tag">
-              <NavLink
-                className="tag"
-                to={`/Profile/${props.post.authorId._id}`}
-              >
-                {"@" + displayName}
-              </NavLink>
-            </div>
-          </div>
         </div>
-        {tweetcontent !== "No-text" && (
-          <div className="tweetContent">{tweetcontent}</div>
-        )}
-        {props.post.gallery[0] ? (
-          <img
-            className="uploadedimage"
-            alt="not found"
-            key={props.post.gallery[0]._id}
-            src={props.post.gallery[0].photo}
-          />
-        ) : (
-          <></>
-        )}
-        {props.post.retweetedTweet && (
-          <RetweetDisplayBlock
-            key={props.post.retweetedTweet._id}
-            username={props.post.retweetedTweet.authorId.screenName}
-            tagName={props.post.retweetedTweet.authorId.tag}
-            avatar={props.post.retweetedTweet.authorId.profileAvater.url}
-            image={props.post.retweetedTweet.gallery[0]}
-            authorId={props.post.retweetedTweet.authorId._id}
-            content={props.post.retweetedTweet.text}
-          />
-        )}
-        {date && (
-          <div className="time">
-            <p>
-              {date.getDate()}/{date.getMonth()}/{date.getFullYear()}
-              &nbsp;&nbsp;
-            </p>
-            <p>
-              {date.getHours()}:{date.getMinutes()}
-            </p>
-          </div>
-        )}
+        {tweetcontent!=="No-text" && <div className="tweetContent">{tweetcontent}</div>}
+        {props.post.gallery[0]? (<img className="uploadedimage" alt="not found" key={props.post.gallery[0]._id} src={props.post.gallery[0].photo}/>):<></>}
+        {props.post.retweetedTweet && <RetweetDisplayBlock key={props.post.retweetedTweet._id}
+              username={props.post.retweetedTweet.authorId.screenName}
+              tagName={props.post.retweetedTweet.authorId.tag}
+              avatar={props.post.retweetedTweet.authorId.profileAvater.url}
+              image={props.post.retweetedTweet.gallery[0]}
+              authorId={props.post.retweetedTweet.authorId._id}
+              content={props.post.retweetedTweet.text}/>}
+        {date && <div className="time">
+            <p>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}&nbsp;&nbsp;</p>
+            <p>{date.getHours()}:{date.getMinutes()}</p>
+        </div>}
         <div className="reactsBar">
-          <Reacts
+            <Reacts 
             postId={postId}
             //count={count}
             numberOfRetweets={numberOfRetweets}
@@ -224,13 +191,13 @@ function Post(props) {
             isPost={props.isPost}
             tweetcontent={tweetcontent}
             username={username}
-            displayName={displayName}
+            displayName={displayName} 
             commentsCount={commentsperpost}
             image={props.post.gallery[0]}
             canretweet={canretweet}
             authorId={props.post.authorId._id}
             //CommentHandler={CommentHandler}
-          />
+            />
         </div>
         {/*displayComments ? ( 
           comments.filter((comment) => comment.postid === postId).slice(0,displaylimit).map((comment) =>
@@ -261,14 +228,12 @@ function Post(props) {
           Load More
         </LoadingButton>}
           </div>*/}
-        {props.isPost && (
-          <div className="comment">
-            <Comment /*passData={passData}*/ />
-          </div>
-        )}
-      </div>
-    </React.Fragment>
-  );
+        {props.isPost && <div className="comment">
+            <Comment /*passData={passData}*//>
+        </div>}
+    </div>
+</React.Fragment>
+    );
 }
 export default Post;
 

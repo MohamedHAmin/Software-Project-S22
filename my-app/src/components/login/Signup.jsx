@@ -8,6 +8,11 @@ import classes from "./Styles/Signup.module.css";
 import SignupwithGoogle from "./SignupwithGoogle";
 import Navbar from "./navbar";
 
+/**
+ *
+ *
+ * @returns Returns 2 signup forms , First One with necessary data [screenName , Tag , Email and Password] and the Second One contains [Birthdate, Phone Number and Biography] 
+ */
 const Signup = () => {
     const [error2, setError2] = useState(false);
     const [error1, setError1] = useState(false);
@@ -97,6 +102,7 @@ const Signup = () => {
                                     <Field name="screenName" placeholder="screenName" autoComplete="off" />
                                 </div>
                                 <ErrorMessage name='screenName' component="span" className={classes.error} />
+
                                 <div className={classes.field}>
                                     <Field name="tag" placeholder="Tag" autoComplete="off" />
                                 </div>

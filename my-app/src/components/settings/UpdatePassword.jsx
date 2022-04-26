@@ -6,6 +6,23 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios'
 import "./Styles/SettingsModals.css"
 import "./Styles/SettingsMenu.css"
+/**
+ * component to update the password of the user.
+ * @component
+ * @param {boolean} darkMode
+ * @example
+ * props.darkMode = true
+ * return (
+ * <div>
+ *    <h2>change password</h2>
+ *    <TextField "current password"/>
+ *    <TextField "new password"/>
+ *    <TextField "confirm new password"/>
+ *     <Button>Save </Button>
+ * </div>
+ * )
+ *  
+ */
 function UpdatePassword(props) {
     const [confirmPassValue, setValueConfirmPass] = useState('');
     const [newPassValue1, setValueNewPass1] = useState('');

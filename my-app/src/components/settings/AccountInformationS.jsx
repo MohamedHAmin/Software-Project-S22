@@ -1,6 +1,5 @@
 import React , {useState,useEffect} from 'react';
 import PrivacySettings from './PrivacySettings';
-import SettingsMenuOptions from './SettingsMenuOptions';
 import './Styles/SettingsMenu.css'
 import './Styles/SettingsMenuOptions.css'
 import ChangeUserTag from './ChangeUserTag';
@@ -11,14 +10,32 @@ import MakeLocVisible from './MakeLocVisible';
 import axios from 'axios';
 import AddPhoneNum from './AddPhoneNum';
 import ChangePhoneNum from './ChangePhoneNum';
-import ChangeTag from './ChangePhoneNum';
+
+/**
+ * component to display the whole page of Account information SUB menu.(it renders inside it <AccInfoOptions/> to display each option only)
+ * @component
+ * @param {boolean} darkMode
+ * @example
+ * props.darkMode = true
+ * const anythingClicked = false
+ * return (
+ * <div>
+ *    <h1>Account information</h1>
+ *    >See information about your account, download an archive of your data, or learn about your account deactivation options</p>
+ *    <AccInfoOptions Username/>
+ *    <AccInfoOptions Phone/>
+ *    <AccInfoOptions Email/>
+ *    ...
+ * </div>
+ * )
+ *  
+ */
 function AccountInformationS(props) {
     
     const [isClickedUsername,setUsernameActive]=useState(false);
     const [isClickedPhone,setPhoneActive]=useState(false);
     const [isClickedEmail,setEmailActive]=useState(false);
     const [isClickedProtectedLars,setProtectedLarsActive]=useState(false);
-    const [isClickedGender,setGenderActive]=useState(false);
     const [isClickedBirthDate,setBirthDateActive]=useState(false);
     const [isClickedLocation,setLocationActive]=useState(false);
     const [anythingClicked,setanythingClicked]=useState(false);
@@ -79,8 +96,7 @@ function AccountInformationS(props) {
         setProtectedLarsActive(false);
         setBirthDateActive(true);
         setLocationActive(false);
-        //set var that something is clicked to true
-        //setanythingClicked(true);      
+        //do not set var that something is clicked to true    
     }
     function clickedLocation(){
         setUsernameActive(false);
@@ -89,20 +105,19 @@ function AccountInformationS(props) {
         setProtectedLarsActive(false);
         setBirthDateActive(false);
         setLocationActive(true);
-        //set var that something is clicked to true
-        //setanythingClicked(true);      
+        //do not set var that something is clicked to true  
     }
     //to refresh the page after adding phone
     const [refreshAfterPhone, setrefreshAfterPhone] = useState(false);
-  function handleChangerefreshAfterPhone() {
-    setrefreshAfterPhone(!refreshAfterPhone);
-    
-  }
+    function handleChangerefreshAfterPhone() {
+        setrefreshAfterPhone(!refreshAfterPhone);
+        
+    }
     //related to request to back end
     const userId=localStorage.getItem("userId");
-// request data from backend
-const [profileData, setProfileData]=useState([]);
-const [ready, setReady]=useState(false);
+    // request data from backend
+    const [profileData, setProfileData]=useState([]);
+    const [ready, setReady]=useState(false);
     useEffect(()=>{
         // console.log(localStorage.getItem("accessToken"));
         axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`, 
@@ -121,15 +136,6 @@ const [ready, setReady]=useState(false);
         })
         
     }, [refreshAfterPhone])
-    const Data={
-        username:'kimoo123',
-        phone:"01157828196",
-        email:"karimyasser34@gmail.com",
-        ProtectedLars:"Yes",
-        gender:"Male",
-        birthdate:"20-8-2001",
-        Location:"maadi"
-    }
     return (
         <div >
             {!anythingClicked&&(<h1 className={!props.darkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Account information</h1>)}
@@ -146,13 +152,10 @@ const [ready, setReady]=useState(false);
             {!anythingClicked && ready && profileData.location.place&&(<div onClick={clickedLocation}><MakeLocVisible darkMode={props.darkMode} profileData={profileData}/></div>)}
             {/*if the clicked option is Username */}
             {isClickedUsername &&(<div><ChangeUserTag  oldValue={profileData.tag} darkMode={props.darkMode}/></div>)}
-            {/* {isClickedUsername &&(<div><ChangeTag  oldValue={profileData.tag} darkMode={props.darkMode}/></div>)} */}
             {isClickedPhone && !profileData.phoneNumber&&(<div><AddPhoneNum  darkMode={props.darkMode} onChangerefreshAfterPhone={handleChangerefreshAfterPhone}/></div>)} 
             {isClickedPhone && profileData.phoneNumber&&(<div><ChangePhoneNum oldValue={profileData.phoneNumber}  darkMode={props.darkMode} onChangerefreshAfterPhone={handleChangerefreshAfterPhone}/></div>)}
             {isClickedEmail &&(<div><TemplateFormEditAccInfo id="131" text="email" oldValue={profileData.email} darkMode={props.darkMode}/></div>)} 
             {isClickedProtectedLars &&(<PrivacySettings isDarkMode={props.darkMode} />)}  
-            {/* {isClickedBirthDate &&(<div><MakeBDvisible isDarkMode={props.darkMode}/></div>)}  */}
-            {/* {isClickedLocation &&(<div><TemplateFormEditAccInfo id="171" text="Location" oldValue={Data.Location} darkMode={props.darkMode}/></div>)}  */}
         </div>
       );
 }

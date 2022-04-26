@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AccountSettings.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AccountSettings.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import SettingsMenuOptions from './SettingsMenuOptions';
+import PersonIcon from '@mui/icons-material/Person';
+import KeyIcon from '@mui/icons-material/Key';
+import UpdatePassword from './UpdatePassword';
+import "./Styles/SettingsMenu.css"
+import ConfirmPassword from './ConfirmPassword';
+import AccountInformationS from './AccountInformationS';
+/**
+ * component to display the page of Account settings with its 2 options -->account info, change password
+ * @component
+ * @param {boolean} isDarkMode
+ * @example
+ * props.isDarkMode = true
+ * const isClickedAccInfo = true
+ * return (
+ * &lt;div>
+ *    &lt;h1>Change your password&lt;/h1>
+ *    &lt;UpdatePassword/>
+ *    
+ * &lt;/div>
+ * )
+ *  
+ */
+function AccountSettings(props) {
+    //vars of the main account settings page
+    const [isClickedAccInfo,setAccInfoActive]=useState(false);
+    const [isClickedChangePassword,setChangePasswordActive]=useState(false);
+    function clickedAccInfo(){
+        setAccInfoActive(true);
+        setChangePasswordActive(false);        
+    }
+    function clickedChangePassword(){
+        setAccInfoActive(false);
+        setChangePasswordActive(true);        
+    }
+    //vars for the confirm button in account information commented because not implemented in back end
+    // const [isConfirmPassInAccInfo,setisConfirmPassInAccInfo]=useState(false);
+    // function handleChangeConfirmPassInAccInfo(){
+    //     setisConfirmPassInAccInfo(true);
+    // }
+  
+    return ( 
+        &lt;div className="settingsSubMenu">
+        {/* if nothing clicked 1*/}
+            {isClickedAccInfo===false &amp;&amp;isClickedChangePassword===false &amp;&amp; (&lt;h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Your account&lt;/h1>)}
+            {isClickedAccInfo===false &amp;&amp;isClickedChangePassword==false &amp;&amp; (&lt;p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>See information about your account, download an archive of your data, or learn about your account deactivation options&lt;/p>)}
+        {/* Account information clicked */}
+            {isClickedAccInfo===true &amp;&amp;isClickedChangePassword===false &amp;&amp;(&lt;AccountInformationS darkMode={props.isDarkMode}/>)}
+        {/* change Password clicked */}
+            {isClickedAccInfo===false &amp;&amp;isClickedChangePassword===true &amp;&amp; (&lt;h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Change your password&lt;/h1>)}
+            {isClickedAccInfo===false &amp;&amp; isClickedChangePassword===true &amp;&amp;(&lt;div >&lt;UpdatePassword darkMode={props.isDarkMode}  />&lt;/div>)} 
+        {/* if nothing clicked 2*/}
+            {isClickedAccInfo===false &amp;&amp;isClickedChangePassword===false &amp;&amp; (&lt;div onClick={clickedAccInfo} >&lt;SettingsMenuOptions id="6" darkMode={props.isDarkMode} active={isClickedAccInfo} Icon={PersonIcon} text="Account information" subtext="See your account information like your phone number and email address." isSubtextExist={true} />&lt;/div>)}
+            {isClickedChangePassword===false &amp;&amp;isClickedAccInfo===false &amp;&amp; (&lt;div onClick={clickedChangePassword} >&lt;SettingsMenuOptions id="7" darkMode={props.isDarkMode} Icon={KeyIcon} active={isClickedChangePassword}  text="Change your password" subtext="Change your password at any time." isSubtextExist={true} />&lt;/div>)}
+        &lt;/div>
+     );
+}
+export default AccountSettings;
+    </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 23:52:36 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

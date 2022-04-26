@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+/**
+ *
+ * 
+ * @returns Returns a welcome message 
+ */
 function contact() {
     return (
         <div >

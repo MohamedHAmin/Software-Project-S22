@@ -7,7 +7,33 @@ import "./Styles/SettingsModals.css"
 import './Styles/SettingsMenu.css'
 import './Styles/SettingsMenuOptions.css'
 import axios from 'axios';
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+/**
+ * component to let the user change his Username.
+ * @component
+ * @param {boolean} darkMode
+ * @param {string} oldValue the old value stored in data base
+ * @param {function} onChangerefreshAfterPhone a function all its purpose is to make the parent componenet 
+ * AccountInformaationS refresh the page (using useEffect) to show the new data (the new phone number added)
+ * or if the user deleted his phone number it refreshes the page to display page of "Add phone number"
+ * @example
+ * props.darkMode = true
+ * props.oldValue = "kimo123"
+ * const newValue = "kariiim"
+ * const isValueChanged = true 
+ * const newValueError = false newValueTypeError
+ * const newValueTypeError = 0
+ * return (
+ * <div>
+ *    <h2>Change username</h2>
+ *    <TextField/>
+ *    <Button> Save
+ *    </Button>
+ *    ...
+ * </div>
+ * )
+ *  
+ */
 function ChangeUserTag(props) {
   const [newValue, setnewValue] = useState('');
   const [isValueChanged, setIsValueChanged] = useState(false);
@@ -26,7 +52,7 @@ function ChangeUserTag(props) {
       setValueNewError(true);
         return false;
     }
-    //check if email already used by request to back end
+    //check if username already used by request to back end
     else if(newValue===props.oldValue){
       setValueNewTypeError(2);
       setValueNewError(true);
@@ -92,7 +118,7 @@ function ChangeUserTag(props) {
             // helperText={confirmPassValueError &&("The password you entered was incorrect.")}
 
             error={newValueError}
-          helperText={newValueError &&(  newValueTypeError===1?  ("Your username must be longer than 3 characters."):("Username already used."))}
+            helperText={newValueError &&(  newValueTypeError===1?  ("Your username must be longer than 3 characters."):("Username already used."))}
 
           />
           </div>

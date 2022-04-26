@@ -17,6 +17,37 @@ import posts from './Arrays/posts';
 import axios from "axios";
 import { PhotoCamera } from '@mui/icons-material/PhotoCamera';
 
+/**
+ * Reacts on a certain post (like/dislike, retweet and comment)
+ * @param {string} postId the id of the meant post
+ * @param {number} numberOfRetweets number of retweets on the meant post
+ * @param {number} numberOfLikes number of likes on the meant post
+ * @param {number} numberOfComments number of comments on the meant post  
+ * @param {boolean} isLiked indicates whether or not the user liked this post or not (to show dislike option)
+ * @param {boolean} isPost indicates whether this post is a tweet/retweet or if is is a comment on a post
+ * @param {string} tweetcontent text written inside the meant post (to be sent to BE if retweet option is selected)
+ * @param {object} image an object that contains the url of the posted image (if exists) as well as the image id
+ * @param {string} username the screenName of the user who posted the tweet
+ * @param {string} displayName the tag of the user who posted the tweet
+ * @param {string} authorId the id of the user who posted the tweet (needed in routing to his profile) 
+ * @param {object} setNumberOfRetweets function from parent to change the state of current number of retweets on the post if the post is retweeted if the BE request was successful
+ * @param {boolean} canretweet indicates whether this post can be retweeted or not (the post can't be retweeted if it is a retweet with no caption)
+ * @returns {div}
+ *          <Reacts 
+            postId={postId}
+            numberOfRetweets={numberOfRetweets}
+            numberOfLikes={props.post.likeCount}
+            isLiked={props.post.isliked}
+            setNumberOfRetweets={setNumberOfRetweets}
+            isPost={props.isPost}
+            tweetcontent={tweetcontent}
+            username={username}
+            displayName={displayName} 
+            image={props.post.gallery[0]}
+            canretweet={canretweet}
+            authorId={props.post.authorId._id}
+            />
+ */
 function Reacts (props) {
     //const [numberOfComments,setNumberOfComments]=useState(0);
     const [open, setOpen] = useState(false);
@@ -71,7 +102,7 @@ function Reacts (props) {
         })
         .catch((err) => {
             //err.message; // 'Oops!'
-            alert("You can't like or dislike tweets currently, you got banned by admins");
+            alert(err.response.data.error);
             console.log(err);
           });
     }
@@ -122,7 +153,7 @@ function Reacts (props) {
     })
     .catch((err) => {
         //err.message; // 'Oops!'
-        alert("You can't retweet currently, you got banned by admins");
+        alert(err.response.data.error);
         console.log(err);
       });
 }
