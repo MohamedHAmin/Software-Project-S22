@@ -14,14 +14,7 @@ beforeEach(async () => {
     email: "user1@gmail.com",
     password: "123456",
   });
-  user2 = await User.create({
-    screenName: "user2",
-    tag: "user2",
-    email: "user2@gmail.com",
-    password: "123456",
-  });
   usertoken = await user.generateAuthToken();
-  usertoken2 = await user2.generateAuthToken();
 });
 
 test("reply successful", async () => {

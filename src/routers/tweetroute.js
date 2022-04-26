@@ -388,7 +388,7 @@ router.post("/reply", auth("user"), async (req, res) => {
       text: text,
     });
     res.status(200).send({ AddedTweetStatus: "Reply Stored" }).end();
-  } catch (e){
+  } catch (e) {
     res.status(400).send({ error: e.toString() }).end();
   }
 });
@@ -649,6 +649,10 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     ])
       .limit(limit)
       .skip(skip);
+    if (likedtweets.length < 1) {
+      e = "no liked tweets found";
+      throw e;
+    }
     for (let i = 0; i < likedtweets.length; i++) {
       if (
         !Array.isArray(likedtweets[i].retweetedTweet) ||
@@ -656,8 +660,10 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
       ) {
         likedtweets[i].retweetedTweet = null;
       }
-      if(!Array.isArray(likedtweets[i].reply) ||
-      !likedtweets[i].reply.length){
+      if (
+        !Array.isArray(likedtweets[i].reply) ||
+        !likedtweets[i].reply.length
+      ) {
         delete likedtweets[i].reply;
       }
     }
