@@ -34,7 +34,7 @@ describe('Signup page', () => {
 
       
       //phone number
-      cy.xpath(selectors.phoneNumber).type(phoneNumber).should('have.value', phoneNumber)
+      cy.xpath(selectors.phoneNumber).type(exactly6).should('have.value', exactly6)
        
       //click anywhere
       cy.xpath(selectors.biography).click()
@@ -67,14 +67,13 @@ describe('Signup page', () => {
   
         
         //phone number
-        cy.xpath(selectors.phoneNumber).type(invalidPhoneNumber).should('have.value', invalidPhoneNumber)
+        cy.xpath(selectors.phoneNumber).type(moreThan6).should('have.value', moreThan6)
   
          //click anywhere
         cy.xpath(selectors.biography).click()
 
-        cy.xpath(selectors.signupForm2).contains('Phone number is not valid').should('exist')
-        cy.xpath(selectors.signupButton).click()
-        cy.location('pathname').should('eq', '/SignUp') 
+        cy.xpath(selectors.signupForm2).contains('Phone number is not valid').should('not.exist')
+         
   
       })
 
@@ -101,7 +100,7 @@ describe('Signup page', () => {
   
         
         //phone number
-        cy.xpath(selectors.phoneNumber).type(invalidPhoneNumberMixedChar).should('have.value', invalidPhoneNumberMixedChar)
+        cy.xpath(selectors.phoneNumber).type(lessThan6).should('have.value', lessThan6)
   
          //click anywhere
         cy.xpath(selectors.biography).click()
