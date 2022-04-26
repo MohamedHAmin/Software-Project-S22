@@ -427,6 +427,17 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
               "_id screenName tag followercount followingcount profileAvater.url",
           },
         },
+        {
+          path: "reply",
+          select: "_id authorId tags text likeCount",
+          strictPopulate: false,
+          populate: {
+            path: "authorId",
+            strictPopulate: false,
+            select:
+              "_id screenName tag followercount followingcount profileAvater.url",
+          },
+        },
       ],
 
       options: { sort },
