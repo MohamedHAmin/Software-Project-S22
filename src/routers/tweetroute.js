@@ -14,6 +14,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 const filter = require("../ethics/bad_words");
 const Tweet = require("../models/Tweet");
+const res = require("express/lib/response");
+const e = require("express");
 
 router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   //Creates a new tweet with the json data that the user sends
@@ -140,7 +142,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       //! you will only get no text in case of retweet
       tweet.text = null;
     }
-
 
     if (tweet.retweetedTweet) {
       let retweetedTweet = await Tweet.findById(tweet.retweetedTweet);
@@ -485,7 +486,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
         {
           //if it is a retweet view content of retweeted tweet
           path: "retweetedTweet",
-          strictPopulate: false,
+          strictPopulate: true,
           select:
             "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
           populate: {
@@ -510,18 +511,46 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
       options: { sort },
     });
+
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
         );
-        if (isliked) {
+        let reqTweet = Tweet.findById(tweet.retweetedTweet);
+        if (isliked && reqTweet) {
           delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: true };
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+            retweetedtweetDeleted: false,
+          };
           return tweets;
-        } else {
+        } else if (!isliked && reqTweet) {
           delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: false };
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+            retweetedtweetDeleted: false,
+          };
+          return tweets;
+        } else if (isliked && !reqTweet) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            //retweetedTweet: null,
+            isliked: true,
+            retweetedtweetDeleted: true,
+          };
+          return tweets;
+        } else if (!isliked && !reqTweet) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            //retweetedtweet: null,
+            isliked: false,
+            retweetedtweetDeleted: true,
+          };
           return tweets;
         }
       });
@@ -532,8 +561,6 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
-
-    //here for testing purposes if an unhandled error routerears
     res.status(400).send({ error: e.toString() });
   }
 });
@@ -619,10 +646,63 @@ router.get("/timeline", auth("any"), async (req, res) => {
   }
 });
 
-// router.get("/search/:searchedItem", auth("any"), async () => {
-//   let searchedItem = req.params.searchedItem;
-//   //TODO implement searching
-// });
+router.get("/search/:searchedtext", auth("any"), async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let searchedItem = req.params.searchedtext;
+    let resultTweets = await Tweet.find({
+      $text: { $search: searchedItem },
+    })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip)
+      .populate({
+        path: "retweetedTweet",
+        strictPopulate: false,
+        select:
+          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select:
+            "_id screenName tag followercount followingcount profileAvater.url",
+        },
+      })
+      .populate({
+        path: "reply",
+        select: "_id authorId tags text likeCount",
+        strictPopulate: false,
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select:
+            "_id screenName tag followercount followingcount profileAvater.url",
+        },
+      })
+      .populate({
+        path: "authorId",
+        strictPopulate: false,
+        select:
+          "_id screenName tag followercount followingcount profileAvater.url",
+      });
+
+    let resultUsers = await User.find({ $text: { $search: searchedItem } })
+      .sort({ tag: 1 })
+      .limit(limit)
+      .skip(skip);
+
+    if (resultUsers.length < 1 && resultTweets.length < 1) {
+      e = "no users or tweets found";
+      throw e;
+    }
+    let searchResults = { Tweets: resultTweets, Users: resultUsers };
+    res.send(searchResults);
+  } catch (e) {
+    //here all caught errors are sent to the client
+    res.status(400).send({ error: e.toString() });
+  }
+});
 
 router.get("/profile/likedtweets", auth("user"), async (req, res) => {
   try {
