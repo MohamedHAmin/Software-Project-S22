@@ -110,7 +110,24 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
     await req.user.isBanned();
-    const tweet = await Tweet.findById(req.params.id);
+    let retweetedtweetDeleted = false;
+    const tweet = await Tweet.findById(req.params.id)
+      .populate({
+        path: "authorId",
+        select:
+          "_id screenName tag followercount followingcount profileAvater.url",
+      })
+      .populate({
+        path: "reply",
+        select: "_id authorId tags text likeCount",
+        strictPopulate: false,
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select:
+            "_id screenName tag followercount followingcount profileAvater.url",
+        },
+      });
     let sentTweet;
     if (!tweet) {
       e = "tweet not found";
@@ -124,48 +141,64 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       tweet.text = null;
     }
 
-    await tweet.populate({
-      path: "authorId",
-      select:
-        "_id screenName tag followercount followingcount profileAvater.url",
-    });
 
     if (tweet.retweetedTweet) {
-      await tweet.populate({
-        //if it is a retweet view content of retweeted tweet
-        path: "retweetedTweet",
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
-        populate: {
-          path: "authorId",
-          strictPopulate: false,
+      let retweetedTweet = await Tweet.findById(tweet.retweetedTweet);
+      if (retweetedTweet) {
+        await tweet.populate({
+          //if it is a retweet view content of retweeted tweet
+          path: "retweetedTweet",
           select:
-            "_id screenName tag followercount followingcount profileAvater.url",
-        },
-      });
+            "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+          populate: {
+            path: "authorId",
+            strictPopulate: false,
+            select:
+              "_id screenName tag followercount followingcount profileAvater.url",
+          },
+        });
+      } else {
+        retweetedtweetDeleted = true;
+      }
     }
-
-    await tweet.populate({
-      path: "reply",
-      select: "_id authorId tags text likeCount",
-      strictPopulate: false,
-      populate: {
-        path: "authorId",
-        strictPopulate: false,
-        select:
-          "_id screenName tag followercount followingcount profileAvater.url",
-      },
-    });
 
     const isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
     );
-    if (isliked) {
+    if (isliked && retweetedtweetDeleted) {
       delete tweet._doc.likes;
-      sentTweet = { ...tweet._doc, isliked: true, reply: tweet.reply };
-    } else {
+      sentTweet = {
+        ...tweet._doc,
+        isliked: true,
+        reply: tweet.reply,
+        retweetedTweet: null,
+        retweetedtweetDeleted: true,
+      };
+    } else if (!isliked && retweetedtweetDeleted) {
       delete tweet._doc.likes;
-      sentTweet = { ...tweet._doc, isliked: false, reply: tweet.reply };
+      sentTweet = {
+        ...tweet._doc,
+        isliked: false,
+        reply: tweet.reply,
+        retweetedTweet: null,
+        retweetedtweetDeleted: true,
+      };
+    } else if (isliked && !retweetedtweetDeleted) {
+      delete tweet._doc.likes;
+      sentTweet = {
+        ...tweet._doc,
+        isliked: true,
+        reply: tweet.reply,
+        retweetedtweetDeleted: false,
+      };
+    } else if (!isliked && !retweetedtweetDeleted) {
+      delete tweet._doc.likes;
+      sentTweet = {
+        ...tweet._doc,
+        isliked: false,
+        reply: tweet.reply,
+        retweetedtweetDeleted: false,
+      };
     }
     res.send(sentTweet);
   } catch (e) {
@@ -185,11 +218,29 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
     }
     const B = targettweet.authorId.equals(req.user._id);
     if (req.admin || B) {
-      if (targettweet.retweetCount > 0) {
-        await Tweet.deleteMany({ retweetedTweet: req.params.id });
-      }
+      // if (targettweet.retweetCount > 0) {
+      //   let retweetingTweets = await Tweet.find({
+      //     retweetedTweet: req.params.id,
+      //   });
+      //   for (retweetingTweet of retweetingTweets) {
+      //     retweetingTweet.originTweetDeleted = true;
+      //     await retweetingTweet.save();
+      //   }
+      // }
       if (targettweet.replyCount > 0) {
         await Tweet.deleteMany({ replyingTo: req.params.id });
+      }
+
+      let replyedOntweet = await Tweet.findById(targettweet.replyingTo);
+      let retweetedTweet = await Tweet.findById(targettweet.retweetedTweet);
+
+      if (replyedOntweet) {
+        replyedOntweet.replyCount--;
+        await replyedOntweet.save();
+      }
+      if (retweetedTweet) {
+        retweetedTweet.retweetCount--;
+        await retweetedTweet.save();
       }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
       res.status(200).end("Success");
@@ -280,7 +331,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
       throw e;
     }
     Retweetedtweet.retweetCount++;
-    let text = req.body.text.trim();
+    let text = req.body.text;
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
 
@@ -289,6 +340,8 @@ router.post("/retweet", auth("user"), async (req, res) => {
       //removed while getting
 
       text = "No-text";
+    } else {
+      text = req.body.text.trim();
     }
 
     if (text.length > 280) {
