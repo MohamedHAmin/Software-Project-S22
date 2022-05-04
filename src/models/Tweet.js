@@ -65,6 +65,7 @@ const tweetSchema = new mongoose.Schema(
         toJSON: { virtuals: true },
       },
     ],
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,

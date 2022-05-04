@@ -517,39 +517,18 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
         );
-        let reqTweet = Tweet.findById(tweet.retweetedTweet);
-        if (isliked && reqTweet) {
+        if (isliked) {
           delete tweet._doc.likes;
           const tweets = {
             ...tweet._doc,
             isliked: true,
-            retweetedtweetDeleted: false,
           };
           return tweets;
-        } else if (!isliked && reqTweet) {
+        } else {
           delete tweet._doc.likes;
           const tweets = {
             ...tweet._doc,
             isliked: false,
-            retweetedtweetDeleted: false,
-          };
-          return tweets;
-        } else if (isliked && !reqTweet) {
-          delete tweet._doc.likes;
-          const tweets = {
-            ...tweet._doc,
-            //retweetedTweet: null,
-            isliked: true,
-            retweetedtweetDeleted: true,
-          };
-          return tweets;
-        } else if (!isliked && !reqTweet) {
-          delete tweet._doc.likes;
-          const tweets = {
-            ...tweet._doc,
-            //retweetedtweet: null,
-            isliked: false,
-            retweetedtweetDeleted: true,
           };
           return tweets;
         }
@@ -590,25 +569,14 @@ router.get("/timeline", auth("any"), async (req, res) => {
           path: "authorId",
           strictPopulate: false,
           select:
-            "_id screenName tag followercount followingcount profileAvater.url",
-        },
-      })
-      .populate({
-        path: "reply",
-        select: "_id authorId tags text likeCount",
-        strictPopulate: false,
-        populate: {
-          path: "authorId",
-          strictPopulate: false,
-          select:
-            "_id screenName tag followercount followingcount profileAvater.url",
+            "_id screenName tag profileAvater.url",
         },
       })
       .populate({
         path: "authorId",
         strictPopulate: false,
         select:
-          "_id screenName tag followercount followingcount profileAvater.url",
+          "_id screenName tag profileAvater.url",
       });
     let i = -1;
     if (!followerTweet.length < 1) {
