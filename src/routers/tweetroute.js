@@ -431,7 +431,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
           path: "authorId",
           strictPopulate: false,
           select:
-            "_id screenName tag followercount followingcount profileAvater.url",
+            "_id screenName tag  profileAvater.url",
         },
         {
           //if it is a retweet view content of retweeted tweet
@@ -443,18 +443,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
             path: "authorId",
             strictPopulate: false,
             select:
-              "_id screenName tag followercount followingcount profileAvater.url",
-          },
-        },
-        {
-          path: "reply",
-          select: "_id authorId tags text likeCount",
-          strictPopulate: false,
-          populate: {
-            path: "authorId",
-            strictPopulate: false,
-            select:
-              "_id screenName tag followercount followingcount profileAvater.url",
+              "_id screenName tag profileAvater.url",
           },
         },
       ],
@@ -514,7 +503,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
         path: "retweetedTweet",
         strictPopulate: false,
         select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes",
         populate: {
           path: "authorId",
           strictPopulate: false,

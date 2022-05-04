@@ -5,9 +5,12 @@ const validator = require("validator");
 const tweetSchema = new mongoose.Schema(
   {
     replyingTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Tweet",
-      default: null,
+      tweetId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tweet",
+        default: null,
+      },
+      tweetExisted: { type: Boolean, default: false },
     },
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,10 +23,14 @@ const tweetSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+
     retweetedTweet: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Tweet",
-      default: null,
+      tweetId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tweet",
+        default: null,
+      },
+      tweetExisted: { type: Boolean, default: false },
     },
     tags: [
       {
@@ -65,7 +72,6 @@ const tweetSchema = new mongoose.Schema(
         toJSON: { virtuals: true },
       },
     ],
-    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
