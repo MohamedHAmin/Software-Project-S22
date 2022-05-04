@@ -10,6 +10,7 @@ const bcrypt = require("bcryptjs"); //generating unique strings
 const nodemailer = require("nodemailer")
 const {v4: uuidv4 } = require("uuid")
 const { urlencoded } = require("express")
+const { identity } = require("lodash")
 require('env-cmd')
 //nodemailer setup [less secure option on ]
 let transporter = nodemailer.createTransport({
@@ -140,5 +141,83 @@ router.post("/signup",async (req, res) => {
       }
       
     })
+      //~~~~~~~~~~~Forget Password~~~~~~~~~~~~~~~~//
+  //post req received from FE 
+  //There's a request to send an email which is called forgot password 
+  router.post('/forgotpassword' , async(req,res)=>{
+    //email to be sent link to and redirect url will be put in the email , he will be directed on that page on FE 
+    const {email} = req.body
+    try{
+      //check if the email already exists in the user 
+      const user = await User.find({ email:email})
+      if(user.length>0){
+        if(user[0].verified){
+            SendResetEmail(user[0])
+            res.send("Email sent , and password has been reset")
+        }
+        else{
+          res.send("Email hasn't been verified yet ")
+        }
+      } else{
+        res.send("Email is not found or registered")
+      }
+  }
+    catch(e) {
+      res.send(e)
+    }   
+  })
 
+  const SendResetEmail = async ({email})=>{
+   
+    //delete any existing forgot password requests by the user 
+    try{
+
+    var newPassword = generator.generate({
+      length: 10,
+      numbers: true
+  });
+
+  const mailOptions = {
+    from : process.env.AUTH_EMAIL,
+    to: email,
+    subject : "Forgot your Password ? ",
+    text: `Your new password is : ${newPassword}`
+  }
   
+      await transporter.sendMail(mailOptions)
+      newPassword = await bcrypt.hash(newPassword,8)
+      await User.updateOne({email},{password:newPassword})
+
+    
+    }
+     catch(e)
+    {
+      console.log(e);
+    }
+  }
+   //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
+   router.get('/auth/google', passport.authenticate('google', {scope:['profile'] }))
+
+   router.get('auth/google/callback',passport.authenticate('google', {failureRedirect:'/googlelogin/failed',successRedirect:"/googlelogin/success"}))
+   //redirect pages will be later on implemented by FE
+ 
+ //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
+ router.get("/googlelogin/failed",(req,res)=>{
+   res.status(401).json({
+     success: false,
+     message: "failure"
+   })
+ })
+ router.get("/googlelogin/success",(req,res)=>{
+   if(req.user){
+   res.status(200).json({
+     success: true,
+     message : "successful",
+     user:req.user,
+     //cookies: req.cookies
+   })
+   
+ }
+ })
+
+    module.exports = router;
