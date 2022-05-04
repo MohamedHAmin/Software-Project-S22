@@ -90,7 +90,7 @@ const tweetSchema = new mongoose.Schema(
 tweetSchema.virtual("reply", {
   ref: "Tweet",
   localField: "_id",
-  foreignField: "replyingTo",
+  foreignField: "replyingTo.tweetId",
 });
 
 tweetSchema.methods.toJSON = function () {
