@@ -135,7 +135,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       path: "retweetedTweet.tweetId",
       strictPopulate: false,
       select:
-        "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount",
+        "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
       populate: {
         path: "authorId",
         strictPopulate: false,
@@ -145,7 +145,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
     await tweet.populate({
       path: "reply",
       select:
-        "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount",
+        "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
       strictPopulate: false,
       populate: [
         {
@@ -155,7 +155,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         },
         {
           path: "reply",
-          select: "_id replyingTo authorId text tags likeCount gallery",
+          select: "_id replyingTo authorId text tags likeCount gallery createdAt",
           strictPopulate: false,
           populate: {
             path: "authorId",
@@ -569,7 +569,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
           path: "retweetedTweet.tweetId",
           strictPopulate: true,
           select:
-            "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+            "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
           populate: {
             path: "authorId",
             strictPopulate: false,
@@ -639,7 +639,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
         path: "retweetedTweet.tweetId",
         strictPopulate: false,
         select:
-          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes",
+          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes createdAt",
         populate: {
           path: "authorId",
           strictPopulate: false,
@@ -700,7 +700,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         path: "retweetedTweet.tweetId",
         strictPopulate: false,
         select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+          "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
         populate: {
           path: "authorId",
           strictPopulate: false,
@@ -773,6 +773,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
                 retweetCount: 1,
                 gallery: 1,
                 replyCount: 1,
+                createdAt:1
               },
             },
             {
@@ -846,12 +847,12 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
           select: "_id screenName tag profileAvater.url",
         },
       });
-    for (userReply of userReplies) {
-      let temp = await Tweet.findById(userReply.replyingTo.tweetId);
-      if (!temp) {
-        userReply.replyingTo.tweetId = null;
-      }
-    }
+    // for (userReply of userReplies) {
+    //   let temp = await Tweet.findById(userReply.replyingTo.tweetId);
+    //   if (!temp) {
+    //     userReply.replyingTo.tweetId = null;
+    //   }
+    // }
     if (userReplies.length < 1 || !userReplies) {
       e = "no replies found";
       throw e;
@@ -862,7 +863,33 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
   }
 });
 
-router.get("/profile/media", auth("user"), async (req, res) => {});
+router.get("/profile/media", auth("user"), async (req, res) => {
+  try {
+    await req.user.isBanned();
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+
+    let userTweetsWithImages = await Tweet.find({
+      authorId: req.user._id,
+      gallery: { $ne: [], $type: "array" },
+    })
+      .limit(limit)
+      .skip(skip)
+      .populate({
+        path: "authorId",
+        select: "_id screenName tag profileAvater.url",
+      });
+
+    if (userTweetsWithImages.length < 1) {
+      e = "no tweets with images found";
+      throw e;
+    }
+
+    res.send(userTweetsWithImages);
+  } catch (e) {
+    res.status(400).send({ error: e.toString() });
+  }
+});
 
 router.get("/explore", auth("any"), async (req, res) => {
   try {
@@ -887,7 +914,7 @@ router.get("/explore", auth("any"), async (req, res) => {
         path: "retweetedTweet.tweetId",
         strictPopulate: false,
         select:
-          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes",
+          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes createdAt",
         populate: {
           path: "authorId",
           strictPopulate: false,
