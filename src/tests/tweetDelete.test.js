@@ -31,7 +31,7 @@ test('Check Admin Delete Authority', async ()=>{
     .set('Authorization','Bearer '+admintoken.token)
     .send({})
     .expect(200)
-    expect(res.text).toEqual("Success")
+    expect(res.text).toMatch("Success")
 })
 test('Check User Delete Authority', async ()=>{
     const user1=await User.create({
@@ -61,7 +61,7 @@ test('Check User Delete Authority', async ()=>{
     .set('Authorization','Bearer '+user2token.token)
     .send({})
     .expect(200)
-    expect(res2.text).toEqual("Success")
+    expect(res2.text).toMatch("Success")
 })
 test('Check Wrong ID', async ()=>{
     const admin=await Admin.create({
