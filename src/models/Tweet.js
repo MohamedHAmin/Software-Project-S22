@@ -99,7 +99,7 @@ tweetSchema.methods.toJSON = function () {
   return tweetobject;
 };
 
-tweetSchema.index({ text: "text" });
+// tweetSchema.index({ text: "text" });
 
 const Tweet = mongoose.model("Tweet", tweetSchema);
 

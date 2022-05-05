@@ -261,7 +261,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.index({ tag: "text" });
+// userSchema.index({ tag: "text" });
 
 const User = mongoose.model("User", userSchema);
 

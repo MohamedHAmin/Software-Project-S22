@@ -155,7 +155,8 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         },
         {
           path: "reply",
-          select: "_id replyingTo authorId text tags likeCount gallery createdAt",
+          select:
+            "_id replyingTo authorId text tags likeCount gallery createdAt",
           strictPopulate: false,
           populate: {
             path: "authorId",
@@ -618,6 +619,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
+
 router.get("/timeline", auth("any"), async (req, res) => {
   try {
     await req.user.isBanned();
@@ -628,9 +630,9 @@ router.get("/timeline", auth("any"), async (req, res) => {
       return user.followingId;
     });
     const user = req.user;
-    //console.log('1')
+
     followingsId.push(req.user._id);
-    //console.log(followingsId)
+
     let followerTweet = await Tweet.find({ authorId: { $in: followingsId } })
       .sort({ createdAt: -1 })
       .limit(limit)
@@ -675,7 +677,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
         }
       });
     }
-    //console.log('2')
+
     res.send(followerTweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -690,8 +692,36 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let searchedItem = req.params.searchedtext;
+    // let resultTweets = await Tweet.find({
+    //   $text: { $search: searchedItem },
+    // })
+    //   .sort({ createdAt: -1 })
+    //   .limit(limit)
+    //   .skip(skip)
+    //   .populate({
+    //     path: "retweetedTweet.tweetId",
+    //     strictPopulate: false,
+    //     select:
+    //       "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+    //     populate: {
+    //       path: "authorId",
+    //       strictPopulate: false,
+    //       select: "_id screenName tag profileAvater.url",
+    //     },
+    //   })
+    //   .populate({
+    //     path: "authorId",
+    //     strictPopulate: false,
+    //     select: "_id screenName tag profileAvater.url",
+    //   });
+
+    // let resultUsers = await User.find({ $text: { $search: searchedItem } })
+    //   .sort({ tag: 1 })
+    //   .limit(limit)
+    //   .skip(skip);
+
     let resultTweets = await Tweet.find({
-      $text: { $search: searchedItem },
+      text: { $regex: searchedItem, $options: "i" },
     })
       .sort({ createdAt: -1 })
       .limit(limit)
@@ -713,15 +743,45 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         select: "_id screenName tag profileAvater.url",
       });
 
-    let resultUsers = await User.find({ $text: { $search: searchedItem } })
+    let resultUsers = await User.find({
+      tag: { $regex: searchedItem, $options: "i" },
+    })
       .sort({ tag: 1 })
       .limit(limit)
-      .skip(skip);
-
+      .skip(skip)
+      .select({
+        _id: 1,
+        screenName: 1,
+        tag: 1,
+        "profileAvatar.url": 1,
+        Biography: 1,
+      });
+    const followingsId = req.user.following.map((user) => {
+      return user.followingId.toString();
+    });
+    let found;
+    let modifiedresultUsers = [];
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
       throw e;
     }
+    if (resultUsers.length > 0) {
+      for (let i = 0; i < resultUsers.length; i++) {
+        found = followingsId.includes(resultUsers[i]._id.toString());
+        if (found) {
+          modifiedresultUsers.push({
+            ...resultUsers[i]._doc,
+            isfollowed: true,
+          });
+        } else {
+          modifiedresultUsers.push({
+            ...resultUsers[i]._doc,
+            isfollowed: false,
+          });
+        }
+      }
+    }
+    resultUsers = modifiedresultUsers;
     let searchResults = { Tweets: resultTweets, Users: resultUsers };
     res.send(searchResults);
   } catch (e) {
@@ -773,7 +833,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
                 retweetCount: 1,
                 gallery: 1,
                 replyCount: 1,
-                createdAt:1
+                createdAt: 1,
               },
             },
             {
