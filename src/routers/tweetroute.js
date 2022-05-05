@@ -835,6 +835,16 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
         path: "authorId",
         strictPopulate: false,
         select: "_id screenName tag profileAvater.url",
+      })
+      .populate({
+        path: "replyingTo.tweetId",
+        select:
+          "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
       });
     for (userReply of userReplies) {
       let temp = await Tweet.findById(userReply.replyingTo.tweetId);
@@ -852,6 +862,8 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
   }
 });
 
+router.get("/profile/media", auth("user"), async (req, res) => {});
+
 router.get("/explore", auth("any"), async (req, res) => {
   try {
     await req.user.isBanned();
@@ -865,9 +877,9 @@ router.get("/explore", auth("any"), async (req, res) => {
 
     followingsId.push(req.user._id);
 
-    let exploredTweet = await Tweet.find(
-      { authorId: { $nin: followingsId , $ne: req.user._id } }
-    )
+    let exploredTweet = await Tweet.find({
+      authorId: { $nin: followingsId, $ne: req.user._id },
+    })
       .sort({ createdAt: -1 })
       .limit(limit)
       .skip(skip)
