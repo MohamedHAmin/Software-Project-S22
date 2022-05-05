@@ -4,6 +4,11 @@ const Admin = require('../models/Admin')
 const Token = require('../models/Token')
 const app = require('../app')
 
+jest.mock('nodemailer', () => ({
+    createTransport: jest.fn().mockReturnValue({
+        sendMail: jest.fn().mockReturnValue((mailoptions, callback) => {})
+    })
+}));
   beforeEach(async ()=>{
       await User.deleteMany()
       await Token.deleteMany()
@@ -160,4 +165,53 @@ const res=await request(app).post('/user/login')
    password:"123456"
 })
 .expect(200)
+})
+
+test('Forget Password with wrong email', async ()=>{
+    await User.create({
+   screenName:"user6",
+   email:"user70@gmail.com",
+   password:"123456",
+   tag:"tag6",
+   verified:true
+})
+const res=await request(app).post('/user/forgotpassword')
+.send({
+   email:"user7@gmail.com"
+})
+.expect(400)
+expect(res.text).toMatch("Email is not found or registered")
+})
+
+test('Forget Password with correct email', async ()=>{
+    await User.create({
+   screenName:"user6",
+   email:"user7@gmail.com",
+   password:"123456",
+   tag:"tag6",
+   verified:true
+})
+const res=await request(app).post('/user/forgotpassword')
+.send({
+   email:"user7@gmail.com"
+})
+.expect(200)
+expect(res.text).toMatch("Email sent , and password has been reset")
+})
+
+
+test('Forget Password with un-verified email', async ()=>{
+    await User.create({
+   screenName:"user6",
+   email:"user70@gmail.com",
+   password:"123456",
+   tag:"tag6",
+   verified:false
+})
+const res=await request(app).post('/user/forgotpassword')
+.send({
+   email:"user70@gmail.com"
+})
+.expect(401)
+expect(res.text).toMatch("Email hasn't been verified yet")
 })
