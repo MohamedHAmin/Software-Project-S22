@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 const User = require("../models/User");
-
+const mongoose = require("mongoose");
 const fs = require("fs");
 
 const router = new express.Router();
@@ -22,23 +22,26 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   try {
     await req.user.isBanned();
     let text = req.body.text;
-
+    let texttrimmed;
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
-    if (text.length == 0) {
+    if (!text || texttrimmed.length < 1) {
       //checks if user sent Text parameter empty
       //if true the post will be rejected and sends an error
       e = "Empty Post";
       throw e;
     }
-    if (text.length > 280) {
+    else{
+      texttrimmed = req.body.text.trim();
+    }
+    if (texttrimmed.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
       e = "Post exceeds max length";
       throw e;
     }
 
-    if (filter.isProfane(text) == true) {
+    if (filter.isProfane(texttrimmed) == true) {
       //checks if user has a blacklisted word in their post
       //if true post will be rejected and sends an error
       //? I'm still using facebook's blacklist for bad words,
@@ -153,8 +156,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         },
         {
           path: "reply",
-          select:
-            "_id replyingTo authorId text tags likeCount gallery",
+          select: "_id replyingTo authorId text tags likeCount gallery",
           strictPopulate: false,
           populate: {
             path: "authorId",
@@ -260,18 +262,20 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
     }
     const B = targettweet.authorId.equals(req.user._id);
     if (req.admin || B) {
-      if(targettweet.replyingTo.tweetId){
-        let replyedOnTweet=await Tweet.findById(targettweet.replyingTo.tweetId);
-        if(replyedOnTweet)
-        {
+      if (targettweet.replyingTo.tweetId) {
+        let replyedOnTweet = await Tweet.findById(
+          targettweet.replyingTo.tweetId
+        );
+        if (replyedOnTweet) {
           replyedOnTweet.replyCount--;
           await replyedOnTweet.save();
         }
       }
-      if(targettweet.retweetedTweet.tweetId){
-        let retweetedTweet=await Tweet.findById(targettweet.retweetedTweet.tweetId);
-        if(retweetedTweet)
-        {
+      if (targettweet.retweetedTweet.tweetId) {
+        let retweetedTweet = await Tweet.findById(
+          targettweet.retweetedTweet.tweetId
+        );
+        if (retweetedTweet) {
           retweetedTweet.retweetCount--;
           await retweetedTweet.save();
         }
@@ -417,34 +421,49 @@ router.post("/retweet", auth("user"), async (req, res) => {
   }
 });
 
-router.post("/reply", auth("user"), async (req, res) => {
+router.post("/reply", auth("user"), upload.array("image"), async (req, res) => {
   try {
     await req.user.isBanned();
+    // let replyingTo=req.body.replyingTo;
+    // if (typeof req.body.replyingTo==="string"){
+    //   replyingTo=mongoose.Types.ObjectId(replyingTo);
+    // }
     let repliedOnTweet = await Tweet.findById(req.body.replyingTo);
     if (!repliedOnTweet) {
       e = "Error: tweet not found";
       throw e;
     }
     repliedOnTweet.replyCount++;
-    let text = req.body.text.trim();
+    let text = req.body.text;
+    let texttrimmed;
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
 
-    if (text.length == 0) {
+    if (
+      (!text || texttrimmed.length < 1) &&
+      (!req.body.imageCheck || req.body.imageCheck === "false")
+    ) {
       //checks if user sent Text parameter empty
       //if true the post will be rejected and sends an error
       e = "Empty Post";
       throw e;
+    } else if (
+      (!text || texttrimmed.length < 1) &&
+      req.body.imageCheck === "true"
+    ) {
+      texttrimmed = " ";
+    } else {
+      texttrimmed = req.body.text.trim();
     }
 
-    if (text.length > 280) {
+    if (text && texttrimmed.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
       e = "Post exceeds max length";
       throw e;
     }
 
-    if (filter.isProfane(text) == true) {
+    if (text && filter.isProfane(texttrimmed) == true) {
       //checks if user has a blacklisted word in their post
       //if true post will be rejected and sends an error
       e = "bad word";
@@ -480,12 +499,41 @@ router.post("/reply", auth("user"), async (req, res) => {
     //if text passed through all tests creates a new entry in the database
     //and sends an OK status message to the client
     await repliedOnTweet.save();
-    const tweet = await Tweet.create({
-      ...req.body,
-      authorId: req.user._id,
-      text: text,
-      replyingTo: { tweetId: req.body.replyingTo, tweetExisted: true },
-    });
+    if (req.body.imageCheck === "true") {
+      // const uploader = (path) => cloudinary.uploads(path, "Images");
+      const urls = [];
+      const files = req.files;
+      if (files.length > 4) {
+        e = "Image limit exceeded";
+        throw e;
+      }
+      for (const file of files) {
+        const path = file.path;
+        const newPath = await cloudinary.uploader.upload(path);
+        const newUrl = { photo: newPath.secure_url };
+        urls.push(newUrl);
+        fs.unlinkSync(path);
+        if (urls.length > 4) {
+          e = "Image limit exceeded";
+          throw e;
+        }
+      }
+      delete req.body.imageCheck;
+      const tweet = await Tweet.create({
+        ...req.body,
+        authorId: req.user._id,
+        text: texttrimmed,
+        gallery: urls,
+        replyingTo: { tweetId: req.body.replyingTo, tweetExisted: true },
+      });
+    } else {
+      const tweet = await Tweet.create({
+        ...req.body,
+        authorId: req.user._id,
+        text: texttrimmed,
+        replyingTo: { tweetId: req.body.replyingTo, tweetExisted: true },
+      });
+    }
     res.status(200).send({ AddedTweetStatus: "Reply Stored" }).end();
   } catch (e) {
     res.status(400).send({ error: e.toString() }).end();
