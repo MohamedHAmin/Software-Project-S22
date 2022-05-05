@@ -100,79 +100,86 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
   } catch (e) {
     //here all exception caught sends their respective
     //error according to failed test
-
+    
     res.status(400).send({ error: e.toString() });
   }
 });
 
 router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
+    const viewer=await User.findById(req.user._id);
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
-    const tweet = await Tweet.findById(req.params.id);
+    let tweet = await Tweet.findById(req.params.id);
     let sentTweet;
     if (!tweet) {
       e = "tweet not found";
       throw e;
     }
-
+    
     if (tweet.text === "No-text") {
       //in case you get a tweet with this place holder in its text path
       //replace it with null
       //! you will only get no text in case of retweet
       tweet.text = null;
     }
-
+    
     await tweet.populate({
       path: "authorId",
       select:
-        "_id screenName tag followercount followingcount profileAvater.url",
+      "_id screenName tag followercount followingcount profileAvater.url",
     });
-
+    
     if (tweet.retweetedTweet) {
       await tweet.populate({
         //if it is a retweet view content of retweeted tweet
         path: "retweetedTweet",
         select:
           "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+        });
+      }
+      
+      await tweet.populate({
+        path: "reply",
+        select: "_id authorId text likeCount",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select:
+          "_id screenName tag isPrivate profileAvater.url",
+        },
       });
-    }
+      tweet.reply=tweet.reply.filter(filterFunc(viewer));
+      console.log(tweet.reply);
+      const isliked = tweet.likes.some(
+        (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          sentTweet = { ...tweet._doc, isliked: true, reply: tweet.reply };
+        } else {
+          delete tweet._doc.likes;
+          sentTweet = { ...tweet._doc, isliked: false, reply: tweet.reply };
+        }
+        res.send(sentTweet);
+      } catch (e) {
+        //here all caught errors are sent to the client
 
-    await tweet.populate({
-      path: "reply",
-      select: "_id authorId text likeCount",
+        //here for testing purposes if an unhandled error routerears
+        res.status(400).send({ error: e.toString() });
+      }
     });
-
-
-    const isliked = tweet.likes.some(
-      (like) => like.like.toString() == req.user._id.toString()
-    );
-    if (isliked) {
-      delete tweet._doc.likes;
-      sentTweet = { ...tweet._doc, isliked: true, reply: tweet.reply };
-    } else {
-      delete tweet._doc.likes;
-      sentTweet = { ...tweet._doc, isliked: false, reply: tweet.reply };
-    }
-    res.send(sentTweet);
-  } catch (e) {
-    //here all caught errors are sent to the client
-
-    //here for testing purposes if an unhandled error routerears
-    res.status(400).send({ error: e.toString() });
-  }
-});
-
-router.delete("/tweet/:id", auth("any"), async (req, res) => {
-  try {
-    const targettweet = await Tweet.findById(req.params.id);
-    if (!targettweet) {
-      throw new Error("Not Found");
-    }
-    const B = targettweet.authorId.equals(req.user._id);
-    if (req.admin || B) {
-      const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).end("Success");
+    
+    router.delete("/tweet/:id", auth("any"), async (req, res) => {
+      try {
+        let targettweet = await Tweet.findById(req.params.id);
+        if (!targettweet) {
+          throw new Error("Not Found");
+        }
+        const mine = targettweet.authorId.equals(req.user._id);
+    if (req.admin || mine) {
+      await Tweet.findByIdAndDelete(req.params.id);
+      res.status(200).send({DeletedTweetStatus:"Success"});
     } else {
       throw new Error("Unauthorized");
     }
@@ -219,7 +226,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
         ReqTweet.likes.splice(unlikedIndex, 1);
         ReqTweet.likeCount = ReqTweet.likeCount - 1;
         await ReqTweet.save();
-
+        
         res.status(201);
         res.send({ ReqTweet, isliked: false });
       } else if (ReqTweet.likeCount == 1) {
@@ -263,28 +270,28 @@ router.post("/retweet", auth("user"), async (req, res) => {
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
-
+    
     if (!text || text.length == 0) {
       //in case of retweet with no text replace here place holder to be
       //removed while getting
-
+      
       text = "No-text";
     }
-
+    
     if (text.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
       e = "Post exceeds max length";
       throw e;
     }
-
+    
     if (filter.isProfane(text) == true) {
       //checks if user has a blacklisted word in their post
       //if true post will be rejected and sends an error
       e = "bad word";
       throw e;
     }
-
+    
     let tags = req.body.tags;
     //tags array are put in variable called tags for ease of use
     //if tags is null or an empty error we assume that there is
@@ -312,7 +319,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
 router.post("/reply", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
-
+    
     let repliedOnTweet = await Tweet.findById(req.body.replyingTo);
     if (!repliedOnTweet) {
       e = "Error: tweet not found";
@@ -322,21 +329,21 @@ router.post("/reply", auth("user"), async (req, res) => {
     let text = req.body.text.trim();
     //text attribute of the post is trimmed (remove whitespaces from both sides of strong)
     //then put in a variable called text for ease of use
-
+    
     if (text.length > 280) {
       //checks if post exceeded 280 characters
       //if true post will be rejected
       e = "Post exceeds max length";
       throw e;
     }
-
+    
     if (filter.isProfane(text) == true) {
       //checks if user has a blacklisted word in their post
       //if true post will be rejected and sends an error
       e = "bad word";
       throw e;
     }
-
+    
     let tags = req.body.tags;
     //tags array are put in variable called tags for ease of use
     //if tags is null or an empty error we assume that there is
@@ -382,7 +389,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
-
+    
     const user = await User.findOne({ _id: req.params.id });
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
@@ -396,45 +403,45 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
           path: "authorId",
           strictPopulate: false,
           select:
-            "_id screenName tag followercount followingcount profileAvater.url",
+          "_id screenName tag followercount followingcount profileAvater.url",
         },
         {
           //if it is a retweet view content of retweeted tweet
           path: "retweetedTweet",
           strictPopulate: false,
           select:
-            "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
           populate: {
             path: "authorId",
             strictPopulate: false,
             select:
-              "_id screenName tag followercount followingcount profileAvater.url",
+            "_id screenName tag followercount followingcount profileAvater.url",
           },
         },
       ],
-
+      
       options: { sort },
     });
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
-        );
-        if (isliked) {
-          delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: true };
-          return tweets;
-        } else {
-          delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: false };
-          return tweets;
-        }
-      });
-    }
-    res.send(user.Tweets);
+          );
+          if (isliked) {
+            delete tweet._doc.likes;
+            const tweets = { ...tweet._doc, isliked: true };
+            return tweets;
+          } else {
+            delete tweet._doc.likes;
+            const tweets = { ...tweet._doc, isliked: false };
+            return tweets;
+          }
+        });
+      }
+      res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
-
+    
     //here for testing purposes if an unhandled error routerears
     res.status(400).send({ error: e.toString() });
   }
@@ -443,7 +450,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
-
+    
     const followingsId = req.user.following.map((user) => {
       return user.followingId;
     });
@@ -452,39 +459,39 @@ router.get("/timeline", auth("any"), async (req, res) => {
     followingsId.push(req.user._id);
     //console.log(followingsId)
     let followerTweet = await Tweet.find({ authorId: { $in: followingsId } })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .skip(skip)
-      .populate({
-        path: "retweetedTweet",
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(skip)
+    .populate({
+      path: "retweetedTweet",
+      strictPopulate: false,
+      select:
+      "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
+      populate: {
+        path: "authorId",
         strictPopulate: false,
         select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes",
-        populate: {
-          path: "authorId",
-          strictPopulate: false,
-          select:
-            "_id screenName tag followercount followingcount profileAvater.url",
-        },
-      })
-      .populate({
-        path: "reply",
-        select: "_id authorId text likeCount",
-        strictPopulate: false,
-      })
+        "_id screenName tag followercount followingcount profileAvater.url",
+      },
+    })
+    .populate({
+      path: "reply",
+      select: "_id authorId text likeCount",
+      strictPopulate: false,
+    })
       .populate({
         path: "authorId",
         strictPopulate: false,
         select:
-          "_id screenName tag followercount followingcount profileAvater.url",
+        "_id screenName tag followercount followingcount profileAvater.url",
       });
       let i=-1;
-    if (!followerTweet.length < 1) {
-      followerTweet = followerTweet.map((tweet) => {
-        i++;
-        const isliked = tweet.likes.some(
-          (like) => like.like.toString() == req.user._id.toString()
-        );
+      if (!followerTweet.length < 1) {
+        followerTweet = followerTweet.map((tweet) => {
+          i++;
+          const isliked = tweet.likes.some(
+            (like) => like.like.toString() == req.user._id.toString()
+            );
         if (isliked) {
           delete tweet._doc.likes;
           const tweets = { ...tweet._doc, isliked: true ,reply:followerTweet[i].reply};
@@ -500,10 +507,16 @@ router.get("/timeline", auth("any"), async (req, res) => {
     res.send(followerTweet);
   } catch (e) {
     //here all caught errors are sent to the client
-
+    
     //here for testing purposes if an unhandled error routerears
     res.status(400).send({ error: e.toString() });
   }
 });
-
+function filterFunc(viewer){
+  return function visCheck(reply){
+    if(viewer.following.includes(reply.authorId._id)){return true;}
+    else if(!reply.authorId.isPrivate){return true;}
+    else{return false;}
+  }
+}
 module.exports = router;
