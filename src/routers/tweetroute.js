@@ -30,8 +30,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       //if true the post will be rejected and sends an error
       e = "Empty Post";
       throw e;
-    }
-    else{
+    } else {
       texttrimmed = req.body.text.trim();
     }
     if (texttrimmed.length > 280) {
@@ -849,6 +848,74 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
     }
     res.send(userReplies);
   } catch (e) {
+    res.status(400).send({ error: e.toString() });
+  }
+});
+
+router.get("/explore", auth("any"), async (req, res) => {
+  try {
+    await req.user.isBanned();
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
+
+    const followingsId = req.user.following.map((user) => {
+      return user.followingId;
+    });
+    // const user = req.user;
+
+    followingsId.push(req.user._id);
+
+    let exploredTweet = await Tweet.find(
+      { authorId: { $nin: followingsId , $ne: req.user._id } }
+    )
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip)
+      .populate({
+        path: "retweetedTweet.tweetId",
+        strictPopulate: false,
+        select:
+          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
+      })
+      .populate({
+        path: "authorId",
+        strictPopulate: false,
+        select: "_id screenName tag profileAvater.url",
+      });
+    let i = -1;
+    if (!exploredTweet.length < 1) {
+      exploredTweet = exploredTweet.map((tweet) => {
+        i++;
+        const isliked = tweet.likes.some(
+          (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+          };
+          return tweets;
+        } else {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+          };
+          return tweets;
+        }
+      });
+    }
+    res.send(exploredTweet);
+  } catch (e) {
+    //here all caught errors are sent to the client
+
+    //here for testing purposes if an unhandled error routerears
     res.status(400).send({ error: e.toString() });
   }
 });
