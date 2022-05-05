@@ -20,7 +20,6 @@ const tweetSchema = new mongoose.Schema(
     },
     text: {
       type: String,
-      trim: true,
       required: true,
     },
 

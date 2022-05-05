@@ -145,11 +145,24 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       select:
         "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount",
       strictPopulate: false,
-      populate: {
-        path: "authorId",
-        strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
-      },
+      populate: [
+        {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
+        {
+          path: "reply",
+          select:
+            "_id replyingTo authorId text tags likeCount gallery",
+          strictPopulate: false,
+          populate: {
+            path: "authorId",
+            strictPopulate: false,
+            select: "_id screenName tag profileAvater.url",
+          },
+        },
+      ],
     });
 
     let Retweet = tweet.retweetedTweet;
@@ -247,6 +260,22 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
     }
     const B = targettweet.authorId.equals(req.user._id);
     if (req.admin || B) {
+      if(targettweet.replyingTo.tweetId){
+        let replyedOnTweet=await Tweet.findById(targettweet.replyingTo.tweetId);
+        if(replyedOnTweet)
+        {
+          replyedOnTweet.replyCount--;
+          await replyedOnTweet.save();
+        }
+      }
+      if(targettweet.retweetedTweet.tweetId){
+        let retweetedTweet=await Tweet.findById(targettweet.retweetedTweet.tweetId);
+        if(retweetedTweet)
+        {
+          retweetedTweet.retweetCount--;
+          await retweetedTweet.save();
+        }
+      }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
       res.status(200).end("Success");
     } else {
@@ -344,7 +373,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
       //in case of retweet with no text replace here place holder to be
       //removed while getting
 
-      text = "No-text";
+      text = " ";
     } else {
       text = req.body.text.trim();
     }
@@ -746,7 +775,6 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
 router.get("/profile/replies", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
-    //console.log("check");
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
