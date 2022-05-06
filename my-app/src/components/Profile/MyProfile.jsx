@@ -254,6 +254,13 @@ function MyProfile(props) {
           <ProfileName pName={Name} pID={Tag} />
         </div>
         <Avatar
+          onClick={
+            coverImage
+              ? () => {
+                  window.location = coverImage;
+                }
+              : null
+          }
           className="coverImage"
           variant="square"
           sx={{ width: "auto", height: 220 }}
@@ -261,7 +268,18 @@ function MyProfile(props) {
           src={coverImage}
         />
         <div className="profileSetup">
-          <Avatar className="profileImage" alt={Name} src={profilePhoto} />
+          <Avatar
+            onClick={
+              profilePhoto
+                ? () => {
+                    window.location = profilePhoto;
+                  }
+                : null
+            }
+            className="profileImage"
+            alt={Name}
+            src={profilePhoto}
+          />
 
           {!sameUserProf ? (
             isAdmin != "" ? (
