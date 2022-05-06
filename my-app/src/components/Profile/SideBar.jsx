@@ -26,11 +26,20 @@ function SideBar({
   Settings,
   Logout,
   isAdmin,
+  darkMode,
 }) {
   let id = localStorage.getItem("userId");
   return (
     <div className="sidebar">
-      <img className="sideBarLarryIcon" alt="Larry Icon" src={LarryIcon} />
+      {!darkMode ? (
+        <img className="sideBarLarryIcon" alt="Larry Icon" src={LarryIcon} />
+      ) : (
+        <img
+          className="sideBarLarryIcon"
+          alt="Larry Icon"
+          src={LarryIconDark}
+        />
+      )}
 
       <ul>
         <li>

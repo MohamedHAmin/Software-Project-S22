@@ -66,7 +66,7 @@ function ProfileInfo({
         ) : (
           ""
         )}
-        {birthdayVisability && birthday.date ? (
+        {birthdayVisability && birthday ? (
           <span data-testid="Edit-Profile-Birthday-Element">
             <CakeIcon /> Born in {monthNames[birthdate.getMonth()]}{" "}
             {birthdate.getDate()}

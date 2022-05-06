@@ -14,11 +14,13 @@ function ProfilePage(props) {
   let { id } = useParams();
 
   useEffect(() => {}, [id]);
+  const [darkMode, setDarkMode] = useState(false);
+  console.log(darkMode);
 
   return (
     <div className="ProfilePage">
-      <SideBar Profile isAdmin={props.isAdmin} />
-      <MyProfile isAdmin={props.isAdmin} />
+      <SideBar Profile isAdmin={props.isAdmin} darkMode={darkMode} />
+      <MyProfile isAdmin={props.isAdmin} setDarkMode={setDarkMode} />
       <div className="rightbar">
         <div className="searchbar">
           <Searchbar />

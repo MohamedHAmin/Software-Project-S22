@@ -126,7 +126,7 @@ it('check that the btn SAVE in update password form disabled untill all input pa
   expect(btnElement).toBeEnabled();
 });
 //trivial case new password is correct and both match
-it('check that update password is done correctly trivial case new password is correct and both match', () => {
+it.skip('check that update password is done correctly trivial case new password is correct and both match', () => {
   render(<UpdatePassword darkMode={true}/>);
   const btnElement = screen.getByRole("button",{name:/save/i});
   const inputOldPassElement=screen.getByTestId("Current-password-updatepage")

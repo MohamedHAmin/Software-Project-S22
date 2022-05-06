@@ -120,7 +120,7 @@ function AccountInformationS(props) {
     const [ready, setReady]=useState(false);
     useEffect(()=>{
         // console.log(localStorage.getItem("accessToken"));
-        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`, 
+        axios.get(`http://localhost:4000/profile/${userId}/me`, 
             { headers: {
                 Authorization: localStorage.getItem("accessToken")}
             }

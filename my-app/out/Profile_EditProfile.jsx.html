@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Profile/EditProfile.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Profile/EditProfile.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { React, useState } from "react";
+import "./Styles/MyProfile.css";
+import { Button, Typography, Modal } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import CloseIcon from "@mui/icons-material/Close";
+import ImageUploaderBanner from "./ImageUploaderBanner";
+import ImageUploaderProfile from "./ImageUploaderProfile";
+import axios from "axios";
+
+/**
+ *
+ * @param {props} props Getting some information about the user.
+ * @returns Returns the edit profile pop up.
+ */
+
+function EditProfile(props) {
+  let userID = localStorage.getItem("userId");
+  const [buttonclosePopup, setButtonClosePopup] = useState(false);
+  const [NameError, setNameError] = useState(false);
+  /**
+   *
+   * @param {event} event The event of handling the edit profile button.
+   */
+  function saveBtn(e) {
+    e.preventDefault();
+
+    let data = {
+      screenName: document.getElementById("editNameProfileField").value,
+      Biography: document.getElementById("editBioProfileField").value,
+      website: document.getElementById("editWebsiteProfileField").value,
+    };
+    setNameError(false);
+    if (!document.getElementById("editNameProfileField").value) {
+      setNameError(true);
+    } else {
+      console.log("---------------------------");
+      console.log(data);
+      console.log("---------------------------");
+      axios
+        .put(`http://localhost:4000/profile/${userID}`, data, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            alert("Something wrong happened!");
+          } else {
+            axios
+              .put(
+                `http://localhost:4000/profile/${userID}`,
+                {
+                  location: {
+                    place: document.getElementById("editLocationProfileField")
+                      .value,
+                  },
+                },
+                {
+                  headers: {
+                    Authorization: localStorage.getItem("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+                if (res.error) {
+                  alert("Something wrong happened!");
+                } else {
+                  window.location.reload();
+                }
+              });
+          }
+        });
+    }
+
+    if (document.getElementById("editNameProfileField").value)
+      props.closeButtonPopup();
+  }
+
+  function handleDiscard() {
+    document.getElementById("editNameProfileField").value = props.Name;
+    document.getElementById("editBioProfileField").value = props.Bio;
+    document.getElementById("editLocationProfileField").value = props.Location;
+    document.getElementById("editWebsiteProfileField").value = props.Website;
+  }
+  function closeBtn() {
+    if (
+      props.Name === document.getElementById("editNameProfileField").value &amp;&amp;
+      props.Bio === document.getElementById("editBioProfileField").value &amp;&amp;
+      props.Location ===
+        document.getElementById("editLocationProfileField").value &amp;&amp;
+      props.Website === document.getElementById("editWebsiteProfileField").value
+    )
+      props.closeButtonPopup();
+    else {
+      setButtonClosePopup(true);
+    }
+  }
+
+  return (
+    &lt;Modal
+      open={props.buttonPopup}
+      onClose={() => props.closeButtonPopup()}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      className="editProfileModal"
+      keepMounted
+    >
+      &lt;form
+        className="editProfileContainer"
+        noValidate
+        autoComplete="off"
+        onSubmit={saveBtn}
+      >
+        &lt;div className="editProfileHeader">
+          &lt;div className="closeIcon">
+            &lt;CloseIcon onClick={closeBtn} />
+          &lt;/div>
+          &lt;Typography variant="h6" color="black">
+            Edit Profile
+          &lt;/Typography>
+          &lt;Button
+            className="saveProfileButton"
+            type="submit"
+            variant="outlined"
+            fullWidth
+          >
+            Save
+          &lt;/Button>
+        &lt;/div>
+
+        &lt;ImageUploaderBanner Name={props.Name} photo={props.coverPhoto} />
+        &lt;ImageUploaderProfile Name={props.Name} photo={props.profilePhoto} />
+
+        &lt;div className="editProfileInputs">
+          &lt;TextField
+            className="editProfileField"
+            label="Name"
+            id="editNameProfileField"
+            defaultValue={props.Name}
+            required
+            fullWidth
+            inputProps={
+              ({ maxLength: 50 }, { "data-testid": "editProfile-Name" })
+            }
+            error={NameError}
+          />
+
+          &lt;TextField
+            className="editProfileField"
+            label="Bio"
+            id="editBioProfileField"
+            defaultValue={props.Bio}
+            fullWidth
+            multiline
+            rows={3}
+            inputProps={
+              ({ maxLength: 160 }, { "data-testid": "editProfile-Bio" })
+            }
+          />
+          &lt;TextField
+            className="editProfileField"
+            label="Location"
+            id="editLocationProfileField"
+            defaultValue={props.Location}
+            fullWidth
+            multiline
+            rows={1}
+            inputProps={
+              ({ maxLength: 160 }, { "data-testid": "editProfile-Location" })
+            }
+          />
+          &lt;TextField
+            className="editProfileField"
+            label="Website"
+            id="editWebsiteProfileField"
+            defaultValue={props.Website}
+            fullWidth
+            multiline
+            rows={1}
+            inputProps={
+              ({ maxLength: 100 }, { "data-testid": "editProfile-Website" })
+            }
+          />
+        &lt;/div>
+        &lt;Modal
+          open={buttonclosePopup}
+          onClose={() => setButtonClosePopup}
+          className="closeEditProfileModal"
+        >
+          &lt;form
+            className="editProfileCloseContainer"
+            noValidate
+            autoComplete="off"
+          >
+            &lt;Typography
+              variant="h6"
+              color="black"
+              fontSize={18}
+              fontWeight={600}
+            >
+              Discard Changes?
+            &lt;/Typography>
+            &lt;Typography
+              variant="p"
+              color="black"
+              fontSize={15}
+              fontWeight={400}
+            >
+              This can't be undone and you 'll lose your changes.
+            &lt;/Typography>
+            &lt;Button
+              className="profileDiscardContainerButton"
+              onClick={() => {
+                setButtonClosePopup(false);
+                props.closeButtonPopup();
+                handleDiscard();
+              }}
+            >
+              Discard
+            &lt;/Button>
+            &lt;Button
+              className="profileCloseContainerButton"
+              onClick={() => setButtonClosePopup(false)}
+            >
+              Cancel
+            &lt;/Button>
+          &lt;/form>
+        &lt;/Modal>
+      &lt;/form>
+    &lt;/Modal>
+  );
+}
+
+export default EditProfile;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06 2022 16:53:59 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

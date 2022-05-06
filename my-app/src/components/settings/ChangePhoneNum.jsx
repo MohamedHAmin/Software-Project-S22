@@ -68,7 +68,7 @@ function ChangePhoneNum(props) {
         phoneNumber:newValue
       }
       //send request to backend to givee them new email
-      axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+      axios.put(`http://localhost:4000/profile/${userId}`,data, {
 
         headers: {
           Authorization: localStorage.getItem("accessToken")
@@ -104,7 +104,7 @@ function ChangePhoneNum(props) {
         phoneNumber:""
       }
       //
-      axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+      axios.put(`http://localhost:4000/profile/${userId}`,data, {
 
         headers: {
           Authorization: localStorage.getItem("accessToken")

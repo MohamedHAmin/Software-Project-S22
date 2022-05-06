@@ -31,7 +31,7 @@ function App() {
     console.log(localStorage.getItem("accessToken"));
     axios
       .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`,
+        `http://localhost:4000/profile/${userId}/me`,
         {
           headers: {
             Authorization: localStorage.getItem("accessToken"),
@@ -51,7 +51,7 @@ function App() {
   function checkAdmin() {
     if (localStorage.getItem("adminToken") !== "") {
       setisAdmin(true);
-      console.log(isAdmin);
+      //console.log(isAdmin);
     }
   }
   return (

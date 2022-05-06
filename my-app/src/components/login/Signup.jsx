@@ -34,7 +34,7 @@ const Signup = () => {
     const Navigate = useNavigate();
 
     const validationSchema1 = Yup.object().shape({
-        password: Yup.string().min(6).max(12).required("Enter Your Password"),
+        password: Yup.string().min(6).max(16).required("Enter Your Password"),
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
         screenName: Yup.string().min(3).required("Enter Your screenName"),
         tag: Yup.string().required("Tag is required")
@@ -61,7 +61,7 @@ const Signup = () => {
         data.birth.date = document.getElementById("BD").value;
 
         console.log(data);
-        axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/signup", data)
+        axios.post("http://localhost:4000/user/signup", data)
             .then((res) => {
                 console.log(res)
                 alert("Please check your email")

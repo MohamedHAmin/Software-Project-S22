@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Admin/ReportsPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Admin/ReportsPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState,useEffect } from "react";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import SideBar from './../Profile/SideBar';
+import ReportsView from './ReportView';
+import axios from 'axios'
+import "./Styles/ReportsPage.css";
+import { FallingLines } from "react-loader-spinner";
+/**
+ * reports page for the admin view where it displays by default when first opened a list of reported tweets and then admin can toggle between two options (reprted tweets and reported users)
+ * it displays the reported tweets/users and indicates the total number of reports on each one 
+ * delete button deletes all reports on the reported tweet/user present in the database
+ * if the tweet contains an offending content onclick on three dots present inside the tweet th admin can delete the meant post
+ * if the user have high number of reports the admin can go to his profile and ban the meant user for X period
+ * the tweets or users are displayed descendingly according to the number of reports 
+ * @param {boolean} isAdmin passed from the App.jsx to all components to be passed to the sidebar and used if needed in component
+ * @returns {div}
+ */
+function ReportsPage(props)
+{
+    const [userReports,setuserReports]=useState([]);
+    const [tweetReports,settweetReports]=useState([]);
+    console.log(tweetReports);
+    useEffect(()=>{
+        axios.get(`http://localhost:4000/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        console.log(res);
+        if (res.error){console.log("Error")}
+        else {
+          settweetReports(res.data);
+          console.log(tweetReports);
+          console.log(res.data);
+        }
+    })
+        axios.get(`http://localhost:4000/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        console.log(res);
+        if (res.error){console.log("Error")}
+        else {
+          setuserReports(res.data);
+        }
+    })
+    },[])
+
+    const passdeletedTweet = (id) => {
+        axios
+          .delete(
+            `http://localhost:4000/tweet/${id}`,
+            { headers: { Authorization: localStorage.getItem("adminToken") } }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error || !res.data === "success") {
+              alert("something went wrong");
+            } else {
+              window.location.reload();
+              axios.get(`http://localhost:4000/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+                console.log(res);
+                if (res.error){console.log("Error")}
+                else {
+                    settweetReports(res.data);
+                    window.location.reload();
+                    window.location.reload();
+                  }
+                });
+            }
+            //retweetCount();
+          })
+          .catch((err) => {
+            //err.message; // 'Oops!'
+            alert("Error occured while deleting");
+            console.log(err);
+          });
+      };
+
+      const ondeleteuserreport = (id) => {
+        axios
+          .delete(
+            `http://localhost:4000/admin/report/${id}?IDType=Reported`,
+            { headers: { Authorization: localStorage.getItem("adminToken") } }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error || !res.data === "success") {
+              alert("something went wrong");
+            } else {
+              window.location.reload();
+              axios.get(`http://localhost:4000/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+                    console.log(res);
+                    if (res.error){console.log("Error")}
+                    else {
+                    setuserReports(res.data);
+                    window.location.reload();
+                    window.location.reload();
+                  }
+                });
+            }
+            //retweetCount();
+          })
+          .catch((err) => {
+            //err.message; // 'Oops!'
+            alert("Error occured while deleting");
+            console.log(err);
+          });
+      };
+
+      const ondeletetweetreport = (id) => {
+        axios
+          .delete(
+            `http://localhost:4000/admin/report/${id}?IDType=Reported`,
+            { headers: { Authorization: localStorage.getItem("adminToken") } }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error || !res.data === "success") {
+              alert("something went wrong");
+            } else {
+              window.location.reload();
+              axios.get(`http://localhost:4000/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+                console.log(res);
+                if (res.error){console.log("Error")}
+                else {
+                    settweetReports(res.data);
+                    window.location.reload();
+                    window.location.reload();
+                  }
+                });
+            }
+            //retweetCount();
+          })
+          .catch((err) => {
+            //err.message; // 'Oops!'
+            alert("Error occured while deleting");
+            console.log(err);
+          });
+      };
+
+    const [clicked,setClicked]=useState(true);
+    const clickHandler=()=>
+    {
+        if(!clicked)
+        {
+            setClicked(true);
+        }
+    }
+    const click2Handler=()=>
+    {
+        setClicked(false);
+    }
+    return(
+        &lt;React.Fragment>
+            &lt;div className="ReportsPage">
+                &lt;SideBar Notifications isAdmin={props.isAdmin}/>
+                &lt;div className="ReportsContainer">
+                    &lt;Stack direction="row">
+                        &lt;Button variant="text" onClick={clickHandler}>Reported Tweets&lt;/Button>
+                        &lt;Button variant="text" onClick={click2Handler}>Reported Profiles&lt;/Button>
+                    &lt;/Stack>
+
+                    {/* {clicked &amp;&amp; tweetReports.length? (
+                        tweetReports.map((tweet)=>
+                        {
+                            &lt;/>
+                        })
+                    )} */}
+                    {(clicked &amp;&amp; tweetReports.tweets) ? ( 
+                        tweetReports.tweets.filter((tweet)=> tweet.Reports!==0).map((tweet) =>
+                            &lt;ReportsView
+                                ondelete={ondeletetweetreport}
+                                times={tweet.Reports}
+                                passdeletedTweet={passdeletedTweet}
+                                isTweet={true}
+                                tweet={tweet}/>)
+                    ):(
+                        &lt;>&lt;/>
+                    )}
+                    {(!clicked &amp;&amp; userReports.users) ? (
+                    userReports.users.filter((user)=> user.Reports!==0).map((user) =>
+                    &lt;ReportsView
+                        ondelete={ondeleteuserreport}
+                        times={user.Reports}
+                        isTweet={false}
+                        user={user}/>)
+                    ):(
+                        &lt;>&lt;/>
+                    )}
+                &lt;/div>
+            &lt;/div>
+        &lt;/React.Fragment>
+    );
+}
+export default ReportsPage;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06 2022 16:53:59 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

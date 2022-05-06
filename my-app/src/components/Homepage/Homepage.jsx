@@ -25,6 +25,7 @@ function Homepage(props) {
   const [userData, setuserdata] = useState([]);
   const [newtweets, setnewtweets] = useState([]);
   const [token,setToken]=useState(localStorage.getItem("accessToken"));
+  const [admintoken,setAdminToken]=useState(localStorage.getItem("adminToken"));
   const [text, setText] = useState("");
   console.log(token);
   /**
@@ -33,7 +34,7 @@ function Homepage(props) {
    *                       accessToken -> authorize the admin or any user to post tweets or delete his tweets 
    * @returns {void}
    */
-  const tokensetter=()=>
+  /*const tokensetter=()=>
   {
     if(props.isAdmin)
     {
@@ -45,25 +46,25 @@ function Homepage(props) {
       setToken(localStorage.getItem("accessToken"));
       console.log(token);
     }
-  }
+  }*/
 
   /**
    * sets token with access token for admin to call BE services of a normal user (example: get pots for timeline, post a tweet, retweet)
    * @returns {void}
    */
-  const tokenreset=()=>
+  /*const tokenreset=()=>
   {
       setToken(localStorage.getItem("accessToken"));
-  }
+  }*/
   /**
    * calls BE to get posts for timeline (your tweets and tweets of people you follow) and sets them in posts state
    * @returns {void}
    */
   const getposts = () => {
-    tokenreset();
+    //tokenreset();
     axios
       .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/timeline`,
+        `http://localhost:4000/timeline`,
         { headers: { Authorization: token } }
       )
       .then((res) => {
@@ -113,11 +114,13 @@ function Homepage(props) {
    * @returns {void}
    */
   const passdeletedTweet = (id) => {
-    tokensetter();
-    axios
+    //tokensetter();
+    if(props.isAdmin)
+    {
+      axios
       .delete(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
-        { headers: { Authorization: token } }
+        `http://localhost:4000/tweet/${id}`,
+        { headers: { Authorization: admintoken } }
       )
       .then((res) => {
         console.log(res);
@@ -135,6 +138,31 @@ function Homepage(props) {
         alert("Error occured while deleting");
         console.log(err);
       });
+    }
+    else
+    {
+      axios
+        .delete(
+          `http://localhost:4000/tweet/${id}`,
+          { headers: { Authorization: token } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error || !res.data === "success") {
+            alert("something went wrong");
+          } else {
+            getposts();
+            window.location.reload();
+            window.location.reload();
+          }
+          //retweetCount();
+        })
+        .catch((err) => {
+          //err.message; // 'Oops!'
+          alert("Error occured while deleting");
+          console.log(err);
+        });
+    }
   };
 
   /*const passdeletedTweet =(id)=>
@@ -204,7 +232,7 @@ function Homepage(props) {
       console.log(data2);
       axios
         .post(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet`,
+          `http://localhost:4000/tweet`,
           data2,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )

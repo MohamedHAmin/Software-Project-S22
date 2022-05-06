@@ -3,6 +3,7 @@ import "./Styles/MyProfile.css";
 import ProfileName from "./ProfileName";
 import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
+import EditProfile from "./EditProfile";
 import { Button, Typography, Modal } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Post from "../Homepage/Post";
 import { FallingLines } from "react-loader-spinner";
+import { Web } from "@material-ui/icons";
 /**
  *
  * @param {props} props Getting if it's admin
@@ -28,8 +30,6 @@ function MyProfile(props) {
   let isAdmin = localStorage.getItem("adminToken");
   const [joinedDate, setJoinedDate] = useState("");
   const [buttonPopup, setButtonPopup] = useState(false);
-  const [buttonclosePopup, setButtonClosePopup] = useState(false);
-  const [NameError, setNameError] = useState(false);
   const [followModalState, setFollowModalState] = useState(false);
   const [optionsModalState, setOptionsModalState] = useState(false);
   const [userTweets, setUserTweets] = useState([]);
@@ -42,9 +42,8 @@ function MyProfile(props) {
   const [Name, setName] = useState("");
   const [Bio, setBio] = useState("");
   const [Location, setLocation] = useState("");
-  const [locationVisability, setlocationVisability] = useState(true);
-
   const [Website, setWebsite] = useState("");
+  const [locationVisability, setlocationVisability] = useState(true);
 
   const [Followers, setFollowers] = useState(0);
 
@@ -53,10 +52,9 @@ function MyProfile(props) {
 
   useEffect(() => {
     axios
-      .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
-      )
+      .get(`http://localhost:4000/tweet/user/${id}`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
       .then((res) => {
         console.log(res);
         if (res.error) {
@@ -68,18 +66,19 @@ function MyProfile(props) {
     if (id == userID) {
       setSameUserProf(true);
     }
-    console.log(sameUserProf);
-    if (id === userID) {
+
+    if (sameUserProf) {
+      setName(null);
       axios
-        .get(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .get(`http://localhost:4000/profile/${id}/me`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           if (res.error) {
             console.log("Error");
           } else {
+            props.setDarkMode(res.data.darkMode);
             setName(res.data.screenName);
             setBio(res.data.Biography);
             setLocation(res.data.location.place);
@@ -97,11 +96,11 @@ function MyProfile(props) {
           }
         });
     } else {
+      setName(null);
       axios
-        .get(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .get(`http://localhost:4000/profile/${id}`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           if (res.error) {
@@ -129,10 +128,9 @@ function MyProfile(props) {
 
   const passdeletedTweet = (id) => {
     axios
-      .delete(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
-      )
+      .delete(`http://localhost:4000/tweet/${id}`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
       .then((res) => {
         console.log(res);
         if (res.error || !res.data === "success") {
@@ -140,12 +138,9 @@ function MyProfile(props) {
         } else {
           window.location.reload();
           axios
-            .get(
-              `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
-              {
-                headers: { Authorization: localStorage.getItem("accessToken") },
-              }
-            )
+            .get(`http://localhost:4000/tweet/user/${id}`, {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            })
             .then((res) => {
               console.log(res);
               if (res.error) {
@@ -165,94 +160,6 @@ function MyProfile(props) {
         console.log(err);
       });
   };
-  console.log(Website);
-  /**
-   *
-   * @param {event} event The event of handling the edit profile button.
-   */
-  function saveBtn(e) {
-    e.preventDefault();
-
-    let data = {
-      screenName: document.getElementById("editNameProfileField").value,
-      Biography: document.getElementById("editBioProfileField").value,
-      website: document.getElementById("editWebsiteProfileField").value,
-    };
-    setNameError(false);
-    if (!document.getElementById("editNameProfileField").value) {
-      setNameError(true);
-    } else {
-      console.log("---------------------------");
-      console.log(data);
-      console.log("---------------------------");
-      axios
-        .put(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
-          data,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.error) {
-            alert("Something wrong happened!");
-          } else {
-            axios
-              .put(
-                `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
-                {
-                  location: {
-                    place: document.getElementById("editLocationProfileField")
-                      .value,
-                  },
-                },
-                {
-                  headers: {
-                    Authorization: localStorage.getItem("accessToken"),
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-                if (res.error) {
-                  alert("Something wrong happened!");
-                } else {
-                  console.log(data);
-                  setName(data.screenName);
-                  setBio(data.Biography);
-                  setWebsite(data.website);
-                  console.log(Website);
-                  setLocation(
-                    document.getElementById("editLocationProfileField").value
-                  );
-                  window.location.reload();
-                }
-              });
-          }
-        });
-    }
-
-    if (document.getElementById("editNameProfileField").value)
-      setButtonPopup(false);
-  }
-
-  function handleDiscard() {
-    setName(Name);
-    setBio(Bio);
-    setWebsite(Website);
-    setLocation(Location);
-  }
-  function closeBtn() {
-    if (
-      Name === document.getElementById("editNameProfileField").value &&
-      Bio === document.getElementById("editBioProfileField").value &&
-      Location === document.getElementById("editLocationProfileField").value &&
-      Website === document.getElementById("editWebsiteProfileField").value
-    )
-      setButtonPopup(false);
-    else {
-      setButtonClosePopup(true);
-    }
-  }
   /**
    * Handling the following request
    */
@@ -262,11 +169,9 @@ function MyProfile(props) {
       setFollowModalState(true);
     } else {
       axios
-        .post(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${id}`,
-          null,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .post(`http://localhost:4000/${userID}/follow/${id}`, null, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           setFollowers(Followers + 1);
 
@@ -285,11 +190,9 @@ function MyProfile(props) {
    */
   function handleUnfollowAction() {
     axios
-      .post(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${id}`,
-        null,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
-      )
+      .post(`http://localhost:4000/${userID}/unfollow/${id}`, null, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
       .then((res) => {
         console.log(res);
         setFollowers(Followers - 1);
@@ -317,7 +220,7 @@ function MyProfile(props) {
   function handleBanAction() {
     axios
       .post(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`,
+        `http://localhost:4000/admin/ban/${id}`,
         { duration: banDuration1 },
         { headers: { Authorization: localStorage.getItem("adminToken") } }
       )
@@ -353,7 +256,7 @@ function MyProfile(props) {
         <Avatar
           className="coverImage"
           variant="square"
-          sx={{ width: "auto", height: 180 }}
+          sx={{ width: "auto", height: 220 }}
           alt={Name}
           src={coverImage}
         />
@@ -513,132 +416,17 @@ function MyProfile(props) {
             </FormControl>
           </Modal>
 
-          <Modal
-            open={buttonPopup}
-            onClose={() => setButtonPopup(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            className="editProfileModal"
-            keepMounted
-          >
-            <form
-              className="editProfileContainer"
-              noValidate
-              autoComplete="off"
-              onSubmit={saveBtn}
-            >
-              <div className="editProfileHeader">
-                <CloseIcon className="closeIcon" onClick={closeBtn} />
-                <Typography variant="h6" color="black">
-                  Edit Profile
-                </Typography>
-                <Button
-                  className="saveProfileButton"
-                  type="submit"
-                  variant="outlined"
-                  fullWidth
-                >
-                  Save
-                </Button>
-              </div>
-              <div className="editProfileInputs">
-                <TextField
-                  className="editProfileField"
-                  label="Name"
-                  id="editNameProfileField"
-                  defaultValue={Name}
-                  required
-                  fullWidth
-                  inputProps={
-                    ({ maxLength: 50 }, { "data-testid": "editProfile-Name" })
-                  }
-                  error={NameError}
-                />
-                <TextField
-                  className="editProfileField"
-                  label="Bio"
-                  id="editBioProfileField"
-                  defaultValue={Bio}
-                  fullWidth
-                  multiline
-                  rows={3}
-                  inputProps={
-                    ({ maxLength: 160 }, { "data-testid": "editProfile-Bio" })
-                  }
-                />
-                <TextField
-                  className="editProfileField"
-                  label="Location"
-                  id="editLocationProfileField"
-                  defaultValue={Location}
-                  fullWidth
-                  multiline
-                  rows={1}
-                  inputProps={
-                    ({ maxLength: 160 },
-                    { "data-testid": "editProfile-Location" })
-                  }
-                />
-                <TextField
-                  className="editProfileField"
-                  label="Website"
-                  id="editWebsiteProfileField"
-                  defaultValue={Website}
-                  fullWidth
-                  multiline
-                  rows={1}
-                  inputProps={
-                    ({ maxLength: 100 },
-                    { "data-testid": "editProfile-Website" })
-                  }
-                />
-              </div>
-              <Modal
-                open={buttonclosePopup}
-                onClose={() => setButtonClosePopup}
-                className="closeEditProfileModal"
-              >
-                <form
-                  className="editProfileCloseContainer"
-                  noValidate
-                  autoComplete="off"
-                >
-                  <Typography
-                    variant="h6"
-                    color="black"
-                    fontSize={18}
-                    fontWeight={600}
-                  >
-                    Discard Changes?
-                  </Typography>
-                  <Typography
-                    variant="p"
-                    color="black"
-                    fontSize={15}
-                    fontWeight={400}
-                  >
-                    This can't be undone and you 'll lose your changes.
-                  </Typography>
-                  <Button
-                    className="profileDiscardContainerButton"
-                    onClick={() => {
-                      setButtonClosePopup(false);
-                      setButtonPopup(false);
-                      handleDiscard();
-                    }}
-                  >
-                    Discard
-                  </Button>
-                  <Button
-                    className="profileCloseContainerButton"
-                    onClick={() => setButtonClosePopup(false)}
-                  >
-                    Cancel
-                  </Button>
-                </form>
-              </Modal>
-            </form>
-          </Modal>
+          <EditProfile
+            buttonPopup={buttonPopup}
+            setButtonPopup={() => setButtonPopup(true)}
+            closeButtonPopup={() => setButtonPopup(false)}
+            Name={Name}
+            Bio={Bio}
+            Location={Location}
+            Website={Website}
+            profilePhoto={profilePhoto}
+            coverPhoto={coverImage}
+          />
         </div>
         <ProfileInfo
           name={Name}
@@ -653,7 +441,7 @@ function MyProfile(props) {
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
         />
-        <MyProfileTabs />
+        {/* <MyProfileTabs /> */}
         {userTweets?.length ? (
           userTweets.map((post) => (
             <Post

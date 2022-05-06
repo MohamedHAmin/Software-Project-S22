@@ -20,12 +20,12 @@ const Login = () => {
     }
     const Navigate = useNavigate();
     const validationSchema = Yup.object().shape({
-        password: Yup.string().min(6).max(12).required("Enter Your Password"),
+        password: Yup.string().min(6).max(16).required("Enter Your Password"),
         email_or_username: Yup.string().min(3).required("Enter Your Email or Tag.")
     })
     const onSubmit = (data) => {
         console.log(data);
-        axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/login", data).then((res) => {
+        axios.post("http://localhost:4000/user/login", data).then((res) => {
             console.log(res);
             if (res.error) {
                 if (res.error === "Error: unable to login as user is not verified") {

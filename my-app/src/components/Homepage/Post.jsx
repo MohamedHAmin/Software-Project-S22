@@ -56,18 +56,30 @@ const [username]=useState(props.post.authorId.screenName);
 const [tweetcontent]=useState(props.post.text);
 const [displayName]=useState(props.post.authorId.tag);
 const [sameuser,setsameuser]=useState(false);
+const [comments,setComments]=useState([]);
 useEffect(()=>{
   if(tweetcontent==="No-text" && !props.post.gallery[0])
   {
     setcanretweet(false);
   }
+  axios.get(`http://localhost:4000/tweet/${postId}`,
+  { headers: { Authorization: localStorage.getItem("accessToken") }}).then((res) => {
+    if (res.error) {
+      console.log(
+        "There was error while attempting to retrieve tweet"
+      );
+    } else {
+      setComments(res.data.reply);
+      console.log(res.data.reply);
+    }
+  });
 },[])
 //const [content, setContent] = useState("");
-//const [displaylimit,setdisplaylimit] = useState(5);
-//const [displayload,setdisplayload] = useState(false);
-//const [loading, setLoading] = useState(false);
+const [displaylimit,setdisplaylimit] = useState(5);
+const [displayload,setdisplayload] = useState(false);
+const [loading, setLoading] = useState(false);
 //console.log(comments);
-/*function handleClick() {
+function handleClick() {
     setLoading(true);
     if(commentsperpost > displaylimit)
     {
@@ -80,14 +92,37 @@ useEffect(()=>{
         }
     }
     setLoading(false);
-}*/
+}
 //const [count,setCount]=useState(props.count);
 //let tmp=comments.filter((comment) => comment.postid === postId);
 //console.log(tmp);
 //to get the content of the comments from the comment component
-/*const passData = (data) => {
-    setContent(data);
-    comments.push({
+const passData = (text) => {
+  let data={
+    Text:text,
+    replyingTo:postId
+  };
+  axios
+        .post(
+          `http://localhost:4000/reply`,
+          data,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            alert("something went wrong");
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          //err.message; // 'Oops!'
+          alert(err.response.data.error);
+          console.log(err);
+        });
+    //setContent(data);
+    /*comments.push({
         id:comments.length,
         postid:postId,
         username:"Ahmed_Emad",
@@ -105,8 +140,8 @@ useEffect(()=>{
     if (commentsperpost > displaylimit)
     {
         setdisplayload(true);
-    }
-  };*/
+    }*/
+  };
   function checkifsameuser()
   {
     if(props.post.authorId._id===localStorage.getItem("userId"))
@@ -128,19 +163,18 @@ function deletepost(){
     temp--;
     props.setcommentsperpost(temp);
     console.log(temp);
-  }
-} */
+  } */
 // const retweetCount=()=>
 //     {
 //         var temp=posts.filter((post)=> post.innerpostid===postId).length;
 //         setNumberOfRetweets(temp);
 //     }
-  /*const [text,setText] =useState("");
+  /*const [text,setText] =useState("");*/
   const [displayComments,setdisplayComments]=useState(false);
   const CommentHandler=()=>
   {
       setdisplayComments(!displayComments);
-  }*/
+  }
 
     /*const passdeletedComment =(id)=>
     {
@@ -176,7 +210,7 @@ function deletepost(){
               authorId={props.post.retweetedTweet.authorId._id}
               content={props.post.retweetedTweet.text}/>}
         {date && <div className="time">
-            <p>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}&nbsp;&nbsp;</p>
+            <p>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}&nbsp;&nbsp;</p>
             <p>{date.getHours()}:{date.getMinutes()}</p>
         </div>}
         <div className="reactsBar">
@@ -196,13 +230,13 @@ function deletepost(){
             image={props.post.gallery[0]}
             canretweet={canretweet}
             authorId={props.post.authorId._id}
-            //CommentHandler={CommentHandler}
+            CommentHandler={CommentHandler}
             />
         </div>
-        {/*displayComments ? ( 
-          comments.filter((comment) => comment.postid === postId).slice(0,displaylimit).map((comment) =>
+        {displayComments ? ( 
+          comments.slice(0,displaylimit).map((comment) =>
             <Post
-              key={comment.id}
+              /*key={comment.id}
               postid={comment.id}
               username={comment.username}
               tagName={comment.displayName}
@@ -212,7 +246,11 @@ function deletepost(){
               //passdeletedTweet={passdeletedComment}
               isPost={false}
               commentsperpost={commentsperpost}
-              setcommentsperpost={setcommentsperpost}
+              setcommentsperpost={setcommentsperpost}*/
+              post={comment}
+              passdeletedTweet={deletepost}
+              isAdmin={props.isAdmin}
+              isPost={true}
             />)
           ):(<></>)}
           <div className="loadmore">
@@ -227,9 +265,9 @@ function deletepost(){
         >
           Load More
         </LoadingButton>}
-          </div>*/}
+          </div>
         {props.isPost && <div className="comment">
-            <Comment /*passData={passData}*//>
+            <Comment passData={passData}/>
         </div>}
     </div>
 </React.Fragment>

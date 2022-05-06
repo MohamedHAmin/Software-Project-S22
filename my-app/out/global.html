@@ -94,9 +94,2443 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="blue"><span class="type-signature">(constant) </span>blue<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    component that diplays the option available in the display settings page, to let the user change the display mode: Light/Fark mode.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_DisplaySettings.jsx.html">settings/DisplaySettings.jsx</a>, <a href="settings_DisplaySettings.jsx.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = truereturn (&lt;div>   &lt;h1>Accessibility, display and languages&lt;/h1>   &lt;p>
+          Manage your font size, color, and background. These settings affect
+          all the Larry accounts on this browser.
+      &lt;/p>   &lt;SettingsMenuOptions Display/>&lt;/div>) </code></pre>
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AccInfoOptions"><span class="type-signature"></span>AccInfoOptions<span class="signature">(darkMode, id, active, Icon, text, subtext, isSubtextExist)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display each option in the Account information SUB menu.(just to make the SUB menu options with the same style and to modularize the code)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of selected option in order to make SettingsPage render the correct sub menu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>active</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to know which option is selected to make it with different style.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Icon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if there exist an icon to this option it would be displayed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the text displayed on the option</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subtext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the subtext diplayed just below the option text</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isSubtextExist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to identify if the option has subtext or no</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_AccInfoOptions.jsx.html">settings/AccInfoOptions.jsx</a>, <a href="settings_AccInfoOptions.jsx.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.id = 1props.darkMode = trueprops.active = trueprops.text = "Username"props.subtext = "Ahmed"props.isSubtextExist = trueconst isclickedAcc = truereturn (&lt;div>   &lt;h2>Username&lt;/h2>   &lt;span>Ahmed&lt;/span>   &lt;ArrowForwardIosIcon />   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AccountInformationS"><span class="type-signature"></span>AccountInformationS<span class="signature">(darkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display the whole page of Account information SUB menu.(it renders inside it <AccInfoOptions/> to display each option only)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_AccountInformationS.jsx.html">settings/AccountInformationS.jsx</a>, <a href="settings_AccountInformationS.jsx.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueconst anythingClicked = falsereturn (&lt;div>   &lt;h1>Account information&lt;/h1>   >See information about your account, download an archive of your data, or learn about your account deactivation options&lt;/p>   &lt;AccInfoOptions Username/>   &lt;AccInfoOptions Phone/>   &lt;AccInfoOptions Email/>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AccountSettings"><span class="type-signature"></span>AccountSettings<span class="signature">(isDarkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display the page of Account settings with its 2 options -->account info, change password
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_AccountSettings.jsx.html">settings/AccountSettings.jsx</a>, <a href="settings_AccountSettings.jsx.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = trueconst isClickedAccInfo = truereturn (&lt;div>   &lt;h1>Change your password&lt;/h1>   &lt;UpdatePassword/>   &lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ChangePhoneNum"><span class="type-signature"></span>ChangePhoneNum<span class="signature">(darkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user add phone number if he does not have it already on Larry.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_AddPhoneNum.jsx.html">settings/AddPhoneNum.jsx</a>, <a href="settings_AddPhoneNum.jsx.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueconst newValue = "01157828196"return (&lt;div>   &lt;h2>Change Phone&lt;/h2>   &lt;h2>Add phone number&lt;/h2>   &lt;Modal>     &lt;TextField/>     &lt;Button> Save     &lt;/Button>     &lt;Button> Close     &lt;/Button>    &lt;/Modal>    ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ChangePhoneNum"><span class="type-signature"></span>ChangePhoneNum<span class="signature">(darkMode, oldValue, onChangerefreshAfterPhone)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change his phone number or delete it.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oldValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the old value stored in data base</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onChangerefreshAfterPhone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a function all its purpose is to make the parent componenet AccountInformaationS refresh the page (using useEffect) to show the new data (the new phone number added)or if the user deleted his phone number it refreshes the page to display page of "Add phone number"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_ChangePhoneNum.jsx.html">settings/ChangePhoneNum.jsx</a>, <a href="settings_ChangePhoneNum.jsx.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.oldValue = "01171458789"const newValue = "01157828196"return (&lt;div>   &lt;h2>Change Phone&lt;/h2>   &lt;TextField/>   &lt;Button> Update phone number   &lt;/Button>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ChangeUserTag"><span class="type-signature"></span>ChangeUserTag<span class="signature">(darkMode, oldValue, onChangerefreshAfterPhone)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change his Username.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oldValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the old value stored in data base</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onChangerefreshAfterPhone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a function all its purpose is to make the parent componenet AccountInformaationS refresh the page (using useEffect) to show the new data (the new phone number added)or if the user deleted his phone number it refreshes the page to display page of "Add phone number"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_ChangeUserTag.jsx.html">settings/ChangeUserTag.jsx</a>, <a href="settings_ChangeUserTag.jsx.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.oldValue = "kimo123"const newValue = "kariiim"const isValueChanged = true const newValueError = false newValueTypeErrorconst newValueTypeError = 0return (&lt;div>   &lt;h2>Change username&lt;/h2>   &lt;TextField/>   &lt;Button> Save   &lt;/Button>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="contact"><span class="type-signature"></span>contact<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="login_contact.jsx.html">login/contact.jsx</a>, <a href="login_contact.jsx.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns a welcome message
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="CreateCard"><span class="type-signature"></span>CreateCard<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting the information of the people i follow.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_CreateCard.jsx.html">Profile/CreateCard.jsx</a>, <a href="Profile_CreateCard.jsx.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the card of the people i follow.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="CreateFollower"><span class="type-signature"></span>CreateFollower<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting the information of my followers.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_CreateFollower.jsx.html">Profile/CreateFollower.jsx</a>, <a href="Profile_CreateFollower.jsx.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the card of my followers.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createImage"><span class="type-signature"></span>createImage<span class="signature">(imageSrc, pixelCrop, rotation)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>imageSrc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">File</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Image File url</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pixelCrop</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">pixelCrop Object provided by react-easy-crop</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">optional rotation parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_cropImage.jsx.html">Profile/cropImage.jsx</a>, <a href="Profile_cropImage.jsx.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="EditProfile"><span class="type-signature"></span>EditProfile<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting some information about the user.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_EditProfile.jsx.html">Profile/EditProfile.jsx</a>, <a href="Profile_EditProfile.jsx.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the edit profile pop up.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="FollowerCard"><span class="type-signature"></span>FollowerCard<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Setting the information of my followers.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_FollowerCard.jsx.html">Profile/FollowerCard.jsx</a>, <a href="Profile_FollowerCard.jsx.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the setted the information of my followers.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="FollowersPage"><span class="type-signature"></span>FollowersPage<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting which page we are in it and if it's admin or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_FollowersPage.jsx.html">Profile/FollowersPage.jsx</a>, <a href="Profile_FollowersPage.jsx.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the followers page
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="FollowingCard"><span class="type-signature"></span>FollowingCard<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Setting the information of the people i follow.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_FollowingCard.jsx.html">Profile/FollowingCard.jsx</a>, <a href="Profile_FollowingCard.jsx.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the setted the information of the people i follow.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="FollowingPage"><span class="type-signature"></span>FollowingPage<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting which page we are in it and if it's admin or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_FollowingPage.jsx.html">Profile/FollowingPage.jsx</a>, <a href="Profile_FollowingPage.jsx.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the following page
+</div>
+
+
+
+    
+
+
+
+
 
         
             
@@ -156,7 +2590,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Header.jsx.html">Header.jsx</a>, <a href="Header.jsx.html#line8">line 8</a>
+        <a href="Homepage_Header.jsx.html">Homepage/Header.jsx</a>, <a href="Homepage_Header.jsx.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -202,7 +2636,7 @@
     
 
     
-    <h4 class="name" id="Homepage"><span class="type-signature"></span>Homepage<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Homepage"><span class="type-signature"></span>Homepage<span class="signature">(isAdmin)</span><span class="type-signature"> &rarr; {div}</span></h4>
     
 
     
@@ -210,8 +2644,163 @@
 
 
 <div class="description">
-    this function renders the HomePage
+    Homepage containing area to post tweets and timeline tweets (your tweets and tweets of people you follow)it also contains sidebar to navigate through pages and it also contains searchbar
 </div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isAdmin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicates whether or not this home is an admin's home or a normal user's home</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Homepage_Homepage.jsx.html">Homepage/Homepage.jsx</a>, <a href="Homepage_Homepage.jsx.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <Homepage isAdmin={isAdmin}/>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ImageUploaderBanner"><span class="type-signature"></span>ImageUploaderBanner<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
 
 
 
@@ -262,7 +2851,7 @@
 
             
 
-            <td class="description last">-</td>
+            <td class="description last">Getting the name and photo of the banner.</td>
         </tr>
 
     
@@ -303,7 +2892,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Homepage.jsx.html">Homepage.jsx</a>, <a href="Homepage.jsx.html#line18">line 18</a>
+        <a href="Profile_ImageUploaderBanner.jsx.html">Profile/ImageUploaderBanner.jsx</a>, <a href="Profile_ImageUploaderBanner.jsx.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -332,7 +2921,7 @@
 
         
 <div class="param-desc">
-    the main section of the HomePage
+    Returns the banner photo uploader.
 </div>
 
 
@@ -349,16 +2938,12 @@
     
 
     
-    <h4 class="name" id="Post"><span class="type-signature"></span>Post<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ImageUploaderProfile"><span class="type-signature"></span>ImageUploaderProfile<span class="signature">(props)</span><span class="type-signature"></span></h4>
     
 
     
 
 
-
-<div class="description">
-    this function renders the post
-</div>
 
 
 
@@ -409,7 +2994,7 @@
 
             
 
-            <td class="description last">getting the value of the tweet</td>
+            <td class="description last">Getting the name and photo of the profile.</td>
         </tr>
 
     
@@ -450,7 +3035,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Post.jsx.html">Post.jsx</a>, <a href="Post.jsx.html#line23">line 23</a>
+        <a href="Profile_ImageUploaderProfile.jsx.html">Profile/ImageUploaderProfile.jsx</a>, <a href="Profile_ImageUploaderProfile.jsx.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -479,10 +3064,2551 @@
 
         
 <div class="param-desc">
-    the post div
+    Returns the profile photo uploader.
 </div>
 
 
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Login"><span class="type-signature"></span>Login<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="login_Login.jsx.html">login/Login.jsx</a>, <a href="login_Login.jsx.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns Login form and its fields [tag, password] and login button
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MakeBDvisible"><span class="type-signature"></span>MakeBDvisible<span class="signature">(darkMode, profileData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the visibility of the birth date
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profileData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">all the profile data of the user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_MakeBDvisible.jsx.html">settings/MakeBDvisible.jsx</a>, <a href="settings_MakeBDvisible.jsx.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.profileData.birth.visability = falseprops.profileData.birth.date = "20-8-2001"return (&lt;div>   &lt;div>Make birthdate visible&lt;/div>   &lt;span>20-8-2001&lt;/span>   &lt;Checkbox>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MakeLocVisible"><span class="type-signature"></span>MakeLocVisible<span class="signature">(darkMode, profileData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the visibility of the location
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profileData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">all the profile data of the user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_MakeLocVisible.jsx.html">settings/MakeLocVisible.jsx</a>, <a href="settings_MakeLocVisible.jsx.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.profileData.location.visability = falseprops.profileData.location.place = "maadi"return (&lt;div>   &lt;div>Make location visible&lt;/div>   &lt;span>maadi&lt;/span>   &lt;Checkbox>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MyFollowers"><span class="type-signature"></span>MyFollowers<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_MyFollowers.jsx.html">Profile/MyFollowers.jsx</a>, <a href="Profile_MyFollowers.jsx.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns my followers.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MyFollowing"><span class="type-signature"></span>MyFollowing<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_MyFollowing.jsx.html">Profile/MyFollowing.jsx</a>, <a href="Profile_MyFollowing.jsx.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the people i follow.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MyProfile"><span class="type-signature"></span>MyProfile<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting if it's admin</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_MyProfile.jsx.html">Profile/MyProfile.jsx</a>, <a href="Profile_MyProfile.jsx.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the main section of the profile page.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MyProfileTabs"><span class="type-signature"></span>MyProfileTabs<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_MyProfileTabs.jsx.html">Profile/MyProfileTabs.jsx</a>, <a href="Profile_MyProfileTabs.jsx.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the tabs appearing on the profile page.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Navbar"><span class="type-signature"></span>Navbar<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="login_navbar.jsx.html">login/navbar.jsx</a>, <a href="login_navbar.jsx.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the navigation bar which contains [Signup- Login - Contact Us]
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="NotificationSettings"><span class="type-signature"></span>NotificationSettings<span class="signature">(isDarkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the notification settings
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_NotificationSettings.jsx.html">settings/NotificationSettings.jsx</a>, <a href="settings_NotificationSettings.jsx.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = truereturn (&lt;div>   &lt;h1>Notifications prefrences&lt;/h1>   &lt;p>Select your preferences by notification type.&lt;/p>   &lt;SettingsMenuOptions "Push notification"/>   &lt;SettingsMenuOptions "Email notification"/>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Post"><span class="type-signature"></span>Post<span class="signature">(post, isAdmin, isPost, passdeletedTweet)</span><span class="type-signature"> &rarr; {div}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    post component that is called to map tweets or retweets (it contains structure of tweet or retweet as well as reactsbar where users can comment, retweet or like the tweet)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>post</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object that contains all needed details about a certain post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAdmin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicates whether or not this user is an admin to be passed in drpdownbutton component (to display delete option not report option)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isPost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicates whether this post is a tweet/retweet or if is is a comment on a post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passdeletedTweet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a function that takes id of tweet from child component (post) and pass it to the parent component (homepage) to call BE</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Homepage_Post.jsx.html">Homepage/Post.jsx</a>, <a href="Homepage_Post.jsx.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <Post
+              post={post}
+              passdeletedTweet={passdeletedTweet}
+              isAdmin={props.isAdmin}
+              isPost={true}>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PrivacySettings"><span class="type-signature"></span>PrivacySettings<span class="signature">(isDarkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the privacy settings.(make his lars available for his followers only)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_PrivacySettings.jsx.html">settings/PrivacySettings.jsx</a>, <a href="settings_PrivacySettings.jsx.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = truereturn (&lt;div>   &lt;h1>>Privacy and safety&lt;/h1>   &lt;p>Select your preferences by notification type.&lt;/p>   &lt;div>Protect your Lars&lt;/div>   &lt;Checkbox/>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ProfileInfo"><span class="type-signature"></span>ProfileInfo<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting all the needed information for the profile.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_ProfileInfo.jsx.html">Profile/ProfileInfo.jsx</a>, <a href="Profile_ProfileInfo.jsx.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the information of the profile.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ProfileName"><span class="type-signature"></span>ProfileName<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting the name and the tag of the profile.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_ProfileName.jsx.html">Profile/ProfileName.jsx</a>, <a href="Profile_ProfileName.jsx.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the header of the profile.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ProfilePage"><span class="type-signature"></span>ProfilePage<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting if it's admin.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_ProfilePage.jsx.html">Profile/ProfilePage.jsx</a>, <a href="Profile_ProfilePage.jsx.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the whole profile page.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Reacts"><span class="type-signature"></span>Reacts<span class="signature">(postId, numberOfRetweets, numberOfLikes, numberOfComments, isLiked, isPost, tweetcontent, image, username, displayName, authorId, setNumberOfRetweets, canretweet)</span><span class="type-signature"> &rarr; {div}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Reacts on a certain post (like/dislike, retweet and comment)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>postId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of the meant post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numberOfRetweets</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">number of retweets on the meant post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numberOfLikes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">number of likes on the meant post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numberOfComments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">number of comments on the meant post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isLiked</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicates whether or not the user liked this post or not (to show dislike option)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isPost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicates whether this post is a tweet/retweet or if is is a comment on a post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tweetcontent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">text written inside the meant post (to be sent to BE if retweet option is selected)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>image</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object that contains the url of the posted image (if exists) as well as the image id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the screenName of the user who posted the tweet</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>displayName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the tag of the user who posted the tweet</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authorId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of the user who posted the tweet (needed in routing to his profile)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setNumberOfRetweets</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function from parent to change the state of current number of retweets on the post if the post is retweeted if the BE request was successful</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>canretweet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicates whether this post can be retweeted or not (the post can't be retweeted if it is a retweet with no caption)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Homepage_Reacts.jsx.html">Homepage/Reacts.jsx</a>, <a href="Homepage_Reacts.jsx.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <Reacts 
+            postId={postId}
+            numberOfRetweets={numberOfRetweets}
+            numberOfLikes={props.post.likeCount}
+            isLiked={props.post.isliked}
+            setNumberOfRetweets={setNumberOfRetweets}
+            isPost={props.isPost}
+            tweetcontent={tweetcontent}
+            username={username}
+            displayName={displayName} 
+            image={props.post.gallery[0]}
+            canretweet={canretweet}
+            authorId={props.post.authorId._id}
+            />
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ReactsIcon"><span class="type-signature"></span>ReactsIcon<span class="signature">(Icon, text, number)</span><span class="type-signature"> &rarr; {div}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    reusable component for reacts on posts
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Icon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the desired icon chosen (example: heart icon for like)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the desired text to be displayed for the user describing the react (example: like)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>number</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the number of users who reacted (example: number of likes on a post)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Homepage_ReactsIcon.jsx.html">Homepage/ReactsIcon.jsx</a>, <a href="Homepage_ReactsIcon.jsx.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ReactsIcon text="Like" number={numberOfLikes} Icon={LikeIcon}/>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -597,7 +5723,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Report.jsx.html">Report.jsx</a>, <a href="Report.jsx.html#line13">line 13</a>
+        <a href="Homepage_Report.jsx.html">Homepage/Report.jsx</a>, <a href="Homepage_Report.jsx.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -744,7 +5870,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ReportAction.jsx.html">ReportAction.jsx</a>, <a href="ReportAction.jsx.html#line12">line 12</a>
+        <a href="Homepage_ReportAction.jsx.html">Homepage/ReportAction.jsx</a>, <a href="Homepage_ReportAction.jsx.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -774,6 +5900,1761 @@
         
 <div class="param-desc">
     the report action page
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ReportsPage"><span class="type-signature"></span>ReportsPage<span class="signature">(isAdmin)</span><span class="type-signature"> &rarr; {div}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    reports page for the admin view where it displays by default when first opened a list of reported tweets and then admin can toggle between two options (reprted tweets and reported users)it displays the reported tweets/users and indicates the total number of reports on each one delete button deletes all reports on the reported tweet/user present in the databaseif the tweet contains an offending content onclick on three dots present inside the tweet th admin can delete the meant postif the user have high number of reports the admin can go to his profile and ban the meant user for X periodthe tweets or users are displayed descendingly according to the number of reports
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isAdmin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">passed from the App.jsx to all components to be passed to the sidebar and used if needed in component</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Admin_ReportsPage.jsx.html">Admin/ReportsPage.jsx</a>, <a href="Admin_ReportsPage.jsx.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ReportsView"><span class="type-signature"></span>ReportsView<span class="signature">(times, isTweet, tweet, user, passdeletedTweet, ondelete)</span><span class="type-signature"> &rarr; {div}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    reusable component used to display tweet reports as well as user reports
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>times</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">number of reports on a certain user or tweet</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isTweet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indicated whether this report is on a tweet or user</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tweet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object that contains all the needed details about the reported tweet</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object that contains all the needed details about the reported user</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passdeletedTweet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">takes the id of the tweet to be deleted from the child and pass it to the parent (reportspage) to call BE</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ondelete</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">passes the id of the tweet or user to delete all reports on the meant user or tweet</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Admin_ReportView.jsx.html">Admin/ReportView.jsx</a>, <a href="Admin_ReportView.jsx.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ReportsView
+            ondelete={ondeletetweetreport}
+            times={tweet.Reports}
+            passdeletedTweet={passdeletedTweet}
+            isTweet={true}
+            tweet={tweet}/>
+            <ReportsView
+            ondelete={ondeleteuserreport}
+            times={user.Reports}
+            isTweet={false}
+            user={user}/>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="RetweetDisplayBlock"><span class="type-signature"></span>RetweetDisplayBlock<span class="signature">(key, username, tagName, avatar, authorId, content, image)</span><span class="type-signature"> &rarr; {div}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component displayed inside the post component if the post is a retweet
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">React special key prop</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">screenName of the user whose post is retweeted</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tagName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">tag of the user whose post is retweeted</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>avatar</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">URL</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the url of the profile picture of the user whose post is retweeted</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authorId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of the user whose post is retweeted (needed in routing to his profile)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">text written inside the retweeted post</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>image</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object that contains the url of the posted image in the retweeted post (if exists) as well as the image id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Homepage_RetweetDisplayBlock.jsx.html">Homepage/RetweetDisplayBlock.jsx</a>, <a href="Homepage_RetweetDisplayBlock.jsx.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <RetweetDisplayBlock key={props.post.retweetedTweet._id}
+              username={props.post.retweetedTweet.authorId.screenName}
+              tagName={props.post.retweetedTweet.authorId.tag}
+              avatar={props.post.retweetedTweet.authorId.profileAvater.url}
+              image={props.post.retweetedTweet.gallery[0]}
+              authorId={props.post.retweetedTweet.authorId._id}
+              content={props.post.retweetedTweet.text}/>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">div</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SettingsMenu"><span class="type-signature"></span>SettingsMenu<span class="signature">(isDarkMode, onIdChange)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display the menu of settings and let the user choose from it the option he needs.But it does not show the sub menu (it just send the id of selected option),because it is instead SettingsPage role.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onIdChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_SettingsMenu.jsx.html">settings/SettingsMenu.jsx</a>, <a href="settings_SettingsMenu.jsx.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = trueconst isclickedAcc = truereturn (&lt;div>   &lt;SettingsMenuOptions account>   &lt;SettingsMenuOptions Larry blue>   &lt;SettingsMenuOptions privacy>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SettingsMenuOptions"><span class="type-signature"></span>SettingsMenuOptions<span class="signature">(darkMode, id, active, Icon, text, subtext, isSubtextExist)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display each option in the settings menu.(just to make the menu options with the same style and to modularize the code)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of selected option in order to make SettingsPage render the correct sub menu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>active</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to know which option is selected to make it with different style.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Icon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if there exist an icon to this option it would be displayed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the text displayed on the option</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subtext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the subtext diplayed just below the option text</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isSubtextExist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to identify if the option has subtext or no</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_SettingsMenuOptions.jsx.html">settings/SettingsMenuOptions.jsx</a>, <a href="settings_SettingsMenuOptions.jsx.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.id = 1props.isDarkMode = trueprops.active = trueprops.text = "Your account"props.isSubtextExist = falseconst isclickedAcc = truereturn (&lt;div>   &lt;Icon/>   &lt;h2> Your account&lt;/h2>   &lt;ArrowForwardIosIcon />   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SettingsPage"><span class="type-signature"></span>SettingsPage<span class="signature">(isDark, isAdmin, onDarkModeChange)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Component for rendering the main Settings menu and the sub menu of the choosen option.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDark</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAdmin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onDarkModeChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_SettingsPage.jsx.html">settings/SettingsPage.jsx</a>, <a href="settings_SettingsPage.jsx.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>prop.isDark = trueprop.isAdmin = falseconst idItemSelected = 1 (Account settings)return (&lt;div>   &lt;SideBar>   &lt;SettingsMenu>   &lt;AccountSettings>&lt;/div>)</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SideBar"><span class="type-signature"></span>SideBar<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting which page is active and if it's the admin.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_SideBar.jsx.html">Profile/SideBar.jsx</a>, <a href="Profile_SideBar.jsx.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns the SideBar
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SideBarIcon"><span class="type-signature"></span>SideBarIcon<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">props</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Getting some information about the Sidebar Icon as it's text,icon, and if it's active.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Profile_SideBarIcon.jsx.html">Profile/SideBarIcon.jsx</a>, <a href="Profile_SideBarIcon.jsx.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returning the sidebar icon.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Signup"><span class="type-signature"></span>Signup<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="login_Signup.jsx.html">login/Signup.jsx</a>, <a href="login_Signup.jsx.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns 2 signup forms , First One with necessary data [screenName , Tag , Email and Password] and the Second One contains [Birthdate, Phone Number and Biography]
 </div>
 
 
@@ -891,7 +7772,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tweet.jsx.html">tweet.jsx</a>, <a href="tweet.jsx.html#line8">line 8</a>
+        <a href="Homepage_tweet.jsx.html">Homepage/tweet.jsx</a>, <a href="Homepage_tweet.jsx.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -1038,7 +7919,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TweetBar.jsx.html">TweetBar.jsx</a>, <a href="TweetBar.jsx.html#line20">line 20</a>
+        <a href="Homepage_TweetBar.jsx.html">Homepage/TweetBar.jsx</a>, <a href="Homepage_TweetBar.jsx.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -1079,6 +7960,148 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="UpdatePassword"><span class="type-signature"></span>UpdatePassword<span class="signature">(darkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to update the password of the user.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="settings_UpdatePassword.jsx.html">settings/UpdatePassword.jsx</a>, <a href="settings_UpdatePassword.jsx.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = truereturn (&lt;div>   &lt;h2>change password&lt;/h2>   &lt;TextField "current password"/>   &lt;TextField "new password"/>   &lt;TextField "confirm new password"/>    &lt;Button>Save &lt;/Button>&lt;/div>) </code></pre>
+
+
+
+        
     
 
     
@@ -1094,13 +8117,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 17:56:30 GMT+0200 (Eastern European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06 2022 16:53:59 GMT+0200 (Eastern European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

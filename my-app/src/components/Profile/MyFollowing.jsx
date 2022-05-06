@@ -18,10 +18,9 @@ function MyFollowing() {
   useEffect(() => {
     if (id == userID) {
       axios
-        .get(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .get(`http://localhost:4000/profile/${id}/me`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           if (res.error) {
@@ -33,10 +32,9 @@ function MyFollowing() {
         });
     } else {
       axios
-        .get(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .get(`http://localhost:4000/profile/${id}`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           if (res.error) {
@@ -49,10 +47,9 @@ function MyFollowing() {
     }
 
     axios
-      .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${id}/following`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
-      )
+      .get(`http://localhost:4000/user/${id}/following`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
       .then((res) => {
         console.log(res);
         if (res.error) {
