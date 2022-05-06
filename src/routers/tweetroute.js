@@ -107,7 +107,10 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
 
 router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
-    const viewer=await User.findById(req.user._id);
+
+    const followingsId = req.user.following.map((user) => {
+      return user.followingId;
+    });
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
     let tweet = await Tweet.findById(req.params.id);
@@ -149,8 +152,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           "_id screenName tag isPrivate profileAvater.url",
         },
       });
-      tweet.reply=tweet.reply.filter(filterFunc(viewer));
-      console.log(tweet.reply);
+      if(!req.user._id.equals(tweet.authorId._id)){tweet.reply=tweet.reply.filter(filterFunc(req.user._id,followingsId));}
       const isliked = tweet.likes.some(
         (like) => like.like.toString() == req.user._id.toString()
         );
@@ -261,7 +263,11 @@ router.post("/retweet", auth("user"), async (req, res) => {
     await req.user.isBanned();
     //same as creating a new tweet but has an added retweet that
     //also increases the retweet count on the original tweet
-    const Retweetedtweet = await Tweet.findById(req.body.retweetedTweet);
+    const Retweetedtweet = await Tweet.findById(req.body.retweetedTweet).populate({path:"authorId",select:"isPrivate"});
+    if(Retweetedtweet.authorId.isPrivate){
+      e = "Author is Private";
+      throw e;
+    }
     if (!Retweetedtweet) {
       e = "Retweeted tweet does not exist";
       throw e;
@@ -454,11 +460,10 @@ router.get("/timeline", auth("any"), async (req, res) => {
     const followingsId = req.user.following.map((user) => {
       return user.followingId;
     });
-    const user = req.user;
     //console.log('1')
     followingsId.push(req.user._id);
     //console.log(followingsId)
-    let followerTweet = await Tweet.find({ authorId: { $in: followingsId } })
+    let followerTweet = await Tweet.find({ authorId: { $in: followingsId },replyingTo:null })
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip(skip)
@@ -475,16 +480,21 @@ router.get("/timeline", auth("any"), async (req, res) => {
       },
     })
     .populate({
+    path: "authorId",
+    strictPopulate: false,
+    select:
+      "_id screenName tag followercount followingcount profileAvater.url",
+    })
+    .populate({
       path: "reply",
       select: "_id authorId text likeCount",
-      strictPopulate: false,
-    })
-      .populate({
+      populate: {
         path: "authorId",
         strictPopulate: false,
         select:
-        "_id screenName tag followercount followingcount profileAvater.url",
-      });
+        "_id screenName tag isPrivate profileAvater.url",
+      },
+    });
       let i=-1;
       if (!followerTweet.length < 1) {
         followerTweet = followerTweet.map((tweet) => {
@@ -492,17 +502,19 @@ router.get("/timeline", auth("any"), async (req, res) => {
           const isliked = tweet.likes.some(
             (like) => like.like.toString() == req.user._id.toString()
             );
-        if (isliked) {
-          delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: true ,reply:followerTweet[i].reply};
-          return tweets;
-        } else {
-          delete tweet._doc.likes;
-          const tweets = { ...tweet._doc, isliked: false ,reply:followerTweet[i].reply};
-          return tweets;
-        }
-      });
-    }
+          if (isliked) {
+            delete tweet._doc.likes;
+            let tweets = { ...tweet._doc, isliked: true ,reply:followerTweet[i].reply};
+            if(!req.user._id.equals(tweets.authorId._id)){tweets.reply=tweets.reply.filter(filterFunc(req.user._id,followingsId));}
+            return tweets;
+          } else {
+            delete tweet._doc.likes;
+            let tweets = { ...tweet._doc, isliked: false ,reply:followerTweet[i].reply};
+            if(!req.user._id.equals(tweets.authorId._id)){tweets.reply=tweets.reply.filter(filterFunc(req.user._id,followingsId));}
+            return tweets;
+          }
+        });
+      }
     //console.log('2')
     res.send(followerTweet);
   } catch (e) {
@@ -512,9 +524,10 @@ router.get("/timeline", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-function filterFunc(viewer){
+function filterFunc(viewerId,followArr){
   return function visCheck(reply){
-    if(viewer.following.includes(reply.authorId._id)){return true;}
+    if(viewerId.equals(reply.authorId._id)){return true;}
+    else if(followArr.map(follower=>follower.toString()).includes(reply.authorId._id.toString())){return true;}
     else if(!reply.authorId.isPrivate){return true;}
     else{return false;}
   }
