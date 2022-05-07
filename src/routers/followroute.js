@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 const router = new express.Router()
 
 //*follow rout
-  router.post("/user/:userId/follow/:id",auth("user"), async (req, res) => {
+  router.post("/user/follow/:id",auth("user"), async (req, res) => {
   
     try {
       //you can not follow your self
@@ -38,7 +38,7 @@ const router = new express.Router()
     }
   });
   //*unfollow ROUT
-  router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
+  router.post("/user/unfollow/:id", auth("user"), async (req, res) => {
    
    
     try {

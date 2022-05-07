@@ -3,15 +3,37 @@ const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 const app = require("../app");
 let user;
+let privUser;
+let notPrivUser;
+let thrdUser;
 let usertoken;
 beforeEach(async () => {
   await Tweet.deleteMany();
   await User.deleteMany();
+  thrdUser = await User.create({
+    screenName: "user3",
+    tag: "tag3",
+    password: "123456",
+    email: "user3@gmail.com",
+  });
+  notPrivUser = await User.create({
+    screenName: "userN",
+    tag: "tagN",
+    password: "123456",
+    email: "userN@gmail.com",
+  });
   user = await User.create({
     screenName: "user1",
     tag: "tag1",
     password: "123456",
     email: "user1@gmail.com",
+  });
+  privUser = await User.create({
+    screenName: "userpriv",
+    tag: "privtag",
+    password: "123456",
+    email: "privuser@gmail.com",
+    isPrivate:true
   });
   usertoken = await user.generateAuthToken();
 });
@@ -30,12 +52,96 @@ test("check Retreiving tweet", async () => {
   expect(res.body.text).toEqual("I am Abdelkhalek");
 });
 
-test("Refuse if sent id parameter is not there", async () => {
+test("Private Reply Not Visible", async () => {
+  usertoken = await thrdUser.generateAuthToken();
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: privUser._id,
+    text: "Private Reply",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: notPrivUser._id,
+    text: "Not Private Reply",
+  });
   const res = await request(app)
-    .get("/tweet/")
+    .get("/tweet/"+newtweet._id)
     .set("Authorization", "Bearer " + usertoken.token)
-    .expect(404);
-  //expect(res.body).toEqual({error:"Tweet Id not sent or is null"});
+    .expect(200);
+  expect(res.body.reply.length).toEqual(1);
+});
+test("Private Reply Visible for Tweet Author", async () => {
+  usertoken = await user.generateAuthToken();
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: privUser._id,
+    text: "Private Reply",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: notPrivUser._id,
+    text: "Not Private Reply",
+  });
+  const res = await request(app)
+    .get("/tweet/"+newtweet._id)
+    .set("Authorization", "Bearer " + usertoken.token)
+    .expect(200);
+  expect(res.body.reply.length).toEqual(2);
+});
+test("Private Reply Visible for Reply Author", async () => {
+  usertoken = await privUser.generateAuthToken();
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: privUser._id,
+    text: "Private Reply",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: notPrivUser._id,
+    text: "Not Private Reply",
+  });
+  const res = await request(app)
+    .get("/tweet/"+newtweet._id)
+    .set("Authorization", "Bearer " + usertoken.token)
+    .expect(200);
+  expect(res.body.reply.length).toEqual(2);
+});
+test("Private Reply Visible for Follower", async () => {
+  usertoken = await thrdUser.generateAuthToken();
+  await request(app)
+    .post("/user/follow/"+privUser._id)
+    .set("Authorization", "Bearer " + usertoken.token)
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: privUser._id,
+    text: "Private Reply",
+  });
+  await Tweet.create({
+    replyingTo:newtweet._id,
+    authorId: notPrivUser._id,
+    text: "Not Private Reply",
+  });
+  const res = await request(app)
+    .get("/tweet/"+newtweet._id)
+    .set("Authorization", "Bearer " + usertoken.token)
+    .expect(200);
+  expect(res.body.reply.length).toEqual(2);
 });
 
 test("Tweet not found", async () => {
