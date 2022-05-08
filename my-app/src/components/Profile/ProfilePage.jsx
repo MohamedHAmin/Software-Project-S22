@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Styles/ProfilePage.css";
 import SideBar from "./SideBar";
 import MyProfile from "./MyProfile";
+import OthersProfile from "./OthersProfile";
 import Searchbar from "../Homepage/Search";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -10,17 +11,22 @@ import { useEffect } from "react";
  * @param {props} props Getting if it's admin.
  * @returns Returns the whole profile page.
  */
+
 function ProfilePage(props) {
-  let { id } = useParams();
-
-  useEffect(() => {}, [id]);
   const [darkMode, setDarkMode] = useState(false);
-  console.log(darkMode);
 
+  let { id } = useParams();
+  let userID = localStorage.getItem("userId");
+  console.log(id);
+  console.log(userID);
   return (
     <div className="ProfilePage">
       <SideBar Profile isAdmin={props.isAdmin} darkMode={darkMode} />
-      <MyProfile isAdmin={props.isAdmin} setDarkMode={setDarkMode} />
+      {id == userID ? (
+        <MyProfile setDarkMode={setDarkMode} />
+      ) : (
+        <OthersProfile isAdmin={props.isAdmin} setDarkMode={setDarkMode} />
+      )}
       <div className="rightbar">
         <div className="searchbar">
           <Searchbar />
@@ -29,4 +35,5 @@ function ProfilePage(props) {
     </div>
   );
 }
+
 export default ProfilePage;

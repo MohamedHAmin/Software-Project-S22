@@ -1,34 +1,23 @@
 import "@testing-library/jest-dom";
 import { render, screen, container, fireEvent } from "@testing-library/react";
-import ProfilePage from "../ProfilePage";
-import {
-  BrowserRouter,
-  MemoryRouter,
-  Route,
-  Routes,
-  useParams,
-} from "react-router-dom";
+import MyProfile from "../MyProfile";
+import { BrowserRouter } from "react-router-dom";
+const MockProfilePage = () => {
+  return (
+    <BrowserRouter>
+      <MyProfile />
+    </BrowserRouter>
+  );
+};
+render(<MockProfilePage />);
 
-describe("Edit Profile Test", () => {
-  //if (screen.queryByTestId("Edit-Profile-Button"))
-  {
+setTimeout(
+  describe("Edit Profile Test", () => {
     // Test Name
+    const buttonElement = screen.queryByTestId("Edit-Profile-Button");
 
     it("Should open edit profile pop up and Change Name.", () => {
-      setTimeout(
-        render(
-          <MemoryRouter initialEntries={["/Profile/626554804da8e6986213b877"]}>
-            <ProfilePage />
-          </MemoryRouter>
-        ),
-        3000
-      );
-      screen.debug();
-      let userID = localStorage.getItem("userId");
-
-      console.log(userID);
-      const buttonElement = screen.queryByTestId("Edit-Profile-Button");
-      const SaveElement = screen.queryByText(/Save/i);
+      const SaveElement = screen.getByText(/Save/i);
       const NameElement = screen.queryByTestId("Edit-Profile-Name-Element");
 
       expect(NameElement).toBeInTheDocument();
@@ -42,22 +31,15 @@ describe("Edit Profile Test", () => {
       expect(editProfileNameElement.value).toBe("Karim");
 
       fireEvent.click(SaveElement);
+
       expect(SaveElement).not.toBeVisible();
       expect(NameElement.innerHTML).toBe("Karim");
     });
 
     // Test Empty Name
     it("Should open edit profile pop up and Change to Empty Name.", () => {
-      setTimeout(
-        render(
-          <MemoryRouter initialEntries={["/Profile/626554804da8e6986213b877"]}>
-            <ProfilePage />
-          </MemoryRouter>
-        ),
-        3000
-      );
-      const buttonElement = screen.queryByTestId("Edit-Profile-Button");
-      const SaveElement = screen.queryByText(/Save/i);
+      render(<MockProfilePage />);
+      const SaveElement = screen.getByText(/Save/i);
       const NameElement = screen.queryByTestId("Edit-Profile-Name-Element");
       expect(NameElement).toBeInTheDocument();
       fireEvent.click(buttonElement);
@@ -74,16 +56,8 @@ describe("Edit Profile Test", () => {
 
     // Test Bio
     it("Should open edit profile pop up and Change Bio.", () => {
-      setTimeout(
-        render(
-          <MemoryRouter initialEntries={["/Profile/626554804da8e6986213b877"]}>
-            <ProfilePage />
-          </MemoryRouter>
-        ),
-        3000
-      );
-      const buttonElement = screen.queryByTestId("Edit-Profile-Button");
-      const SaveElement = screen.queryByText(/Save/i);
+      render(<MockProfilePage />);
+      const SaveElement = screen.getByText(/Save/i);
 
       const BioElement = screen.queryByTestId("Edit-Profile-Bio-Element"); //Data rendered in profile page
 
@@ -106,16 +80,8 @@ describe("Edit Profile Test", () => {
 
     // Test Location
     it("Should open edit profile pop up and Change Location.", () => {
-      setTimeout(
-        render(
-          <MemoryRouter initialEntries={["/Profile/626554804da8e6986213b877"]}>
-            <ProfilePage />
-          </MemoryRouter>
-        ),
-        3000
-      );
-      const buttonElement = screen.queryByTestId("Edit-Profile-Button");
-      const SaveElement = screen.queryByText(/Save/i);
+      render(<MockProfilePage />);
+      const SaveElement = screen.getByText(/Save/i);
 
       const LocationElement = screen.queryByTestId(
         "Edit-Profile-Location-Element"
@@ -142,16 +108,9 @@ describe("Edit Profile Test", () => {
 
     // Test Website
     it("Should open edit profile pop up and Change Website.", () => {
-      setTimeout(
-        render(
-          <MemoryRouter initialEntries={["/Profile/626554804da8e6986213b877"]}>
-            <ProfilePage />
-          </MemoryRouter>
-        ),
-        3000
-      );
+      render(<MockProfilePage />);
       const buttonElement = screen.queryByTestId("Edit-Profile-Button");
-      const SaveElement = screen.queryByText(/Save/i);
+      const SaveElement = screen.getByText(/Save/i);
 
       const WebsiteElement = screen.queryByTestId(
         "Edit-Profile-Website-Element"
@@ -175,25 +134,25 @@ describe("Edit Profile Test", () => {
       expect(SaveElement).not.toBeVisible();
       expect(WebsiteElement.innerHTML).toContain("Hello World"); // Data changed in profile page
     });
-    //} else {
-    // const FollowElement = screen.queryByTestId("Follow-Profile-Button");
-    // const FollowersElement = screen.queryByTestId("Followers-Profile");
-    // if (screen.queryByText("Follow")) {
-    //   // Test Follow
-    //   it("Should open edit profile pop up and Change Followers up.", () => {
-    //     render(<MockProfilePage />);
-    //     expect(FollowElement).toBeInTheDocument();
-    //     fireEvent.click(FollowElement);
-    //   });
-    // } else if (screen.queryAllByAltText("Unfollow"))
-    //   // Test UnFollow
-    //   it("Should open edit profile pop up and Change Followers down.", () => {
-    //     render(<MockProfilePage />);
-    //     expect(FollowElement).toBeInTheDocument();
-    //     fireEvent.click(FollowElement);
-    //     const CheckElement = screen.getAllByText("Unfollow");
-    //     expect(CheckElement).toBeInTheDocument();
-    //     const unFollowButton = screen.queryByTestId("Follow-Profile-Pop-Button");
-    //   });
-  }
-});
+  }, 5000)
+);
+// } else {
+// const FollowElement = screen.queryByTestId("Follow-Profile-Button");
+// const FollowersElement = screen.queryByTestId("Followers-Profile");
+// if (screen.queryByText("Follow")) {
+//   // Test Follow
+//   it("Should open edit profile pop up and Change Followers up.", () => {
+//     render(<MockProfilePage />);
+//     expect(FollowElement).toBeInTheDocument();
+//     fireEvent.click(FollowElement);
+//   });
+// } else if (screen.queryAllByAltText("Unfollow"))
+//   // Test UnFollow
+//   it("Should open edit profile pop up and Change Followers down.", () => {
+//     render(<MockProfilePage />);
+//     expect(FollowElement).toBeInTheDocument();
+//     fireEvent.click(FollowElement);
+//     const CheckElement = screen.getAllByText("Unfollow");
+//     expect(CheckElement).toBeInTheDocument();
+//     const unFollowButton = screen.queryByTestId("Follow-Profile-Pop-Button");
+//   });
