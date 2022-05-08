@@ -96,3 +96,59 @@ test("reply exceeded tag limit", async () => {
     .expect(400);
 });
 
+test("reply with images and text", async ()=>{
+
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .field("text", "try this for size dude")
+    .field("replyingTo",newtweet._id.toString())
+    .field("imageCheck", "true")
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .expect(200);
+});
+
+test("reply images exceeded limit", async ()=>{
+
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .field("text", "try this for size dude")
+    .field("replyingTo",newtweet._id.toString())
+    .field("imageCheck", "true")
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .expect(400);
+});
+
+test("reply with images only", async ()=>{
+
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .field("replyingTo",newtweet._id.toString())
+    .field("imageCheck", "true")
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .expect(200);
+});

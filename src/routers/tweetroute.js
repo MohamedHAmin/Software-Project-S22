@@ -129,7 +129,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       }
     }
 
-    console.log(modifiedreplies);
 
     let isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
@@ -212,7 +211,6 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
       options: { sort },
     });
-    console.log(user.Tweets);
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
@@ -344,7 +342,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    const filters= {followerfilter:req.query.followerfilter};
+    const filters = { followerfilter: req.query.followerfilter };
     let searchedItem = req.params.searchedtext.trim();
     if (!searchedItem || searchedItem.length < 1) {
       e = "Attempting search of empty string";
@@ -450,10 +448,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
     }
-    if(filters.followerfilter){
-      modifiedresultUsers=[];
-      for(let i=0;i<resultUsers.length;i++){
-        if(resultUsers[i].isfollowed){
+    if (filters.followerfilter) {
+      modifiedresultUsers = [];
+      for (let i = 0; i < resultUsers.length; i++) {
+        if (resultUsers[i].isfollowed) {
           // resultUsers.splice(i,1);
           // if(i!==0){
           //   i--;
@@ -464,7 +462,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
           modifiedresultUsers.push(resultUsers[i]);
         }
       }
-      resultUsers=modifiedresultUsers;
+      resultUsers = modifiedresultUsers;
     }
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
@@ -550,7 +548,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     ])
       .limit(limit)
       .skip(skip)
-      .sort({createdAt:-1});
+      .sort({ createdAt: -1 });
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
       throw e;
@@ -1021,14 +1019,17 @@ router.post("/reply", auth("user"), upload.array("image"), async (req, res) => {
 
 router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+    if (!req.admin) {
+      await req.user.isBanned();
+    }
+
     const targettweet = await Tweet.findById(req.params.id);
     if (!targettweet) {
       throw new Error("Not Found");
     }
     const B = targettweet.authorId.equals(req.user._id);
     if (req.admin || B) {
-      if (targettweet.replyingTo.tweetId) {
+      if (targettweet.replyingTo.tweetExisted) {
         let replyedOnTweet = await Tweet.findById(
           targettweet.replyingTo.tweetId
         );
@@ -1037,7 +1038,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
           await replyedOnTweet.save();
         }
       }
-      if (targettweet.retweetedTweet.tweetId) {
+      if (targettweet.retweetedTweet.tweetExisted) {
         let retweetedTweet = await Tweet.findById(
           targettweet.retweetedTweet.tweetId
         );
