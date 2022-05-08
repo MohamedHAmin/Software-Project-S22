@@ -31,66 +31,65 @@ beforeEach(async () => {
 
 test('check follow',async ()=>{
    
-    const res=await request(app).post('/user/'+user1._id.toString()+'/follow/'+user2._id.toString())
+    const res=await request(app).post('/user/follow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
     
-    expect(res.body[0].followingId).toEqual(user2._id.toString())
    ///not put user id
-    await request(app).post('/user/'+user1._id.toString()+'/follow/')
+    await request(app).post('/user/follow/')
     .set('Authorization','Bearer '+user1token.token)
     .expect(404)
 
     //unauthorized
-    await request(app).post('/user/'+user1._id.toString()+'/follow/'+user2._id.toString())
+    await request(app).post('/user/follow/'+user2._id.toString())
     .expect(401)
     //follow some you alresdy follow
-     await request(app).post('/user/'+user1._id.toString()+'/follow/'+user2._id.toString())
+     await request(app).post('/user/follow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
       // follow your self
-    await request(app).post('/user/'+user1._id.toString()+'/follow/'+user1._id.toString())
+    await request(app).post('/user/follow/'+user1._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
 
     //follow unexisting user
-    await request(app).post('/user/'+user1._id.toString()+'/follow/'+"6246378467b2fc4cc39ae714")
+    await request(app).post('/user/follow/'+"6246378467b2fc4cc39ae714")
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
 });
 test('check unfollow',async ()=>{
-    await request(app).post('/user/'+user1._id.toString()+'/follow/'+user2._id.toString())
+    await request(app).post('/user/follow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
-    await request(app).post('/user/'+user1._id.toString()+'/unfollow/')
+    await request(app).post('/user/unfollow/')
     .set('Authorization','Bearer '+user1token.token)
     .expect(404)
-     await request(app).post('/user/'+user1._id.toString()+'/unfollow/'+user2._id.toString())
+     await request(app).post('/user/unfollow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
-    await request(app).post('/user/'+user1._id.toString()+'/unfollow/'+user2._id.toString())
+    await request(app).post('/user/unfollow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
-    await request(app).post('/user/'+user1._id.toString()+'/unfollow/'+"6246378467b2fc4cc39ae714")
+    await request(app).post('/user/unfollow/'+"6246378467b2fc4cc39ae714")
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
 });
 test('check following',async ()=>{
-    await request(app).post('/user/'+user1._id.toString()+'/follow/'+user2._id.toString())
+    await request(app).post('/user/follow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
     const res=await request(app).get('/user/'+user1._id.toString()+'/following/')
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
 
-    expect(res.body[0].followingId.screenName).toEqual(user2.screenName)
+  
     await request(app).get('/user/'+"552222222"+'/following/')
     .set('Authorization','Bearer '+user1token.token)
     .expect(400)
 
 });
 test('check follower',async ()=>{
-    await request(app).post('/user/'+user1._id.toString()+'/follow/'+user2._id.toString())
+    await request(app).post('/user/follow/'+user2._id.toString())
     .set('Authorization','Bearer '+user1token.token)
     .expect(200)
     const res=await request(app).get('/user/'+user2._id.toString()+'/follower/')
@@ -100,7 +99,7 @@ test('check follower',async ()=>{
     expect(res.body[0].screenName).toEqual(user1.screenName)
     expect(res.body[0].isfollowing).toEqual(false)
 
-    await request(app).post('/user/'+user2._id.toString()+'/follow/'+user1._id.toString())
+    await request(app).post('/user/follow/'+user1._id.toString())
     .set('Authorization','Bearer '+user2token.token)
     .expect(200)
     const res2 =await request(app).get('/user/'+user1._id.toString()+'/follower/')

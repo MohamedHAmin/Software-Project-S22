@@ -26,7 +26,15 @@ test('Check Admin Creation', async ()=>{
         tag:"admin"
     })
     .expect(201)
-    
+    const res2=await request(app).post('/admin/create')
+    .set('Authorization','Bearer '+token.token)
+    .send({
+        screenName:"coolAdmin23",
+        email:"cool23@.com",
+        password:"awesomeadmin",
+        tag:"admin"
+    })
+    .expect(400)
     await request(app).post('/admin/create')
     .set('Authorization','Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQ0MzVlNWNiMTZlZGYyYWI3OWI2OGIiLCJpYXQiOjE2NDg2Mzc0MTN9.5X6CFbeyMus45xdNooJrbkJ-RvV8MMVXuK_6tsVPduA')
     .send({

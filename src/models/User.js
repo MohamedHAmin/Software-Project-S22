@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     default:""
   },
   phoneNumber:{
-    type:Number,
+    type:String,
     default:0
   },
   darkMode:{
@@ -206,19 +206,6 @@ userSchema.methods.toJSON=function(){
   delete userobject.facebookId
   return userobject
 }
-// TODO
-// userSchema.methods.isBanned=async function(){
-//   const user = this
-//   let now=new Date()
-//   if(user.ban>now){
-//     return true
-//   }
-//   else{
-//     user.ban=null
-//     await user.save()
-//     return false
-//   }
-// }
 userSchema.methods.isBanned=async function(){
   const user = this;
   if(!user.ban){return;} //if not ban return and move on normally
