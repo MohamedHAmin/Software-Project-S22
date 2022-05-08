@@ -152,3 +152,12 @@ test("reply with images only", async ()=>{
     .attach('image','src/tests/fixtures/favicon-32x32.png')
     .expect(200);
 });
+
+test("reply with images only", async ()=>{
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .send({text:""})
+    .expect(400);
+});
