@@ -23,9 +23,9 @@
     "browserslist": "^4.20.2",
     "cloudinary": "^1.29.0",
     "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.2",
-    "faker": "^6.6.6",
     "fcm-node": "^1.6.1",
     "firebase-admin": "^10.1.0",
     "fs": "^0.0.1-security",
@@ -38,6 +38,7 @@
     "multer": "^1.4.4",
     "nodemailer": "^6.7.3",
     "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
     "supertest": "^6.2.2",
     "uuid": "^8.3.2",
     "validator": "^13.7.0"
