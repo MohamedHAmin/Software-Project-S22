@@ -67,7 +67,6 @@ function MyProfile(props) {
         if (res.error) {
           console.log("Error");
         } else {
-          props.setDarkMode(res.data.darkMode);
           setName(res.data.screenName);
           setBio(res.data.Biography);
           setLocation(res.data.location.place);
@@ -190,7 +189,7 @@ function MyProfile(props) {
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
         />
-        {/* <MyProfileTabs /> */}
+        <MyProfileTabs Tweets />
         {userTweets?.length ? (
           userTweets.map((post) => (
             <Post

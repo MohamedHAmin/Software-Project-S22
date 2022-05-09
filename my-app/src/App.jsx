@@ -92,6 +92,18 @@ function App() {
               element={<ProfilePage isAdmin={isAdmin} />}
             ></Route>
             <Route
+              path="/Profile/:id/with_replies"
+              element={<ProfilePage isAdmin={isAdmin} />}
+            ></Route>
+            <Route
+              path="/Profile/:id/media"
+              element={<ProfilePage isAdmin={isAdmin} />}
+            ></Route>
+            <Route
+              path="/Profile/:id/likes"
+              element={<ProfilePage isAdmin={isAdmin} />}
+            ></Route>
+            <Route
               path="/Report/:reportType/:id"
               element={<Report isAdmin={isAdmin} />}
             ></Route>

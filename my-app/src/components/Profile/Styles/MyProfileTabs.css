@@ -1,14 +1,21 @@
-.myProfileTabs {
-  border-bottom: 2px solid var(--color-border) !important;
-  
-}
 
 .myProfileTab {
   text-transform: inherit !important;
   color: var(--color-mode) !important;
   font-weight: 500 !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   opacity: 0.9 !important;
+  width: 25% !important;
+}
+
+.myProfileTab-active{
+  text-transform: inherit !important;
+    color: var(--color-mode) !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    opacity: 0.9 !important;
+    width: 25% !important;
+  border-bottom: 2px solid var(--color-mode) !important;
 }
 
 .myProfileNavLink  {

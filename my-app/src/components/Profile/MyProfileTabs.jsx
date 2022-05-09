@@ -6,21 +6,37 @@ import "./Styles/MyProfileTabs.css";
  *
  * @returns Returns the tabs appearing on the profile page.
  */
-function MyProfileTabs() {
+function MyProfileTabs(props) {
   let { id } = useParams();
   return (
     <Box className="myProfileTabs">
       <NavLink className="myProfileNavLink" to={`/Profile/${id}`}>
-        <Tab value={0} className="myProfileTab" label="Tweets" />
+        <Tab
+          value={0}
+          className={props.Tweets ? "myProfileTab-active" : "myProfileTab"}
+          label="Tweets"
+        />
       </NavLink>
-      <NavLink className="myProfileNavLink" to="/Profile/with_replies">
-        <Tab value={1} className="myProfileTab" label="Tweets & replies" />
+      <NavLink className="myProfileNavLink" to={`/Profile/${id}/with_replies`}>
+        <Tab
+          value={1}
+          className={props.Replies ? "myProfileTab-active" : "myProfileTab"}
+          label="Tweets & replies"
+        />
       </NavLink>
-      <NavLink className="myProfileNavLink" to="/Profile/media">
-        <Tab value={2} className="myProfileTab" label="Media" />
+      <NavLink className="myProfileNavLink" to={`/Profile/${id}/media`}>
+        <Tab
+          value={2}
+          className={props.Media ? "myProfileTab-active" : "myProfileTab"}
+          label="Media"
+        />
       </NavLink>
-      <NavLink className="myProfileNavLink" to="/Profile/likes">
-        <Tab value={3} className="myProfileTab" label="Likes" />
+      <NavLink className="myProfileNavLink" to={`/Profile/${id}/likes`}>
+        <Tab
+          value={3}
+          className={props.Likes ? "myProfileTab-active" : "myProfileTab"}
+          label="Likes"
+        />
       </NavLink>
     </Box>
   );

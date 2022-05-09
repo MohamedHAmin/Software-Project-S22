@@ -400,7 +400,7 @@ function OthersProfile(props) {
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
         />
-        {/* <MyProfileTabs /> */}
+        <MyProfileTabs Tweets/>
         {userTweets?.length ? (
           userTweets.map((post) => (
             <Post
