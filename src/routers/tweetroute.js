@@ -99,6 +99,9 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           modifiedRetweet.tweetId = { ...Retweet.tweetId._doc, isliked: false };
           modifiedRetweet.tweetExisted = Retweet.tweetExisted;
         }
+      } else if (Retweet.tweetId) {
+        modifiedRetweet.tweetId = Retweet.tweetId;
+        modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       } else {
         modifiedRetweet.tweetId = null;
         modifiedRetweet.tweetExisted = Retweet.tweetExisted;
@@ -128,7 +131,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         tweet.replyingTo.tweetId = null;
       }
     }
-
 
     let isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
@@ -732,14 +734,6 @@ router.get("/explore", auth("any"), async (req, res) => {
         }
       });
     }
-    // for (let i = 0; i < exploredTweet.length; i++) {
-    //   if (exploredTweet[i].replyingTo.tweetExisted) {
-    //     temp = await Tweet.findById(exploredTweet[i].replyingTo.tweetId);
-    //     if (!temp) {
-    //       exploredTweet[i].replyingTo.tweetId = null;
-    //     }
-    //   }
-    // }
     res.send(exploredTweet);
   } catch (e) {
     //here all caught errors are sent to the client
