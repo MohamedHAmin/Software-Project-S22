@@ -75,8 +75,8 @@ function PrivacySettings(props) {
                 }
                 else{
                     setChecked(false);
-                    ;
-                    alert("changed successfully!")
+                    
+                    
                 }
             })
         }
@@ -106,7 +106,7 @@ function PrivacySettings(props) {
                 alert("error nothing changed!")
             }
             else{
-                alert("changed successfully!")
+                
                 setChecked(true);
                 
             }
@@ -118,7 +118,7 @@ function PrivacySettings(props) {
             {isClickedAudience===false &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Privacy and safety</h1>)}
             {isClickedAudience===false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage what information you see and share on Larry.</p>)}
             {isClickedAudience===false &&(<h2 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" } style={{marginTop:25}}>Your Larry activity</h2>)}
-            {isClickedAudience===false &&(<div onClick={clickedAudience} ><SettingsMenuOptions id="11" darkMode={props.isDarkMode} active={isClickedAudience} Icon={PeopleIcon} text="Audience" subtext="Manage what information you allow other people on Twitter to see." isSubtextExist={true}/></div>)}
+            {isClickedAudience===false &&(<div onClick={clickedAudience} ><SettingsMenuOptions id="11" darkMode={props.isDarkMode} active={isClickedAudience} Icon={PeopleIcon} text="Audience" subtext="Manage what information you allow other people on Larry to see." isSubtextExist={true}/></div>)}
             {/* Audience clicked */}
             {isClickedAudience===true &&(<h2 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Audience</h2>)}
             {isClickedAudience===true &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage what information you allow other people on Larry to see.</p>)}
@@ -154,7 +154,7 @@ function PrivacySettings(props) {
                                 <Button 
                                 type='submit'
                                 variant="contained" 
-                                className={props.isDarkMode?"forceChangePasswordMUIDarkMode":""} 
+                                className="buttonSettingsModal" 
                                 style={{marginTop:24, width:200}}
                                 >
                                 Protect
@@ -164,6 +164,7 @@ function PrivacySettings(props) {
                                 <Button
                                 style={{marginTop:7, width:200}}
                                 onClick={handleClose}
+                                className="profileCloseContainerButton"
                                 >
                                 Cancel
                                 </Button>

@@ -14,7 +14,7 @@ function RetweetDisplayBlock(props) {
             <Avatar className="profilePic" src={props.avatar}/>
             <div className="profileInfo">
             <div className="username"><NavLink className="username" to={`/Profile/${props.authorId}`} >{props.username}</NavLink></div>
-                <div className="tag"><NavLink className="tag" to={`/Profile/${props.authorId}`} >{"@" + props.displayName}</NavLink></div>
+                <div className="tag"><NavLink className="tag" to={`/Profile/${props.authorId}`} >{"@" + props.tagName}</NavLink></div>
             </div>
         </div>
         <div className="tweetContent">{props.content}</div>

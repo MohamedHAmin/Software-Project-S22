@@ -43,15 +43,17 @@ function MyProfile(props) {
   const [profilePhoto, setProfilePhoto] = useState("");
   const [Following, setFollowing] = useState(0);
   const [birthDate, setBirthDate] = useState("");
+  const [birthDateVisability, setbirthDateVisability] = useState(true);
   const [Name, setName] = useState("");
   const [Bio, setBio] = useState("");
   const [Location, setLocation] = useState("");
+  const [locationVisability, setlocationVisability] = useState(true);
 
-  //const [Website, setWebsite] = useState(profileData.user.website);
+  const [Website, setWebsite] = useState("");
   const [Name1, setName1] = useState(Name);
   const [Bio1, setBio1] = useState(Bio);
   const [Location1, setLocation1] = useState(Location);
-
+  const [Website1, setWebsite1] = useState(Website);
   const [Followers, setFollowers] = useState(0);
 
   const [banDuration, setBanDuration] = useState("");
@@ -70,6 +72,7 @@ function MyProfile(props) {
   //   setBirthDate(profileData.birth.date.Date);
   // }
 
+  
   useEffect(() => {
     axios
       .get(
@@ -103,6 +106,8 @@ function MyProfile(props) {
             setName(res.data.screenName);
             setBio(res.data.Biography);
             setLocation(res.data.location.place);
+            setWebsite(res.data.website);
+            setlocationVisability(res.data.location.visability);
             setJoinedDate(res.data.createdAt);
             setFollowers(res.data.followercount);
             setCoverImage(res.data.banner.url);
@@ -110,7 +115,8 @@ function MyProfile(props) {
             setBanDuration(res.data.ban);
             setProfilePhoto(res.data.profileAvater.url);
             setFollowing(res.data.followingcount);
-            setBirthDate(res.data.birth.date.Date);
+            setBirthDate(res.data.birth.date);
+            setbirthDateVisability(res.data.birth.visability);
           }
         });
     } else {
@@ -127,7 +133,9 @@ function MyProfile(props) {
             setProfileData(res.data);
             setName(res.data.user.screenName);
             setBio(res.data.user.Biography);
+            setWebsite(res.data.user.website);
             setLocation(res.data.user.location.place);
+            setlocationVisability(res.data.user.location.visability);
             setJoinedDate(res.data.user.createdAt);
             setFollowers(res.data.user.followercount);
             setCoverImage(res.data.user.banner.url);
@@ -135,7 +143,8 @@ function MyProfile(props) {
             setBanDuration(res.data.user.ban);
             setProfilePhoto(res.data.user.profileAvater.url);
             setFollowing(res.data.user.followingcount);
-            setBirthDate(res.data.user.birth.date.Date);
+            setBirthDate(res.data.user.birth.date);
+            setbirthDateVisability(res.data.user.birth.visability);
             setIsFollowed(res.data.isfollowing);
           }
         });
@@ -194,16 +203,17 @@ function MyProfile(props) {
         console.log(err);
       });
   };
-
+  console.log(Website);
   function saveBtn(e) {
     e.preventDefault();
+
     let data = {
-      screenName: Name1,
-      Biography: Bio1,
+      screenName: document.getElementById("editNameProfileField").value,
+      Biography: document.getElementById("editBioProfileField").value,
+      website: document.getElementById("editWebsiteProfileField").value,
     };
-    console.log(Name1);
     setNameError(false);
-    if (Name1 === "") {
+    if (!document.getElementById("editNameProfileField").value) {
       setNameError(true);
     } else {
       // setName(Name1);
@@ -226,7 +236,12 @@ function MyProfile(props) {
             axios
               .put(
                 `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
-                { location: { place: Location1 } },
+                {
+                  location: {
+                    place: document.getElementById("editLocationProfileField")
+                      .value,
+                  },
+                },
                 {
                   headers: {
                     Authorization: localStorage.getItem("accessToken"),
@@ -238,9 +253,14 @@ function MyProfile(props) {
                 if (res.error) {
                   alert("Something wrong happened!");
                 } else {
-                  setName(Name1);
-                  setBio(Bio1);
-                  setLocation(Location1);
+                  console.log(data);
+                  setName(data.screenName);
+                  setBio(data.Biography);
+                  setWebsite(data.website);
+                  console.log(Website);
+                  setLocation(
+                    document.getElementById("editLocationProfileField").value
+                  );
                   window.location.reload();
                 }
               });
@@ -248,19 +268,24 @@ function MyProfile(props) {
         });
     }
     //setWebsite(Website);
-    if (Name1 !== "") setButtonPopup(false);
+    console.log(Name1);
+    console.log(Name);
+    if (document.getElementById("editNameProfileField").value)
+      setButtonPopup(false);
   }
 
   function handleDiscard() {
     setName(Name);
     setBio(Bio);
+    setWebsite(Website);
     setLocation(Location);
   }
   function closeBtn() {
     if (
-      Name === Name1 &&
-      Bio === Bio1 &&
-      Location === Location1
+      Name === document.getElementById("editNameProfileField").value &&
+      Bio === document.getElementById("editBioProfileField").value &&
+      Location === document.getElementById("editLocationProfileField").value &&
+      Website === document.getElementById("editWebsiteProfileField").value
       // &&Website === website
     )
       setButtonPopup(false);
@@ -319,26 +344,34 @@ function MyProfile(props) {
   }
 
   function handleOptionsClick() {
-    navigate(`/Report/Profile/${userID}`);
+    if (!isAdmin) {
+      navigate(`/Report/Profile/${userID}`);
+    } else {
+      setOptionsModalState(true);
+    }
   }
   function handleBanAction() {
     axios
       .post(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`
+        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`,
+        { duration: banDuration1 },
+        { headers: { Authorization: localStorage.getItem("adminToken") } }
       )
       .then((res) => {
-        if (res.error.Error) {
+        console.log(res);
+        if (res.error) {
           console.log(
             "An error occured while attempting to ban the user, please try again"
           );
+        } else {
+          setBanDuration(banDuration1);
+          alert("The user has been banned");
         }
-        setBanDuration(banDuration1);
-        alert("The user has been banned");
       });
     setOptionsModalState(false);
   }
   function handleSelectChange(event) {
-    setBanDuration(event.target.value);
+    setBanDuration1(event.target.value);
   }
   function handleReportAction() {
     setOptionsModalState(false);
@@ -560,7 +593,7 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Name"
-                  onChange={(e) => setName1(e.target.value)}
+                  id="editNameProfileField"
                   defaultValue={Name}
                   required
                   fullWidth
@@ -572,7 +605,7 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Bio"
-                  onChange={(e) => setBio1(e.target.value)}
+                  id="editBioProfileField"
                   defaultValue={Bio}
                   fullWidth
                   multiline
@@ -584,24 +617,29 @@ function MyProfile(props) {
                 <TextField
                   className="editProfileField"
                   label="Location"
-                  onChange={(e) => setLocation1(e.target.value)}
+                  id="editLocationProfileField"
                   defaultValue={Location}
                   fullWidth
+                  multiline
+                  rows={1}
                   inputProps={
-                    ({ maxLength: 30 },
+                    ({ maxLength: 160 },
                     { "data-testid": "editProfile-Location" })
                   }
                 />
-                {/* <TextField
-                className="editProfileField"
-                label="Website"
-                onChange={(e) => setWebsite1(e.target.value)}
-                defaultValue={website}
-                fullWidth
-                inputProps={
-                  ({ maxLength: 100 }, { "data-testid": "editProfile-Website" })
-                }
-              /> */}
+                <TextField
+                  className="editProfileField"
+                  label="Website"
+                  id="editWebsiteProfileField"
+                  defaultValue={Website}
+                  fullWidth
+                  multiline
+                  rows={1}
+                  inputProps={
+                    ({ maxLength: 100 },
+                    { "data-testid": "editProfile-Website" })
+                  }
+                />
               </div>
               <Modal
                 open={buttonclosePopup}
@@ -658,8 +696,10 @@ function MyProfile(props) {
           following={Following}
           bio={Bio}
           location={Location}
-          //website={Website}
+          locationVisability={locationVisability}
+          website={Website}
           birthday={birthDate}
+          birthdayVisability={birthDateVisability}
         />
         <MyProfileTabs />
         {userTweets?.length ? (

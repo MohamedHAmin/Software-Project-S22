@@ -13,20 +13,37 @@ function MyFollowers() {
   let userID = localStorage.getItem("userId");
 
   useEffect(() => {
-    axios
-      .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.error) {
-          console.log("Error");
-        } else {
-          setName(res.data.screenName);
-          setTag(res.data.tag);
-        }
-      });
+    if (id == userID) {
+      axios
+        .get(
+          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setName(res.data.screenName);
+            setTag(res.data.tag);
+          }
+        });
+    } else {
+      axios
+        .get(
+          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setName(res.data.user.screenName);
+            setTag(res.data.user.tag);
+          }
+        });
+    }
     axios
       .get(
         `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${id}/follower`,

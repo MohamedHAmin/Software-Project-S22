@@ -9,7 +9,7 @@ function ProfileName({ pName, pID }) {
       <ArrowBackIcon onClick={() => navigate(-1)} />
       <div className="description">
         <h2>{pName}</h2>
-        <p>{pID} </p>
+        <p> @{pID} </p>
       </div>
     </div>
   );

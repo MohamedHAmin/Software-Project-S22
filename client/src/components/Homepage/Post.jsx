@@ -27,7 +27,6 @@ function Post(props) {
   const [hasimage,sethasimage]=useState(false);
   const [canretweet,setcanretweet]=useState(true);
   //var binaryData = [];
-  console.log(props.post.gallery[0]?.photo);
   /*if(props.post.gallery || props.post.gallery?.length)
   {
     console.log(props.post.gallery);
@@ -44,6 +43,12 @@ const [username]=useState(props.post.authorId.screenName);
 const [tweetcontent]=useState(props.post.text);
 const [displayName]=useState(props.post.authorId.tag);
 const [sameuser,setsameuser]=useState(false);
+useEffect(()=>{
+  if(tweetcontent==="No-text" && !props.post.gallery[0])
+  {
+    setcanretweet(false);
+  }
+},[])
 //const [content, setContent] = useState("");
 //const [displaylimit,setdisplaylimit] = useState(5);
 //const [displayload,setdisplayload] = useState(false);
@@ -123,12 +128,6 @@ function deletepost(){
   {
       setdisplayComments(!displayComments);
   }*/
-    useEffect(()=>{
-      if(!tweetcontent && !props.post.gallery[0])
-      {
-        setcanretweet(false);
-      }
-    },[])
 
     /*const passdeletedComment =(id)=>
     {
@@ -160,13 +159,13 @@ function deletepost(){
               username={props.post.retweetedTweet.authorId.screenName}
               tagName={props.post.retweetedTweet.authorId.tag}
               avatar={props.post.retweetedTweet.authorId.profileAvater.url}
-              image={props.post.gallery[0]}
+              image={props.post.retweetedTweet.gallery[0]}
               authorId={props.post.retweetedTweet.authorId._id}
               content={props.post.retweetedTweet.text}/>}
-        <div className="time">
+        {date && <div className="time">
             <p>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}&nbsp;&nbsp;</p>
             <p>{date.getHours()}:{date.getMinutes()}</p>
-        </div>
+        </div>}
         <div className="reactsBar">
             <Reacts 
             postId={postId}

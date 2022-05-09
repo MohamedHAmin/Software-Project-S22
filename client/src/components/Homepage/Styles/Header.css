@@ -10,7 +10,7 @@ header {
    width:100%;
    background-color: var(--color-background);
    color: var(--color-mode);
-   z-index: 200;
+   z-index: 500;
    position: sticky;
   }
 .Header{

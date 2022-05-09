@@ -16,38 +16,43 @@ const Login = () => {
     }
     const Navigate = useNavigate();
     const validationSchema = Yup.object().shape({
-        password: Yup.string().min(6).max(12).required("Write Your Password"),
-        email_or_username: Yup.string().min(3).required("Write Your email.")
+        password: Yup.string().min(6).max(16).required("Enter Your Password"),
+        email_or_username: Yup.string().min(3).required("Enter Your Email or Tag.")
     })
     const onSubmit = (data) => {
         console.log(data);
         axios.post("http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/login", data).then((res) => {
             console.log(res);
-            if (res.error) {
-                if (res.error === "Error: unable to login as user is not verified") {
-                    alert("Please verify your email")
-                } else if(res.error=== "Error: unable to login") {
-                    setError("Wrong userName OR Password");
-                }
-            } else {
+            // if (res.error) {
+            //     if (res.error === "Error: unable to login as user is not verified") {
+            //         alert("Please verify your email")
+            //     } else if (res.error === "Error: unable to login") {
+            //         setError("Wrong userName OR Password");
+            //     }
+            // } else {
                 localStorage.setItem("accessToken", res.data.token.token);
                 localStorage.setItem("userId", res.data.user.user._id);
-                if(res.data.user.adminToken)
-                {
+                if (res.data.user.adminToken) {
                     localStorage.setItem("adminToken", res.data.user.adminToken.token);
                 }
-                else
-                {
+                else {
                     localStorage.setItem("adminToken", "");
                 }
                 Navigate("/Home");
                 Navigate(0);
             }
-        })
-    };
-    const clickHandeler = ()=>{
+        ).catch(err => {
+          console.log(err.response.data.error);
+          if (err.response.data.error == "Error: unable to login as user is not verified") {
+            alert("Please verify your email")
+          } else {
+            setError("Wrong username OR password");
+          }
+    })};
+    const clickHandeler = () => {
         Navigate("/SignUp")
     }
+    //color: #4158D0
     return (
         <div>
             <Navbar />
@@ -62,12 +67,12 @@ const Login = () => {
                         <LoginwithGoogle />
                     </div>
 
-                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} className={classes.form}> 
+                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} className={classes.form}>
                         <Form>
                             <div className={classes.field}>
-                                <Field className={classes.userinput} name="email_or_username" placeholder="Email or Username" autoComplete="off" />
+                                <Field className={classes.userinput} name="email_or_username" placeholder="Email or Tag" autoComplete="off" />
                             </div>
-                            <ErrorMessage name='email_or_username' component="span" className={classes.error}/>
+                            <ErrorMessage name='email_or_username' component="span" className={classes.error} />
                             {error === false ? <span></span> : <span className={classes.error}>{error}</span>}
 
                             <div className={classes.field}>
@@ -85,7 +90,6 @@ const Login = () => {
                                     <a href="#">Forgot password?</a>
                                 </div>
                             </div>
-
                             <button className={classes.button} type="submit" >Login</button>
                             <div className={classes.signupLink}>
                                 Not a member? <a onClick={clickHandeler}>Signup now</a>

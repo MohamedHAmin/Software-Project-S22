@@ -32,7 +32,7 @@ function UpdatePassword(props) {
       if(confirmPassValue && newPassValue1 && newPassValue2){
         // if(confirmPassValue==="karim"){
         //   setIsConfirmPassCorrect(1)
-          if(newPassValue1.length<6){
+          if(newPassValue1.length<6 && newPassValue1.length>16){
             setValueNewPass1Error(true);
           }
           else if(newPassValue1===newPassValue2){
@@ -149,7 +149,7 @@ function UpdatePassword(props) {
               type="submit" 
               disabled={confirmPassValue.length===0 || newPassValue1.length===0 || newPassValue2.length===0}
               variant="contained"  
-              className={props.darkMode?"forceChangePasswordMUIDarkMode":""} 
+              className="buttonSettingsModal"
               style={{marginTop:20}}
             >
               save
@@ -175,6 +175,7 @@ function UpdatePassword(props) {
                       variant="contained" 
                       style={{marginTop:7, width:200}}
                       onClick={handleClose}
+                      className="profileCloseContainerButton"
                       >
                       Close
                       </Button>

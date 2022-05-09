@@ -1,9 +1,9 @@
 import React from "react";
 import { Tabs, Tab, Box } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import "./Styles/MyProfileTabs.css";
 function MyProfileTabs() {
-  let id = localStorage.getItem("userId");
+  let { id } = useParams();
   return (
     <Box className="myProfileTabs">
       <Tabs centered>

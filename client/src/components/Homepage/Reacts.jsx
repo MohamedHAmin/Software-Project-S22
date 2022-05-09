@@ -69,6 +69,11 @@ function Reacts (props) {
                 }
             }
         })
+        .catch((err) => {
+            //err.message; // 'Oops!'
+            alert(err.response.data.error);
+            console.log(err);
+          });
     }
     const RetweetHandler=()=>{
         /*posts.push({
@@ -84,10 +89,10 @@ function Reacts (props) {
             images:selectedImage
         });*/
         let data=
-      {
-        text: value,
-        retweetedTweet:props.postId
-      };
+        {
+            text: value,
+            retweetedTweet:props.postId
+        };
       if(value==="")
       {
           data.text="No-text";
@@ -104,6 +109,7 @@ function Reacts (props) {
               handleClose();
               setValue("");
               props.setNumberOfRetweets(props.numberOfRetweets+1);
+              window.location.reload();
           }
         /*var index=posts.map((post)=>post.id).indexOf(props.postId);
         console.log(index);
@@ -114,6 +120,11 @@ function Reacts (props) {
         setNumberOfRetweets(temp);*/
         //props.setCount(props.count+1);
     })
+    .catch((err) => {
+        //err.message; // 'Oops!'
+        alert(err.response.data.error);
+        console.log(err);
+      });
 }
         return (
             <div className="reactsBar">
