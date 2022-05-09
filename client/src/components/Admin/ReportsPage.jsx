@@ -13,7 +13,7 @@ function ReportsPage(props)
     const [tweetReports,settweetReports]=useState([]);
     console.log(tweetReports);
     useEffect(()=>{
-        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
         console.log(res);
         if (res.error){console.log("Error")}
         else {
@@ -22,7 +22,7 @@ function ReportsPage(props)
           console.log(res.data);
         }
     })
-        axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
         console.log(res);
         if (res.error){console.log("Error")}
         else {
@@ -34,7 +34,7 @@ function ReportsPage(props)
     const passdeletedTweet = (id) => {
         axios
           .delete(
-            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/${id}`,
             { headers: { Authorization: localStorage.getItem("adminToken") } }
           )
           .then((res) => {
@@ -43,7 +43,7 @@ function ReportsPage(props)
               alert("something went wrong");
             } else {
               window.location.reload();
-              axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
                 console.log(res);
                 if (res.error){console.log("Error")}
                 else {
@@ -65,7 +65,7 @@ function ReportsPage(props)
       const ondeleteuserreport = (id) => {
         axios
           .delete(
-            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/report/${id}?IDType=Reported`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/report/${id}?IDType=Reported`,
             { headers: { Authorization: localStorage.getItem("adminToken") } }
           )
           .then((res) => {
@@ -74,7 +74,7 @@ function ReportsPage(props)
               alert("something went wrong");
             } else {
               window.location.reload();
-              axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
                     console.log(res);
                     if (res.error){console.log("Error")}
                     else {
@@ -96,7 +96,7 @@ function ReportsPage(props)
       const ondeletetweetreport = (id) => {
         axios
           .delete(
-            `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/report/${id}?IDType=Reported`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/report/${id}?IDType=Reported`,
             { headers: { Authorization: localStorage.getItem("adminToken") } }
           )
           .then((res) => {
@@ -105,7 +105,7 @@ function ReportsPage(props)
               alert("something went wrong");
             } else {
               window.location.reload();
-              axios.get(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
                 console.log(res);
                 if (res.error){console.log("Error")}
                 else {

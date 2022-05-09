@@ -37,7 +37,7 @@ function MakeLocVisible(props) {
             let data={
                 location:{visability:!checked}
             }
-            axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}`,data, {
 
               headers: {
                 Authorization: localStorage.getItem("accessToken")

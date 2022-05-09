@@ -76,7 +76,7 @@ function MyProfile(props) {
   useEffect(() => {
     axios
       .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/user/${id}`,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
@@ -94,7 +94,7 @@ function MyProfile(props) {
     if (id === userID) {
       axios
         .get(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${id}/me`,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
         .then((res) => {
@@ -122,7 +122,7 @@ function MyProfile(props) {
     } else {
       axios
         .get(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${id}`,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
         .then((res) => {
@@ -157,7 +157,7 @@ function MyProfile(props) {
 
     // axios
     //   .get(
-    //     `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}/me`,
+    //     `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/user/${id}/me`,
     //     { headers: { Authorization: localStorage.getItem("accessToken") } }
     //   )
     //   .then((res) => {
@@ -168,7 +168,7 @@ function MyProfile(props) {
   const passdeletedTweet = (id) => {
     axios
       .delete(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/${id}`,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
@@ -179,7 +179,7 @@ function MyProfile(props) {
           window.location.reload();
           axios
             .get(
-              `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+              `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/user/${id}`,
               {
                 headers: { Authorization: localStorage.getItem("accessToken") },
               }
@@ -224,7 +224,7 @@ function MyProfile(props) {
       console.log("---------------------------");
       axios
         .put(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userID}`,
           data,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
@@ -235,7 +235,7 @@ function MyProfile(props) {
           } else {
             axios
               .put(
-                `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
+                `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userID}`,
                 {
                   location: {
                     place: document.getElementById("editLocationProfileField")
@@ -304,7 +304,7 @@ function MyProfile(props) {
     } else {
       axios
         .post(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${id}`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/user/${userID}/follow/${id}`,
           null,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
@@ -327,7 +327,7 @@ function MyProfile(props) {
   function handleUnfollowAction() {
     axios
       .post(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/user/${userID}/unfollow/${id}`,
         null,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
@@ -353,7 +353,7 @@ function MyProfile(props) {
   function handleBanAction() {
     axios
       .post(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/admin/ban/${id}`,
         { duration: banDuration1 },
         { headers: { Authorization: localStorage.getItem("adminToken") } }
       )

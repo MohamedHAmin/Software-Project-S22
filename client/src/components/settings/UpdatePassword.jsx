@@ -45,7 +45,7 @@ function UpdatePassword(props) {
               newPassword:newPassValue1
             }
             //
-            axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/profile/${userId}/password`,data, {
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}/password`,data, {
 
               headers: {
                 Authorization: localStorage.getItem("accessToken")

@@ -50,7 +50,7 @@ function Reacts (props) {
         setLikeStatus(false);
     }
     const LikeClickHandler=()=>{
-        axios.put(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${props.postId}/like`,{},{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
+        axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/${props.postId}/like`,{},{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
         {
             console.log(res);
             if(res.error)
@@ -97,7 +97,7 @@ function Reacts (props) {
       {
           data.text="No-text";
       }
-        axios.post(`http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/retweet`, data,{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/retweet`, data,{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
       {
         console.log(res);
           if(res.error)
