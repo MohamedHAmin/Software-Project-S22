@@ -1,10 +1,7 @@
-const { text } = require("express");
+
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const { text } = require('express');
-const mongoose =require('mongoose')
-const validator =require('validator')
 
 const tweetSchema = new mongoose.Schema(
   {

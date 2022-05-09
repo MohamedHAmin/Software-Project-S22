@@ -231,13 +231,14 @@ const userSchema = new mongoose.Schema({
         default: true,
       },
     },
-  },
+  }},
   {
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
     strictPopulate: false,
   }
+
 );
 //to connect with tweet he tweet
 userSchema.virtual("Tweets", {
