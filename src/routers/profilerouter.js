@@ -74,7 +74,8 @@ router.put("/:id", auth("user"), async (req, res) => {
       change = true;
       delete updates.birth;
     }
-    if (req.body.location && req.body.location.visability) {
+    console.log('first')
+    if (req.body.location &&( req.body.location.visability!==undefined)) {
       req.user.location.visability = req.body.location.visability;
       change = true;
     }
@@ -152,7 +153,8 @@ router.delete("/:id/avater", auth("any"), async (req, res) => {
     if (req.user.profileAvater.cloudnaryId) {
       await cloudinary.uploader.destroy(req.user.profileAvater.cloudnaryId);
     }
-    req.user.profileAvater = null;
+    req.user.profileAvater.url = null;
+    req.user.profileAvater.cloudnaryId = null;
     await req.user.save();
     res.json(req.user);
   } catch (e) {
@@ -194,7 +196,9 @@ router.delete("/:id/banner", auth("any"), async (req, res) => {
     if (req.user.banner.cloudnaryId) {
       await cloudinary.uploader.destroy(req.user.banner.cloudnaryId);
     }
-    req.user.banner = null;
+    req.user.banner.url = null;
+    req.user.banner.cloudnaryId = null;
+
     await req.user.save();
     res.json(req.user);
   } catch (e) {
