@@ -19,7 +19,7 @@ function FollowingCard(props) {
     } else {
       axios
         .post(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact.followingId._id}`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/user/${userID}/follow/${props.contact.followingId._id}`,
           null,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
@@ -41,7 +41,7 @@ function FollowingCard(props) {
   function handleUnfollowAction() {
     axios
       .post(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.contact.followingId._id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/user/${userID}/unfollow/${props.contact.followingId._id}`,
         null,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )

@@ -41,7 +41,7 @@ function Homepage(props) {
     tokenreset();
     axios
       .get(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/timeline`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/timeline`,
         { headers: { Authorization: token } }
       )
       .then((res) => {
@@ -84,7 +84,7 @@ function Homepage(props) {
     tokensetter();
     axios
       .delete(
-        `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet/${id}`,
         { headers: { Authorization: token } }
       )
       .then((res) => {
@@ -169,7 +169,7 @@ function Homepage(props) {
       console.log(data2);
       axios
         .post(
-          `http://larry-env.eba-c9wvtgzk.us-east-1.elasticbeanstalk.com/api/tweet`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/tweet`,
           data2,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )

@@ -1,0 +1,32 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+		{
+			"name": "api",
+			"image": "mostafaelnashar/larry-api",
+			"hostname": "api",
+			"essential": false,
+			"memory": 128
+		},
+		{
+			"name": "client",
+			"image": "mostafaelnashar/larry-client",
+			"hostname": "client",
+			"essential": false,
+			"memory": 128
+		},
+		{
+			"name": "router",
+			"image": "mostafaelnashar/larry-router",
+			"essential": true,
+			"portMappings": [
+				{
+				"hostPort": 80,
+				"containerPort": 80
+				}
+			],
+			"links": ["api", "client"],
+			"memory": 128
+		}
+	]
+}

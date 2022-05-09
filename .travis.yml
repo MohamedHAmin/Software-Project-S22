@@ -25,7 +25,7 @@ script:
   - docker-compose up --exit-code-from api
   # - docker run --network mean --name database -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -p 27017:27017 -d mongo
   # - docker run --network mean -v /app/node_modules -v $(pwd)/api:/app -e MONGOCONNECT=mongodb://root:example@database:27017/ -e PORT=3000 -e SECRET=$SECRET -e CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME -e CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY -e CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET -e AUTH_EMAIL=$AUTH_EMAIL -e AUTH_PASS=$AUTH_PASS -e CURRENTURL=$CURRENTURL api npm run Dtest
-  - docker build -t mostafaelnashar/larry-client ./client
+  # - docker build -t mostafaelnashar/larry-client ./client
 
 after_success:
   - docker build -t mostafaelnashar/larry-api ./api
@@ -33,13 +33,13 @@ after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push mostafaelnashar/larry-api
   - docker push mostafaelnashar/larry-router
-  - docker push mostafaelnashar/larry-client
+  # - docker push mostafaelnashar/larry-client
 
 deploy:
   provider: elasticbeanstalk
   wait_until_deployed: true
   region: 'us-east-1'
-  app: 'larry'
+  app: 'Larry'
   env: 'Larry-env'
   bucket: elasticbeanstalk-us-east-1-284489073366
   bucket_path: larry
