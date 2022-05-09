@@ -2,6 +2,10 @@ const { text } = require("express");
 const mongoose = require("mongoose");
 const validator = require("validator");
 
+const { text } = require('express');
+const mongoose =require('mongoose')
+const validator =require('validator')
+
 const tweetSchema = new mongoose.Schema(
   {
     replyingTo: {
@@ -79,25 +83,11 @@ const tweetSchema = new mongoose.Schema(
     strictPopulate: false,
   }
 );
-
-// tweetSchema.virtual('replies',{
-//   ref:'Tweet',
-//   localField:'_id',
-//   foreignField:'replyingTo'
-// })
-
-tweetSchema.virtual("reply", {
-  ref: "Tweet",
-  localField: "_id",
-  foreignField: "replyingTo.tweetId",
-});
-
-tweetSchema.methods.toJSON = function () {
-  const tweet = this;
-  const tweetobject = tweet.toObject();
-  delete tweetobject.likes;
-  return tweetobject;
-};
+tweetSchema.virtual('reply',{
+  ref:'Tweet',
+  localField:'_id',
+  foreignField:'replyingTo.tweetId'
+})
 
 // tweetSchema.index({ text: "text" });
 

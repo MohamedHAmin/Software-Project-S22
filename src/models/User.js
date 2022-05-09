@@ -6,9 +6,91 @@ const Token = require("./Token");
 const Admin = require("./Admin");
 const { now, cloneWith } = require("lodash");
 
-const userSchema = new mongoose.Schema(
-  {
-    screenName: {
+const userSchema = new mongoose.Schema({
+  screenName: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  tag:{
+     type:String,
+     required:true,
+     unique:true
+  },
+  Biography:{
+    type:String,
+    maxlength:280,
+    default:""
+  },
+  website:{
+    type:String,
+    maxlength:280,
+    default:""
+  },
+  phoneNumber:{
+    type:String,
+    default:0
+  },
+  darkMode:{
+       type:Boolean,
+       default:false
+  },
+
+  location:{
+    place:{
+      type:String,
+      default:null
+    },
+    visability:{
+      type:Boolean,
+      default:true
+     }
+  },
+  birth:{
+    date:{
+      type:Date,
+    default:Date.now()
+    },
+    visability:{
+      type:Boolean,
+      default:true
+     }
+  },
+  isPrivate:{
+    type:Boolean,
+    default:false
+  },
+  password: {
+    type: String,
+    trim: true,
+    required: true,
+    minlength: 6,
+  },
+  ban:{
+    type:Date,
+    default:Date.now()
+  },
+  verified:{
+    type: Boolean,
+    default:false
+  },
+  email: {
+    type: String,
+    trim: true,
+    unique:true,
+    required: true,
+    lowercase: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error("not valid email");
+      }
+    },
+  },
+  profileAvater: {
+    url:{ type: String,
+    trim: true,
+    default:null},
+    cloudnaryId:{
       type: String,
       required: true,
       trim: true,
