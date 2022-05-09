@@ -102,6 +102,10 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           modifiedRetweet.tweetId = { ...Retweet.tweetId._doc, isliked: false };
           modifiedRetweet.tweetExisted = Retweet.tweetExisted;
         }
+      }
+      else if (Retweet.tweetId) {
+        modifiedRetweet.tweetId = Retweet.tweetId;
+        modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       } else {
         modifiedRetweet.tweetId = null;
         modifiedRetweet.tweetExisted = Retweet.tweetExisted;
