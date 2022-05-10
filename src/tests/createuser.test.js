@@ -1,5 +1,4 @@
 const request = require('supertest')
-//const nodemailerMock = require('nodemailer-mock').getMockFor(nodemailer);
 const User = require('../models/User')
 const Userverification = require('../models/UserVerification')
 const bcrypt = require("bcryptjs"); //generating unique strings 
@@ -33,17 +32,15 @@ test('Check Email Duplication', async ()=>{
         screenName:"user6",
         email:"oz123@gmail.com",
         password:"123456",
-        verified: true,
-        tag:"@oz174"
+        tag:"@oz174",
+        verified:true
     })
     const res=await request(app).post('/user/signup')
-
     .send({
-    screenName:"user6",
+        screenName:"user6",
     email:"oz123@gmail.com",
     password:"123456",
-    verified:true,
-    tag:"@oz174"
+    tag:"@o88"
     })
     .expect(400)
 })
@@ -56,7 +53,6 @@ test('Check Tag Duplication', async ()=>{
         verified:true
     })
     const res=await request(app).post('/user/signup')
-   
     .send({
         screenName:"user6",
     email:"oz124@gmail.com",
@@ -67,7 +63,6 @@ test('Check Tag Duplication', async ()=>{
 })
 test('Check Password Length', async ()=>{
     const res=await request(app).post('/user/signup')
-  
     .send({
         screenName:"user6",
         email:"oz123@gmail.com",
@@ -78,7 +73,6 @@ test('Check Password Length', async ()=>{
 })
 test('Email Validity', async ()=>{
     const res=await request(app).post('/user/signup')
- 
     .send({
         screenName:"user6",
     email:"oz123@gmail",
@@ -90,7 +84,6 @@ test('Email Validity', async ()=>{
 })
 test('Empty User name', async ()=>{
     const res=await request(app).post('/user/signup')
-   
     .send({
         email:"cool23@gmail.com",
         password:"superuser",
@@ -100,7 +93,6 @@ test('Empty User name', async ()=>{
 })
 test('Empty Email', async ()=>{
     const res=await request(app).post('/user/signup')
-   
     .send({
         user_name:"oz14",
         password:"superuser1",
@@ -110,7 +102,6 @@ test('Empty Email', async ()=>{
 })
 test('Empty Password', async ()=>{
     const res=await request(app).post('/user/signup')
-    
     .send({
         user_name:"Superoz12",
         email:"cool23@gmail.com",
@@ -141,13 +132,13 @@ test('email verfication', async ()=>{
     const userverification2=await Userverification.findOne()
 
     const userverification=await Userverification.findOne({email:"cool23@gmail.com"})
-    //let s=userverification.uniqueString.toString()
-    //s=s.replace('+','xMl3Jk')
-    //s=s.replace('/','Por21Ld')
-    //s=s.replace('=','Ml32')
+    let s=userverification.uniqueString.toString()
+     s=s.replace('+','xMl3Jk')
+     s=s.replace('/','Por21Ld')
+     s=s.replace('=','Ml32')
     //console.log("🚀 ~ file: createuser.test.js ~ line 136 ~ test ~ s", s)
      
-    const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'?hash='+userverification.uniqueString)
+    const res2=await request(app).get('/user/verify/'+userverification.userId.toString()+'/'+s)
     .expect(200)
     
 })

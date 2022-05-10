@@ -30,7 +30,7 @@ const auth =(role)=>{
                     throw new Error()
                 }
             }
-            req.token=tokenIn
+            req.token=token
             req.user=user
             next()
         }catch(e){

@@ -16,14 +16,6 @@ beforeEach(async () => {
     tag: "US1",
     password: "123456",
     email: "User1@gmail.com",
-    location:{
-      place:"cairo",
-      visability:false
-    },
-    birth:{
-      date:"2022-04-24T13:35:32.392Z",
-      visability:false
-    }
   });
   user1.save()
 
@@ -38,16 +30,6 @@ beforeEach(async () => {
 });
 
 test("check change user data", async () => {
-  
-  const res2 = await request(app)
-    .put("/profile/" + user2._id.toString())
-    .set("Authorization", "Bearer " + user2token.token)
-    .send({
-      screenName: "u1",
-      tag: "T1",
-    })
-   // console.log("🚀 ~ file: changedata.test.js ~ line 35 ~ test ~ res2", res2)
-
   const res = await request(app)
     .put("/profile/" + user2._id.toString())
     .set("Authorization", "Bearer " + user2token.token)
@@ -66,22 +48,6 @@ test("check change user data", async () => {
       password: "888",
     })
     .expect(400);
-
-    await request(app)
-    .put("/profile/" + user2._id.toString())
-
-    .set("Authorization", "Bearer " + user2token.token)
-    .send({
-      location: {
-        place:"cairo",
-        visability:true
-      },
-      birth: {
-        visability:true
-      },
-    })
-    .expect(200);
-    
 });
 
 test('change password',async ()=>{

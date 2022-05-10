@@ -6,9 +6,7 @@ const upload = require("../utils/multer");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 const fs = require("fs");
-const Notification = require("../models/Notification");
-const notifiy = require("../utils/firbase");
-const Token = require("../models/Token.js");
+
 const router = new express.Router();
 //! remember to require and install badwords
 router.use(bodyParser.json());
@@ -52,7 +50,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         select: "_id screenName tag profileAvater.url",
       },
     });
-    console.log("🚀 ~ file: tweetroute.js ~ line 55 ~ router.get ~ tweet", tweet)
     await tweet.populate({
       path: "reply",
       select:
@@ -79,7 +76,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
     });
 
     let Retweet = tweet.retweetedTweet;
-    let modifiedRetweet = { tweetId: "", tweetExisted: null };
+    let modifiedRetweet = { tweetId: "", tweetExisted: "" };
     let replies = tweet.reply;
     let modifiedreply;
     let modifiedreplies = [];
@@ -102,16 +99,15 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           modifiedRetweet.tweetId = { ...Retweet.tweetId._doc, isliked: false };
           modifiedRetweet.tweetExisted = Retweet.tweetExisted;
         }
-        
-      }
-      else if (Retweet.tweetId) {
+      } else if (Retweet.tweetId) {
         modifiedRetweet.tweetId = Retweet.tweetId;
         modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       } else {
         modifiedRetweet.tweetId = null;
         modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       }
-    }  
+    }
+
     if (replies && replies.length > 0) {
       for (reply of replies) {
         let replyisliked = reply.likes.some(
@@ -135,8 +131,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         tweet.replyingTo.tweetId = null;
       }
     }
-
-   
 
     let isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
@@ -219,7 +213,6 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
       options: { sort },
     });
-    console.log(user.Tweets);
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
@@ -351,7 +344,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    const filters= {followerfilter:req.query.followerfilter};
+    const filters = { followerfilter: req.query.followerfilter };
     let searchedItem = req.params.searchedtext.trim();
     if (!searchedItem || searchedItem.length < 1) {
       e = "Attempting search of empty string";
@@ -457,10 +450,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
     }
-    if(filters.followerfilter){
-      modifiedresultUsers=[];
-      for(let i=0;i<resultUsers.length;i++){
-        if(resultUsers[i].isfollowed){
+    if (filters.followerfilter) {
+      modifiedresultUsers = [];
+      for (let i = 0; i < resultUsers.length; i++) {
+        if (resultUsers[i].isfollowed) {
           // resultUsers.splice(i,1);
           // if(i!==0){
           //   i--;
@@ -471,7 +464,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
           modifiedresultUsers.push(resultUsers[i]);
         }
       }
-      resultUsers=modifiedresultUsers;
+      resultUsers = modifiedresultUsers;
     }
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
@@ -557,7 +550,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     ])
       .limit(limit)
       .skip(skip)
-      .sort({createdAt:-1});
+      .sort({ createdAt: -1 });
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
       throw e;
@@ -741,14 +734,6 @@ router.get("/explore", auth("any"), async (req, res) => {
         }
       });
     }
-    // for (let i = 0; i < exploredTweet.length; i++) {
-    //   if (exploredTweet[i].replyingTo.tweetExisted) {
-    //     temp = await Tweet.findById(exploredTweet[i].replyingTo.tweetId);
-    //     if (!temp) {
-    //       exploredTweet[i].replyingTo.tweetId = null;
-    //     }
-    //   }
-    // }
     res.send(exploredTweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -841,10 +826,6 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
     } else {
       await Tweet.create({ ...req.body, authorId: req.user._id });
     }
-      const nottext=req.user.tag+" has lar"
-      notifiy(req.user,nottext,req.user._id.toString(),"newtweet")
-  
-
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" });
   } catch (e) {
     //here all exception caught sends their respective
@@ -911,9 +892,6 @@ router.post("/retweet", auth("user"), async (req, res) => {
       text: text,
       retweetedTweet: { tweetId: req.body.retweetedTweet, tweetExisted: true },
     });
-    const nottext=req.user.tag+" has relar"
-    notifiy(req.user,nottext,req.user._id.toString(),"newtweet")
-
     res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
   } catch (e) {
     res.status(400).send({ error: e.toString() });
@@ -1035,14 +1013,17 @@ router.post("/reply", auth("user"), upload.array("image"), async (req, res) => {
 
 router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+    if (!req.admin) {
+      await req.user.isBanned();
+    }
+
     const targettweet = await Tweet.findById(req.params.id);
     if (!targettweet) {
       throw new Error("Not Found");
     }
     const B = targettweet.authorId.equals(req.user._id);
     if (req.admin || B) {
-      if (targettweet.replyingTo.tweetId) {
+      if (targettweet.replyingTo.tweetExisted) {
         let replyedOnTweet = await Tweet.findById(
           targettweet.replyingTo.tweetId
         );
@@ -1051,7 +1032,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
           await replyedOnTweet.save();
         }
       }
-      if (targettweet.retweetedTweet.tweetId) {
+      if (targettweet.retweetedTweet.tweetExisted) {
         let retweetedTweet = await Tweet.findById(
           targettweet.retweetedTweet.tweetId
         );
@@ -1084,8 +1065,6 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
     //unliked determines if the put request is a like or an unlike(variable unliked)
     //variable unlikedIndex determines which element is the like pending to be removed
     const ReqTweet = await Tweet.findById(req.params.id);
-    const user = await User.findById(ReqTweet.authorId);
-
     if (!ReqTweet) {
       //makes sure that tweet exists by making sure ReqTweet is not a null
       e = "Error : Not Found";
@@ -1130,44 +1109,10 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
       ReqTweet.likes = ReqTweet.likes.concat({ like: req.user._id });
       ReqTweet.likeCount++;
       await ReqTweet.save();
-
-      //* Notification part
-
-      if (user.Notificationssetting.liketweet) {
-        const text = req.user.tag+"like on your lar";
-        const notifications = new Notification({ userId: req.user._id, text,notifiedUId:user._id });
-        notifications.save();
-        const tokens = await Token.find({ ownerId: user._id });
-        console.log(
-          "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
-          tokens
-        );
-        if (tokens) {
-          let fcmtokens = tokens.map((token) => token.fcmToken);
-          var uniqueArray = [...new Set(fcmtokens)];
-          uniqueArray = uniqueArray.filter((t) => t != null);
-          console.log(
-            "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
-            uniqueArray
-          );
-          console.log(
-            "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
-            text
-          );
-  
-          notifiy(uniqueArray, text, req.user._id.toString());
-        }}
-   
-
-
-  //*end of Notification part
-
-
       res.status(201);
       res.send({ ReqTweet, isliked: true });
-    
-  }
-} catch (e) {
+    }
+  } catch (e) {
     //catch and send back errors to the front end
     res.status(400);
     res.send({ error: e.toString() });
