@@ -439,14 +439,15 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let requiredId=mongoose.Types.ObjectId(req.params.id);
     let user = await User.findById(req.params.id);
     if (!user) {
-      e = "user not found";
+      e = "user doesn't exist ";
       throw e;
     }
 
     let likedtweets = await Tweet.aggregate([
-      { $match: { "likes.like": req.params.id } },
+      { $match: { "likes.like": requiredId } },
       { $project: { likes: 0 } },
       {
         $lookup: {
@@ -512,6 +513,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       .limit(limit)
       .skip(skip)
       .sort({ createdAt: -1 });
+    console.log(likedtweets);
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
       throw e;
@@ -541,10 +543,9 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-
     let user = await User.findById(req.params.id);
     if (!user) {
-      e = "user not found";
+      e = "user doesn't exist";
       throw e;
     }
 
@@ -592,7 +593,7 @@ router.get("/profile/media/:id", auth("user"), async (req, res) => {
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let user = await User.findById(req.params.id);
     if (!user) {
-      e = "user not found";
+      e = "user doesn't exist";
       throw e;
     }
     let userTweetsWithImages = await Tweet.find({
