@@ -45,6 +45,30 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
         userId: user._id,
       });
       await private2.save()
+       
+    const text = req.user.screenName+" send followrequset you";
+    const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
+    notifications.save();
+    const tokens = await Token.find({ ownerId: req.params.id });
+    console.log(
+      "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
+      tokens
+    );
+    if (tokens) {
+      let fcmtokens = tokens.map((token) => token.fcmToken);
+      var uniqueArray = [...new Set(fcmtokens)];
+      uniqueArray = uniqueArray.filter((t) => t != null);
+      console.log(
+        "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
+        uniqueArray
+      );
+      console.log(
+        "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
+        text
+      );
+
+      notifiy(uniqueArray, text, req.user.tag);
+    }
       return res.send({ sccuss: true });
     }
     //return res.send({ sccuss: true });
@@ -76,7 +100,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
           text
         );
 
-        notifiy(uniqueArray, text, req.user._id.toString());
+        notifiy(uniqueArray, text, req.user.tag);
       }
     }
     res.send({ sccuss: true });
@@ -213,15 +237,18 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
     privateRequest = privateRequest.map((request) => {
       return request.userId.toString();
     });
+    
     checkedfollower=checkedfollower.map(follow=>{
 
     
     if (privateRequest.includes(follow.followingId._id.toString())) {
       const ispending = true;
-      return ({ ispending, follow });
+      const followingId=follow.followingId
+
+      return ({ ispending,isfollowing:follow.isfollowing, followingId:follow.followingId });
     }else{
       const ispending = false;
-      return ({ ispending, follow });
+      return ({ ispending,isfollowing:follow.isfollowing,followingId:follow.followingId });
   }})
 
     res.send(checkedfollower);
