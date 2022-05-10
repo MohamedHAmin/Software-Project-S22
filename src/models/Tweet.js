@@ -2,10 +2,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 07b212c (Merge branch 'BE' into Youssef)
 const tweetSchema = new mongoose.Schema(
   {
     replyingTo: {

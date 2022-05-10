@@ -350,34 +350,6 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       e = "Attempting search of empty string";
       throw e;
     }
-    // let resultTweets = await Tweet.find({
-    //   $text: { $search: searchedItem },
-    // })
-    //   .sort({ createdAt: -1 })
-    //   .limit(limit)
-    //   .skip(skip)
-    //   .populate({
-    //     path: "retweetedTweet.tweetId",
-    //     strictPopulate: false,
-    //     select:
-    //       "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-    //     populate: {
-    //       path: "authorId",
-    //       strictPopulate: false,
-    //       select: "_id screenName tag profileAvater.url",
-    //     },
-    //   })
-    //   .populate({
-    //     path: "authorId",
-    //     strictPopulate: false,
-    //     select: "_id screenName tag profileAvater.url",
-    //   });
-
-    // let resultUsers = await User.find({ $text: { $search: searchedItem } })
-    //   .sort({ tag: 1 })
-    //   .limit(limit)
-    //   .skip(skip);
-
     let resultTweets = await Tweet.find({
       text: { $regex: searchedItem, $options: "i" },
     })
@@ -400,10 +372,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         strictPopulate: false,
         select: "_id screenName tag profileAvater.url",
       });
-
-    let resultUsers = await User.find({
-      tag: { $regex: searchedItem, $options: "i" },
-    })
+      
+      let resultUsers = await User.find({
+        tag: { $regex: searchedItem, $options: "i" },
+      })
       .sort({ tag: 1 })
       .limit(limit)
       .skip(skip)
@@ -414,6 +386,9 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         "profileAvatar.url": 1,
         Biography: 1,
       });
+      console.log("checkpoint");
+      console.log(req.user);
+      console.log(req.user.following);
     const followingsId = req.user.following.map((user) => {
       return user.followingId.toString();
     });
