@@ -179,6 +179,17 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
       e = "user doesn't exist";
       throw e;
     }
+    if(user.isPrivate){
+      const isfollowed = req.user.following.some(
+        (followed) => followed.followingId.toString() == user._id.toString()
+      );
+
+      if (!isfollowed) {
+       return  res.status(400).send({error:"this content is private"});
+
+   
+      } 
+    }
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
