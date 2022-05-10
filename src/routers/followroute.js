@@ -14,6 +14,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     if (req.params.id.toString() == req.user._id.toString()) {
       throw new Error("you can not follow your self ");
     }
+
     //find user
     const user = await User.findById(req.params.id);
     //if no user
@@ -30,20 +31,23 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     }
     //*check private
     if (user.isPrivate) {
-      const privateRequest = await PrivateRequest.find({
+      const private3 = await PrivateRequest.find({
         requestUser: req.user._id,
         userId: user._id,
       });
-      if (privateRequest.length === 0) {
+    
+      if (private3.length === 1) {
         throw new Error("you already request the PrivateRequest");
       }
-      const PrivateRequest = new PrivateRequest({
+      console.log('first')
+      const private2 = new PrivateRequest({
         requestUser: req.user._id,
         userId: user._id,
       });
-
+      await private2.save()
       return res.send({ sccuss: true });
     }
+    //return res.send({ sccuss: true });
     //*add to user following
     req.user.following = req.user.following.concat({ followingId: user._id });
     req.user.followingcount++;
@@ -97,16 +101,25 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
 })
 router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
   try {
+    
     const user = await User.findById(req.params.id);
-
-    const privateRequest = await PrivateRequest.findByIdAndDelete({
-      userId: req.user._id,
-      requestUser:req.params.id
-    });
-    if(!privateRequest){
+    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ user", user)
+    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ req.params.id", req.params.id)
+    if(!user){
       throw new Error("no user found");
     }
-      user.following = user.following.concat({ followingId: user._id });
+    console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
+
+    console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
+    const privateRequest = await PrivateRequest.deleteMany({
+      userId: req.user._id.toString(),
+      requestUser:req.params.id
+    });
+    console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
+    if(privateRequest.deletedCount==0){
+      throw new Error("no user found");
+    }
+    user.following = user.following.concat({ followingId: req.user._id });
     user.followingcount++;
     await user.save();
     req.user.followercount++;
@@ -193,6 +206,24 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
       });
     }
 
+    let privateRequest = await PrivateRequest.find({
+      requestUser: req.user._id,
+    });
+
+    privateRequest = privateRequest.map((request) => {
+      return request.userId.toString();
+    });
+    checkedfollower=checkedfollower.map(follow=>{
+
+    
+    if (privateRequest.includes(follow.followingId._id.toString())) {
+      const ispending = true;
+      return ({ ispending, follow });
+    }else{
+      const ispending = false;
+      return ({ ispending, follow });
+  }})
+
     res.send(checkedfollower);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
@@ -229,6 +260,25 @@ router.get("/user/:id/follower", auth("user"), async (req, res) => {
         }
       });
     }
+    let privateRequest = await PrivateRequest.find({
+      requestUser: req.user._id,
+    });
+
+    privateRequest = privateRequest.map((request) => {
+      return request.userId.toString();
+    });
+    user.follower=user.follower.map(follow=>{
+
+    
+    if (privateRequest.includes(follow._id.toString())) {
+      const ispending = true;
+      follow.ispending=ispending
+      return (follow);
+    }else{
+      const ispending = false;
+      follow.ispending=ispending
+      return (follow);
+  }})
     res.send(user.follower);
   } catch (e) {
     res.status(400).send({ error: e.toString() });

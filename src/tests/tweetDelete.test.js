@@ -61,7 +61,7 @@ test('Check User Delete Authority', async ()=>{
     .set('Authorization','Bearer '+user2token.token)
     .send({})
     .expect(200)
-    expect(res2.text).toEqual("Success")
+   
 })
 test('Check Wrong ID', async ()=>{
     const admin=await Admin.create({

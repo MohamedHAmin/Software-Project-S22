@@ -65,7 +65,7 @@ router.post("/signup",async (req, res) => {
     try{
       await Token.deleteMany({ token: req.token })
       
-      res.status(200).end("Success")}
+      res.status(200).end({success:"Success"})}
       
       
       catch (e) {
@@ -75,10 +75,12 @@ router.post("/signup",async (req, res) => {
     
     router.delete("/logoutall",auth('any'), async (req, res) => {
       try{
+        console.log("🚀 ~ file: userauthroute.js ~ line 80 ~ router.delete ~  req.user._id.toString()",  req.user._id.toString())
         await Token.deleteMany({ 
-          ownerId: req.user._id
+          ownerId: req.user._id.toString()
         })
-        res.status(200).end("Success")
+        console.log('first')
+        res.status(200).send({success:"Success"})
         
       }
       catch (e) {
@@ -156,10 +158,10 @@ router.post("/signup",async (req, res) => {
             res.send("Email sent , and password has been reset")
         }
         else{
-          res.send("Email hasn't been verified yet ")
+          res.send({success:"Email hasn't been verified yet "})
         }
       } else{
-        res.send("Email is not found or registered")
+        res.send({success:"Email is not found or registered"})
       }
   }
     catch(e) {
