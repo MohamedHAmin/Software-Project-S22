@@ -386,9 +386,6 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         "profileAvatar.url": 1,
         Biography: 1,
       });
-      console.log("checkpoint");
-      console.log(req.user);
-      console.log(req.user.following);
     const followingsId = req.user.following.map((user) => {
       return user.followingId.toString();
     });
@@ -429,13 +426,6 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       modifiedresultUsers = [];
       for (let i = 0; i < resultUsers.length; i++) {
         if (resultUsers[i].isfollowed) {
-          // resultUsers.splice(i,1);
-          // if(i!==0){
-          //   i--;
-          //   if(i<0){
-          //     i=0;
-          //   }
-          // }
           modifiedresultUsers.push(resultUsers[i]);
         }
       }
