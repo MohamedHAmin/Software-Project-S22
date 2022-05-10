@@ -103,8 +103,8 @@ test('Check User Logout from All devices ', async ()=>{
     .set('Authorization','Bearer '+ destroytoken.token)
     .send({
         ownerId: destroytoken.ownerId
-    })
-    .expect(200)
+    }).expect(200)
+    
 })
 test('Check Admin Login ', async ()=>{
     const user1 = await User.create({

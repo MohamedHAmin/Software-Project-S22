@@ -114,13 +114,109 @@ router.post("/signup",async (req, res) => {
   router.delete("/logout" ,auth('any'),async (req, res) => {
       try{
       await Token.deleteMany({ token: req.token })
-   
-      res.status(200).end("Success")}
+      
+      res.status(200).end({success:"Success"})}
       
       
       catch (e) {
       res.status(400).send({ error: e.toString() });
       }
+    })
+    
+    router.delete("/logoutall",auth('any'), async (req, res) => {
+      try{
+        console.log("🚀 ~ file: userauthroute.js ~ line 80 ~ router.delete ~  req.user._id.toString()",  req.user._id.toString())
+        await Token.deleteMany({ 
+          ownerId: req.user._id.toString()
+        })
+        console.log('first')
+        res.status(200).send({success:"Success"})
+        
+      }
+      catch (e) {
+        res.status(400).send({ error: e.toString() });
+      }
+    })
+    // ~~~~~~~~Email Verification~~~~~~~~~~~~//
+    const sendVerificationEmail = async({_id,email},res)=>{
+      //url to be used in the email 
+      try{
+      const currenturl = process.env.CURRENTURL
+         const hashstring=_id.toString()+process.env.SECRET
+      const uniqueString = await bcrypt.hash(hashstring, 8);
+    // const notaccepteduniqustreng=uniqueString
+      //const accepteduniqueString=uniqueString.toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32')
+    
+      //hash the string 
+      
+        const newVerification = new UserVerification({
+          userId : _id,
+          email:email,
+          uniqueString: uniqueString,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + 21600000, //6 hrs in ms]
+        })  
+        const mailOptions = {
+          from : process.env.AUTH_EMAIL,
+          to: email,
+          subject : " Verify Your Email",
+          html: `<p> Verify the email address to complete the signup and login to your account. </p> 
+          <p> This Link <b> expires in 6 hours </p> </p> <p> Press <a href=${currenturl + "user/verify/" + _id + "?hash=" + uniqueString}> here </a> to proceed </p>`
+          
+        }
+        
+        await newVerification.save()
+          transporter.sendMail(mailOptions)
+      
+    }catch(e){
+    console.log(e);
+    }
+    
+    }
+    router.get("/verify/:userId/", async(req,res)=>{
+      try{
+        let userId=req.params.userId;
+        let uniqueString = req.query.hash; 
+        //uniqueString =uniqueString.toString().replaceAll("por21Ld",'/').replaceAll('xMl3Jk','+').replaceAll('Ml32','=')
+    
+        const result=await UserVerification.find({userId})
+          if(result.length > 0 ){
+            let hasheduniqueString = result[0].uniqueString
+                if(uniqueString===hasheduniqueString){
+                  await User.updateOne({_id:userId},{verified:true})            
+                  await UserVerification.deleteOne({userId})             
+                  }
+            }
+              res.send("Email sent , pending verification")
+      } catch (e){
+       res.send(e)
+      }
+      
+    })
+      //~~~~~~~~~~~Forget Password~~~~~~~~~~~~~~~~//
+  //post req received from FE 
+  //There's a request to send an email which is called forgot password 
+  router.post('/forgotpassword' , async(req,res)=>{
+    //email to be sent link to and redirect url will be put in the email , he will be directed on that page on FE 
+    const {email} = req.body
+    try{
+      //check if the email already exists in the user 
+      const user = await User.find({ email:email})
+      if(user.length>0){
+        if(user[0].verified){
+            SendResetEmail(user[0])
+            res.send("Email sent , and password has been reset")
+        }
+        else{
+          res.send({success:"Email hasn't been verified yet "})
+        }
+      } else{
+        res.send({success:"Email is not found or registered"})
+      }
+  }
+    catch(e) {
+      res.send(e)
+    }   
   })
 
   router.delete("/logoutall",auth('any'), async (req, res) => {

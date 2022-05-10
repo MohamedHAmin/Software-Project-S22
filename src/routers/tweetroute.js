@@ -1017,7 +1017,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
         }
       }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).end("Success");
+      res.status(200).send({success:"Success"});
     } else {
       throw new Error("Unauthorized");
     }
