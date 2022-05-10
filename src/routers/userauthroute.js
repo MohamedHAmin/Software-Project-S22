@@ -153,13 +153,13 @@ router.post("/signup",async (req, res) => {
       if(user.length>0){
         if(user[0].verified){
             SendResetEmail(user[0])
-            res.send("Email sent , and password has been reset")
+            res.status(200).send("Email sent , and password has been reset")
         }
         else{
-          res.send("Email hasn't been verified yet ")
+          res.status(401).send("Email hasn't been verified yet ")
         }
       } else{
-        res.send("Email is not found or registered")
+        res.status(400).send("Email is not found or registered")
       }
   }
     catch(e) {
