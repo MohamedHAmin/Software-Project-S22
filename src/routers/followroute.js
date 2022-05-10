@@ -45,7 +45,31 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
         userId: user._id,
       });
       await private2.save()
-      return res.send({ sccuss: true });
+       
+    const text = req.user.screenName+" send followrequset you";
+    const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
+    notifications.save();
+    const tokens = await Token.find({ ownerId: req.params.id });
+    console.log(
+      "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
+      tokens
+    );
+    if (tokens) {
+      let fcmtokens = tokens.map((token) => token.fcmToken);
+      var uniqueArray = [...new Set(fcmtokens)];
+      uniqueArray = uniqueArray.filter((t) => t != null);
+      console.log(
+        "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
+        uniqueArray
+      );
+      console.log(
+        "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
+        text
+      );
+
+      notifiy(uniqueArray, text, req.user.tag);
+    }
+      return res.send({ ispending: true });
     }
     //return res.send({ sccuss: true });
     //*add to user following
@@ -76,7 +100,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
           text
         );
 
-        notifiy(uniqueArray, text, req.user._id.toString());
+        notifiy(uniqueArray, text, req.user.tag);
       }
     }
     res.send({ sccuss: true });
@@ -132,7 +156,28 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 })
-
+router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
+  try{
+    const user = await User.findById(req.params.id);
+    //if no user
+    if (!user) {
+      throw new Error("no user found");
+    }
+    const private3 = await PrivateRequest.find({
+      requestUser: req.user._id,
+      userId: user._id,
+    });
+    if (private3.length === 1) {
+      const private3 = await PrivateRequest.deleteOne({
+       userId:req.user._id,
+        requestUser: user._id,
+      });
+      return res.send({ispending:false});
+    }
+  }catch (e){
+    res.status(400).send({ error: e.toString() });
+  }
+})
 //*unfollow ROUT
 router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
   try {
@@ -140,6 +185,17 @@ router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
     //if no user
     if (!user) {
       throw new Error("no user found");
+    }
+    const private3 = await PrivateRequest.find({
+      requestUser: req.user._id,
+      userId: user._id,
+    });
+    if (private3.length === 1) {
+      const private3 = await PrivateRequest.deleteOne({
+        requestUser: req.user._id,
+        userId: user._id,
+      });
+      return res.send({ ispending: false });
     }
     const lengthBefore = req.user.following.length;
 
@@ -213,15 +269,18 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
     privateRequest = privateRequest.map((request) => {
       return request.userId.toString();
     });
+    
     checkedfollower=checkedfollower.map(follow=>{
 
     
     if (privateRequest.includes(follow.followingId._id.toString())) {
       const ispending = true;
-      return ({ ispending, follow });
+      const followingId=follow.followingId
+
+      return ({ ispending,isfollowing:follow.isfollowing, followingId:follow.followingId });
     }else{
       const ispending = false;
-      return ({ ispending, follow });
+      return ({ ispending,isfollowing:follow.isfollowing,followingId:follow.followingId });
   }})
 
     res.send(checkedfollower);

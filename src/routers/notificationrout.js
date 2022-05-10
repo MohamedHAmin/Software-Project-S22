@@ -43,6 +43,7 @@ router.get("/sendfcm", auth("any"),async (req, res) => {
     try {
       
       let fcmToken = req.query.token;
+      console.log("🚀 ~ file: notificationrout.js ~ line 46 ~ router.get ~ fcmToken", fcmToken)
 
       req.token.fcmToken= fcmToken
       await  req.token.save()

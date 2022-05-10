@@ -141,7 +141,7 @@ router.post("/ban/:id", auth("admin"), async (req, res) => {
         text
       );
 
-      notifiy(uniqueArray, text, req.user._id.toString());
+      notifiy(uniqueArray, text, req.user.tag);
     }
 
     //* end of notification part

@@ -52,7 +52,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         select: "_id screenName tag profileAvater.url",
       },
     });
-    console.log("🚀 ~ file: tweetroute.js ~ line 55 ~ router.get ~ tweet", tweet)
     await tweet.populate({
       path: "reply",
       select:
@@ -180,6 +179,17 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
       e = "user doesn't exist";
       throw e;
     }
+    if(user.isPrivate){
+      const isfollowed = req.user.following.some(
+        (followed) => followed.followingId.toString() == user._id.toString()
+      );
+
+      if (!isfollowed) {
+       return  res.status(400).send({error:"this content is private"});
+
+   
+      } 
+    }
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
@@ -219,7 +229,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
       options: { sort },
     });
-    console.log(user.Tweets);
+
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
@@ -587,9 +597,14 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      e = "user doesn't exist";
+      throw e;
+    }
 
     let userReplies = await Tweet.find({
-      authorId: req.user._id,
+      authorId: req.params.id,
       "replyingTo.tweetExisted": true,
     })
       .limit(limit)
@@ -842,7 +857,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       await Tweet.create({ ...req.body, authorId: req.user._id });
     }
       const nottext=req.user.tag+" has lar"
-      notifiy(req.user,nottext,req.user._id.toString(),"newtweet")
+      notifiy(req.user,nottext,req.user.tag,"newtweet")
   
 
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" });
@@ -912,7 +927,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
       retweetedTweet: { tweetId: req.body.retweetedTweet, tweetExisted: true },
     });
     const nottext=req.user.tag+" has relar"
-    notifiy(req.user,nottext,req.user._id.toString(),"newtweet")
+    notifiy(req.user,nottext,req.user.tag,"newtweet")
 
     res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
   } catch (e) {
@@ -1155,7 +1170,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
             text
           );
   
-          notifiy(uniqueArray, text, req.user._id.toString());
+          notifiy(uniqueArray, text, req.user.tag);
         }}
    
 

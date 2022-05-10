@@ -15,6 +15,15 @@ router.get("/:id", auth("any"), async (req, res) => {
     if (!user) {
       throw new Error("no user found");
     }
+    const isfollowed = req.user.following.some(
+      (followed) => followed.followingId.toString() == user._id.toString()
+    );
+    let isfollowing;
+    if (isfollowed) {
+      isfollowing = true;
+    } else {
+      isfollowing = false;
+    }
     if (user.location.visability === false) {
       user.location = undefined;
     }
@@ -26,13 +35,13 @@ router.get("/:id", auth("any"), async (req, res) => {
     user.Notificationssetting = undefined;
 
     if (user.isPrivate === true) {
-      user.birth = undefined;
-      user.location = undefined;
-      user.banner.url = null;
-      user.Biography = undefined;
-      user.phoneNumber = undefined;
-      user.verified = undefined;
-      user.website = undefined;
+      user.birth=null;
+      user.location="";
+      user.banner.url=null;
+      user.Biography="";
+      user.phoneNumber = 0;
+      user.verified = null;
+      user.website = "";
       user.darkMode = undefined;
 
       let privateRequest = await PrivateRequest.find({
@@ -45,24 +54,16 @@ router.get("/:id", auth("any"), async (req, res) => {
 
       if (privateRequest.includes(req.params.id)) {
         const ispending = true;
-        return res.status(200).send({ ispending, user });
+        return res.status(200).send({ ispending, user,isfollowing });
       }else{
         const ispending = false;
-        return res.status(200).send({ ispending, user });
+        return res.status(200).send({ ispending, user,isfollowing });
       }
     }
     //*if you send private request
   
 
-    const isfollowed = req.user.following.some(
-      (followed) => followed.followingId.toString() == user._id.toString()
-    );
-    let isfollowing;
-    if (isfollowed) {
-      isfollowing = true;
-    } else {
-      isfollowing = false;
-    }
+
 
     res.send({ user, isfollowing: isfollowing });
   } catch (e) {
