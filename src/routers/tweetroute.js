@@ -322,15 +322,6 @@ router.get("/timeline", auth("any"), async (req, res) => {
         }
       });
     }
-    // let temp;
-    // for (let i = 0; i < followerTweet.length; i++) {
-    //   if (followerTweet[i].replyingTo.tweetExisted) {
-    //     temp = await Tweet.findById(followerTweet[i].replyingTo.tweetId);
-    //     if (!temp) {
-    //       followerTweet[i].replyingTo.tweetId = null;
-    //     }
-    //   }
-    // }
     res.send(followerTweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -372,10 +363,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         strictPopulate: false,
         select: "_id screenName tag profileAvater.url",
       });
-      
-      let resultUsers = await User.find({
-        tag: { $regex: searchedItem, $options: "i" },
-      })
+
+    let resultUsers = await User.find({
+      tag: { $regex: searchedItem, $options: "i" },
+    })
       .sort({ tag: 1 })
       .limit(limit)
       .skip(skip)
@@ -443,14 +434,19 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
   }
 });
 
-router.get("/profile/likedtweets", auth("user"), async (req, res) => {
+router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      e = "user not found";
+      throw e;
+    }
 
     let likedtweets = await Tweet.aggregate([
-      { $match: { "likes.like": req.user._id } },
+      { $match: { "likes.like": req.params.id } },
       { $project: { likes: 0 } },
       {
         $lookup: {
@@ -540,14 +536,20 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-router.get("/profile/replies", auth("user"), async (req, res) => {
+router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      e = "user not found";
+      throw e;
+    }
+
     let userReplies = await Tweet.find({
-      authorId: req.user._id,
+      authorId: req.params.id,
       "replyingTo.tweetExisted": true,
     })
       .limit(limit)
@@ -583,14 +585,18 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
   }
 });
 
-router.get("/profile/media", auth("user"), async (req, res) => {
+router.get("/profile/media/:id", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      e = "user not found";
+      throw e;
+    }
     let userTweetsWithImages = await Tweet.find({
-      authorId: req.user._id,
+      authorId: req.params.id,
       gallery: { $ne: [], $type: "array" },
     })
       .limit(limit)
@@ -1007,7 +1013,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
         }
       }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).send({success:"Success"});
+      res.status(200).send({ success: "Success" });
     } else {
       throw new Error("Unauthorized");
     }
