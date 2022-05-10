@@ -102,6 +102,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           modifiedRetweet.tweetId = { ...Retweet.tweetId._doc, isliked: false };
           modifiedRetweet.tweetExisted = Retweet.tweetExisted;
         }
+        
       }
       else if (Retweet.tweetId) {
         modifiedRetweet.tweetId = Retweet.tweetId;
@@ -110,9 +111,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         modifiedRetweet.tweetId = null;
         modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       }
-    }
-    console.log("🚀 ~ file: tweetroute.js ~ line 108 ~ router.get ~ modifiedRetweet", tweet)
-       
+    }  
     if (replies && replies.length > 0) {
       for (reply of replies) {
         let replyisliked = reply.likes.some(
@@ -138,7 +137,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
     }
 
    
-    console.log("🚀 ~ file: tweetroute.js ~ line 136 ~ router.get ~ modifiedreplies", modifiedreplies)
 
     let isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
@@ -1063,7 +1061,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
         }
       }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).end("Success");
+      res.status(200).send({success:"Success"});
     } else {
       throw new Error("Unauthorized");
     }

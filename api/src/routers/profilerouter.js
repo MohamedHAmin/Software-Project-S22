@@ -3,19 +3,20 @@ const User = require("../models/User");
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 const auth = require("../middleware/auth");
+const PrivateRequest = require("../models/PrivateRequest");
 const bcrypt = require("bcryptjs");
+const { request } = require("express");
 
 const router = new express.Router();
 
 router.get("/:id", auth("any"), async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
-
     if (!user) {
       throw new Error("no user found");
     }
     if (user.location.visability === false) {
-      user.Location = undefined;
+      user.location = undefined;
     }
     if (user.birth.visability === false) {
       user.birth = undefined;
@@ -23,6 +24,35 @@ router.get("/:id", auth("any"), async (req, res) => {
     user.ban = undefined;
     user.email = undefined;
     user.Notificationssetting = undefined;
+
+    if (user.isPrivate === true) {
+      user.birth = undefined;
+      user.location = undefined;
+      user.banner.url = null;
+      user.Biography = undefined;
+      user.phoneNumber = undefined;
+      user.verified = undefined;
+      user.website = undefined;
+      user.darkMode = undefined;
+
+      let privateRequest = await PrivateRequest.find({
+        requestUser: req.user._id,
+      });
+
+      privateRequest = privateRequest.map((request) => {
+        return request.userId.toString();
+      });
+
+      if (privateRequest.includes(req.params.id)) {
+        const ispending = true;
+        return res.status(200).send({ ispending, user });
+      }else{
+        const ispending = false;
+        return res.status(200).send({ ispending, user });
+      }
+    }
+    //*if you send private request
+  
 
     const isfollowed = req.user.following.some(
       (followed) => followed.followingId.toString() == user._id.toString()
@@ -66,7 +96,6 @@ router.put("/:id/password", auth("user"), async (req, res) => {
 });
 router.put("/:id", auth("user"), async (req, res) => {
   try {
-  
     let change = false;
     const updates = Object.keys(req.body);
     if (req.body.birth) {
@@ -74,8 +103,8 @@ router.put("/:id", auth("user"), async (req, res) => {
       change = true;
       delete updates.birth;
     }
-    console.log('first')
-    if (req.body.location &&( req.body.location.visability!==undefined)) {
+    console.log("first");
+    if (req.body.location && req.body.location.visability !== undefined) {
       req.user.location.visability = req.body.location.visability;
       change = true;
     }
@@ -96,13 +125,12 @@ router.put("/:id", auth("user"), async (req, res) => {
       "phoneNumber",
       "darkMode",
     ];
-  
-    const isvalidoperation = updates.every((update) => {
-       return allowtoupdate.includes(update);
-    });
-   
 
-    if (!isvalidoperation&&!change) {
+    const isvalidoperation = updates.every((update) => {
+      return allowtoupdate.includes(update);
+    });
+
+    if (!isvalidoperation && !change) {
       throw new Error("you can not change this data");
     }
 
