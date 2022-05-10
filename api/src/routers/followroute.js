@@ -292,14 +292,16 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
 router.get("/user/:id/follower", auth("user"), async (req, res) => {
   try {
     const sort = [{ createdAt: -1 }];
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     const user = await User.findOne({ _id: req.params.id });
     await user.populate({
       path: "follower",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",
       options: {
-        limit: parseInt(req.query.limit), //to limit number of user
-        skip: parseInt(req.query.skip),
+        limit: parseInt(limit), //to limit number of user
+        skip: parseInt(skip),
         sort,
       },
     });
