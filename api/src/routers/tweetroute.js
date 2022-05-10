@@ -22,7 +22,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
-    await req.user.isBanned();
+
     const tweet = await Tweet.findById(req.params.id);
     let sentTweet;
     if (!tweet) {
@@ -170,7 +170,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 //tprofile tweets
 router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+    
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -273,7 +273,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
 router.get("/timeline", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+ 
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -497,7 +497,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 
 router.get("/profile/likedtweets", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -594,7 +594,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
 });
 router.get("/profile/replies", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let user = await User.findById(req.params.id);
@@ -642,7 +642,7 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
 
 router.get("/profile/media", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -688,7 +688,6 @@ router.get("/profile/media", auth("user"), async (req, res) => {
 
 router.get("/explore", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -1050,7 +1049,6 @@ router.post("/reply", auth("user"), upload.array("image"), async (req, res) => {
 
 router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
     const targettweet = await Tweet.findById(req.params.id);
     if (!targettweet) {
       throw new Error("Not Found");

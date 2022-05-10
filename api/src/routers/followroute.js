@@ -114,7 +114,7 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
     const privateRequest = await PrivateRequest.find({
       userId: req.user._id,
     }).populate({
-      path: "userId",
+      path: "requestUser",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",})
     res.send(privateRequest);
