@@ -69,7 +69,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
 
       notifiy(uniqueArray, text, req.user.tag);
     }
-      return res.send({ sccuss: true });
+      return res.send({ ispending: true });
     }
     //return res.send({ sccuss: true });
     //*add to user following
@@ -156,7 +156,28 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 })
-
+router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
+  try{
+    const user = await User.findById(req.params.id);
+    //if no user
+    if (!user) {
+      throw new Error("no user found");
+    }
+    const private3 = await PrivateRequest.find({
+      requestUser: req.user._id,
+      userId: user._id,
+    });
+    if (private3.length === 1) {
+      const private3 = await PrivateRequest.deleteOne({
+       userId:req.user._id,
+        requestUser: user._id,
+      });
+      return res.send({ispending:false});
+    }
+  }catch (e){
+    res.status(400).send({ error: e.toString() });
+  }
+})
 //*unfollow ROUT
 router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
   try {
@@ -164,6 +185,17 @@ router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
     //if no user
     if (!user) {
       throw new Error("no user found");
+    }
+    const private3 = await PrivateRequest.find({
+      requestUser: req.user._id,
+      userId: user._id,
+    });
+    if (private3.length === 1) {
+      const private3 = await PrivateRequest.deleteOne({
+        requestUser: req.user._id,
+        userId: user._id,
+      });
+      return res.send({ ispending: false });
     }
     const lengthBefore = req.user.following.length;
 

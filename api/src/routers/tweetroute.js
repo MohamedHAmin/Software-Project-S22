@@ -597,9 +597,14 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      e = "user doesn't exist";
+      throw e;
+    }
 
     let userReplies = await Tweet.find({
-      authorId: req.user._id,
+      authorId: req.params.id,
       "replyingTo.tweetExisted": true,
     })
       .limit(limit)
