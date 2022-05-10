@@ -46,7 +46,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
       });
       await private2.save()
        
-    const text = req.user.screenName+" send followrequset you";
+    const text = req.user.screenName+" sent you a follow request";
     const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
     notifications.save();
     const tokens = await Token.find({ ownerId: req.params.id });
@@ -79,7 +79,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     user.followercount++;
     await user.save();
     if (user.Notificationssetting.newfollow) {
-      const text = req.user.screenName+" start follow you";
+      const text = req.user.screenName+" started following you";
       const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
       notifications.save();
       const tokens = await Token.find({ ownerId: req.params.id });
@@ -114,7 +114,7 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
     const privateRequest = await PrivateRequest.find({
       userId: req.user._id,
     }).populate({
-      path: "requestUser",
+      path: "userId",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",})
     res.send(privateRequest);
