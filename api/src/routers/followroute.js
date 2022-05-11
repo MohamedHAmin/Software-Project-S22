@@ -117,7 +117,6 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
       path: "requestUser",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",})
-    console.log("🚀 ~ file: followroute.js ~ line 120 ~ router.get ~ privateRequest", privateRequest)
     res.send(privateRequest);
   
   }catch (e) {
@@ -136,10 +135,18 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
 
     console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
+    const privateRequest2 = await PrivateRequest.find({
+      userId: req.user._id.toString(),
+      requestUser:req.params.id
+    });
+    console.log("🚀 ~ file: followroute.js ~ line 142 ~ router.get ~ privateRequest2", privateRequest2)
     const privateRequest = await PrivateRequest.deleteMany({
       userId: req.user._id.toString(),
       requestUser:req.params.id
     });
+    console.log("🚀 ~ file: followroute.js ~ line 140 ~ router.get ~ req.user._id", req.user._id)
+    console.log("🚀 ~ file: followroute.js ~ line 141 ~ router.get ~ req.params.id", req.params.id)
+
     console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
     if(privateRequest.deletedCount==0){
       throw new Error("no user found");
