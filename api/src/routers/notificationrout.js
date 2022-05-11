@@ -12,7 +12,7 @@ const router = new express.Router();
 router.get("/notification", auth("any"),async (req, res) => {
   try { 
     const sort = [{ createdAt: -1 }];
-    let notifications=await Notification.find({notifiedUId:req.user._id}).populate({ path: "requestUser",
+    let notifications=await Notification.find({notifiedUId:req.user._id}).populate({ path: "userId",
     select:
       "_id screenName tag profileAvater.url ",
       options:{
