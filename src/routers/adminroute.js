@@ -120,8 +120,8 @@ router.post("/ban/:id", auth("admin"), async (req, res) => {
     ).select({ screenName: 1, ban: 1 });
 
     //*notification part
-    const text = "you are banned " + req.body.duration + " days";
-    const notifications = new Notification({ notifiedUId: req.user._id, text });
+    const text = "You got banned for " + req.body.duration + " day(s)";
+    const notifications = new Notification({ notifiedUId: bannedUser._id, text });
     notifications.save();
     const tokens = await Token.find({ ownerId: req.params.id });
     console.log(

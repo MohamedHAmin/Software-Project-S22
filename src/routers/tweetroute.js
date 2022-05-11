@@ -22,7 +22,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
-    await req.user.isBanned();
+ 
     const tweet = await Tweet.findById(req.params.id);
     let sentTweet;
     if (!tweet) {
@@ -170,7 +170,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 //tprofile tweets
 router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -273,7 +273,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
 router.get("/timeline", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -497,7 +497,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 
 router.get("/profile/likedtweets", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -594,7 +594,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
 });
 router.get("/profile/replies", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let user = await User.findById(req.params.id);
@@ -642,7 +642,7 @@ router.get("/profile/replies", auth("user"), async (req, res) => {
 
 router.get("/profile/media", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -688,7 +688,7 @@ router.get("/profile/media", auth("user"), async (req, res) => {
 
 router.get("/explore", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -856,7 +856,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
     } else {
       await Tweet.create({ ...req.body, authorId: req.user._id });
     }
-      const nottext=req.user.tag+" has lar"
+      const nottext=req.user.tag+" posted a new lar"
       notifiy(req.user,nottext,req.user.tag,"newtweet")
   
 
@@ -1050,7 +1050,7 @@ router.post("/reply", auth("user"), upload.array("image"), async (req, res) => {
 
 router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const targettweet = await Tweet.findById(req.params.id);
     if (!targettweet) {
       throw new Error("Not Found");
@@ -1149,7 +1149,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
       //* Notification part
 
       if (user.Notificationssetting.liketweet) {
-        const text = req.user.tag+"like on your lar";
+        const text = req.user.tag+" liked your lar";
         const notifications = new Notification({ userId: req.user._id, text,notifiedUId:user._id });
         notifications.save();
         const tokens = await Token.find({ ownerId: user._id });
@@ -1172,9 +1172,6 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
   
           notifiy(uniqueArray, text, req.user.tag);
         }}
-   
-
-
   //*end of Notification part
 
 

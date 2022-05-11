@@ -11,10 +11,16 @@ const router = new express.Router();
 
 router.get("/notification", auth("any"),async (req, res) => {
   try { 
-    const notifications=await Notification.find({notifiedUId:req.user._id}).populate({ path: "userId",
+    const sort = [{ createdAt: -1 }];
+    let notifications=await Notification.find({notifiedUId:req.user._id}).populate({ path: "userId",
     select:
-      "_id screenName tag profileAvater.url",})
-    
+      "_id screenName tag profileAvater.url ",
+      options:{
+        limit: parseInt(req.query.limit), //to limit number of user
+        skip: parseInt(req.query.skip),
+
+    }})
+    notifications=notifications.reverse()
     res.send({notifications});
   } catch (e) {
     res.status(400).send({ error: e.toString() });

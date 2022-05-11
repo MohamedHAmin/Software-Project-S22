@@ -46,7 +46,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
       });
       await private2.save()
        
-    const text = req.user.screenName+" send followrequset you";
+    const text = req.user.screenName+" sent you a follow request";
     const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
     notifications.save();
     const tokens = await Token.find({ ownerId: req.params.id });
@@ -79,7 +79,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     user.followercount++;
     await user.save();
     if (user.Notificationssetting.newfollow) {
-      const text = req.user.screenName+" start follow you";
+      const text = req.user.screenName+" started following you";
       const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
       notifications.save();
       const tokens = await Token.find({ ownerId: req.params.id });
@@ -114,7 +114,7 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
     const privateRequest = await PrivateRequest.find({
       userId: req.user._id,
     }).populate({
-      path: "userId",
+      path: "requestUser",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",})
     res.send(privateRequest);
@@ -135,10 +135,18 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
 
     console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
+    const privateRequest2 = await PrivateRequest.find({
+      userId: req.user._id.toString(),
+      requestUser:req.params.id
+    });
+    console.log("🚀 ~ file: followroute.js ~ line 142 ~ router.get ~ privateRequest2", privateRequest2)
     const privateRequest = await PrivateRequest.deleteMany({
       userId: req.user._id.toString(),
       requestUser:req.params.id
     });
+    console.log("🚀 ~ file: followroute.js ~ line 140 ~ router.get ~ req.user._id", req.user._id)
+    console.log("🚀 ~ file: followroute.js ~ line 141 ~ router.get ~ req.params.id", req.params.id)
+
     console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
     if(privateRequest.deletedCount==0){
       throw new Error("no user found");
@@ -292,14 +300,16 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
 router.get("/user/:id/follower", auth("user"), async (req, res) => {
   try {
     const sort = [{ createdAt: -1 }];
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     const user = await User.findOne({ _id: req.params.id });
     await user.populate({
       path: "follower",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",
       options: {
-        limit: parseInt(req.query.limit), //to limit number of user
-        skip: parseInt(req.query.skip),
+        limit: parseInt(limit), //to limit number of user
+        skip: parseInt(skip),
         sort,
       },
     });
