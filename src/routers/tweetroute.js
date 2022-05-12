@@ -168,7 +168,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
-
+    const match = { "replyingTo.tweetId":null , "replyingTo.tweetExisted": false };
     const user = await User.findOne({ _id: req.params.id });
     if (!user) {
       e = "user doesn't exist";
@@ -177,6 +177,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
+      match,
       options: {
         limit: parseInt(limit), //to limit number of user
         skip: parseInt(skip),
@@ -421,6 +422,19 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
       resultUsers = modifiedresultUsers;
+      let modifiedresultTweets = [];
+      for (let i = 0; i < resultTweets.length; i++) {
+        for (resultUser of resultUsers) {
+          if (
+            resultTweets[i].authorId.toString() === resultUser._id.toString()
+          ) {
+            modifiedresultTweets.push(resultTweets[i]);
+            console.log("check");
+          }
+        }
+      }
+      resultTweets = modifiedresultTweets;
+      console.log(resultTweets);
     }
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
@@ -439,7 +453,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    let requiredId=mongoose.Types.ObjectId(req.params.id);
+    let requiredId = mongoose.Types.ObjectId(req.params.id);
     let user = await User.findById(req.params.id);
     if (!user) {
       e = "user doesn't exist ";
@@ -542,46 +556,88 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    let user = await User.findById(req.params.id);
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
+    const user = await User.findOne({ _id: req.params.id });
     if (!user) {
       e = "user doesn't exist";
       throw e;
     }
-
-    let userReplies = await Tweet.find({
-      authorId: req.params.id,
-      "replyingTo.tweetExisted": true,
-    })
-      .limit(limit)
-      .skip(skip)
-      .populate({
-        path: "authorId",
-        strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
-      })
-      .populate({
-        path: "replyingTo.tweetId",
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-        populate: {
+    const sort = [{ createdAt: -1 }];
+    const tweets = await user.populate({
+      path: "Tweets",
+      options: {
+        limit: parseInt(limit), //to limit number of user
+        skip: parseInt(skip),
+      },
+      populate: [
+        {
           path: "authorId",
           strictPopulate: false,
-          select: "_id screenName tag profileAvater.url",
+          select: "_id screenName tag  profileAvater.url",
         },
+        {
+          //if it is a retweet view content of retweeted tweet
+          path: "retweetedTweet.tweetId",
+          strictPopulate: false,
+          select:
+            "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+          populate: {
+            path: "authorId",
+            strictPopulate: false,
+            select: "_id screenName tag profileAvater.url",
+          },
+        },
+        {
+          path:"replyingTo.tweetId",
+          strictPopulate: true,
+          select:"_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+          populate:{
+            path: "authorId",
+            strictPopulate: false,
+            select: "_id screenName tag profileAvater.url",
+          },
+        },
+      ],
+
+      options: { sort },
+    });
+    if (!user.Tweets.length < 1) {
+      user.Tweets = user.Tweets.map((tweet) => {
+        const isliked = tweet.likes.some(
+          (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+          };
+          return tweets;
+        } else {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+          };
+          return tweets;
+        }
       });
-    // for (userReply of userReplies) {
-    //   let temp = await Tweet.findById(userReply.replyingTo.tweetId);
-    //   if (!temp) {
-    //     userReply.replyingTo.tweetId = null;
-    //   }
-    // }
-    if (userReplies.length < 1 || !userReplies) {
-      e = "no replies found";
+      let temp;
+      for (let i = 0; i < user.Tweets.length; i++) {
+        if (user.Tweets[i].replyingTo.tweetExisted) {
+          temp = await Tweet.findById(user.Tweets[i].replyingTo.tweetId);
+          if (!temp) {
+            user.Tweets[i].replyingTo.tweetId = null;
+          }
+        }
+      }
+    } else {
+      e = "user has no tweets";
       throw e;
     }
-    res.send(userReplies);
+    res.send(user.Tweets);
   } catch (e) {
+    //here all caught errors are sent to the client
     res.status(400).send({ error: e.toString() });
   }
 });
