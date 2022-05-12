@@ -178,10 +178,6 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     const tweets = await user.populate({
       path: "Tweets",
       match,
-      options: {
-        limit: parseInt(limit), //to limit number of user
-        skip: parseInt(skip),
-      },
       populate: [
         {
           path: "authorId",
@@ -212,7 +208,9 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
         // },
       ],
 
-      options: { sort },
+      options: { sort,        limit: parseInt(limit), //to limit number of user
+      skip: parseInt(skip),        limit: parseInt(limit), //to limit number of user
+      limit: parseInt(limit), },
     });
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
