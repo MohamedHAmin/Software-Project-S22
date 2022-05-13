@@ -265,6 +265,22 @@ opacity: 0.80;
   margin-left: 30%;
   margin-right:14.7%;
 }
+.privateAccMessageHeader{
+  font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 500 !important;
+    font-size: 22px !important;
+    text-align:center !important;
+    margin-top:5% !important;
+  
+}
+.privateAccMessageParagraph{
+  font-family: "Montserrat", "Verdana", "Times New Roman" !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+    text-align:center !important;
+    margin-top:3% !important;
+  
+}
 
 @media only screen and (max-width: 859px) {
   .myProfile {

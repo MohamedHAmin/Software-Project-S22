@@ -44,16 +44,16 @@ function OthersProfile(props) {
   const [Location, setLocation] = useState("");
   const [Website, setWebsite] = useState("");
   const [locationVisability, setlocationVisability] = useState(true);
-
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [Followers, setFollowers] = useState(0);
-
   const [banDuration, setBanDuration] = useState("");
   const [banDuration1, setBanDuration1] = useState("");
 
   useEffect(() => {
     setUserTweets([]);
     axios
-      .get(`http://localhost:4000/tweet/user/${id}`, {
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -66,7 +66,7 @@ function OthersProfile(props) {
       });
 
     axios
-      .get(`http://localhost:4000/profile/${id}`, {
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -86,16 +86,26 @@ function OthersProfile(props) {
           setBanDuration(res.data.user.ban);
           setProfilePhoto(res.data.user.profileAvater.url);
           setFollowing(res.data.user.followingcount);
-          setBirthDate(res.data.user.birth.date);
-          setbirthDateVisability(res.data.user.birth.visability);
+          setIsPending(res.data.ispending);
+          if(res.data.user.birth)
+          {
+            setBirthDate(res.data.user.birth.date);
+            setbirthDateVisability(res.data.user.birth.visability);
+          }
           setIsFollowed(res.data.isfollowing);
+          setIsPrivate(res.data.user.isPrivate);
+          console.log(res.data.isfollowing);
+          console.log("🚀 ~ file: OthersProfile.jsx ~ line 93 ~ .then ~ res.data.isfollowing", res.data.isfollowing)
+          
+          console.log(res.data.user.isPrivate);
         }
       });
   }, [id]);
+  console.log(isPrivate);
 
   const passdeletedTweet = (id) => {
     axios
-      .delete(`http://localhost:4000/tweet/${id}`, {
+      .delete(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${id}`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -105,7 +115,7 @@ function OthersProfile(props) {
         } else {
           window.location.reload();
           axios
-            .get(`http://localhost:4000/tweet/user/${id}`, {
+            .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`, {
               headers: { Authorization: localStorage.getItem("accessToken") },
             })
             .then((res) => {
@@ -131,19 +141,27 @@ function OthersProfile(props) {
    * Handling the following request
    */
   function handleButtonClick() {
+    if(isPending===false)
+    {  
     console.log(isFollowed);
     if (isFollowed) {
       setFollowModalState(true);
     } else {
       axios
-        .post(`http://localhost:4000/${userID}/follow/${id}`, null, {
+        .post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${id}`, null, {
           headers: { Authorization: localStorage.getItem("accessToken") },
         })
         .then((res) => {
-          setFollowers(Followers + 1);
-
-          setIsFollowed(true);
-          console.log(res);
+          window.location.reload();
+          // Window.location.reload;
+          // if(res.data.ispending==true)
+          //   setIsPending(true);
+          // else
+          // {
+          //   setFollowers(Followers + 1);
+          //   setIsFollowed(true);
+          //   console.log(res);
+          // }
         })
         .catch((err) => {
           debugger;
@@ -151,25 +169,38 @@ function OthersProfile(props) {
           setFollowModalState(true); // 'Oops!'
         });
     }
+    }
+    else{
+      handleUnfollowAction();
+      setIsPending(false);
+    }
   }
   /**
    * Handling the unfollowing request
    */
   function handleUnfollowAction() {
+     
     axios
-      .post(`http://localhost:4000/${userID}/unfollow/${id}`, null, {
+      .post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${id}`, null, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
-        console.log(res);
-        setFollowers(Followers - 1);
-        setFollowModalState(false);
-        setIsFollowed(false);
+        if(isPending===true)
+        {
+          setIsPending(false);
+        }
+        else{
+          console.log(res);
+          setFollowers(Followers - 1);
+          setFollowModalState(false);
+          setIsFollowed(false);
+        }
       })
       .catch((err) => {
-        debugger;
+        
         alert("already unfollowed");
       }); // 'Oops!';
+    
   }
   /**
    * Handling the report navigation
@@ -187,7 +218,7 @@ function OthersProfile(props) {
   function handleBanAction() {
     axios
       .post(
-        `http://localhost:4000/admin/ban/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`,
         { duration: banDuration1 },
         { headers: { Authorization: localStorage.getItem("adminToken") } }
       )
@@ -273,7 +304,7 @@ function OthersProfile(props) {
             onClick={handleButtonClick}
             data-testid="Follow-Profile-Button"
           >
-            {isFollowed ? "Unfollow" : "Follow"}
+            {!isPrivate?(isFollowed ? "Unfollow" : "Follow"):(isPending?("Pending"):(isFollowed ? "Unfollow" : "Follow") )}
           </Button>
 
           <Modal
@@ -399,9 +430,27 @@ function OthersProfile(props) {
           website={Website}
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
+          isPrivate={isPrivate}
+          isFollowed={isFollowed}
         />
-        <MyProfileTabs Tweets/>
-        {userTweets?.length ? (
+        {/* if any user account is public show profile tabs(tweets, likes,...) */}
+        {  !isPrivate && (
+        <MyProfileTabs />
+        )}
+        {/* if any user account is private do NOT show profile tabs(tweets, likes,...) */}
+        {  isPrivate && !isFollowed &&(
+          <div className="privateAccMessageHeader" >These Lars are protected!
+           <div className="privateAccMessageParagraph">Only approved followers can see @{Tag} Tweets. To request access, click Follow.</div>
+          </div>
+         
+        )}
+        {  isPrivate && isFollowed &&(
+          <MyProfileTabs />
+        )}
+        {/* if any user account public -> show his tweets  
+            OR if user account is private: -> if he follows me -> show his tweets
+                                           -> if he doesn't follows me -> dont show his tweets*/}
+        {!isPrivate?(userTweets?.length ? (
           userTweets.map((post) => (
             <Post
               post={post}
@@ -412,7 +461,15 @@ function OthersProfile(props) {
           ))
         ) : (
           <></>
-        )}
+        )):
+            ( userTweets?.length && isFollowed? (
+              userTweets.map((post) => (
+                <Post
+                  post={post}
+                  passdeletedTweet={passdeletedTweet}
+                  isAdmin={props.isAdmin}
+                  isPost={true}
+                />))):(<></>))}
       </div>
     );
   } else {

@@ -25,7 +25,7 @@ const Login = () => {
     })
     const onSubmit = (data) => {
         console.log(data);
-        axios.post("http://localhost:4000/user/login", data).then((res) => {
+        axios.post("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/login", data).then((res) => {
             console.log(res);
             if (res.error) {
                 if (res.error === "Error: unable to login as user is not verified") {

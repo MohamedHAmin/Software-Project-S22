@@ -61,7 +61,7 @@ const Signup = () => {
         data.birth.date = document.getElementById("BD").value;
 
         console.log(data);
-        axios.post("http://localhost:4000/user/signup", data)
+        axios.post("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/signup", data)
             .then((res) => {
                 console.log(res)
                 alert("Please check your email")

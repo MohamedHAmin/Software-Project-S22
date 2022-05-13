@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Global</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Global</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="blue"><span class="type-signature">(constant) </span>blue<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    component that diplays the option available in the display settings page, to let the user change the display mode: Light/Fark mode.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DisplaySettings.jsx.html">DisplaySettings.jsx</a>, <a href="DisplaySettings.jsx.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = truereturn (&lt;div>   &lt;h1>Accessibility, display and languages&lt;/h1>   &lt;p>
+          Manage your font size, color, and background. These settings affect
+          all the Larry accounts on this browser.
+      &lt;/p>   &lt;SettingsMenuOptions Display/>&lt;/div>) </code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AccInfoOptions"><span class="type-signature"></span>AccInfoOptions<span class="signature">(darkMode, id, active, Icon, text, subtext, isSubtextExist)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display each option in the Account information SUB menu.(just to make the SUB menu options with the same style and to modularize the code)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of selected option in order to make SettingsPage render the correct sub menu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>active</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to know which option is selected to make it with different style.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Icon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if there exist an icon to this option it would be displayed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the text displayed on the option</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subtext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the subtext diplayed just below the option text</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isSubtextExist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to identify if the option has subtext or no</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AccInfoOptions.jsx.html">AccInfoOptions.jsx</a>, <a href="AccInfoOptions.jsx.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.id = 1props.darkMode = trueprops.active = trueprops.text = "Username"props.subtext = "Ahmed"props.isSubtextExist = trueconst isclickedAcc = truereturn (&lt;div>   &lt;h2>Username&lt;/h2>   &lt;span>Ahmed&lt;/span>   &lt;ArrowForwardIosIcon />   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AccountInformationS"><span class="type-signature"></span>AccountInformationS<span class="signature">(darkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display the whole page of Account information SUB menu.(it renders inside it <AccInfoOptions/> to display each option only)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AccountInformationS.jsx.html">AccountInformationS.jsx</a>, <a href="AccountInformationS.jsx.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueconst anythingClicked = falsereturn (&lt;div>   &lt;h1>Account information&lt;/h1>   >See information about your account, download an archive of your data, or learn about your account deactivation options&lt;/p>   &lt;AccInfoOptions Username/>   &lt;AccInfoOptions Phone/>   &lt;AccInfoOptions Email/>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AccountSettings"><span class="type-signature"></span>AccountSettings<span class="signature">(isDarkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display the page of Account settings with its 2 options -->account info, change password
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AccountSettings.jsx.html">AccountSettings.jsx</a>, <a href="AccountSettings.jsx.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = trueconst isClickedAccInfo = truereturn (&lt;div>   &lt;h1>Change your password&lt;/h1>   &lt;UpdatePassword/>   &lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ChangePhoneNum"><span class="type-signature"></span>ChangePhoneNum<span class="signature">(darkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user add phone number if he does not have it already on Larry.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AddPhoneNum.jsx.html">AddPhoneNum.jsx</a>, <a href="AddPhoneNum.jsx.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueconst newValue = "01157828196"return (&lt;div>   &lt;h2>Change Phone&lt;/h2>   &lt;h2>Add phone number&lt;/h2>   &lt;Modal>     &lt;TextField/>     &lt;Button> Save     &lt;/Button>     &lt;Button> Close     &lt;/Button>    &lt;/Modal>    ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ChangePhoneNum"><span class="type-signature"></span>ChangePhoneNum<span class="signature">(darkMode, oldValue, onChangerefreshAfterPhone)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change his phone number or delete it.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oldValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the old value stored in data base</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onChangerefreshAfterPhone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a function all its purpose is to make the parent componenet AccountInformaationS refresh the page (using useEffect) to show the new data (the new phone number added)or if the user deleted his phone number it refreshes the page to display page of "Add phone number"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ChangePhoneNum.jsx.html">ChangePhoneNum.jsx</a>, <a href="ChangePhoneNum.jsx.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.oldValue = "01171458789"const newValue = "01157828196"return (&lt;div>   &lt;h2>Change Phone&lt;/h2>   &lt;TextField/>   &lt;Button> Update phone number   &lt;/Button>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ChangeUserTag"><span class="type-signature"></span>ChangeUserTag<span class="signature">(darkMode, oldValue, onChangerefreshAfterPhone)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change his Username.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oldValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the old value stored in data base</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onChangerefreshAfterPhone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a function all its purpose is to make the parent componenet AccountInformaationS refresh the page (using useEffect) to show the new data (the new phone number added)or if the user deleted his phone number it refreshes the page to display page of "Add phone number"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ChangeUserTag.jsx.html">ChangeUserTag.jsx</a>, <a href="ChangeUserTag.jsx.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.oldValue = "kimo123"const newValue = "kariiim"const isValueChanged = true const newValueError = false newValueTypeErrorconst newValueTypeError = 0return (&lt;div>   &lt;h2>Change username&lt;/h2>   &lt;TextField/>   &lt;Button> Save   &lt;/Button>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MakeBDvisible"><span class="type-signature"></span>MakeBDvisible<span class="signature">(darkMode, profileData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the visibility of the birth date
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profileData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">all the profile data of the user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MakeBDvisible.jsx.html">MakeBDvisible.jsx</a>, <a href="MakeBDvisible.jsx.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.profileData.birth.visability = falseprops.profileData.birth.date = "20-8-2001"return (&lt;div>   &lt;div>Make birthdate visible&lt;/div>   &lt;span>20-8-2001&lt;/span>   &lt;Checkbox>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="MakeLocVisible"><span class="type-signature"></span>MakeLocVisible<span class="signature">(darkMode, profileData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the visibility of the location
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profileData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">all the profile data of the user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MakeLocVisible.jsx.html">MakeLocVisible.jsx</a>, <a href="MakeLocVisible.jsx.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = trueprops.profileData.location.visability = falseprops.profileData.location.place = "maadi"return (&lt;div>   &lt;div>Make location visible&lt;/div>   &lt;span>maadi&lt;/span>   &lt;Checkbox>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="NotificationSettings"><span class="type-signature"></span>NotificationSettings<span class="signature">(isDarkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the notification settings
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="NotificationSettings.jsx.html">NotificationSettings.jsx</a>, <a href="NotificationSettings.jsx.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = truereturn (&lt;div>   &lt;h1>Notifications prefrences&lt;/h1>   &lt;p>Select your preferences by notification type.&lt;/p>   &lt;SettingsMenuOptions "Push notification"/>   &lt;SettingsMenuOptions "Email notification"/>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PrivacySettings"><span class="type-signature"></span>PrivacySettings<span class="signature">(isDarkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to let the user change the privacy settings.(make his lars available for his followers only)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PrivacySettings.jsx.html">PrivacySettings.jsx</a>, <a href="PrivacySettings.jsx.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = truereturn (&lt;div>   &lt;h1>>Privacy and safety&lt;/h1>   &lt;p>Select your preferences by notification type.&lt;/p>   &lt;div>Protect your Lars&lt;/div>   &lt;Checkbox/>&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SettingsMenu"><span class="type-signature"></span>SettingsMenu<span class="signature">(isDarkMode, onIdChange)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display the menu of settings and let the user choose from it the option he needs.But it does not show the sub menu (it just send the id of selected option),because it is instead SettingsPage role.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDarkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onIdChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SettingsMenu.jsx.html">SettingsMenu.jsx</a>, <a href="SettingsMenu.jsx.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.isDarkMode = trueconst isclickedAcc = truereturn (&lt;div>   &lt;SettingsMenuOptions account>   &lt;SettingsMenuOptions Larry blue>   &lt;SettingsMenuOptions privacy>   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SettingsMenuOptions"><span class="type-signature"></span>SettingsMenuOptions<span class="signature">(darkMode, id, active, Icon, text, subtext, isSubtextExist)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to display each option in the settings menu.(just to make the menu options with the same style and to modularize the code)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of selected option in order to make SettingsPage render the correct sub menu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>active</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to know which option is selected to make it with different style.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Icon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if there exist an icon to this option it would be displayed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the text displayed on the option</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subtext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the subtext diplayed just below the option text</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isSubtextExist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to identify if the option has subtext or no</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SettingsMenuOptions.jsx.html">SettingsMenuOptions.jsx</a>, <a href="SettingsMenuOptions.jsx.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.id = 1props.isDarkMode = trueprops.active = trueprops.text = "Your account"props.isSubtextExist = falseconst isclickedAcc = truereturn (&lt;div>   &lt;Icon/>   &lt;h2> Your account&lt;/h2>   &lt;ArrowForwardIosIcon />   ...&lt;/div>) </code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="SettingsPage"><span class="type-signature"></span>SettingsPage<span class="signature">(isDark, isAdmin, onDarkModeChange)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Component for rendering the main Settings menu and the sub menu of the choosen option.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDark</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAdmin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onDarkModeChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SettingsPage.jsx.html">SettingsPage.jsx</a>, <a href="SettingsPage.jsx.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>prop.isDark = trueprop.isAdmin = falseconst idItemSelected = 1 (Account settings)return (&lt;div>   &lt;SideBar>   &lt;SettingsMenu>   &lt;AccountSettings>&lt;/div>)</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="UpdatePassword"><span class="type-signature"></span>UpdatePassword<span class="signature">(darkMode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    component to update the password of the user.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>darkMode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="UpdatePassword.jsx.html">UpdatePassword.jsx</a>, <a href="UpdatePassword.jsx.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>props.darkMode = truereturn (&lt;div>   &lt;h2>change password&lt;/h2>   &lt;TextField "current password"/>   &lt;TextField "new password"/>   &lt;TextField "confirm new password"/>    &lt;Button>Save &lt;/Button>&lt;/div>) </code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 23:52:37 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: SettingsMenu.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: SettingsMenu.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import AccountSettings from "./AccountSettings";
+import "./Styles/SettingsMenu.css";
+import SettingsMenuOptions from "./SettingsMenuOptions";
+import KeyIcon from "@mui/icons-material/Key";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled, alpha } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
+import Homepage from "../Homepage/Homepage";
+/**
+ * component to display the menu of settings and let the user choose from it the option he needs.
+ * But it does not show the sub menu (it just send the id of selected option),
+ * because it is instead SettingsPage role.
+ * @component
+ * @param {boolean} isDarkMode
+ * @param {function} onIdChange
+ * @example
+ * props.isDarkMode = true
+ * const isclickedAcc = true
+ * return (
+ * &lt;div>
+ *    &lt;SettingsMenuOptions account>
+ *    &lt;SettingsMenuOptions Larry blue>
+ *    &lt;SettingsMenuOptions privacy>
+ *    ...
+ * &lt;/div>
+ * )
+ *  
+ */
+function SettingsMenu(props) {
+  const [isclickedAcc, setAccActive] = useState(true);
+  const [isclickedSecurity, setSecurActive] = useState(false);
+  const [isclickedPrivacy, setPrivacyActive] = useState(false);
+  const [isclickedNotifications, setNotificationActive] = useState(false);
+  const [isclickedAccessibility, setAccessibilityActive] = useState(false);
+  const Search = styled("div")(({ theme }) => ({
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    "&amp;:hover": {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    marginBottom: 20,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: theme.spacing(3),
+      width: "auto",
+    },
+  }));
+
+  const SearchIconWrapper = styled("div")(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }));
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: "inherit",
+    "&amp; .MuiInputBase-input": {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: theme.transitions.create("width"),
+      width: "100%",
+      [theme.breakpoints.up("md")]: {
+        width: "20ch",
+      },
+    },
+  }));
+  function clickedAccount() {
+    setAccActive(true);
+    setSecurActive(false);
+    setPrivacyActive(false);
+    setNotificationActive(false);
+    setAccessibilityActive(false);
+    props.onIdChange(1);
+  }
+  function clickedSecurity() {
+    setAccActive(false);
+    setSecurActive(true);
+    setPrivacyActive(false);
+    setNotificationActive(false);
+    setAccessibilityActive(false);
+    props.onIdChange(2);
+  }
+  function clickedPrivacy() {
+    setAccActive(false);
+    setSecurActive(false);
+    setPrivacyActive(true);
+    setNotificationActive(false);
+    setAccessibilityActive(false);
+    props.onIdChange(3);
+  }
+  function clickedNotifications() {
+    setAccActive(false);
+    setSecurActive(false);
+    setPrivacyActive(false);
+    setNotificationActive(true);
+    setAccessibilityActive(false);
+    props.onIdChange(4);
+  }
+  function clickedAccessibility() {
+    setAccActive(false);
+    setSecurActive(false);
+    setPrivacyActive(false);
+    setNotificationActive(false);
+    setAccessibilityActive(true);
+    props.onIdChange(5);
+  }
+  return (
+    &lt;div>
+      &lt;h1
+        className={
+          !props.isDarkMode
+            ? "settingsMenuHeaderLight"
+            : "settingsMenuHeaderDark"
+        }
+      >
+        Settings
+      &lt;/h1>
+      &lt;Search>
+        &lt;SearchIconWrapper>
+          &lt;SearchIcon />
+        &lt;/SearchIconWrapper>
+        &lt;StyledInputBase
+          placeholder="Search…"
+          inputProps={{ "aria-label": "search" }}
+        />
+      &lt;/Search>
+      {/* Routing from Nav bar in login main screen*/}
+
+      &lt;div>
+        &lt;div>
+          {/* &lt;NavLink to="/Settings/account">&lt;/NavLink> */}
+          &lt;div onClick={clickedAccount}>
+            &lt;SettingsMenuOptions
+              id="1"
+              darkMode={props.isDarkMode}
+              active={isclickedAcc}
+              Icon={KeyIcon}
+              text="Your account"
+            />{" "}
+          &lt;/div>
+          &lt;NavLink to="/Home">
+            &lt;div>
+              &lt;SettingsMenuOptions
+                id="2"
+                darkMode={props.isDarkMode}
+                active={isclickedSecurity}
+                Icon={KeyIcon}
+                text="Larry blue"
+              />{" "}
+            &lt;/div>{" "}
+          &lt;/NavLink>
+          &lt;div onClick={clickedPrivacy}>
+            &lt;SettingsMenuOptions
+              id="3"
+              darkMode={props.isDarkMode}
+              active={isclickedPrivacy}
+              Icon={KeyIcon}
+              text="Privacy and safety"
+            />{" "}
+          &lt;/div>
+          &lt;div onClick={clickedNotifications}>
+            &lt;SettingsMenuOptions
+              id="4"
+              darkMode={props.isDarkMode}
+              active={isclickedNotifications}
+              Icon={KeyIcon}
+              text="Notifications"
+            />{" "}
+          &lt;/div>
+          &lt;div onClick={clickedAccessibility}>
+            &lt;SettingsMenuOptions
+              id="5"
+              darkMode={props.isDarkMode}
+              active={isclickedAccessibility}
+              Icon={KeyIcon}
+              text="Accessibility, display, and languages"
+            />{" "}
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+      &lt;div>
+        &lt;div>
+          &lt;Routes>
+            &lt;Route path="/Home" element={&lt;Homepage />}>&lt;/Route>
+          &lt;/Routes>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default SettingsMenu;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 23:52:37 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

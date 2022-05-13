@@ -38,7 +38,7 @@ function SettingsMenuOptions({id,darkMode,active,Icon,text,subtext,isSubtextExis
           <div className='karim2' >
               <div className={!darkMode?`settingsMenuOptionsLight`:`settingsMenuOptionsDark `}>
                 {id>5 && id<12  && (<Icon/>)}  
-                <h2 style={{marginLeft: 10, fontWeight: 500, fontSize:18}}>{text}</h2>
+                <div style={{marginLeft: 10, fontWeight: 500, fontSize:18,verticalAlign:"middle"}}>{text}</div>
                 
               </div>
               {isSubtextExist &&(<div><span className={!darkMode?`subtextsettingsMenuOptionsLight`:`subtextsettingsMenuOptionsDark `}  style={{marginLeft: 10, fontWeight: 200, fontSize:12}}> {subtext}</span></div>)}

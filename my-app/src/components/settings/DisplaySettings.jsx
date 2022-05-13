@@ -118,7 +118,7 @@ function DisplaySettings(props) {
     };
     axios
       .put(
-        `http://localhost:4000/profile/${userId}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,
         data,
         {
           headers: {

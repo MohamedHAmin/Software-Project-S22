@@ -16,17 +16,20 @@ function FollowingCard(props) {
   const [followModalState, setFollowModalState] = useState(false);
   let userID = localStorage.getItem("userId");
   const [Followers, setFollowers] = useState(0);
+  const [isPending, setIsPending] = useState(props.contact.ispending);
   /**
    * Handling the following request
    */
   function handleButtonClick() {
+    if(isPending===false)
+    {  
     console.log(isFollowed);
     if (isFollowed) {
       setFollowModalState(true);
     } else {
       axios
         .post(
-          `http://localhost:4000/${userID}/follow/${props.contact.followingId._id}`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact.followingId._id}`,
           null,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
@@ -41,6 +44,11 @@ function FollowingCard(props) {
           setFollowModalState(true); // 'Oops!'
         });
     }
+    }
+    else{
+      handleUnfollowAction();
+      setIsPending(false);
+    }
   }
   /**
    * Handling the unfollowing request
@@ -48,16 +56,22 @@ function FollowingCard(props) {
   function handleUnfollowAction() {
     axios
       .post(
-        `http://localhost:4000/${userID}/unfollow/${props.contact.followingId._id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.contact.followingId._id}`,
         null,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
+        if(isPending===true)
+        {
+          setIsPending(false);
+        }
+        else{
         console.log(res);
         setFollowers(Followers - 1);
         setFollowModalState(false);
         setIsFollowed(false);
         window.location.reload();
+      }
       })
       .catch((err) => {}); // 'Oops!';
   }
@@ -148,7 +162,7 @@ function FollowingCard(props) {
             props.contact.isfollowing ? "followButton1" : "followButton2"
           }
         >
-          {props.contact.isfollowing ? "Following" : "Follow"}
+          {isPending?("Pending"):(props.contact.isfollowing ? "Following" : "Follow")}
         </Button>
       ) : null}
     </div>

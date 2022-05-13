@@ -27,6 +27,7 @@ function UpdatePassword(props) {
     const [confirmPassValue, setValueConfirmPass] = useState('');
     const [newPassValue1, setValueNewPass1] = useState('');
     const [newPassValue2, setValueNewPass2] = useState('');
+    const [isValueChanged, setisValueChanged] = useState(false);
     const [isAllPassCorrect, setIsAllPassCorrect] = useState(0);
     const [isConfirmPassCorrect, setIsConfirmPassCorrect] = useState(0);
     //errors vars
@@ -37,6 +38,12 @@ function UpdatePassword(props) {
     const [buttonPopup, setButtonPopup] = useState(false);
     //related to request to back end
     const userId=localStorage.getItem("userId");
+    //check if nothing entered to make btn disabled
+    const isDisabeled =()=>{
+      if(confirmPassValue.length===0 || newPassValue1.length===0 || newPassValue2.length===0)
+        return true;
+      return false;
+    }
     
     const  handleSubmit =(e) =>{
       e.preventDefault()
@@ -49,7 +56,7 @@ function UpdatePassword(props) {
       if(confirmPassValue && newPassValue1 && newPassValue2){
         // if(confirmPassValue==="karim"){
         //   setIsConfirmPassCorrect(1)
-          if(newPassValue1.length<6){
+          if(newPassValue1.length<6 || newPassValue1.length>16 ){
             setValueNewPass1Error(true);
           }
           else if(newPassValue1===newPassValue2){
@@ -62,7 +69,7 @@ function UpdatePassword(props) {
               newPassword:newPassValue1
             }
             //
-            axios.put(`http://localhost:4000/profile/${userId}/password`,data, {
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}/password`,data, {
 
               headers: {
                 Authorization: localStorage.getItem("accessToken")
@@ -139,7 +146,7 @@ function UpdatePassword(props) {
           type="password" 
           fullWidth
           error={newPassValue1Error}
-          helperText={newPassValue1Error &&("Your password needs to be at least 6 characters. Please enter a longer one.")}
+          helperText={newPassValue1Error &&("Your password needs to be between 6 and 16 characters. Please enter another one.")}
           inputProps={{"data-testid": "New-password-updatepage" ,className:props.darkMode?"forceChangePasswordMUIDarkMode":"" }}
           />
           
@@ -166,7 +173,7 @@ function UpdatePassword(props) {
               type="submit" 
               disabled={confirmPassValue.length===0 || newPassValue1.length===0 || newPassValue2.length===0}
               variant="contained"  
-              className="buttonSettingsModal"
+              className={(confirmPassValue.length===0 || newPassValue1.length===0 || newPassValue2.length===0)?"buttonSettingsDisabled":"buttonSettings" }
               style={{marginTop:20}}
             >
               save
