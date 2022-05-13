@@ -1,0 +1,41 @@
+.container {
+	height: 45vh;
+	width: auto;
+}
+
+.container-cropper {
+	height: 100%;
+}
+
+.cropper {
+	height: 90%;
+	position: relative;
+}
+
+.slider {
+	height: 10%;
+	display: flex;
+	align-items: center;
+	position: relative;
+	left:30%;
+	width: 40%;
+}
+.cont {
+	display: flex;
+}
+
+.container-buttons {
+	background-color: #192030!important;
+	border: none !important;
+	color: white !important;
+	font-weight: 700 !important;
+	font-size: 14px !important;
+	text-transform: inherit !important;
+	border-radius: 40px !important;
+	height: 25px !important;
+	width: 80px !important;
+	position: absolute !important;
+	right: 50px !important;
+	margin-top: 2px !important;
+	
+}

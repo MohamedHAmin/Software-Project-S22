@@ -1,0 +1,24 @@
+
+
+.FollowersPage {
+  color: var(--color-mode);
+  margin-right: 4%;
+  display: flex;
+  margin-left: 24%;
+}
+
+@media screen and (max-width: 1060px) {
+  .FollowersPage {
+    margin-left: 2%;
+  }
+}
+
+@media screen and (max-width: 859px) {
+  .FollowersPage {
+    margin-right: 0;
+  }
+
+  .rightbar {
+    display: none;
+  }
+}

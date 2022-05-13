@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+.container1 {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+    background: rgb(247, 247, 247);
+}
+
+.imageContainer1 {
+    width: 40%;
+    min-width: 320px;
+}
+
+.imageContainer1 img {
+    margin-bottom: 40px;
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+
+}
+
+::selection {
+    background: #4158d0;
+    color: #fff;
+}
+
+.signupContainer1 {
+    height: 500px;
+    min-width: 320px;
+    width: 40%;
+    max-width: 400px;
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(1 1 1 / 15%);
+}
+
+.title1 {
+    font-size: 35px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 90px;
+    color: #fff;
+    user-select: none;
+    border-radius: 15px 15px 0 0;
+    background: linear-gradient(-135deg, #c850c0, #2B3DBC);
+}
+
+.signupContainer1 form {
+    padding: 10px 30px 30px 30px;
+}
+
+.field1 {
+    height: 50px;
+    width: 100%;
+    margin-top: 35px;
+}
+
+.field1 input {
+    height: 80%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    padding-left: 20px;
+
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+
+}
+
+.btnsup1 {
+    width: 50%;
+    height: 40px;
+    border: 1px solid;
+    background: rgb(43, 61, 188);
+    border-radius: 25px;
+    font-size: 18px;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    margin-top: 40px;
+}
+
+
+.content input {
+    width: 15px;
+    height: 15px;
+    background: red;
+}
+
+.content label {
+    color: #262626;
+    user-select: none;
+    padding-left: 5px;
+}
+
+.container1 form .field1 input:focus,
+form .field1 input:valid {
+    border-color: lightgrey;
+}
+
+.field1 label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color: #999999;
+    font-weight: 400;
+    font-size: 17px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+}
+
+.label input:focus~label,
+.label input:valid~label {
+    top: 0%;
+    font-size: 16px;
+    color: #4158d0;
+    background: #fff;
+    transform: translateY(-50%);
+}
+
+form .passLink {
+    color: "";
+}
+
+button:hover {
+    border-color: #2691d9;
+    transition: 0.5s;
+}
+
+form .signupLink {
+    color: #262626;
+    margin-top: 20px;
+    text-align: center;
+}
+
+form .passLink a,
+form .signupLink a {
+    color: #4158d0;
+    text-decoration: none;
+}
+
+form .passLink a:hover,
+form .signupLink a:hover {
+    text-decoration: underline;
+}
+
+.paragraph {
+    text-align: center;
+    padding-top: 5%;
+    color: rgb(221, 28, 28);
+}
+
+.success {
+    color: rgb(7, 217, 7);
+}
+
+.failed {
+    color: rgb(221, 28, 28);
+}

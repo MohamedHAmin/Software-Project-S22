@@ -1,0 +1,76 @@
+.sidebar {
+  border-right: 2px solid var(--color-border);
+  width:20%;
+  position:fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  margin-left: 4%;
+  height: 100vh;
+  overflow: hidden;
+  min-width: 210px;
+
+}
+
+.sidebar a 
+{ text-decoration: none; }
+
+.sideBarLarryIcon {
+  height: 55px;
+  margin-top: 11px;
+  position: relative;
+  left: 5%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sideBarTweet {
+  background-color: var(--larry-color) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 800 !important;
+  font-size: 17px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 7.5% !important;
+  margin-top: 20px !important;
+  width: 85% !important;  
+}
+.logoutIcon{
+  position:absolute;
+  bottom: 30px;
+  width: 100%;
+}
+
+.sideBarTweet:hover {
+  background-color: var(--color-hover) !important;
+}
+
+@media screen and (max-width: 1060px) {
+  .sidebar {
+    min-width: 10%;
+    margin-left: 2%;
+
+  }
+
+  .sideBarLarryIcon {
+    margin-left: 4%;
+  }
+  li {
+    margin-left: 35%;
+  }
+  .logoutIcon {
+    margin-left: 35%;
+  }
+}
+
+@media screen and (max-width: 859px) {
+  .sidebar {
+    margin-right: 0;
+    min-width: 27%;
+  }
+}

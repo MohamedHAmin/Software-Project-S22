@@ -1,0 +1,28 @@
+.TweetDiv{
+    width: 100%;
+    /* box-shadow: 1px 0px 0 0 rgba(0, 0, 0, 0.1); */
+    /*height: 200px;*/    
+}
+.form-control{
+  resize: none;
+  border: none;
+  outline: none;
+  outline:0px !important;
+  box-shadow: none !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size:20px;
+  padding-top: 2%;
+  min-height: 40px;
+  line-height: 20px;
+  width: 95%;
+  height: 100%;
+  /* background-color: var(--color-mode); */
+  color:var(--color-mode) !important;
+  /* border-width: 1px; */
+  /* border-style: solid; */
+}
+.TweetDiv textarea,
+.TweetDiv textarea:focus {
+  background-color: var(--color-background);
+}
+

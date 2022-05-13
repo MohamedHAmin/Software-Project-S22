@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSDoc: Source: login/Login.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="styles/prettify-tomorrow.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1 class="page-title">Source: login/Login.jsx</h1>
+
+      <section>
+        <article>
+          <pre
+            class="prettyprint source linenums"
+          ><code>import { React } from "react";
+import { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import axios from 'axios'
+import classes from './Styles/Login.module.css';
+import { useNavigate } from "react-router-dom";
+import Navbar from "./navbar";
+import LoginwithGoogle from "./LoginwithGoogle";
+/**
+ *
+ *
+ * @returns Returns Login form and its fields [tag, password] and login button
+ */
+const Login = () => {
+    const [error, setError] = useState(false);
+    const initialValues = {
+        email_or_username: "",
+        password: ""
+    }
+    const Navigate = useNavigate();
+    const validationSchema = Yup.object().shape({
+        password: Yup.string().min(6).max(16).required("Enter Your Password"),
+        email_or_username: Yup.string().min(3).required("Enter Your Email or Tag.")
+    })
+    const onSubmit = (data) => {
+        console.log(data);
+        axios.post("http://localhost:4000/user/login", data).then((res) => {
+            console.log(res);
+            if (res.error) {
+                if (res.error === "Error: unable to login as user is not verified") {
+                    alert("Please verify your email")
+                } else if (res.error === "Error: unable to login") {
+                    setError("Wrong userName OR Password");
+                }
+            } else {
+                localStorage.setItem("accessToken", res.data.token.token);
+                localStorage.setItem("userId", res.data.user.user._id);
+                if (res.data.user.adminToken) {
+                    localStorage.setItem("adminToken", res.data.user.adminToken.token);
+                }
+                else {
+                    localStorage.setItem("adminToken", "");
+                }
+                Navigate("/Home");
+                Navigate(0);
+            }
+        })
+    };
+    const clickHandeler = () => {
+        Navigate("/SignUp")
+    }
+    return (
+        &lt;div>
+            &lt;Navbar />
+            &lt;div className={classes.container}>
+                &lt;div className={classes.imageContainer}>
+                    &lt;img src="https://cdn.discordapp.com/attachments/949620839647698964/954738917968609290/d5acdefc-2d8c-41a4-b067-706cf76ee3aa.jpg">&lt;/img>
+                &lt;/div>
+                &lt;div className={classes.loginContainer}>
+                    &lt;div className={classes.title}>Login Form &lt;/div>
+
+                    &lt;div className={classes.GoogleLogin}>
+                        &lt;LoginwithGoogle />
+                    &lt;/div>
+
+                    &lt;Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} className={classes.form}>
+                        &lt;Form>
+                            &lt;div className={classes.field}>
+                                &lt;Field className={classes.userinput} name="email_or_username" placeholder="Email or Tag" autoComplete="off" />
+                            &lt;/div>
+                            &lt;ErrorMessage name='email_or_username' component="span" className={classes.error} />
+                            {error === false ? &lt;span>&lt;/span> : &lt;span className={classes.error}>{error}&lt;/span>}
+
+                            &lt;div className={classes.field}>
+                                &lt;Field type="password" className={classes.userinput} name="password" placeholder="password" autoComplete="off" />
+                            &lt;/div>
+                            &lt;ErrorMessage name='password' component="span" className={classes.error} />
+                            {error === false ? &lt;span>&lt;/span> : &lt;span className={classes.error}>{error}&lt;/span>}
+
+                            &lt;div className={classes.content}>
+                                &lt;div className={classes.checkbox}>
+                                    &lt;input type="checkbox" id="remember-me" />
+                                    &lt;label for="remember-me">Remember me&lt;/label>
+                                &lt;/div>
+                                &lt;div className={classes.passLink}>
+                                    &lt;a href="#">Forgot password?&lt;/a>
+                                &lt;/div>
+                            &lt;/div>
+
+                            &lt;button className={classes.button} type="submit" >Login&lt;/button>
+                            &lt;div className={classes.signupLink}>
+                                Not a member? &lt;a onClick={clickHandeler}>Signup now&lt;/a>
+                            &lt;/div>
+                        &lt;/Form>
+                    &lt;/Formik>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div >
+    );
+}
+export default Login;</code></pre>
+        </article>
+      </section>
+    </div>
+
+    <nav>
+      <h2><a href="index.html">Home</a></h2>
+      <h3>Global</h3>
+      <ul>
+        <li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li>
+        <li>
+          <a href="global.html#AccountInformationS">AccountInformationS</a>
+        </li>
+        <li><a href="global.html#AccountSettings">AccountSettings</a></li>
+        <li><a href="global.html#blue">blue</a></li>
+        <li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li>
+        <li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li>
+        <li><a href="global.html#contact">contact</a></li>
+        <li><a href="global.html#CreateCard">CreateCard</a></li>
+        <li><a href="global.html#CreateFollower">CreateFollower</a></li>
+        <li><a href="global.html#createImage">createImage</a></li>
+        <li><a href="global.html#EditProfile">EditProfile</a></li>
+        <li><a href="global.html#FollowerCard">FollowerCard</a></li>
+        <li><a href="global.html#FollowersPage">FollowersPage</a></li>
+        <li><a href="global.html#FollowingCard">FollowingCard</a></li>
+        <li><a href="global.html#FollowingPage">FollowingPage</a></li>
+        <li><a href="global.html#Header">Header</a></li>
+        <li><a href="global.html#Homepage">Homepage</a></li>
+        <li>
+          <a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a>
+        </li>
+        <li>
+          <a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a>
+        </li>
+        <li><a href="global.html#Login">Login</a></li>
+        <li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li>
+        <li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li>
+        <li><a href="global.html#MyFollowers">MyFollowers</a></li>
+        <li><a href="global.html#MyFollowing">MyFollowing</a></li>
+        <li><a href="global.html#MyProfile">MyProfile</a></li>
+        <li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li>
+        <li><a href="global.html#Navbar">Navbar</a></li>
+        <li>
+          <a href="global.html#NotificationSettings">NotificationSettings</a>
+        </li>
+        <li><a href="global.html#Post">Post</a></li>
+        <li><a href="global.html#PrivacySettings">PrivacySettings</a></li>
+        <li><a href="global.html#ProfileInfo">ProfileInfo</a></li>
+        <li><a href="global.html#ProfileName">ProfileName</a></li>
+        <li><a href="global.html#ProfilePage">ProfilePage</a></li>
+        <li><a href="global.html#Reacts">Reacts</a></li>
+        <li><a href="global.html#ReactsIcon">ReactsIcon</a></li>
+        <li><a href="global.html#Report">Report</a></li>
+        <li><a href="global.html#ReportAction">ReportAction</a></li>
+        <li><a href="global.html#ReportsPage">ReportsPage</a></li>
+        <li><a href="global.html#ReportsView">ReportsView</a></li>
+        <li>
+          <a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a>
+        </li>
+        <li><a href="global.html#SettingsMenu">SettingsMenu</a></li>
+        <li>
+          <a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a>
+        </li>
+        <li><a href="global.html#SettingsPage">SettingsPage</a></li>
+        <li><a href="global.html#SideBar">SideBar</a></li>
+        <li><a href="global.html#SideBarIcon">SideBarIcon</a></li>
+        <li><a href="global.html#Signup">Signup</a></li>
+        <li><a href="global.html#Tweet">Tweet</a></li>
+        <li><a href="global.html#TweetBar">TweetBar</a></li>
+        <li><a href="global.html#UpdatePassword">UpdatePassword</a></li>
+      </ul>
+    </nav>
+
+    <br class="clear" />
+
+    <footer>
+      Documentation generated by
+      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06
+      2022 16:53:59 GMT+0200 (Eastern European Standard Time)
+    </footer>
+
+    <script>
+      prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

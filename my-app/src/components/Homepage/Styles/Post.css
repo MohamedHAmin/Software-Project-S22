@@ -1,0 +1,105 @@
+.logo
+{
+    float: right;
+    width: 20px;
+    height: 20px;
+}
+.userInfo
+{
+    margin-right: 100%;
+    display: flex;
+}
+.tweet
+{
+    /* border-width: 2px; */
+    border-style: solid;
+    border-color: var(--color-border);
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    /*height: fit-content;*/
+    padding:calc(2%);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    width: auto;
+    color: var(--color-mode);
+}
+.profilePic
+{
+    position: relative;
+    top:0px;
+    left:0px;
+    cursor: pointer;
+    float: left;
+}
+.loadmore
+{
+    text-align: center;
+}
+.tweetContent
+{
+    padding: calc(2%);
+    float: left;
+    
+}
+.profileInfo
+{
+    float: left;
+    cursor: pointer;
+    margin-right: 45%;
+    margin-left: 0%;
+    margin-bottom: 2%;
+}
+.tag
+{
+    font-size: small;
+    color: var(--color-mode);
+    margin-left: 6%;
+
+}
+.username
+{
+    font-size: medium;
+    font-weight: bold;
+    color: var(--color-mode);
+text-decoration: none;
+margin-left: 6%;
+}
+.time
+{
+    float: left;
+    display: flex;
+    font-size: smaller;
+    color: grey !important;
+    margin-right: 100%;
+    margin-bottom: 2%;
+}
+.reactsBar
+{
+    display: flex;
+    float:left;
+    margin-right: 100%;
+    margin-bottom: 1%;
+}
+.comment
+{
+    float:left;
+    display: flex;
+    width: 100%;
+}
+/* .tweet:hover
+{
+    border-color: rgba(109, 113, 255, 1);
+} */
+.deleteIcon
+{
+    float: right;
+}
+.deleteIcon:hover
+{
+    color: red;
+}
+.nothingClass{
+display: none;
+}

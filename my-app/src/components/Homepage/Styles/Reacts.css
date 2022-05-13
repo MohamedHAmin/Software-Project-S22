@@ -1,0 +1,54 @@
+@media screen and (max-width: 1000px) {
+    .reactsBar {
+      min-width: 215px;
+    }
+    .icon
+    {
+        margin-right: 40%;
+    }
+}
+.icon
+{
+    margin-right: 40%;
+}
+.close:hover
+{
+    color: red;
+}
+.RetweetHeader
+{
+    display: flex;
+}
+#react2
+{
+    border: none;
+    background: none;
+    color:var(--color-mode) ;
+
+}
+.Retweettext
+{
+    word-wrap: normal;
+    width: 100%;
+    flex-direction: column;
+    resize: none;
+    border: none;
+}
+.retweetinnerblock
+{
+    /*max-width:inherit;*/
+    width: inherit;
+}
+.RetweetPopup
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45%;
+    background-color: #ffff;
+    border: 2px solid;
+    box-Shadow: 24;
+    border-radius: 20px;
+    padding: 2%;
+}
