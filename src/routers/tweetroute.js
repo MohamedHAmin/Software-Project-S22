@@ -28,7 +28,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       throw e;
     }
 
-    if (tweet.text === "No-text") {
+    if (tweet.text === " ") {
       //in case you get a tweet with this place holder in its text path
       //replace it with null
       //! you will only get no text in case of retweet
