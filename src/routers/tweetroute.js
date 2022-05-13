@@ -163,7 +163,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 });
 
 //tprofile tweets
-router.get("/tweet/user/:id", auth("any"), async (req, res) => {
+router.get("/profile/tweets/:id", auth("any"), async (req, res) => {
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
