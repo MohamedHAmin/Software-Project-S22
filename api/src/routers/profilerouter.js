@@ -149,16 +149,19 @@ router.put("/:id", auth("user"), async (req, res) => {
 });
 router.put(
   "/:id/avater",
-  auth("any"),
   upload.single("image"),
   async (req, res) => {
     try {
+      const user=await User.findOne({ _id:req.params.id})
+      if (!user) {
+        throw new Error("no user found");
+      }
       if (!req.file) {
         throw new Error("no imge found");
       }
       // Delete image from cloudinary
-      if (req.user.profileAvater.cloudnaryId) {
-        await cloudinary.uploader.destroy(req.user.profileAvater.cloudnaryId);
+      if (user.profileAvater.cloudnaryId) {
+        await cloudinary.uploader.destroy(user.profileAvater.cloudnaryId);
       }
 
       // Upload image to cloudinary
@@ -166,11 +169,11 @@ router.put(
       if (!result.secure_url || !result.public_id) {
         throw new Error("can not upload");
       }
-      req.user.profileAvater.url = result.secure_url;
-      req.user.profileAvater.cloudnaryId = result.public_id;
+      user.profileAvater.url = result.secure_url;
+      user.profileAvater.cloudnaryId = result.public_id;
 
-      await req.user.save();
-      res.json(req.user);
+      await user.save();
+      res.send(user);
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }
@@ -192,16 +195,19 @@ router.delete("/:id/avater", auth("any"), async (req, res) => {
 });
 router.put(
   "/:id/banner",
-  auth("any"),
   upload.single("image"),
   async (req, res) => {
     try {
+      const user=await User.findOne({ _id:req.params.id})
+      if (!user) {
+        throw new Error("no user found");
+      }
       if (!req.file) {
         throw new Error("no imge found");
       }
       // Delete image from cloudinary
-      if (req.user.banner.cloudnaryId) {
-        await cloudinary.uploader.destroy(req.user.banner.cloudnaryId);
+      if (user.banner.cloudnaryId) {
+        await cloudinary.uploader.destroy(user.banner.cloudnaryId);
       }
 
       // Upload image to cloudinary
@@ -209,11 +215,11 @@ router.put(
       if (!result.secure_url || !result.public_id) {
         throw new Error("can not upload");
       }
-      req.user.banner.url = result.secure_url;
-      req.user.banner.cloudnaryId = result.public_id;
+      user.banner.url = result.secure_url;
+      user.banner.cloudnaryId = result.public_id;
 
-      await req.user.save();
-      res.json(req.user);
+      await user.save();
+      res.send(user);
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }
