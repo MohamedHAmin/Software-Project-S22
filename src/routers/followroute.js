@@ -39,7 +39,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
       if (private3.length === 1) {
         throw new Error("you already request the PrivateRequest");
       }
-      console.log('first')
+      //console.log('first')
       const private2 = new PrivateRequest({
         requestUser: req.user._id,
         userId: user._id,
@@ -50,22 +50,22 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
     notifications.save();
     const tokens = await Token.find({ ownerId: req.params.id });
-    console.log(
-      "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
-      tokens
-    );
+    // console.log(
+    //   "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
+    //   tokens
+    // );
     if (tokens) {
       let fcmtokens = tokens.map((token) => token.fcmToken);
       var uniqueArray = [...new Set(fcmtokens)];
       uniqueArray = uniqueArray.filter((t) => t != null);
-      console.log(
-        "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
-        uniqueArray
-      );
-      console.log(
-        "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
-        text
-      );
+      // console.log(
+      //   "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
+      //   uniqueArray
+      // );
+      // console.log(
+      //   "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
+      //   text
+      // );
 
       notifiy(uniqueArray, text, req.user.tag);
     }
@@ -83,22 +83,22 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
       const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
       notifications.save();
       const tokens = await Token.find({ ownerId: req.params.id });
-      console.log(
-        "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
-        tokens
-      );
+      // console.log(
+      //   "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
+      //   tokens
+      // );
       if (tokens) {
         let fcmtokens = tokens.map((token) => token.fcmToken);
         var uniqueArray = [...new Set(fcmtokens)];
         uniqueArray = uniqueArray.filter((t) => t != null);
-        console.log(
-          "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
-          uniqueArray
-        );
-        console.log(
-          "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
-          text
-        );
+        // console.log(
+        //   "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
+        //   uniqueArray
+        // );
+        // console.log(
+        //   "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
+        //   text
+        // );
 
         notifiy(uniqueArray, text, req.user.tag);
       }
@@ -127,27 +127,27 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
   try {
     
     const user = await User.findById(req.params.id);
-    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ user", user)
-    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ req.params.id", req.params.id)
+    // console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ user", user)
+    // console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ req.params.id", req.params.id)
     if(!user){
       throw new Error("no user found");
     }
-    console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
+    //console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
 
-    console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
+    //console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
     const privateRequest2 = await PrivateRequest.find({
       userId: req.user._id.toString(),
       requestUser:req.params.id
     });
-    console.log("🚀 ~ file: followroute.js ~ line 142 ~ router.get ~ privateRequest2", privateRequest2)
+    //console.log("🚀 ~ file: followroute.js ~ line 142 ~ router.get ~ privateRequest2", privateRequest2)
     const privateRequest = await PrivateRequest.deleteMany({
       userId: req.user._id.toString(),
       requestUser:req.params.id
     });
-    console.log("🚀 ~ file: followroute.js ~ line 140 ~ router.get ~ req.user._id", req.user._id)
-    console.log("🚀 ~ file: followroute.js ~ line 141 ~ router.get ~ req.params.id", req.params.id)
+    // console.log("🚀 ~ file: followroute.js ~ line 140 ~ router.get ~ req.user._id", req.user._id)
+    // console.log("🚀 ~ file: followroute.js ~ line 141 ~ router.get ~ req.params.id", req.params.id)
 
-    console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
+    //console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
     if(privateRequest.deletedCount==0){
       throw new Error("no user found");
     }
