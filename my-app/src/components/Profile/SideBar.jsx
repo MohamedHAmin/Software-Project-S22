@@ -63,7 +63,7 @@ function SideBar({
             </NavLink>
           )}
           {!isAdmin && (
-            <NavLink to="/Home">
+            <NavLink to="/Notifications">
               <SideBarIcon
                 active={Notifications}
                 text="Notifications"

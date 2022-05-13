@@ -12,10 +12,10 @@ import Modal from "./components/login/Modal";
 import Report from "./components/Homepage/Report";
 import axios from "axios";
 import ReportAction from "./components/Homepage/ReportAction";
-import AccountSettings from "./components/settings/AccountSettings";
 import ReportsPage from "./components/Admin/ReportsPage";
 import FollowingPage from "./components/Profile/FollowingPage";
 import FollowersPage from "./components/Profile/FollowersPage";
+import Notifications from "./components/Homepage/Notifications";
 function App() {
   // DUMMY VAR dark mode just to make useeffect work when clicked on changing mode
   const [DarkMode, setDarkMode] = useState(false);
@@ -123,6 +123,10 @@ function App() {
             <Route
               path="/ReportsPage"
               element={<ReportsPage isAdmin={isAdmin} />}
+            ></Route>
+            <Route
+              path="/Notifications"
+              element={<Notifications isAdmin={isAdmin}/>}
             ></Route>
           </Routes>
         </BrowserRouter>

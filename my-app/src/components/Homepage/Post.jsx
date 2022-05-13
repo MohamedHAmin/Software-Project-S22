@@ -4,15 +4,11 @@ import moment from 'moment';
 import Comment from "./Comment";
 import Avatar from '@mui/material/Avatar';
 import Logo from "../../Images/Logo Title Page.png"
-import Delete from '@mui/icons-material/DeleteOutlined';
 import "./Styles/Post.css";
 import Button from "./dropDownButton"
-import comments from "./Arrays/comments"
 import RetweetDisplayBlock from './RetweetDisplayBlock';
 import LoadMore from '@mui/icons-material/MoreHoriz';
 import LoadingButton from '@mui/lab/LoadingButton';
-import posts from "./Arrays/posts"
-import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
 /**
@@ -99,7 +95,7 @@ function handleClick() {
 //to get the content of the comments from the comment component
 const passData = (text) => {
   let data={
-    Text:text,
+    text:text,
     replyingTo:postId
   };
   axios
@@ -209,7 +205,8 @@ function deletepost(){
               image={props.post.retweetedTweet.tweetId.gallery[0]}
               authorId={props.post.retweetedTweet.tweetId.authorId._id}
               content={props.post.retweetedTweet.tweetId.text}/>}
-        {date && <div className="time">
+        {(props.post.retweetedTweet.tweetExisted==true && !props.post.retweetedTweet.tweetId) && <div className="comments">This Lar has been deleted</div>}
+        {props.post.createdAt && <div className="time">
             <p>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}&nbsp;&nbsp;</p>
             <p>{date.getHours()}:{date.getMinutes()}</p>
         </div>}

@@ -15,6 +15,7 @@
     overflow: hidden;
     width: 100%;
     color: var(--color-mode);
+    cursor: pointer;
 }
 .uploadedimage
 {
