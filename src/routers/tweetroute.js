@@ -285,7 +285,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
 
     followingsId.push(req.user._id);
 
-    let followerTweet = await Tweet.find({ authorId: { $in: followingsId } })
+    let followerTweet = await Tweet.find({ authorId: { $in: followingsId },replyingTo:{tweetId:null,tweetExisted:false} })
       .sort({ createdAt: -1 })
       .limit(limit)
       .skip(skip)
@@ -305,17 +305,6 @@ router.get("/timeline", auth("any"), async (req, res) => {
         strictPopulate: false,
         select: "_id screenName tag profileAvater.url",
       })
-      .populate({
-        path: "replyingTo.tweetId",
-        strictPopulate: true,
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes createdAt",
-        populate: {
-          path: "authorId",
-          strictPopulate: true,
-          select: "_id screenName tag profileAvater.url",
-        },
-      });
     let i = -1;
     if (!followerTweet.length < 1) {
       followerTweet = followerTweet.map((tweet) => {
@@ -481,7 +470,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
     let likedtweets = await Tweet.aggregate([
-      { $match: { "likes.like": req.user._id } },
+      { $match: { "likes.like": req.user._id ,"replyingTo.tweetId":null , "replyingTo.tweetExisted": false }},
       { $project: { likes: 0 } },
       {
         $lookup: {
