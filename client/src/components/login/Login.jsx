@@ -47,34 +47,6 @@ const Login = () => {
                 else {
                     localStorage.setItem("adminToken", "");
                 }
-
-
-                const msg = getMessaging(app);
-                getToken(msg, { apidKey: "AIzaSyDd8zEGYjbbwztKcfcRdL4NlTubEUYzcXk" }).then((currentToken) => {
-                    if (currentToken) {
-                        console.log("🚀 ~ file: App.js ~ line 12 ~ getToken ~ currentToken", currentToken)
-                        axios
-                            .get(
-                                `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/sendfcm?token=${currentToken}`,
-                                { headers: { Authorization: res.data.token.token } }
-                            ).then((res) => {
-
-                                console.log("🚀 ~ file: Login.jsx ~ line 59 ~ getToken ~ res", res)
-                            }).catch(e => {
-                                console.log("🚀 ~ file: Login.jsx ~ line 62 ~ ).then ~ e", e.response)
-
-                            })
-                        // Send the token to your server and update the UI if necessary
-                        // ...
-                    } else {
-                        // Show permission request UI
-                        console.log('No registration token available. Request permission to generate one.');
-                        // ...
-                    }
-                }).catch((err) => {
-                    console.log('An error occurred while retrieving token. ', err);
-                    // ...
-                });
                 Navigate("/Home");
                 Navigate(0);
             }
