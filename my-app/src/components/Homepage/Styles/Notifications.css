@@ -3,10 +3,13 @@
     color: var(--color-mode);
     margin-right: 4%;
     display: flex;
-    margin-left: 24%;
-    /* max-width: inherit;
-    width:100%;
-    height: inherit; */
+    margin-left: 24% ;
+    
+}
+
+.Notificationrightbar {
+    position: sticky;
+    height: 100vh;
 }
 .notificationbuttons {
     background-color: #2b3dbc !important;
