@@ -30,7 +30,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       throw e;
     }
 
-    if (tweet.text === "No-text") {
+    if (tweet.text === " ") {
       //in case you get a tweet with this place holder in its text path
       //replace it with null
       //! you will only get no text in case of retweet
@@ -540,6 +540,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
       e = "no liked tweets found";
       throw e;
     }
+    tweetFilterFunc(req.user,likedtweets);
     for (let i = 0; i < likedtweets.length; i++) {
       if (
         !Array.isArray(likedtweets[i].retweetedTweet.tweetId) ||
@@ -560,7 +561,7 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-router.get("/profile/replies/:id", auth("user"), async (req, res) => {
+router.get("/profile/replies/:id", auth("user"), async (req, res) => {//????????????????????????
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
@@ -570,6 +571,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
       e = "user doesn't exist";
       throw e;
     }
+    if(!await allowView(req.user,req.params.id)){throw new Error("Private User");}
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
@@ -632,8 +634,8 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           return tweets;
         }
       });
-      let temp;
       //??????????????????????????????????????????!
+      //let temp;
       // for (let i = 0; i < user.Tweets.length; i++) {
       //   if (user.Tweets[i].replyingTo.tweetExisted) {
       //     temp = await Tweet.findById(user.Tweets[i].replyingTo.tweetId);
@@ -667,7 +669,7 @@ router.get("/profile/media", auth("user"), async (req, res) => {
       .skip(skip)
       .populate({
         path: "authorId",
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName isPrivate tag profileAvater.url",
       })
       .populate({
         path: "retweetedTweet.tweetId",
@@ -685,6 +687,7 @@ router.get("/profile/media", auth("user"), async (req, res) => {
       e = "no tweets with images found";
       throw e;
     }
+    tweetFilterFunc(req.user,userTweetsWithImages);
     for (let i = 0; i < userTweetsWithImages.length; i++) {
       if (userTweetsWithImages[i].replyingTo.tweetExisted) {
         temp = await Tweet.findById(userTweetsWithImages[i].replyingTo.tweetId);
@@ -714,6 +717,7 @@ router.get("/explore", auth("any"), async (req, res) => {
 
     let exploredTweet = await Tweet.find({
       authorId: { $nin: followingsId, $ne: req.user._id },
+      replyingTo:{tweetId:null,tweetExisted:false}
     })
       .sort({ createdAt: -1 })
       .limit(limit)
@@ -732,21 +736,11 @@ router.get("/explore", auth("any"), async (req, res) => {
       .populate({
         path: "authorId",
         strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName isPrivate tag profileAvater.url",
       })
-      .populate({
-        path: "replyingTo.tweetId",
-        strictPopulate: true,
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes createdAt",
-        populate: {
-          path: "authorId",
-          strictPopulate: true,
-          select: "_id screenName tag profileAvater.url",
-        },
-      });
     let i = -1;
     if (!exploredTweet.length < 1) {
+      exploredTweet=tweetFilterFunc(req.user,exploredTweet);
       exploredTweet = exploredTweet.map((tweet) => {
         i++;
         const isliked = tweet.likes.some(
@@ -1199,7 +1193,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
   }
 
 });
-/**Provide Viewer and Tweet|||Filters the tweet's replies*/
+/**Provide Viewer and Tweet==>Filters the tweet's replies*/
 function replyFilterFunc(viewer,tweet){
   const viewerId=viewer._id;
   if(viewerId.equals(tweet.authorId._id)){return;}
@@ -1214,7 +1208,7 @@ function replyFilterFunc(viewer,tweet){
     else{return false;}
   })
 }
-/**Provide Viewer and Tweet|||Returns an editted tweet if replyingTo tweet is Private else returns null*/
+/**Provide Viewer and Tweet==>Returns an editted tweet if replyingTo tweet is Private else returns null*/
 function reptoFilterFunc(viewer,tweet){
   if(!tweet.replyingTo.tweetId){return null;}
   const viewerId=viewer._id;
@@ -1231,7 +1225,33 @@ function reptoFilterFunc(viewer,tweet){
     tweetExisted:true
   };
   return temp;
-
+}
+/**Provide Viewer and Tweets==>Filters Tweets*/
+function tweetFilterFunc(viewer,tweets){
+  const viewerId=viewer._id;
+  let followArr=viewer.following;
+  followArr = followArr.map((follow) => {
+    return follow.followingId.toString();
+  });
+  tweets=tweets.filter(function visCheck(tweet){
+    if(viewerId.equals(tweet.authorId._id)){return true;}
+    else if(followArr.includes(tweet.authorId._id.toString())){return true;}
+    else if(!tweet.authorId.isPrivate){return true;}
+    else{return false;}
+  })
+  return tweets;
+}
+/**Provide Viewer and Target User ID==>Determines if the Viewer is allowed to view the Target*/
+async function allowView(viewer,targetId){
+  if(viewer._id.equals(targetId)){return true;}
+  let followArr=viewer.following;
+  followArr = followArr.map((follow) => {
+    return follow.followingId.toString();
+  });
+  if(followArr.includes(targetId)){return true;}
+  const target=await User.findById(targetId);
+  if(!target.isPrivate){return true;}
+  return false;
 }
 
 module.exports = router;
