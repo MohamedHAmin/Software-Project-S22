@@ -37,7 +37,7 @@ function EditProfile(props) {
       console.log(data);
       console.log("---------------------------");
       axios
-        .put(`http://localhost:4000/profile/${userID}`, data, {
+        .put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}`, data, {
           headers: { Authorization: localStorage.getItem("accessToken") },
         })
         .then((res) => {
@@ -47,7 +47,7 @@ function EditProfile(props) {
           } else {
             axios
               .put(
-                `http://localhost:4000/profile/${userID}`,
+                `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}`,
                 {
                   location: {
                     place: document.getElementById("editLocationProfileField")

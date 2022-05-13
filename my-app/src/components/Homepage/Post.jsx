@@ -62,7 +62,7 @@ useEffect(()=>{
   {
     setcanretweet(false);
   }
-  axios.get(`http://localhost:4000/tweet/${postId}`,
+  axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${postId}`,
   { headers: { Authorization: localStorage.getItem("accessToken") }}).then((res) => {
     if (res.error) {
       console.log(
@@ -104,7 +104,7 @@ const passData = (text) => {
   };
   axios
         .post(
-          `http://localhost:4000/reply`,
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/reply`,
           data,
           { headers: { Authorization: localStorage.getItem("accessToken") } }
         )
@@ -202,13 +202,13 @@ function deletepost(){
         </div>
         {tweetcontent!=="No-text" && <div className="tweetContent">{tweetcontent}</div>}
         {props.post.gallery[0]? (<img className="uploadedimage" alt="not found" key={props.post.gallery[0]._id} src={props.post.gallery[0].photo}/>):<></>}
-        {props.post.retweetedTweet && <RetweetDisplayBlock key={props.post.retweetedTweet._id}
-              username={props.post.retweetedTweet.authorId.screenName}
-              tagName={props.post.retweetedTweet.authorId.tag}
-              avatar={props.post.retweetedTweet.authorId.profileAvater.url}
-              image={props.post.retweetedTweet.gallery[0]}
-              authorId={props.post.retweetedTweet.authorId._id}
-              content={props.post.retweetedTweet.text}/>}
+        {props.post.retweetedTweet.tweetId && <RetweetDisplayBlock key={props.post.retweetedTweet.tweetId._id}
+              username={props.post.retweetedTweet.tweetId.authorId.screenName}
+              tagName={props.post.retweetedTweet.tweetId.authorId.tag}
+              avatar={props.post.retweetedTweet.tweetId.authorId.profileAvater.url}
+              image={props.post.retweetedTweet.tweetId.gallery[0]}
+              authorId={props.post.retweetedTweet.tweetId.authorId._id}
+              content={props.post.retweetedTweet.tweetId.text}/>}
         {date && <div className="time">
             <p>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}&nbsp;&nbsp;</p>
             <p>{date.getHours()}:{date.getMinutes()}</p>

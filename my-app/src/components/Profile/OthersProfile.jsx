@@ -47,19 +47,22 @@ function OthersProfile(props) {
   const [Location, setLocation] = useState("");
   const [Website, setWebsite] = useState("");
   const [locationVisability, setlocationVisability] = useState(true);
-
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [Followers, setFollowers] = useState(0);
-
   const [banDuration, setBanDuration] = useState("");
   const [banDuration1, setBanDuration1] = useState("");
-console.log(route.pathname);
+  console.log(route.pathname);
   useEffect(() => {
     setUserTweets([]);
     setUserTweetsLiked([]);
     axios
-      .get(`http://localhost:4000/tweet/user/${id}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
+      .get(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.error) {
@@ -69,23 +72,26 @@ console.log(route.pathname);
         }
       });
 
-      axios
-        .get(`http://localhost:4000/profile/likedtweets`, {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.error) {
-            console.log("Error");
-          } else {
-            setUserTweetsLiked(res.data);
-          }
-        });
-
     axios
-      .get(`http://localhost:4000/profile/${id}`, {
+      .get(`http://localhost:4000/profile/likedtweets`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          setUserTweetsLiked(res.data);
+        }
+      });
+
+    axios
+      .get(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.error) {
@@ -103,18 +109,33 @@ console.log(route.pathname);
           setBanDuration(res.data.user.ban);
           setProfilePhoto(res.data.user.profileAvater.url);
           setFollowing(res.data.user.followingcount);
-          setBirthDate(res.data.user.birth.date);
-          setbirthDateVisability(res.data.user.birth.visability);
+          setIsPending(res.data.ispending);
+          if (res.data.user.birth) {
+            setBirthDate(res.data.user.birth.date);
+            setbirthDateVisability(res.data.user.birth.visability);
+          }
           setIsFollowed(res.data.isfollowing);
+          setIsPrivate(res.data.user.isPrivate);
+          console.log(res.data.isfollowing);
+          console.log(
+            "🚀 ~ file: OthersProfile.jsx ~ line 93 ~ .then ~ res.data.isfollowing",
+            res.data.isfollowing
+          );
+
+          console.log(res.data.user.isPrivate);
         }
       });
   }, [id]);
+  console.log(isPrivate);
 
   const passdeletedTweet = (id) => {
     axios
-      .delete(`http://localhost:4000/tweet/${id}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
+      .delete(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.error || !res.data === "success") {
@@ -122,9 +143,12 @@ console.log(route.pathname);
         } else {
           window.location.reload();
           axios
-            .get(`http://localhost:4000/tweet/user/${id}`, {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            })
+            .get(
+              `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+              {
+                headers: { Authorization: localStorage.getItem("accessToken") },
+              }
+            )
             .then((res) => {
               console.log(res);
               if (res.error) {
@@ -148,25 +172,40 @@ console.log(route.pathname);
    * Handling the following request
    */
   function handleButtonClick() {
-    console.log(isFollowed);
-    if (isFollowed) {
-      setFollowModalState(true);
+    if (isPending === false) {
+      console.log(isFollowed);
+      if (isFollowed) {
+        setFollowModalState(true);
+      } else {
+        axios
+          .post(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${id}`,
+            null,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            window.location.reload();
+            // Window.location.reload;
+            // if(res.data.ispending==true)
+            //   setIsPending(true);
+            // else
+            // {
+            //   setFollowers(Followers + 1);
+            //   setIsFollowed(true);
+            //   console.log(res);
+            // }
+          })
+          .catch((err) => {
+            debugger;
+            alert(err.response.data.error);
+            setFollowModalState(true); // 'Oops!'
+          });
+      }
     } else {
-      axios
-        .post(`http://localhost:4000/${userID}/follow/${id}`, null, {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        })
-        .then((res) => {
-          setFollowers(Followers + 1);
-
-          setIsFollowed(true);
-          console.log(res);
-        })
-        .catch((err) => {
-          debugger;
-          alert(err.response.data.error);
-          setFollowModalState(true); // 'Oops!'
-        });
+      handleUnfollowAction();
+      setIsPending(false);
     }
   }
   /**
@@ -174,17 +213,24 @@ console.log(route.pathname);
    */
   function handleUnfollowAction() {
     axios
-      .post(`http://localhost:4000/${userID}/unfollow/${id}`, null, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
+      .post(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${id}`,
+        null,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
       .then((res) => {
-        console.log(res);
-        setFollowers(Followers - 1);
-        setFollowModalState(false);
-        setIsFollowed(false);
+        if (isPending === true) {
+          setIsPending(false);
+        } else {
+          console.log(res);
+          setFollowers(Followers - 1);
+          setFollowModalState(false);
+          setIsFollowed(false);
+        }
       })
       .catch((err) => {
-        debugger;
         alert("already unfollowed");
       }); // 'Oops!';
   }
@@ -204,7 +250,7 @@ console.log(route.pathname);
   function handleBanAction() {
     axios
       .post(
-        `http://localhost:4000/admin/ban/${id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/ban/${id}`,
         { duration: banDuration1 },
         { headers: { Authorization: localStorage.getItem("adminToken") } }
       )
@@ -290,7 +336,15 @@ console.log(route.pathname);
             onClick={handleButtonClick}
             data-testid="Follow-Profile-Button"
           >
-            {isFollowed ? "Unfollow" : "Follow"}
+            {!isPrivate
+              ? isFollowed
+                ? "Unfollow"
+                : "Follow"
+              : isPending
+              ? "Pending"
+              : isFollowed
+              ? "Unfollow"
+              : "Follow"}
           </Button>
 
           <Modal
@@ -416,10 +470,47 @@ console.log(route.pathname);
           website={Website}
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
+          isPrivate={isPrivate}
+          isFollowed={isFollowed}
         />
 
-        {route.pathname == `/Profile/${id}` ? <MyProfileTabs Tweets /> : <></>}
-        {userTweets?.length && route.pathname == `/Profile/${id}` ? (
+        {/* if any user account is public show profile tabs(tweets, likes,...) */}
+        {!isPrivate && route.pathname == `/Profile/${id}` && (
+          <MyProfileTabs Tweets />
+        )}
+
+        {/* if any user account is private do NOT show profile tabs(tweets, likes,...) */}
+        {isPrivate && !isFollowed && route.pathname == `/Profile/${id}` && (
+          <div className="privateAccMessageHeader">
+            These Lars are protected!
+            <div className="privateAccMessageParagraph">
+              Only approved followers can see @{Tag} Tweets. To request access,
+              click Follow.
+            </div>
+          </div>
+        )}
+        {isPrivate && isFollowed && route.pathname == `/Profile/${id}` && (
+          <MyProfileTabs Tweets />
+        )}
+        {/* if any user account public -> show his tweets  
+            OR if user account is private: -> if he follows me -> show his tweets
+                                          -> if he doesn't follows me -> dont show his tweets*/}
+        {!isPrivate && route.pathname == `/Profile/${id}` ? (
+          userTweets?.length ? (
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
+        ) : userTweets?.length &&
+          isFollowed &&
+          route.pathname == `/Profile/${id}` ? (
           userTweets.map((post) => (
             <Post
               post={post}
@@ -431,13 +522,44 @@ console.log(route.pathname);
         ) : (
           <></>
         )}
-        {route.pathname == `/Profile/${id}/likes` ? (
-          <MyProfileTabs Likes />
-        ) : (
-          <></>
+
+        {!isPrivate && route.pathname == `/Profile/${id}/likes` && (
+          <MyProfileTabs Tweets />
         )}
-        {userTweetsLiked?.length && route.pathname == `/Profile/${id}/likes` ? (
-          userTweetsLiked.map((post) => (
+
+        {/* if any user account is private do NOT show profile tabs(tweets, likes,...) */}
+        {isPrivate && !isFollowed && route.pathname == `/Profile/${id}/likes` && (
+          <div className="privateAccMessageHeader">
+            These Lars are protected!
+            <div className="privateAccMessageParagraph">
+              Only approved followers can see @{Tag} Tweets. To request access,
+              click Follow.
+            </div>
+          </div>
+        )}
+        {isPrivate &&
+          isFollowed &&
+          route.pathname == `/Profile/${id}/likes` && <MyProfileTabs Tweets />}
+        {/* if any user account public -> show his tweets  
+            OR if user account is private: -> if he follows me -> show his tweets
+                                          -> if he doesn't follows me -> dont show his tweets*/}
+        {!isPrivate && route.pathname == `/Profile/${id}/likes` ? (
+          userTweets?.length ? (
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
+        ) : userTweets?.length &&
+          isFollowed &&
+          route.pathname == `/Profile/${id}/likes` ? (
+          userTweets.map((post) => (
             <Post
               post={post}
               passdeletedTweet={passdeletedTweet}

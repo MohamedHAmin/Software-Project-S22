@@ -36,7 +36,7 @@ function PrivacySettings(props) {
 
     useEffect(()=>{
     
-        axios.get(`http://localhost:4000/profile/${userId}/me`, 
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`, 
             { headers: {
                 Authorization: localStorage.getItem("accessToken")}
             }
@@ -77,7 +77,7 @@ function PrivacySettings(props) {
             let data={
                 isPrivate:false
             }
-            axios.put(`http://localhost:4000/profile/${userId}`,data, {
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
 
               headers: {
                 Authorization: localStorage.getItem("accessToken")
@@ -109,7 +109,7 @@ function PrivacySettings(props) {
         let data={
             isPrivate:true
         }
-        axios.put(`http://localhost:4000/profile/${userId}`,data, {
+        axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
 
           headers: {
             Authorization: localStorage.getItem("accessToken")

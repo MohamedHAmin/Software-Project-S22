@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSDoc: Source: PrivacySettings.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="styles/prettify-tomorrow.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1 class="page-title">Source: PrivacySettings.jsx</h1>
+
+      <section>
+        <article>
+          <pre
+            class="prettyprint source linenums"
+          ><code>import React, { useState,useEffect } from 'react';
+import SettingsMenuOptions from './SettingsMenuOptions';
+import PeopleIcon from '@mui/icons-material/People';
+import "./Styles/SettingsMenuOptions.css"
+import "./Styles/SettingsMenu.css"
+import Checkbox from '@mui/material/Checkbox';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import "./Styles/SettingsModals.css"
+import { textAlign } from '@mui/system';
+import axios from 'axios'
+
+/**
+ * component to let the user change the privacy settings.(make his lars available for his followers only)
+ * @component
+ * @param {boolean} isDarkMode
+ * @example
+ * props.isDarkMode = true
+ * return (
+ * &lt;div>
+ *    &lt;h1>>Privacy and safety&lt;/h1>
+ *    &lt;p>Select your preferences by notification type.&lt;/p>
+ *    &lt;div>Protect your Lars&lt;/div>
+ *    &lt;Checkbox/>
+ * &lt;/div>
+ * )
+ *  
+ */
+function PrivacySettings(props) {
+     //related to request to back end
+     const userId=localStorage.getItem("userId");
+    //request to back end
+    const [checked, setChecked] = useState();
+
+    useEffect(()=>{
+    
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`, 
+            { headers: {
+                Authorization: localStorage.getItem("accessToken")}
+            }
+        ).then((res)=>{
+            if(res.data.error){
+                
+            }
+            else{
+                setChecked(res.data.isPrivate);
+                //console.log(profileData);
+                //console.log(res.data.isPrivate);
+                console.log(res.data);
+            }
+        })
+        
+    }, [])
+    // const privateAcc={
+    //     privateVal:false
+    //profileData.isPrivate
+    // }
+    
+    
+    const [isClickedAudience,setAudienceActive]=useState(false);
+    
+
+    const [buttonPopup, setButtonPopup] = useState(false);
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+    function clickedAudience(){
+        setAudienceActive(true);
+    }
+   
+
+    const handleChange = (event) => {
+        if(checked===true)
+        {
+            //make request to back end here
+            
+            let data={
+                isPrivate:false
+            }
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+
+              headers: {
+                Authorization: localStorage.getItem("accessToken")
+              }
+      
+            }).then((res)=>{
+                console.log(res);
+                if(res.error){
+                    alert("error nothing changed!")
+                }
+                else{
+                    setChecked(false);
+                    
+                    
+                }
+            })
+        }
+        else{
+            setButtonPopup(true)
+        }
+        
+    };
+    const handleClose = () => setButtonPopup(false);
+    const  handleSubmit =(e) =>{
+        e.preventDefault()
+        
+        handleClose()
+        //make request to backend
+        let data={
+            isPrivate:true
+        }
+        axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+
+          headers: {
+            Authorization: localStorage.getItem("accessToken")
+          }
+  
+        }).then((res)=>{
+            console.log(res);
+            if(res.error){
+                alert("error nothing changed!")
+            }
+            else{
+                
+                setChecked(true);
+                
+            }
+        })
+    }
+    return ( 
+        &lt;div className="settingsSubMenu">
+            {/* if nothing clicked 1*/}
+            {isClickedAudience===false &amp;&amp;(&lt;h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Privacy and safety&lt;/h1>)}
+            {isClickedAudience===false &amp;&amp;(&lt;p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage what information you see and share on Larry.&lt;/p>)}
+            {isClickedAudience===false &amp;&amp;(&lt;h2 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" } style={{marginTop:25}}>Your Larry activity&lt;/h2>)}
+            {isClickedAudience===false &amp;&amp;(&lt;div onClick={clickedAudience} >&lt;SettingsMenuOptions id="11" darkMode={props.isDarkMode} active={isClickedAudience} Icon={PeopleIcon} text="Audience" subtext="Manage what information you allow other people on Twitter to see." isSubtextExist={true}/>&lt;/div>)}
+            {/* Audience clicked */}
+            {isClickedAudience===true &amp;&amp;(&lt;h2 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Audience&lt;/h2>)}
+            {isClickedAudience===true &amp;&amp;(&lt;p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage what information you allow other people on Larry to see.&lt;/p>)}
+            {isClickedAudience===true &amp;&amp;(
+                &lt;div>
+                    &lt;div style={{display: 'flex',alignItems: 'center'}}>
+                        &lt;div onClick={handleChange} className={!props.isDarkMode? "settingsMenuOptionsLight":"settingsMenuOptionsDark" }>
+                            &lt;div  style={{marginLeft: 10, fontWeight: 500, fontSize:18, display:'center'}}>Protect your Lars&lt;/div>
+                            
+                        &lt;/div>
+                        &lt;div className={!props.isDarkMode?`arrowIconLight`:`arrowIconDark `} >
+                            &lt;Checkbox {...label}
+                            data-testid="checkbox1"
+                            onChange={handleChange}
+                            checked={checked}
+                            />
+                        &lt;/div>
+                        &lt;Modal 
+                        open={buttonPopup}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                        keepMounted
+                        >
+                          &lt;form className={!props.isDarkMode? 'protectYourLarsLight':'protectYourLarsDark'} onSubmit={handleSubmit}>
+                                &lt;Typography className={!props.isDarkMode? "settingsModalHeaderLight":"settingsModalHeaderDark" } id="modal-modal-title" variant="h6" component="h2" >
+                                Protect your Lars?
+                                &lt;/Typography>
+                                &lt;Typography className={!props.isDarkMode? "settingsModalParagraphLight":"settingsModalParagraphDark" } id="modal-modal-description" sx={{ mt: 2 }}>
+                                This will make them visible only to your Larry followers. 
+                                &lt;/Typography>
+                                &lt;div style={{textAlign:"center"}}>
+                                &lt;Button 
+                                type='submit'
+                                variant="contained" 
+                                className="buttonSettingsModal" 
+                                style={{marginTop:24, width:200}}
+                                >
+                                Protect
+                                &lt;/Button>
+                                &lt;/div>
+                                &lt;div style={{ textAlign:"center"}}>
+                                &lt;Button
+                                style={{marginTop:7, width:200}}
+                                onClick={handleClose}
+                                className="profileCloseContainerButton"
+                                >
+                                Cancel
+                                &lt;/Button>
+                                &lt;/div>
+                          &lt;/form>
+                        &lt;/Modal>
+                    &lt;/div>
+                    &lt;p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>When selected, your Lars and other account information are only visible to people who follow you.&lt;a className='App-link' href="https://help.twitter.com/en/safety-and-security/public-and-protected-tweets">Learn more&lt;/a>&lt;/p>
+                &lt;/div>
+            )}
+        &lt;/div>
+     );
+}
+
+export default PrivacySettings;</code></pre>
+        </article>
+      </section>
+    </div>
+
+    <nav>
+      <h2><a href="index.html">Home</a></h2>
+      <h3>Global</h3>
+      <ul>
+        <li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li>
+        <li>
+          <a href="global.html#AccountInformationS">AccountInformationS</a>
+        </li>
+        <li><a href="global.html#AccountSettings">AccountSettings</a></li>
+        <li><a href="global.html#blue">blue</a></li>
+        <li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li>
+        <li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li>
+        <li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li>
+        <li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li>
+        <li>
+          <a href="global.html#NotificationSettings">NotificationSettings</a>
+        </li>
+        <li><a href="global.html#PrivacySettings">PrivacySettings</a></li>
+        <li><a href="global.html#SettingsMenu">SettingsMenu</a></li>
+        <li>
+          <a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a>
+        </li>
+        <li><a href="global.html#SettingsPage">SettingsPage</a></li>
+        <li><a href="global.html#UpdatePassword">UpdatePassword</a></li>
+      </ul>
+    </nav>
+
+    <br class="clear" />
+
+    <footer>
+      Documentation generated by
+      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26
+      2022 23:52:37 GMT+0200 (Eastern European Standard Time)
+    </footer>
+
+    <script>
+      prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

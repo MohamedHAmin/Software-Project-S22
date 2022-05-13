@@ -48,7 +48,7 @@ function MyProfile(props) {
   useEffect(() => {
     setUserTweets([]);
     axios
-      .get(`http://localhost:4000/tweet/user/${id}`, {
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -61,7 +61,7 @@ function MyProfile(props) {
       });
 
     axios
-      .get(`http://localhost:4000/profile/${id}/me`, {
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -89,7 +89,7 @@ function MyProfile(props) {
 
   const passdeletedTweet = (id) => {
     axios
-      .delete(`http://localhost:4000/tweet/${id}`, {
+      .delete(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${id}`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -99,7 +99,7 @@ function MyProfile(props) {
         } else {
           window.location.reload();
           axios
-            .get(`http://localhost:4000/tweet/user/${id}`, {
+            .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`, {
               headers: { Authorization: localStorage.getItem("accessToken") },
             })
             .then((res) => {

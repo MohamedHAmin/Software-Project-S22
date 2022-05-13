@@ -36,6 +36,8 @@ function ProfileInfo({
   birthday,
   birthdayVisability,
   locationVisability,
+  isPrivate,
+  isFollowed,
 }) {
   let { id } = useParams();
   const joinDate = new Date(date);
@@ -86,14 +88,35 @@ function ProfileInfo({
         <p></p>
       </div>
 
-      <div className="followInfo">
-        <NavLink to={`/Profile/${id}/Following`}>
-          <span>{following} Following </span>
-        </NavLink>
-        <NavLink to={`/Profile/${id}/Followers`}>
-          <span data-testid="Followers-Profile">{followers} Followers</span>
-        </NavLink>
-      </div>
+      
+        {isPrivate?(isFollowed?(
+          <div className="followInfo">
+            <NavLink to={`/Profile/${id}/Following`}>
+            <span>{following} Following </span>
+            </NavLink>
+            <NavLink to={`/Profile/${id}/Followers`}>
+            <span data-testid="Followers-Profile">{followers} Followers</span>
+            </NavLink>
+          </div>
+
+        ):(
+          <div className="followInfo">
+            <span>{following} Following </span>
+            <span data-testid="Followers-Profile">{followers} Followers</span>
+          </div>
+        )) 
+        :(
+          <div className="followInfo">
+              <NavLink to={`/Profile/${id}/Following`}>
+              <span>{following} Following </span>
+              </NavLink>
+              <NavLink to={`/Profile/${id}/Followers`}>
+              <span data-testid="Followers-Profile">{followers} Followers</span>
+              </NavLink>
+         </div>
+        )}
+        
+      
     </div>
   );
 }

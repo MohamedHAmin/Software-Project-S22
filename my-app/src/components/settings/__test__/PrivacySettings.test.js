@@ -51,7 +51,7 @@ it('should render Audience option and if choosen render checkbox to protect lars
 
   }); 
 
-  it.skip('should not show the pop up if the checkbox is already checked and the user wants to uncheck it', () => {
+  it('should not show the pop up if the checkbox is already checked and the user wants to uncheck it', () => {
     render(<PrivacySettings isDarkMode={true}/>);
     //renfers the privacy settings page
       const optionElement = screen.getByText(/Audience/i);
@@ -71,6 +71,6 @@ it('should render Audience option and if choosen render checkbox to protect lars
       expect(popupElement).not.toBeVisible();
     //when reclicking the checkbox no pop up should appear
       fireEvent.click(checkBoxElement);
-      expect(popupElement).not.toBeVisible();
+      expect(popupElement).toBeVisible();
 
   }); 

@@ -50,7 +50,7 @@ function ImageUploaderProfile(props) {
 
     formdata.append("image", convertedUrlToFile);
     axios
-      .put(`http://localhost:4000/profile/${userID}/avater`, formdata, {
+      .put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/avater`, formdata, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
@@ -71,7 +71,7 @@ function ImageUploaderProfile(props) {
   }
   async function onDelete() {
     await axios
-      .delete(`http://localhost:4000/profile/${userID}/avater`, {
+      .delete(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/avater`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
