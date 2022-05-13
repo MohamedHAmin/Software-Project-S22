@@ -31,11 +31,10 @@ function OthersProfile(props) {
   let userID = localStorage.getItem("userId");
   let isAdmin = localStorage.getItem("adminToken");
   const [joinedDate, setJoinedDate] = useState("");
-  const [buttonPopup, setButtonPopup] = useState(false);
+
   const [followModalState, setFollowModalState] = useState(false);
   const [optionsModalState, setOptionsModalState] = useState(false);
   const [userTweets, setUserTweets] = useState([]);
-  const [userTweetsLiked, setUserTweetsLiked] = useState([]);
   const [coverImage, setCoverImage] = useState("");
   const [Tag, setTag] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -55,35 +54,63 @@ function OthersProfile(props) {
   console.log(route.pathname);
   useEffect(() => {
     setUserTweets([]);
-    setUserTweetsLiked([]);
-    axios
-      .get(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.error) {
-          console.log("Error");
-        } else {
-          setUserTweets(res.data);
-        }
-      });
 
-    axios
-      .get(`http://localhost:4000/profile/likedtweets`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.error) {
-          console.log("Error");
-        } else {
-          setUserTweetsLiked(res.data);
-        }
-      });
+    {
+      route.pathname == `/Profile/${id}` &&
+        axios
+          .get(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setUserTweets(res.data);
+            }
+          });
+    }
+
+    {
+      route.pathname == `/Profile/${id}/with_replies` &&
+        axios
+          .get(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api//profile/replies/${id}`,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setUserTweets(res.data);
+            }
+          });
+    }
+
+    {
+      route.pathname == `/Profile/${id}/likes` &&
+        axios
+          .get(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/likedtweets/${id}`,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setUserTweets(res.data);
+            }
+          });
+    }
 
     axios
       .get(
@@ -116,17 +143,9 @@ function OthersProfile(props) {
           }
           setIsFollowed(res.data.isfollowing);
           setIsPrivate(res.data.user.isPrivate);
-          console.log(res.data.isfollowing);
-          console.log(
-            "🚀 ~ file: OthersProfile.jsx ~ line 93 ~ .then ~ res.data.isfollowing",
-            res.data.isfollowing
-          );
-
-          console.log(res.data.user.isPrivate);
         }
       });
-  }, [id]);
-  console.log(isPrivate);
+  }, [route.pathname]);
 
   const passdeletedTweet = (id) => {
     axios
@@ -474,13 +493,19 @@ function OthersProfile(props) {
           isFollowed={isFollowed}
         />
 
-        {/* if any user account is public show profile tabs(tweets, likes,...) */}
-        {!isPrivate && route.pathname == `/Profile/${id}` && (
+        {/*Tweets First Tab */}
+        {!isPrivate && route.pathname == `/Profile/${id}` ? (
           <MyProfileTabs Tweets />
+        ) : (
+          <></>
         )}
-
-        {/* if any user account is private do NOT show profile tabs(tweets, likes,...) */}
-        {isPrivate && !isFollowed && route.pathname == `/Profile/${id}` && (
+        {isPrivate && isFollowed && route.pathname == `/Profile/${id}` ? (
+          <MyProfileTabs Tweets />
+        ) : (
+          <></>
+        )}
+        {/* if any user account is private do NOT show Tweets */}
+        {isPrivate && !isFollowed && route.pathname == `/Profile/${id}` ? (
           <div className="privateAccMessageHeader">
             These Lars are protected!
             <div className="privateAccMessageParagraph">
@@ -488,9 +513,8 @@ function OthersProfile(props) {
               click Follow.
             </div>
           </div>
-        )}
-        {isPrivate && isFollowed && route.pathname == `/Profile/${id}` && (
-          <MyProfileTabs Tweets />
+        ) : (
+          <></>
         )}
         {/* if any user account public -> show his tweets  
             OR if user account is private: -> if he follows me -> show his tweets
@@ -508,27 +532,40 @@ function OthersProfile(props) {
           ) : (
             <></>
           )
-        ) : userTweets?.length &&
-          isFollowed &&
+        ) : userTweets?.length && isFollowed ? (
           route.pathname == `/Profile/${id}` ? (
-          userTweets.map((post) => (
-            <Post
-              post={post}
-              passdeletedTweet={passdeletedTweet}
-              isAdmin={props.isAdmin}
-              isPost={true}
-            />
-          ))
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
         ) : (
           <></>
         )}
 
-        {!isPrivate && route.pathname == `/Profile/${id}/likes` && (
-          <MyProfileTabs Tweets />
+        {/*Tweets Second Tab */}
+        {!isPrivate && route.pathname == `/Profile/${id}/with_replies` ? (
+          <MyProfileTabs Replies />
+        ) : (
+          <></>
         )}
-
-        {/* if any user account is private do NOT show profile tabs(tweets, likes,...) */}
-        {isPrivate && !isFollowed && route.pathname == `/Profile/${id}/likes` && (
+        {isPrivate &&
+        isFollowed &&
+        route.pathname == `/Profile/${id}/with_replies` ? (
+          <MyProfileTabs Replies />
+        ) : (
+          <></>
+        )}
+        {/* if any user account is private do NOT show Tweets */}
+        {isPrivate &&
+        !isFollowed &&
+        route.pathname == `/Profile/${id}/with_replies` ? (
           <div className="privateAccMessageHeader">
             These Lars are protected!
             <div className="privateAccMessageParagraph">
@@ -536,10 +573,67 @@ function OthersProfile(props) {
               click Follow.
             </div>
           </div>
+        ) : (
+          <></>
         )}
+        {/* if any user account public -> show his tweets  
+            OR if user account is private: -> if he follows me -> show his tweets
+                                          -> if he doesn't follows me -> dont show his tweets*/}
+        {!isPrivate && route.pathname == `/Profile/${id}/with_replies` ? (
+          userTweets?.length ? (
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
+        ) : userTweets?.length && isFollowed ? (
+          route.pathname == `/Profile/${id}/with_replies` ? (
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
+        ) : (
+          <></>
+        )}
+
+        {/*Tweets Second Tab */}
+        {!isPrivate && route.pathname == `/Profile/${id}/likes` ? (
+          <MyProfileTabs Likes />
+        ) : (
+          <></>
+        )}
+        {isPrivate && isFollowed && route.pathname == `/Profile/${id}/likes` ? (
+          <MyProfileTabs Likes />
+        ) : (
+          <></>
+        )}
+        {/* if any user account is private do NOT show Tweets */}
         {isPrivate &&
-          isFollowed &&
-          route.pathname == `/Profile/${id}/likes` && <MyProfileTabs Tweets />}
+        !isFollowed &&
+        route.pathname == `/Profile/${id}/likes` ? (
+          <div className="privateAccMessageHeader">
+            These Lars are protected!
+            <div className="privateAccMessageParagraph">
+              Only approved followers can see @{Tag} Tweets. To request access,
+              click Follow.
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         {/* if any user account public -> show his tweets  
             OR if user account is private: -> if he follows me -> show his tweets
                                           -> if he doesn't follows me -> dont show his tweets*/}
@@ -556,17 +650,19 @@ function OthersProfile(props) {
           ) : (
             <></>
           )
-        ) : userTweets?.length &&
-          isFollowed &&
+        ) : userTweets?.length && isFollowed ? (
           route.pathname == `/Profile/${id}/likes` ? (
-          userTweets.map((post) => (
-            <Post
-              post={post}
-              passdeletedTweet={passdeletedTweet}
-              isAdmin={props.isAdmin}
-              isPost={true}
-            />
-          ))
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
         ) : (
           <></>
         )}

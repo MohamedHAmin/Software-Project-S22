@@ -28,7 +28,6 @@ function MyProfile(props) {
   const [joinedDate, setJoinedDate] = useState("");
   const [buttonPopup, setButtonPopup] = useState(false);
   const [userTweets, setUserTweets] = useState([]);
-  const [userTweetsLiked, setUserTweetsLiked] = useState([]);
   const [coverImage, setCoverImage] = useState("");
   const [Tag, setTag] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -47,23 +46,70 @@ function MyProfile(props) {
 
   useEffect(() => {
     setUserTweets([]);
-    axios
-      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.error) {
-          console.log("Error");
-        } else {
-          setUserTweets(res.data);
-        }
-      });
+    {
+      route.pathname == `/Profile/${id}` &&
+        axios
+          .get(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setUserTweets(res.data);
+            }
+          });
+    }
+
+    {
+      route.pathname == `/Profile/${id}/with_replies` &&
+        axios
+          .get(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api//profile/replies/${id}`,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setUserTweets(res.data);
+            }
+          });
+    }
+
+    {
+      route.pathname == `/Profile/${id}/likes` &&
+        axios
+          .get(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/likedtweets/${id}`,
+            {
+              headers: { Authorization: localStorage.getItem("accessToken") },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.error) {
+              console.log("Error");
+            } else {
+              setUserTweets(res.data);
+            }
+          });
+    }
 
     axios
-      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
+      .get(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.error) {
@@ -85,13 +131,16 @@ function MyProfile(props) {
           setbirthDateVisability(res.data.birth.visability);
         }
       });
-  }, [id]);
+  }, [route.pathname]);
 
   const passdeletedTweet = (id) => {
     axios
-      .delete(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${id}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      })
+      .delete(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.error || !res.data === "success") {
@@ -99,9 +148,12 @@ function MyProfile(props) {
         } else {
           window.location.reload();
           axios
-            .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`, {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            })
+            .get(
+              `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+              {
+                headers: { Authorization: localStorage.getItem("accessToken") },
+              }
+            )
             .then((res) => {
               console.log(res);
               if (res.error) {
@@ -192,6 +244,8 @@ function MyProfile(props) {
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
         />
+
+        {/*Tweets First Tab */}
         {route.pathname == `/Profile/${id}` ? <MyProfileTabs Tweets /> : <></>}
         {userTweets?.length && route.pathname == `/Profile/${id}` ? (
           userTweets.map((post) => (
@@ -205,14 +259,35 @@ function MyProfile(props) {
         ) : (
           <></>
         )}
-        
+
+        {/*Tweets Second Tab */}
+        {route.pathname == `/Profile/${id}/with_replies` ? (
+          <MyProfileTabs Replies />
+        ) : (
+          <></>
+        )}
+        {userTweets?.length &&
+        route.pathname == `/Profile/${id}/with_replies` ? (
+          userTweets.map((post) => (
+            <Post
+              post={post}
+              passdeletedTweet={passdeletedTweet}
+              isAdmin={props.isAdmin}
+              isPost={true}
+            />
+          ))
+        ) : (
+          <></>
+        )}
+
+        {/*Likes Fourth Tab */}
         {route.pathname == `/Profile/${id}/likes` ? (
           <MyProfileTabs Likes />
         ) : (
           <></>
         )}
-        {userTweetsLiked?.length && route.pathname == `/Profile/${id}/likes` ? (
-          userTweetsLiked.map((post) => (
+        {userTweets?.length && route.pathname == `/Profile/${id}/likes` ? (
+          userTweets.map((post) => (
             <Post
               post={post}
               passdeletedTweet={passdeletedTweet}
