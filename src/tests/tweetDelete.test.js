@@ -30,8 +30,8 @@ test('Check Admin Delete Authority', async ()=>{
     const res=await request(app).delete('/tweet/'+tweet1._id)
     .set('Authorization','Bearer '+admintoken.token)
     .send({})
-    //.expect(200)
-    //expect(res.text).toEqual("Success")
+    .expect(200)
+    expect(res.body.Status).toMatch("Success")
 })
 test('Check User Delete Authority', async ()=>{
     const user1=await User.create({
@@ -74,7 +74,7 @@ test('Check Wrong ID', async ()=>{
     .set('Authorization','Bearer '+admintoken.token)
     .send({})
     .expect(400)
-   // expect(res.text).toMatch("CastError")
+    expect(res.text).toMatch("CastError")
 })
 test('Check Non-existing ID', async ()=>{
     const user1=await User.create({
