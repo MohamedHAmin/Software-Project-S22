@@ -16,6 +16,7 @@ import axios from "axios";
 import Post from "../Homepage/Post";
 import { FallingLines } from "react-loader-spinner";
 import { Web } from "@material-ui/icons";
+import { useLocation } from "react-router-dom";
 /**
  *
  * @param {props} props Getting if it's admin
@@ -24,6 +25,7 @@ import { Web } from "@material-ui/icons";
 function OthersProfile(props) {
   const navigate = useNavigate();
   let { id } = useParams();
+  const route = useLocation();
   const [isFollowed, setIsFollowed] = useState(false);
 
   let userID = localStorage.getItem("userId");
@@ -33,6 +35,7 @@ function OthersProfile(props) {
   const [followModalState, setFollowModalState] = useState(false);
   const [optionsModalState, setOptionsModalState] = useState(false);
   const [userTweets, setUserTweets] = useState([]);
+  const [userTweetsLiked, setUserTweetsLiked] = useState([]);
   const [coverImage, setCoverImage] = useState("");
   const [Tag, setTag] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -49,9 +52,10 @@ function OthersProfile(props) {
 
   const [banDuration, setBanDuration] = useState("");
   const [banDuration1, setBanDuration1] = useState("");
-
+console.log(route.pathname);
   useEffect(() => {
     setUserTweets([]);
+    setUserTweetsLiked([]);
     axios
       .get(`http://localhost:4000/tweet/user/${id}`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
@@ -64,6 +68,19 @@ function OthersProfile(props) {
           setUserTweets(res.data);
         }
       });
+
+      axios
+        .get(`http://localhost:4000/profile/likedtweets`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweetsLiked(res.data);
+          }
+        });
 
     axios
       .get(`http://localhost:4000/profile/${id}`, {
@@ -400,9 +417,27 @@ function OthersProfile(props) {
           birthday={birthDate}
           birthdayVisability={birthDateVisability}
         />
-        <MyProfileTabs Tweets/>
-        {userTweets?.length ? (
+
+        {route.pathname == `/Profile/${id}` ? <MyProfileTabs Tweets /> : <></>}
+        {userTweets?.length && route.pathname == `/Profile/${id}` ? (
           userTweets.map((post) => (
+            <Post
+              post={post}
+              passdeletedTweet={passdeletedTweet}
+              isAdmin={props.isAdmin}
+              isPost={true}
+            />
+          ))
+        ) : (
+          <></>
+        )}
+        {route.pathname == `/Profile/${id}/likes` ? (
+          <MyProfileTabs Likes />
+        ) : (
+          <></>
+        )}
+        {userTweetsLiked?.length && route.pathname == `/Profile/${id}/likes` ? (
+          userTweetsLiked.map((post) => (
             <Post
               post={post}
               passdeletedTweet={passdeletedTweet}
