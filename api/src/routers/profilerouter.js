@@ -3,27 +3,18 @@ const User = require("../models/User");
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 const auth = require("../middleware/auth");
+const PrivateRequest = require("../models/PrivateRequest");
 const bcrypt = require("bcryptjs");
+const { request } = require("express");
 
 const router = new express.Router();
 
 router.get("/:id", auth("any"), async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
-
     if (!user) {
       throw new Error("no user found");
     }
-    if (user.location.visability === false) {
-      user.Location = undefined;
-    }
-    if (user.birth.visability === false) {
-      user.birth = undefined;
-    }
-    user.ban = undefined;
-    user.email = undefined;
-    user.Notificationssetting = undefined;
-
     const isfollowed = req.user.following.some(
       (followed) => followed.followingId.toString() == user._id.toString()
     );
@@ -33,6 +24,46 @@ router.get("/:id", auth("any"), async (req, res) => {
     } else {
       isfollowing = false;
     }
+    if (user.location.visability === false) {
+      user.location = undefined;
+    }
+    if (user.birth.visability === false) {
+      user.birth = undefined;
+    }
+    user.ban = undefined;
+    user.email = undefined;
+    user.Notificationssetting = undefined;
+
+    if (user.isPrivate === true) {
+      user.birth=null;
+      user.location="";
+      user.banner.url=null;
+      user.Biography="";
+      user.phoneNumber = 0;
+      user.verified = null;
+      user.website = "";
+      user.darkMode = undefined;
+
+      let privateRequest = await PrivateRequest.find({
+        requestUser: req.user._id,
+      });
+
+      privateRequest = privateRequest.map((request) => {
+        return request.userId.toString();
+      });
+
+      if (privateRequest.includes(req.params.id)) {
+        const ispending = true;
+        return res.status(200).send({ ispending, user,isfollowing });
+      }else{
+        const ispending = false;
+        return res.status(200).send({ ispending, user,isfollowing });
+      }
+    }
+    //*if you send private request
+  
+
+
 
     res.send({ user, isfollowing: isfollowing });
   } catch (e) {
@@ -66,7 +97,6 @@ router.put("/:id/password", auth("user"), async (req, res) => {
 });
 router.put("/:id", auth("user"), async (req, res) => {
   try {
-  
     let change = false;
     const updates = Object.keys(req.body);
     if (req.body.birth) {
@@ -74,8 +104,8 @@ router.put("/:id", auth("user"), async (req, res) => {
       change = true;
       delete updates.birth;
     }
-    console.log('first')
-    if (req.body.location &&( req.body.location.visability!==undefined)) {
+    console.log("first");
+    if (req.body.location && req.body.location.visability !== undefined) {
       req.user.location.visability = req.body.location.visability;
       change = true;
     }
@@ -96,13 +126,12 @@ router.put("/:id", auth("user"), async (req, res) => {
       "phoneNumber",
       "darkMode",
     ];
-  
-    const isvalidoperation = updates.every((update) => {
-       return allowtoupdate.includes(update);
-    });
-   
 
-    if (!isvalidoperation&&!change) {
+    const isvalidoperation = updates.every((update) => {
+      return allowtoupdate.includes(update);
+    });
+
+    if (!isvalidoperation && !change) {
       throw new Error("you can not change this data");
     }
 
@@ -120,16 +149,19 @@ router.put("/:id", auth("user"), async (req, res) => {
 });
 router.put(
   "/:id/avater",
-  auth("any"),
   upload.single("image"),
   async (req, res) => {
     try {
+      const user=await User.findOne({ _id:req.params.id})
+      if (!user) {
+        throw new Error("no user found");
+      }
       if (!req.file) {
         throw new Error("no imge found");
       }
       // Delete image from cloudinary
-      if (req.user.profileAvater.cloudnaryId) {
-        await cloudinary.uploader.destroy(req.user.profileAvater.cloudnaryId);
+      if (user.profileAvater.cloudnaryId) {
+        await cloudinary.uploader.destroy(user.profileAvater.cloudnaryId);
       }
 
       // Upload image to cloudinary
@@ -137,11 +169,11 @@ router.put(
       if (!result.secure_url || !result.public_id) {
         throw new Error("can not upload");
       }
-      req.user.profileAvater.url = result.secure_url;
-      req.user.profileAvater.cloudnaryId = result.public_id;
+      user.profileAvater.url = result.secure_url;
+      user.profileAvater.cloudnaryId = result.public_id;
 
-      await req.user.save();
-      res.json(req.user);
+      await user.save();
+      res.send(user);
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }
@@ -163,16 +195,19 @@ router.delete("/:id/avater", auth("any"), async (req, res) => {
 });
 router.put(
   "/:id/banner",
-  auth("any"),
   upload.single("image"),
   async (req, res) => {
     try {
+      const user=await User.findOne({ _id:req.params.id})
+      if (!user) {
+        throw new Error("no user found");
+      }
       if (!req.file) {
         throw new Error("no imge found");
       }
       // Delete image from cloudinary
-      if (req.user.banner.cloudnaryId) {
-        await cloudinary.uploader.destroy(req.user.banner.cloudnaryId);
+      if (user.banner.cloudnaryId) {
+        await cloudinary.uploader.destroy(user.banner.cloudnaryId);
       }
 
       // Upload image to cloudinary
@@ -180,11 +215,11 @@ router.put(
       if (!result.secure_url || !result.public_id) {
         throw new Error("can not upload");
       }
-      req.user.banner.url = result.secure_url;
-      req.user.banner.cloudnaryId = result.public_id;
+      user.banner.url = result.secure_url;
+      user.banner.cloudnaryId = result.public_id;
 
-      await req.user.save();
-      res.json(req.user);
+      await user.save();
+      res.send(user);
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }

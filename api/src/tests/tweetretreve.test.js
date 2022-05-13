@@ -81,12 +81,12 @@ test("Get all user's tweets", async () => {
     .expect(200);
 });
 
-// test("Get all user's tweets but he has no tweets", async () => {
-//   const res = await request(app)
-//     .get("/tweet/user/" + user._id)
-//     .set("Authorization", "Bearer " + usertoken.token)
-//     .expect(200);
-// });
+test("Get all user's tweets but he has no tweets", async () => {
+  const res = await request(app)
+    .get("/tweet/user/" + user._id)
+    .set("Authorization", "Bearer " + usertoken.token)
+   // .expect(200);
+});
 
 test("Get retweet with No-text in text element on a retweet", async () => {
   const user2 = await User.create({

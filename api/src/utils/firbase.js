@@ -10,7 +10,7 @@ const User=require('../models/User')
 
 
 const sendNotification = async (user, body,topic,type = "user") => {
-console.log("🚀 ~ file: firbase.js ~ line 9 ~ sendNotification ~ user", user)
+//console.log("🚀 ~ file: firbase.js ~ line 9 ~ sendNotification ~ user", user)
    fcmtoken=user;
    if (type === "newtweet"){ 
     await user.populate({
@@ -44,9 +44,9 @@ console.log("🚀 ~ file: firbase.js ~ line 9 ~ sendNotification ~ user", user)
         fcmtoken=uniqueArray.filter(t=>t!=null)
 
     } 
-    console.log("🚀 ~ file: firbase.js ~ line 24 ~ fcm.subscribeToTopic ~ fcmtoken", fcmtoken)
-    console.log("🚀 ~ file: firbase.js ~ line 25 ~ fcm.subscribeToTopic ~ topic", topic.toString())
-    topic=topic.toString()
+    console.log("🚀 ~ file: firbase.js ~ line 47 ~ fcm.subscribeToTopic ~ fcmtoken", fcmtoken)
+    console.log("🚀 ~ file: firbase.js ~ line 48 ~ fcm.subscribeToTopic ~ topic", topic)
+  
     if(fcmtoken.length===1){
       console.log("🚀 ~ file: firbase.js ~ line 51 ~ sendNotification ~ fcmtoken.length", fcmtoken.length)
       var message2 = {
@@ -62,29 +62,31 @@ console.log("🚀 ~ file: firbase.js ~ line 9 ~ sendNotification ~ user", user)
     
       fcm.send(message2, function (err, response) {
         if (err) {
-          console.log("🚀 ~ file: firbase.js ~ line 64 ~ err", err)
-          console.log("Something has gone wrong!");
+         // console.log("🚀 ~ file: firbase.js ~ line 64 ~ err", err)
+        //  console.log("Something has gone wrong!");
         } else {
-          console.log("Successfully sent with response: ", response);
+          //console.log("Successfully sent with response: ", response);
         }
        
       });
       return
     }
-  fcm.subscribeToTopic(fcmtoken,'l', (err, res) => {
-    console.log(
+    fcmtoken=fcmtoken.map(token=>token.toString())
+
+  fcm.subscribeToTopic(fcmtoken,topic, (err, res) => {
+   /*  console.log(
       "🚀 ~ file: firbase.js ~ line 9 ~ fcm.subscribeToTopic ~ res",
       res
-    );
-    console.log(
+    ); 
+     console.log(
       "🚀 ~ file: firbase.js ~ line 9 ~ fcm.subscribeToTopic ~ err",
       err
-    );
+    );  */
   }); 
 
   var message = {
     //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-    to: "/topics/" + 'l',
+    to: "/topics/" + topic,
     //collapse_key: 'your_collapse_key',
 
     notification: {
@@ -95,15 +97,15 @@ console.log("🚀 ~ file: firbase.js ~ line 9 ~ sendNotification ~ user", user)
 
   fcm.send(message, function (err, response) {
     if (err) {
-      console.log("Something has gone wrong!");
+    // console.log("Something has gone wrong!");
     } else {
-      console.log("Successfully sent with response: ", response);
+     // console.log("Successfully sent with response: ", response);
     }
-    fcm.unsubscribeToTopic(fcmtoken,'l', (err, res) => {
-      console.log(
+    fcm.unsubscribeToTopic(fcmtoken,topic, (err, res) => {
+   /*     console.log(
         "🚀 ~ file: firbase.js ~ line 37 ~ fcm.unsubscribeToTopic ~ res",
         res
-      );
+      );  */
     });
   });
 };

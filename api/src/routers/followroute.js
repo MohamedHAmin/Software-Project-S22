@@ -14,6 +14,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     if (req.params.id.toString() == req.user._id.toString()) {
       throw new Error("you can not follow your self ");
     }
+
     //find user
     const user = await User.findById(req.params.id);
     //if no user
@@ -30,20 +31,47 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     }
     //*check private
     if (user.isPrivate) {
-      const privateRequest = await PrivateRequest.find({
+      const private3 = await PrivateRequest.find({
         requestUser: req.user._id,
         userId: user._id,
       });
-      if (privateRequest.length === 0) {
+    
+      if (private3.length === 1) {
         throw new Error("you already request the PrivateRequest");
       }
-      const PrivateRequest = new PrivateRequest({
+      console.log('first')
+      const private2 = new PrivateRequest({
         requestUser: req.user._id,
         userId: user._id,
       });
+      await private2.save()
+       
+    const text = req.user.screenName+" sent you a follow request";
+    const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
+    notifications.save();
+    const tokens = await Token.find({ ownerId: req.params.id });
+    console.log(
+      "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
+      tokens
+    );
+    if (tokens) {
+      let fcmtokens = tokens.map((token) => token.fcmToken);
+      var uniqueArray = [...new Set(fcmtokens)];
+      uniqueArray = uniqueArray.filter((t) => t != null);
+      console.log(
+        "🚀 ~ file: followroute.js ~ line 46 ~ router.post ~ uniqueArray",
+        uniqueArray
+      );
+      console.log(
+        "🚀 ~ file: followroute.js ~ line 87 ~ router.post ~ text",
+        text
+      );
 
-      return res.send({ sccuss: true });
+      notifiy(uniqueArray, text, req.user.tag);
     }
+      return res.send({ ispending: true });
+    }
+    //return res.send({ sccuss: true });
     //*add to user following
     req.user.following = req.user.following.concat({ followingId: user._id });
     req.user.followingcount++;
@@ -51,7 +79,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
     user.followercount++;
     await user.save();
     if (user.Notificationssetting.newfollow) {
-      const text = req.user.screenName+" start follow you";
+      const text = req.user.screenName+" started following you";
       const notifications = new Notification({ userId: req.user._id, text,notifiedUId:req.params.id });
       notifications.save();
       const tokens = await Token.find({ ownerId: req.params.id });
@@ -72,7 +100,7 @@ router.post("/user/:userId/follow/:id", auth("user"), async (req, res) => {
           text
         );
 
-        notifiy(uniqueArray, text, req.user._id.toString());
+        notifiy(uniqueArray, text, req.user.tag);
       }
     }
     res.send({ sccuss: true });
@@ -86,7 +114,7 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
     const privateRequest = await PrivateRequest.find({
       userId: req.user._id,
     }).populate({
-      path: "userId",
+      path: "requestUser",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",})
     res.send(privateRequest);
@@ -97,16 +125,33 @@ router.get("/privateRequest", auth("any"), async (req, res) => {
 })
 router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
   try {
+    
     const user = await User.findById(req.params.id);
-
-    const privateRequest = await PrivateRequest.findByIdAndDelete({
-      userId: req.user._id,
-      requestUser:req.params.id
-    });
-    if(!privateRequest){
+    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ user", user)
+    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ req.params.id", req.params.id)
+    if(!user){
       throw new Error("no user found");
     }
-      user.following = user.following.concat({ followingId: user._id });
+    console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
+
+    console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
+    const privateRequest2 = await PrivateRequest.find({
+      userId: req.user._id.toString(),
+      requestUser:req.params.id
+    });
+    console.log("🚀 ~ file: followroute.js ~ line 142 ~ router.get ~ privateRequest2", privateRequest2)
+    const privateRequest = await PrivateRequest.deleteMany({
+      userId: req.user._id.toString(),
+      requestUser:req.params.id
+    });
+    console.log("🚀 ~ file: followroute.js ~ line 140 ~ router.get ~ req.user._id", req.user._id)
+    console.log("🚀 ~ file: followroute.js ~ line 141 ~ router.get ~ req.params.id", req.params.id)
+
+    console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
+    if(privateRequest.deletedCount==0){
+      throw new Error("no user found");
+    }
+    user.following = user.following.concat({ followingId: req.user._id });
     user.followingcount++;
     await user.save();
     req.user.followercount++;
@@ -119,7 +164,28 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 })
-
+router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
+  try{
+    const user = await User.findById(req.params.id);
+    //if no user
+    if (!user) {
+      throw new Error("no user found");
+    }
+    const private3 = await PrivateRequest.find({
+      requestUser: req.user._id,
+      userId: user._id,
+    });
+    if (private3.length === 1) {
+      const private3 = await PrivateRequest.deleteOne({
+       userId:req.user._id,
+        requestUser: user._id,
+      });
+      return res.send({ispending:false});
+    }
+  }catch (e){
+    res.status(400).send({ error: e.toString() });
+  }
+})
 //*unfollow ROUT
 router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
   try {
@@ -127,6 +193,17 @@ router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
     //if no user
     if (!user) {
       throw new Error("no user found");
+    }
+    const private3 = await PrivateRequest.find({
+      requestUser: req.user._id,
+      userId: user._id,
+    });
+    if (private3.length === 1) {
+      const private3 = await PrivateRequest.deleteOne({
+        requestUser: req.user._id,
+        userId: user._id,
+      });
+      return res.send({ ispending: false });
     }
     const lengthBefore = req.user.following.length;
 
@@ -193,6 +270,27 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
       });
     }
 
+    let privateRequest = await PrivateRequest.find({
+      requestUser: req.user._id,
+    });
+
+    privateRequest = privateRequest.map((request) => {
+      return request.userId.toString();
+    });
+    
+    checkedfollower=checkedfollower.map(follow=>{
+
+    
+    if (privateRequest.includes(follow.followingId._id.toString())) {
+      const ispending = true;
+      const followingId=follow.followingId
+
+      return ({ ispending,isfollowing:follow.isfollowing, followingId:follow.followingId });
+    }else{
+      const ispending = false;
+      return ({ ispending,isfollowing:follow.isfollowing,followingId:follow.followingId });
+  }})
+
     res.send(checkedfollower);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
@@ -202,14 +300,16 @@ router.get("/user/:id/following", auth("user"), async (req, res) => {
 router.get("/user/:id/follower", auth("user"), async (req, res) => {
   try {
     const sort = [{ createdAt: -1 }];
+    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     const user = await User.findOne({ _id: req.params.id });
     await user.populate({
       path: "follower",
       select:
         "_id screenName tag followercount followingcount profileAvater.url Biography",
       options: {
-        limit: parseInt(req.query.limit), //to limit number of user
-        skip: parseInt(req.query.skip),
+        limit: parseInt(limit), //to limit number of user
+        skip: parseInt(skip),
         sort,
       },
     });
@@ -229,6 +329,25 @@ router.get("/user/:id/follower", auth("user"), async (req, res) => {
         }
       });
     }
+    let privateRequest = await PrivateRequest.find({
+      requestUser: req.user._id,
+    });
+
+    privateRequest = privateRequest.map((request) => {
+      return request.userId.toString();
+    });
+    user.follower=user.follower.map(follow=>{
+
+    
+    if (privateRequest.includes(follow._id.toString())) {
+      const ispending = true;
+      follow.ispending=ispending
+      return (follow);
+    }else{
+      const ispending = false;
+      follow.ispending=ispending
+      return (follow);
+  }})
     res.send(user.follower);
   } catch (e) {
     res.status(400).send({ error: e.toString() });

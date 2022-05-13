@@ -22,7 +22,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
-    await req.user.isBanned();
+ 
     const tweet = await Tweet.findById(req.params.id);
     let sentTweet;
     if (!tweet) {
@@ -52,7 +52,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         select: "_id screenName tag profileAvater.url",
       },
     });
-    console.log("🚀 ~ file: tweetroute.js ~ line 55 ~ router.get ~ tweet", tweet)
     await tweet.populate({
       path: "reply",
       select:
@@ -102,13 +101,16 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           modifiedRetweet.tweetId = { ...Retweet.tweetId._doc, isliked: false };
           modifiedRetweet.tweetExisted = Retweet.tweetExisted;
         }
+        
+      }
+      else if (Retweet.tweetId) {
+        modifiedRetweet.tweetId = Retweet.tweetId;
+        modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       } else {
         modifiedRetweet.tweetId = null;
         modifiedRetweet.tweetExisted = Retweet.tweetExisted;
       }
-    }
-    console.log("🚀 ~ file: tweetroute.js ~ line 108 ~ router.get ~ modifiedRetweet", tweet)
-       
+    }  
     if (replies && replies.length > 0) {
       for (reply of replies) {
         let replyisliked = reply.likes.some(
@@ -134,7 +136,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
     }
 
    
-    console.log("🚀 ~ file: tweetroute.js ~ line 136 ~ router.get ~ modifiedreplies", modifiedreplies)
 
     let isliked = tweet.likes.some(
       (like) => like.like.toString() == req.user._id.toString()
@@ -169,18 +170,30 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 //tprofile tweets
 router.get("/tweet/user/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
-
+    const match = { "replyingTo.tweetId":null , "replyingTo.tweetExisted": false };
     const user = await User.findOne({ _id: req.params.id });
     if (!user) {
       e = "user doesn't exist";
       throw e;
     }
+    if(user.isPrivate){
+      const isfollowed = req.user.following.some(
+        (followed) => followed.followingId.toString() == user._id.toString()
+      );
+
+      if (!isfollowed) {
+       return  res.status(400).send({error:"this content is private"});
+
+   
+      } 
+    }
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
+      match,
       options: {
         limit: parseInt(limit), //to limit number of user
         skip: parseInt(skip),
@@ -203,21 +216,21 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
             select: "_id screenName tag profileAvater.url",
           },
         },
-        // {
-        //   path:"replyingTo.tweetId",
-        //   strictPopulate: true,
-        //   select:"_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-        //   populate:{
-        //     path: "authorId",
-        //     strictPopulate: false,
-        //     select: "_id screenName tag profileAvater.url",
-        //   },
-        // },
+         {
+           path:"replyingTo.tweetId",
+           strictPopulate: true,
+           select:"_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+           populate:{
+             path: "authorId",
+             strictPopulate: false,
+             select: "_id screenName tag profileAvater.url",
+           },
+         },
       ],
 
       options: { sort },
     });
-    console.log(user.Tweets);
+
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
@@ -261,7 +274,7 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
 
 router.get("/timeline", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -349,40 +362,12 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    const filters= {followerfilter:req.query.followerfilter};
+    const filters = { followerfilter: req.query.followerfilter };
     let searchedItem = req.params.searchedtext.trim();
     if (!searchedItem || searchedItem.length < 1) {
       e = "Attempting search of empty string";
       throw e;
     }
-    // let resultTweets = await Tweet.find({
-    //   $text: { $search: searchedItem },
-    // })
-    //   .sort({ createdAt: -1 })
-    //   .limit(limit)
-    //   .skip(skip)
-    //   .populate({
-    //     path: "retweetedTweet.tweetId",
-    //     strictPopulate: false,
-    //     select:
-    //       "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-    //     populate: {
-    //       path: "authorId",
-    //       strictPopulate: false,
-    //       select: "_id screenName tag profileAvater.url",
-    //     },
-    //   })
-    //   .populate({
-    //     path: "authorId",
-    //     strictPopulate: false,
-    //     select: "_id screenName tag profileAvater.url",
-    //   });
-
-    // let resultUsers = await User.find({ $text: { $search: searchedItem } })
-    //   .sort({ tag: 1 })
-    //   .limit(limit)
-    //   .skip(skip);
-
     let resultTweets = await Tweet.find({
       text: { $regex: searchedItem, $options: "i" },
     })
@@ -455,21 +440,27 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
     }
-    if(filters.followerfilter){
-      modifiedresultUsers=[];
-      for(let i=0;i<resultUsers.length;i++){
-        if(resultUsers[i].isfollowed){
-          // resultUsers.splice(i,1);
-          // if(i!==0){
-          //   i--;
-          //   if(i<0){
-          //     i=0;
-          //   }
-          // }
+    if (filters.followerfilter) {
+      modifiedresultUsers = [];
+      for (let i = 0; i < resultUsers.length; i++) {
+        if (resultUsers[i].isfollowed) {
           modifiedresultUsers.push(resultUsers[i]);
         }
       }
-      resultUsers=modifiedresultUsers;
+      resultUsers = modifiedresultUsers;
+      let modifiedresultTweets = [];
+      for (let i = 0; i < resultTweets.length; i++) {
+        for (resultUser of resultUsers) {
+          if (
+            resultTweets[i].authorId.toString() === resultUser._id.toString()
+          ) {
+            modifiedresultTweets.push(resultTweets[i]);
+            console.log("check");
+          }
+        }
+      }
+      resultTweets = modifiedresultTweets;
+      console.log(resultTweets);
     }
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
@@ -485,7 +476,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 
 router.get("/profile/likedtweets", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -580,52 +571,99 @@ router.get("/profile/likedtweets", auth("user"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-router.get("/profile/replies", auth("user"), async (req, res) => {
+router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
     await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-
-    let userReplies = await Tweet.find({
-      authorId: req.user._id,
-      "replyingTo.tweetExisted": true,
-    })
-      .limit(limit)
-      .skip(skip)
-      .populate({
-        path: "authorId",
-        strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
-      })
-      .populate({
-        path: "replyingTo.tweetId",
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-        populate: {
-          path: "authorId",
-          strictPopulate: false,
-          select: "_id screenName tag profileAvater.url",
-        },
-      });
-    // for (userReply of userReplies) {
-    //   let temp = await Tweet.findById(userReply.replyingTo.tweetId);
-    //   if (!temp) {
-    //     userReply.replyingTo.tweetId = null;
-    //   }
-    // }
-    if (userReplies.length < 1 || !userReplies) {
-      e = "no replies found";
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) {
+      e = "user doesn't exist";
       throw e;
     }
-    res.send(userReplies);
+    const sort = [{ createdAt: -1 }];
+    const tweets = await user.populate({
+      path: "Tweets",
+      options: {
+        limit: parseInt(limit), //to limit number of user
+        skip: parseInt(skip),
+      },
+      populate: [
+        {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag  profileAvater.url",
+        },
+        {
+          //if it is a retweet view content of retweeted tweet
+          path: "retweetedTweet.tweetId",
+          strictPopulate: false,
+          select:
+            "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+          populate: {
+            path: "authorId",
+            strictPopulate: false,
+            select: "_id screenName tag profileAvater.url",
+          },
+        },
+        {
+          path:"replyingTo.tweetId",
+          strictPopulate: true,
+          select:"_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+          populate:{
+            path: "authorId",
+            strictPopulate: false,
+            select: "_id screenName tag profileAvater.url",
+          },
+        },
+      ],
+
+      options: { sort },
+    });
+    if (!user.Tweets.length < 1) {
+      user.Tweets = user.Tweets.map((tweet) => {
+        const isliked = tweet.likes.some(
+          (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+          };
+          return tweets;
+        } else {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+          };
+          return tweets;
+        }
+      });
+      let temp;
+      for (let i = 0; i < user.Tweets.length; i++) {
+        if (user.Tweets[i].replyingTo.tweetExisted) {
+          temp = await Tweet.findById(user.Tweets[i].replyingTo.tweetId);
+          if (!temp) {
+            user.Tweets[i].replyingTo.tweetId = null;
+          }
+        }
+      }
+    } else {
+      e = "user has no tweets";
+      throw e;
+    }
+    res.send(user.Tweets);
   } catch (e) {
+    //here all caught errors are sent to the client
     res.status(400).send({ error: e.toString() });
   }
 });
 
 router.get("/profile/media", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
@@ -671,7 +709,7 @@ router.get("/profile/media", auth("user"), async (req, res) => {
 
 router.get("/explore", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
 
@@ -839,8 +877,8 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
     } else {
       await Tweet.create({ ...req.body, authorId: req.user._id });
     }
-      const nottext=req.user.tag+" has lar"
-      notifiy(req.user,nottext,req.user._id.toString(),"newtweet")
+      const nottext=req.user.tag+" posted a new lar"
+      notifiy(req.user,nottext,req.user.tag,"newtweet")
   
 
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" });
@@ -910,7 +948,7 @@ router.post("/retweet", auth("user"), async (req, res) => {
       retweetedTweet: { tweetId: req.body.retweetedTweet, tweetExisted: true },
     });
     const nottext=req.user.tag+" has relar"
-    notifiy(req.user,nottext,req.user._id.toString(),"newtweet")
+    notifiy(req.user,nottext,req.user.tag,"newtweet")
 
     res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
   } catch (e) {
@@ -1033,7 +1071,7 @@ router.post("/reply", auth("user"), upload.array("image"), async (req, res) => {
 
 router.delete("/tweet/:id", auth("any"), async (req, res) => {
   try {
-    await req.user.isBanned();
+
     const targettweet = await Tweet.findById(req.params.id);
     if (!targettweet) {
       throw new Error("Not Found");
@@ -1059,7 +1097,7 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
         }
       }
       const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).end("Success");
+      res.status(200).send({success:"Success"});
     } else {
       throw new Error("Unauthorized");
     }
@@ -1132,7 +1170,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
       //* Notification part
 
       if (user.Notificationssetting.liketweet) {
-        const text = req.user.tag+"like on your lar";
+        const text = req.user.tag+" liked your lar";
         const notifications = new Notification({ userId: req.user._id, text,notifiedUId:user._id });
         notifications.save();
         const tokens = await Token.find({ ownerId: user._id });
@@ -1153,11 +1191,8 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
             text
           );
   
-          notifiy(uniqueArray, text, req.user._id.toString());
+          notifiy(uniqueArray, text, req.user.tag);
         }}
-   
-
-
   //*end of Notification part
 
 
