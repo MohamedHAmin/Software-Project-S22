@@ -71,6 +71,6 @@ it('should render Audience option and if choosen render checkbox to protect lars
       expect(popupElement).not.toBeVisible();
     //when reclicking the checkbox no pop up should appear
       fireEvent.click(checkBoxElement);
-      expect(popupElement).not.toBeVisible();
+      expect(popupElement).toBeVisible();
 
   }); 

@@ -1,40 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Styles/ProfilePage.css";
 import SideBar from "./SideBar";
 import MyProfile from "./MyProfile";
+import OthersProfile from "./OthersProfile";
 import Searchbar from "../Homepage/Search";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import axios from "axios";
+/**
+ *
+ * @param {props} props Getting if it's admin.
+ * @returns Returns the whole profile page.
+ */
+
 function ProfilePage(props) {
+  const [darkMode, setDarkMode] = useState(false);
   let { id } = useParams();
-  //const [name, setName] = useState("Ahmed Emad");
-  //const [bio, setBio] = useState("Pyyschooooooo");
-  //const [location, setLocation] = useState("6th of October");
-  //const [website, setWebsite] = useState("https://twitter.com/Ahmed_Emad81");
-  //const [followers, setFollowers] = useState(13);
-  //const [banDuration, setBanDuration] = useState("");
-  //const [user,setUser] = useState([]);
-
-  useEffect(() => {}, [id]);
-
-  //var tweetNum = 12;
-  //const userName = "Ahmed_Emad81";
-  //var date = "October 2020";
-  //var following = 10;
-  //var isFollowed = false;
-  //var isAdmin = true;
-  //var sameUserProf = true;
-  //const birthday = "12/9/2001";
-  //var picture =
-  //  "https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y";
-  //var pictureCover =
-  //  "https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y";
+  let userID = localStorage.getItem("userId");
+  useEffect(() => {
+    axios
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          setDarkMode(res.data.darkMode);
+        }
+      });
+  }, [id]);
 
   return (
     <div className="ProfilePage">
-      <SideBar Profile isAdmin={props.isAdmin}/>
-      <MyProfile isAdmin={props.isAdmin}/>
+      <SideBar Profile isAdmin={props.isAdmin} darkMode={darkMode} />
+      {id == userID ? <MyProfile /> : <OthersProfile isAdmin={props.isAdmin} />}
       <div className="rightbar">
         <div className="searchbar">
           <Searchbar />
@@ -43,4 +43,5 @@ function ProfilePage(props) {
     </div>
   );
 }
+
 export default ProfilePage;

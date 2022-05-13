@@ -6,6 +6,22 @@ import UpdatePassword from './UpdatePassword';
 import "./Styles/SettingsMenu.css"
 import ConfirmPassword from './ConfirmPassword';
 import AccountInformationS from './AccountInformationS';
+/**
+ * component to display the page of Account settings with its 2 options -->account info, change password
+ * @component
+ * @param {boolean} isDarkMode
+ * @example
+ * props.isDarkMode = true
+ * const isClickedAccInfo = true
+ * return (
+ * <div>
+ *    <h1>Change your password</h1>
+ *    <UpdatePassword/>
+ *    
+ * </div>
+ * )
+ *  
+ */
 function AccountSettings(props) {
     //vars of the main account settings page
     const [isClickedAccInfo,setAccInfoActive]=useState(false);
@@ -18,11 +34,11 @@ function AccountSettings(props) {
         setAccInfoActive(false);
         setChangePasswordActive(true);        
     }
-    //vars for the confirm button in account information
-    const [isConfirmPassInAccInfo,setisConfirmPassInAccInfo]=useState(false);
-  function handleChangeConfirmPassInAccInfo(){
-    setisConfirmPassInAccInfo(true);
-  }
+    //vars for the confirm button in account information commented because not implemented in back end
+    // const [isConfirmPassInAccInfo,setisConfirmPassInAccInfo]=useState(false);
+    // function handleChangeConfirmPassInAccInfo(){
+    //     setisConfirmPassInAccInfo(true);
+    // }
   
     return ( 
         <div className="settingsSubMenu">
@@ -30,9 +46,6 @@ function AccountSettings(props) {
             {isClickedAccInfo===false &&isClickedChangePassword===false && (<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Your account</h1>)}
             {isClickedAccInfo===false &&isClickedChangePassword==false && (<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>See information about your account, download an archive of your data, or learn about your account deactivation options</p>)}
         {/* Account information clicked */}
-            {/* {isClickedAccInfo===true &&isClickedChangePassword===false && (<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Account information</h1>)}
-            {isClickedAccInfo===true &&isClickedChangePassword===false && isConfirmPassInAccInfo===false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>See information about your account, download an archive of your data, or learn about your account deactivation options</p>)} */}
-            {/* {isClickedAccInfo===true && isClickedChangePassword===false && isConfirmPassInAccInfo===false && (<div ><ConfirmPassword darkMode={props.isDarkMode} onConfirmPassChange={handleChangeConfirmPassInAccInfo} /></div>)}  */}
             {isClickedAccInfo===true &&isClickedChangePassword===false &&(<AccountInformationS darkMode={props.isDarkMode}/>)}
         {/* change Password clicked */}
             {isClickedAccInfo===false &&isClickedChangePassword===true && (<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Change your password</h1>)}

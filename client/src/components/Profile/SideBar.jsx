@@ -13,7 +13,11 @@ import LarryIconDark from "../../Images/Logo Dark Mode.png";
 import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { NavLink } from "react-router-dom";
-
+/**
+ *
+ * @param {props} props Getting which page is active and if it's the admin.
+ * @returns Returns the SideBar
+ */
 function SideBar({
   Home,
   Search,
@@ -22,11 +26,20 @@ function SideBar({
   Settings,
   Logout,
   isAdmin,
+  darkMode,
 }) {
   let id = localStorage.getItem("userId");
   return (
     <div className="sidebar">
-      <img className="sideBarLarryIcon" alt="Larry Icon" src={LarryIcon} />
+      {!darkMode ? (
+        <img className="sideBarLarryIcon" alt="Larry Icon" src={LarryIcon} />
+      ) : (
+        <img
+          className="sideBarLarryIcon"
+          alt="Larry Icon"
+          src={LarryIconDark}
+        />
+      )}
 
       <ul>
         <li>
@@ -50,7 +63,7 @@ function SideBar({
             </NavLink>
           )}
           {!isAdmin && (
-            <NavLink to="/Home">
+            <NavLink to="/Notifications">
               <SideBarIcon
                 active={Notifications}
                 text="Notifications"

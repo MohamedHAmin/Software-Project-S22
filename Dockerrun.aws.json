@@ -9,6 +9,13 @@
 			"memory": 128
 		},
 		{
+			"name": "client",
+			"image": "mostafaelnashar/larry-client",
+			"hostname": "client",
+			"essential": false,
+			"memory": 128
+		},
+		{
 			"name": "router",
 			"image": "mostafaelnashar/larry-router",
 			"essential": true,
@@ -18,7 +25,7 @@
 				"containerPort": 80
 				}
 			],
-			"links": ["api"],
+			"links": ["api", "client"],
 			"memory": 128
 		}
 	]

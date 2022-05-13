@@ -19,6 +19,11 @@ const monthNames = [
   "November",
   "December",
 ];
+/**
+ *
+ * @param {props} props Getting all the needed information for the profile.
+ * @returns Returns the information of the profile.
+ */
 function ProfileInfo({
   name,
   userName,
@@ -31,10 +36,13 @@ function ProfileInfo({
   birthday,
   birthdayVisability,
   locationVisability,
+  isPrivate,
+  isFollowed,
 }) {
   let { id } = useParams();
   const joinDate = new Date(date);
   const birthdate = new Date(birthday);
+
   const websiteLength = website.length;
   return (
     <div className="profileInfo2">
@@ -60,7 +68,7 @@ function ProfileInfo({
         ) : (
           ""
         )}
-        {(birthdayVisability && birthday) ? (
+        {birthdayVisability && birthday ? (
           <span data-testid="Edit-Profile-Birthday-Element">
             <CakeIcon /> Born in {monthNames[birthdate.getMonth()]}{" "}
             {birthdate.getDate()}
@@ -80,14 +88,35 @@ function ProfileInfo({
         <p></p>
       </div>
 
-      <div className="followInfo">
-        <NavLink to={`/Profile/${id}/Following`}>
-          <span>{following} Following </span>
-        </NavLink>
-        <NavLink to={`/Profile/${id}/Followers`}>
-          <span data-testid="Followers-Profile">{followers} Followers</span>
-        </NavLink>
-      </div>
+      
+        {isPrivate?(isFollowed?(
+          <div className="followInfo">
+            <NavLink to={`/Profile/${id}/Following`}>
+            <span>{following} Following </span>
+            </NavLink>
+            <NavLink to={`/Profile/${id}/Followers`}>
+            <span data-testid="Followers-Profile">{followers} Followers</span>
+            </NavLink>
+          </div>
+
+        ):(
+          <div className="followInfo">
+            <span>{following} Following </span>
+            <span data-testid="Followers-Profile">{followers} Followers</span>
+          </div>
+        )) 
+        :(
+          <div className="followInfo">
+              <NavLink to={`/Profile/${id}/Following`}>
+              <span>{following} Following </span>
+              </NavLink>
+              <NavLink to={`/Profile/${id}/Followers`}>
+              <span data-testid="Followers-Profile">{followers} Followers</span>
+              </NavLink>
+         </div>
+        )}
+        
+      
     </div>
   );
 }

@@ -3,12 +3,13 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules/
+/api/node_modules/
+/client/node_modules/
 /.pnp
 .pnp.js
-
+/api/config
 # testing
-/coverage
+/api/coverage
 
 # production
 /build

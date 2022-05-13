@@ -5,6 +5,10 @@ import CreateFollower from "./CreateFollower";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FallingLines } from "react-loader-spinner";
+/**
+ *
+ * @returns Returns my followers.
+ */
 function MyFollowers() {
   let { id } = useParams();
   const [Name, setName] = useState("");
@@ -15,10 +19,9 @@ function MyFollowers() {
   useEffect(() => {
     if (id == userID) {
       axios
-        .get(
-          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${id}/me`,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           if (res.error) {
@@ -30,10 +33,9 @@ function MyFollowers() {
         });
     } else {
       axios
-        .get(
-          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${id}`,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
+        .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           if (res.error) {
@@ -45,10 +47,9 @@ function MyFollowers() {
         });
     }
     axios
-      .get(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/user/${id}/follower`,
-        { headers: { Authorization: localStorage.getItem("accessToken") } }
-      )
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${id}/follower`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
       .then((res) => {
         console.log(res);
         if (res.error) {

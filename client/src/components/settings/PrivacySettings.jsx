@@ -12,7 +12,22 @@ import "./Styles/SettingsModals.css"
 import { textAlign } from '@mui/system';
 import axios from 'axios'
 
-
+/**
+ * component to let the user change the privacy settings.(make his lars available for his followers only)
+ * @component
+ * @param {boolean} isDarkMode
+ * @example
+ * props.isDarkMode = true
+ * return (
+ * <div>
+ *    <h1>>Privacy and safety</h1>
+ *    <p>Select your preferences by notification type.</p>
+ *    <div>Protect your Lars</div>
+ *    <Checkbox/>
+ * </div>
+ * )
+ *  
+ */
 function PrivacySettings(props) {
      //related to request to back end
      const userId=localStorage.getItem("userId");
@@ -21,7 +36,7 @@ function PrivacySettings(props) {
 
     useEffect(()=>{
     
-        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}/me`, 
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`, 
             { headers: {
                 Authorization: localStorage.getItem("accessToken")}
             }
@@ -62,7 +77,7 @@ function PrivacySettings(props) {
             let data={
                 isPrivate:false
             }
-            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}`,data, {
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
 
               headers: {
                 Authorization: localStorage.getItem("accessToken")
@@ -94,7 +109,7 @@ function PrivacySettings(props) {
         let data={
             isPrivate:true
         }
-        axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}`,data, {
+        axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
 
           headers: {
             Authorization: localStorage.getItem("accessToken")
@@ -118,7 +133,7 @@ function PrivacySettings(props) {
             {isClickedAudience===false &&(<h1 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Privacy and safety</h1>)}
             {isClickedAudience===false &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage what information you see and share on Larry.</p>)}
             {isClickedAudience===false &&(<h2 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" } style={{marginTop:25}}>Your Larry activity</h2>)}
-            {isClickedAudience===false &&(<div onClick={clickedAudience} ><SettingsMenuOptions id="11" darkMode={props.isDarkMode} active={isClickedAudience} Icon={PeopleIcon} text="Audience" subtext="Manage what information you allow other people on Larry to see." isSubtextExist={true}/></div>)}
+            {isClickedAudience===false &&(<div onClick={clickedAudience} ><SettingsMenuOptions id="11" darkMode={props.isDarkMode} active={isClickedAudience} Icon={PeopleIcon} text="Audience" subtext="Manage what information you allow other people on Twitter to see." isSubtextExist={true}/></div>)}
             {/* Audience clicked */}
             {isClickedAudience===true &&(<h2 className={!props.isDarkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Audience</h2>)}
             {isClickedAudience===true &&(<p className={!props.isDarkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>Manage what information you allow other people on Larry to see.</p>)}

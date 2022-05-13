@@ -9,6 +9,26 @@ import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Homepage from "../Homepage/Homepage";
+/**
+ * component to display the menu of settings and let the user choose from it the option he needs.
+ * But it does not show the sub menu (it just send the id of selected option),
+ * because it is instead SettingsPage role.
+ * @component
+ * @param {boolean} isDarkMode
+ * @param {function} onIdChange
+ * @example
+ * props.isDarkMode = true
+ * const isclickedAcc = true
+ * return (
+ * <div>
+ *    <SettingsMenuOptions account>
+ *    <SettingsMenuOptions Larry blue>
+ *    <SettingsMenuOptions privacy>
+ *    ...
+ * </div>
+ * )
+ *  
+ */
 function SettingsMenu(props) {
   const [isclickedAcc, setAccActive] = useState(true);
   const [isclickedSecurity, setSecurActive] = useState(false);

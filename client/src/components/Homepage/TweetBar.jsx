@@ -12,7 +12,11 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 const Input = styled('input')({
     display: 'none',
 });
-
+/**
+ * this function renders the tweet bar
+ * @param {props} props handeles the lar button click and the upload button
+ * @returns the tweet bar
+ */
 function TweetBar(props){
     //const [selectedImage, setSelectedImage] = useState(null);
     /*const [uploadCount,setuploadCount]=useState(0);

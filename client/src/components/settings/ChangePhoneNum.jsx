@@ -6,8 +6,30 @@ import Typography from '@mui/material/Typography';
 import "./Styles/SettingsModals.css"
 import './Styles/SettingsMenu.css'
 import './Styles/SettingsMenuOptions.css'
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from 'axios'
+/**
+ * component to let the user change his phone number or delete it.
+ * @component
+ * @param {boolean} darkMode
+ * @param {string} oldValue the old value stored in data base
+ * @param {function} onChangerefreshAfterPhone a function all its purpose is to make the parent componenet 
+ * AccountInformaationS refresh the page (using useEffect) to show the new data (the new phone number added)
+ * or if the user deleted his phone number it refreshes the page to display page of "Add phone number"
+ * @example
+ * props.darkMode = true
+ * props.oldValue = "01171458789"
+ * const newValue = "01157828196"
+ * return (
+ * <div>
+ *    <h2>Change Phone</h2>
+ *    <TextField/>
+ *    <Button> Update phone number
+ *    </Button>
+ *    ...
+ * </div>
+ * )
+ *  
+ */
 function ChangePhoneNum(props) {
     
   const [newValue, setnewValue] = useState('');
@@ -20,13 +42,10 @@ function ChangePhoneNum(props) {
   const [buttonclosePopup, setButtonClosePopup] = useState(false);
   //related to request to back end
   const userId=localStorage.getItem("userId");
-  
-  
   const regex =/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
   const  handleSubmit =(e) =>{
     e.preventDefault()
-    
     setValueNewError(false);
     if(newValue.length!=11){
       setValueNewTypeError(1);
@@ -42,16 +61,14 @@ function ChangePhoneNum(props) {
     else if(regex.test(newValue)=== false){
         setValueNewTypeError(1);
         setValueNewError(true);
-          return false;
+        return false;
       }
     else{
-      
-      //send request to backend to givee them new email
       let data={
         phoneNumber:newValue
       }
-      //
-      axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}`,data, {
+      //send request to backend to givee them new email
+      axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
 
         headers: {
           Authorization: localStorage.getItem("accessToken")
@@ -73,7 +90,7 @@ function ChangePhoneNum(props) {
       })
       .catch(err => {
         
-        alert("cryyyyyy")
+        alert("error")
       });
     }
   }
@@ -87,7 +104,7 @@ function ChangePhoneNum(props) {
         phoneNumber:""
       }
       //
-      axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}`,data, {
+      axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
 
         headers: {
           Authorization: localStorage.getItem("accessToken")
@@ -109,7 +126,7 @@ function ChangePhoneNum(props) {
       })
       .catch(err => {
         
-        alert("cryyyyyy")
+        alert("error")
       });
   //show message
   //send request to backend to givee them new email
@@ -136,7 +153,7 @@ function ChangePhoneNum(props) {
             // helperText={confirmPassValueError &&("The password you entered was incorrect.")}
 
             error={newValueError}
-          helperText={newValueError &&(  newValueTypeError===1?  ("Please enter a valid phone number."):("Phone number already used."))}
+            helperText={newValueError &&(  newValueTypeError===1?  ("Please enter a valid phone number."):("Phone number already used."))}
 
           />
           </div>

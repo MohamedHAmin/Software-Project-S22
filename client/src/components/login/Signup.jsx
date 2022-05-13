@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
@@ -7,18 +7,20 @@ import axios from 'axios'
 import classes from "./Styles/Signup.module.css";
 import SignupwithGoogle from "./SignupwithGoogle";
 import Navbar from "./navbar";
+import { Avatar } from "@material-ui/core";
+import Addpic from "./Addpic";
 
+/**
+ *
+ *
+ * @returns Returns 2 signup forms , First One with necessary data [screenName , Tag , Email and Password] and the Second One contains [Birthdate, Phone Number and Biography] 
+ */
 const Signup = () => {
     const [error2, setError2] = useState(false);
     const [error1, setError1] = useState(false);
     const [next, setNext] = useState(false);
     const [userData, setUserData] = useState();
 
-    const initialValues2 = {
-        phoneNumber: "",
-        birth: { date: "" },
-        Biography: ""
-    }
     const initialValues1 = {
         screenName: "",
         tag: "",
@@ -26,22 +28,33 @@ const Signup = () => {
         password: "",
     }
 
+    const initialValues2 = {
+        phoneNumber: "",
+        birth: { date: "" },
+        Biography: "",
+        location: { place: "" },
+        website: "",
+        banner: { url: "" },
+        profileAvater: { url: "" },
+    }
+
     const Navigate = useNavigate();
 
     const validationSchema1 = Yup.object().shape({
-        password: Yup.string().min(6).max(16).required("Enter Your Password"),
+        password: Yup.string().matches(/^(\S+$)/, 'You entered a space ,please remove it').min(6).max(16).required("Enter Your Password"),
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
         screenName: Yup.string().min(3).required("Enter Your screenName"),
-        tag: Yup.string().required("Tag is required")
+        tag: Yup.string().matches(/^(\S+$)/, 'You entered a space ,please remove it').required("Tag is required")
     })
 
     const validationSchema2 = Yup.object().shape({
         phoneNumber: Yup.string()
             .matches(
-                /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+                /^((\\+[1-9]{1,4}[ \\-])|(\\([0-9]{2,3}\\)[ \\-])|([0-9]{2,4})[ \\-])?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
                 "Phone number is not valid"
             ),
-        Biography: Yup.string()
+        Biography: Yup.string(),
+        // birth: { date: Yup.string().matches(/^(\S+$)/, 'you entered a space ,please remove it') }
     })
     const onSubmit1 = (data) => {
         setUserData(data);
@@ -49,14 +62,23 @@ const Signup = () => {
     }
 
     const onSubmit2 = (data) => {
+
+        console.log(document.querySelector("#BD").value);
+
         data.screenName = userData.screenName;
         data.email = userData.email;
         data.password = userData.password;
         data.tag = userData.tag;
-        data.birth.date = document.getElementById("BD").value;
+
+        data.birth.date = document.querySelector("#BD").value;
+        console.log("🚀 ~ file: Signup.jsx ~ line 81 ~ onSubmit2 ~ data", data)
+
+        data.location.place = document.getElementById("Loc").value;
+
 
         console.log(data);
-        axios.post("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/user/signup", data)
+
+        axios.post("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/signup", data)
             .then((res) => {
                 console.log(res)
                 alert("Please check your email")
@@ -71,9 +93,9 @@ const Signup = () => {
                     setNext(false);
                 }
             })
-
-        // console.log(document.getElementById("BD").value)
     };
+
+    const [openModal, setOpenModal] = useState(false)
     return (
         <div>
             <Navbar />
@@ -97,6 +119,7 @@ const Signup = () => {
                                     <Field name="screenName" placeholder="screenName" autoComplete="off" />
                                 </div>
                                 <ErrorMessage name='screenName' component="span" className={classes.error} />
+
                                 <div className={classes.field}>
                                     <Field name="tag" placeholder="Tag" autoComplete="off" />
                                 </div>
@@ -113,6 +136,8 @@ const Signup = () => {
                                     <Field type="password" name="password" placeholder="password" autoComplete="off" />
                                 </div>
                                 <ErrorMessage name='password' component="span" className={classes.error} />
+
+                                {/* <Avatar src="/apple-touch-icon.png" sx={{ width: 200, height: 75, cursor: "pointer" }} /> */}
 
                                 <div>
                                     <button className={classes.btnsup} type="submit">Next </button>
@@ -135,9 +160,25 @@ const Signup = () => {
                                 <ErrorMessage name='phoneNumber' component="span" className={classes.error} />
 
                                 <div className={classes.field}>
-                                    <Field name="Biography" placeholder="Biography" autoComplete="off"></Field>
+                                    <Field id="bio" name="Biography" placeholder="Biography" autoComplete="off"></Field>
                                 </div>
                                 <ErrorMessage name='Biography' component="span" className={classes.error} />
+
+
+                                <div className={classes.field}>
+                                    <Field id="Loc" name="dummylocation" placeholder="Location" autoComplete="off" ></Field>
+                                </div>
+                                <ErrorMessage name='Location' component="span" className={classes.error} />
+
+                                <div className={classes.field}>
+                                    <Field id="Link" name="website" placeholder="You can put any website link here" autoComplete="off"></Field>
+                                </div>
+                                <ErrorMessage name='Link' component="span" className={classes.error} />
+
+                                <div>
+                                    <button className={classes.btnsup1} type="button" onClick={() => { setOpenModal(true); }} > Add photo</button>
+                                    {openModal && <Addpic closeModal={setOpenModal} />}
+                                </div>
 
                                 <div>
                                     <button className={classes.btnsup1} type="submit" >Signup</button>
@@ -151,3 +192,6 @@ const Signup = () => {
     );
 }
 export default Signup;
+
+//npm install react-easy-crop --save
+//npm i react-image-crop --save

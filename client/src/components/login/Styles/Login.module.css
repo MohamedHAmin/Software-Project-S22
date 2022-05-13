@@ -8,20 +8,24 @@
   background: rgb(247, 247, 247);
   font-family: "Montserrat", "Verdana", "Times New Roman";
 }
+
 .imageContainer {
   width: 40%;
   min-width: 320px;
 }
+
 .imageContainer img {
   margin-bottom: 40px;
   width: 100%;
   object-fit: contain;
   object-position: center;
 }
+
 ::selection {
   background: #4158d0;
   color: #fff;
 }
+
 .loginContainer {
   min-width: 320px;
   width: 40%;
@@ -30,6 +34,7 @@
   border-radius: 10px;
   box-shadow: 0 5px 25px rgba(1 1 1 / 15%);
 }
+
 .title {
   font-size: 35px;
   font-weight: 600;
@@ -40,14 +45,17 @@
   border-radius: 15px 15px 0 0;
   background: linear-gradient(-135deg, #c850c0, #2B3DBC);
 }
+
 .loginContainer form {
   padding: 10px 30px 50px 30px;
 }
+
 .field {
   height: 50px;
   width: 100%;
   margin-top: 20px;
 }
+
 .field input {
   height: 100%;
   width: 100%;
@@ -58,6 +66,7 @@
   border-radius: 25px;
   transition: all 0.3s ease;
 }
+
 .container button {
   width: 100%;
   height: 50px;
@@ -69,6 +78,7 @@
   font-weight: 700;
   cursor: pointer;
   outline: none;
+  margin-top: 20px;
 }
 
 .content {
@@ -166,9 +176,11 @@ form .signupLink a:hover {
   text-align: center;
   padding-top: 5%;
 }
-.success{
-  color: rgb(7,217,7);
+
+.success {
+  color: rgb(7, 217, 7);
 }
+
 .error {
-  color: rgb(221,28,28);
+  color: rgb(221, 28, 28);
 }

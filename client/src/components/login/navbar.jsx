@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./Styles/navbar.css";
-
+/**
+ *
+ * 
+ * @returns Returns the navigation bar which contains [Signup- Login - Contact Us] 
+ */
 function Navbar() {
     const [active, setActive] = useState("navMenue")
     const [toggleIcon, setToggleIcon] = useState("navToggler")
@@ -19,7 +23,7 @@ function Navbar() {
             <a href="/" className="navBrand">
             </a>
             <ul className={active}>
-                
+
                 <li className="navItem"><a href="/" className="navLink">Login</a> </li>
                 <li className="navItem"><a href="/SignUp" className="navLink">Signup</a> </li>
                 <li className="navItem"><a href="/contact" className="navLink">Contact Us</a> </li>

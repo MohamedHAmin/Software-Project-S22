@@ -5,6 +5,11 @@ import SideBar from "../Profile/SideBar";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+/**
+ * this function renders the report page
+ * @param {props} props it handles admin view 
+ * @returns Report page
+ */
 function Report(props) {
   const navigate = useNavigate();
   let { reportType } = useParams();

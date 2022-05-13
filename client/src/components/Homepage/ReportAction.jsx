@@ -4,7 +4,11 @@ import CloseIcon from '@mui/icons-material/Close';import SideBar from "../Profil
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 
-
+/**
+ *  this function renders the report action page 
+ * @param {props} props it handles admin view
+ * @returns the report action page 
+ */
 function ReportAction(props) {
   const navigate = useNavigate();
     return (

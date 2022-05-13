@@ -6,6 +6,25 @@ import clsx from "clsx";
 import { styled } from "@mui/system";
 import { useSwitch } from "@mui/base/SwitchUnstyled";
 import axios from "axios";
+/**
+ * component that diplays the option available in the display settings page, to let the user change the display mode: Light/Fark mode.
+ * @component
+ * @param {boolean} isDarkMode
+ * @param {function} onDarkModeChanged a function to make the change in display mode return to app componenet
+ * @example
+ * props.isDarkMode = true
+ * return (
+ * <div>
+ *    <h1>Accessibility, display and languages</h1>
+ *    <p>
+          Manage your font size, color, and background. These settings affect
+          all the Larry accounts on this browser.
+      </p>
+ *    <SettingsMenuOptions Display/>
+ * </div>
+ * )
+ *  
+ */
 
 //button of dark/light mode
 const blue = {
@@ -99,7 +118,7 @@ function DisplaySettings(props) {
     };
     axios
       .put(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com//api/profile/${userId}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,
         data,
         {
           headers: {
