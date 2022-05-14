@@ -39,7 +39,6 @@ function App() {
         }
       )
       .then((res) => {
-        console.log(res);
         if (res.data.error) {
         } else {
           setProfileData(res.data);
@@ -126,7 +125,7 @@ function App() {
             ></Route>
             <Route
               path="/Notifications"
-              element={<Notifications isAdmin={isAdmin}/>}
+              element={<Notifications isAdmin={isAdmin} />}
             ></Route>
           </Routes>
         </BrowserRouter>

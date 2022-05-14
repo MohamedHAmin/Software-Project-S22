@@ -1,5 +1,5 @@
 import FollowerCard from "./FollowerCard";
-import { NavLink } from "react-router-dom";
+
 import "./Styles/CreateFollower.css";
 /**
  *

@@ -4,7 +4,7 @@ import ProfileName from "./ProfileName";
 import CreateFollower from "./CreateFollower";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FallingLines } from "react-loader-spinner";
+
 /**
  *
  * @returns Returns my followers.

@@ -4,18 +4,14 @@ import ProfileName from "./ProfileName";
 import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
 import EditProfile from "./EditProfile";
-import { Button, Typography, Modal } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import CloseIcon from "@mui/icons-material/Close";
+import { Button } from "@mui/material";
+
 import MyProfileTabs from "./MyProfileTabs";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import { useNavigate, useParams } from "react-router-dom";
+
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Post from "../Homepage/Post";
 import { FallingLines } from "react-loader-spinner";
-import { Web } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
 /**
  *
@@ -46,62 +42,6 @@ function MyProfile(props) {
 
   useEffect(() => {
     setUserTweets([]);
-    {
-      route.pathname == `/Profile/${id}` &&
-        axios
-          .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
-            {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setUserTweets(res.data);
-            }
-          });
-    }
-
-    {
-      route.pathname == `/Profile/${id}/with_replies` &&
-        axios
-          .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/replies/${id}`,
-            {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setUserTweets(res.data);
-            }
-          });
-    }
-
-    {
-      route.pathname == `/Profile/${id}/likes` &&
-        axios
-          .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/likedtweets/${id}`,
-            {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setUserTweets(res.data);
-            }
-          });
-    }
 
     axios
       .get(
@@ -131,7 +71,59 @@ function MyProfile(props) {
           setbirthDateVisability(res.data.birth.visability);
         }
       });
-  }, [route.pathname]);
+
+    if (route.pathname === `/Profile/${id}`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+    if (route.pathname === `/Profile/${id}/with_replies`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/replies/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+    if (route.pathname === `/Profile/${id}/likes`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/likedtweets/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+  }, [route.pathname, id]);
 
   const passdeletedTweet = (id) => {
     axios
@@ -246,8 +238,8 @@ function MyProfile(props) {
         />
 
         {/*Tweets First Tab */}
-        {route.pathname == `/Profile/${id}` ? <MyProfileTabs Tweets /> : <></>}
-        {userTweets?.length && route.pathname == `/Profile/${id}` ? (
+        {route.pathname === `/Profile/${id}` ? <MyProfileTabs Tweets /> : <></>}
+        {userTweets?.length && route.pathname === `/Profile/${id}` ? (
           userTweets.map((post) => (
             <Post
               post={post}
@@ -261,13 +253,13 @@ function MyProfile(props) {
         )}
 
         {/*Tweets Second Tab */}
-        {route.pathname == `/Profile/${id}/with_replies` ? (
+        {route.pathname === `/Profile/${id}/with_replies` ? (
           <MyProfileTabs Replies />
         ) : (
           <></>
         )}
-        {userTweets?.length &&
-        route.pathname == `/Profile/${id}/with_replies` ? (
+        {userTweets.length &&
+        route.pathname === `/Profile/${id}/with_replies` ? (
           userTweets.map((post) => (
             <Post
               post={post}
@@ -281,12 +273,12 @@ function MyProfile(props) {
         )}
 
         {/*Likes Fourth Tab */}
-        {route.pathname == `/Profile/${id}/likes` ? (
+        {route.pathname === `/Profile/${id}/likes` ? (
           <MyProfileTabs Likes />
         ) : (
           <></>
         )}
-        {userTweets?.length && route.pathname == `/Profile/${id}/likes` ? (
+        {userTweets.length && route.pathname === `/Profile/${id}/likes` ? (
           userTweets.map((post) => (
             <Post
               post={post}
