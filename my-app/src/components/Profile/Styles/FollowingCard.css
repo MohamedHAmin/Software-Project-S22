@@ -13,7 +13,7 @@
 }
 
 .followButton1 {
-  background-color: var(--larry-color) !important;
+  background-color: var(--color-background) !important;
   border: none !important;
   color: var(--color-mode) !important;
   font-weight: 700 !important;
