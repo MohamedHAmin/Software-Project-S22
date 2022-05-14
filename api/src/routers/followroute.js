@@ -172,8 +172,8 @@ router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
       throw new Error("no user found");
     }
     const private3 = await PrivateRequest.find({
-      requestUser: req.user._id,
-      userId: user._id,
+      requestUser: user._id,
+      userId: req.user._id,
     });
     if (private3.length === 1) {
       const private3 = await PrivateRequest.deleteOne({
