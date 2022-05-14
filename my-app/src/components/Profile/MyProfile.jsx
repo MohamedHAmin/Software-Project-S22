@@ -5,9 +5,7 @@ import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
 import EditProfile from "./EditProfile";
 import { Button } from "@mui/material";
-
 import MyProfileTabs from "./MyProfileTabs";
-
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Post from "../Homepage/Post";
@@ -93,6 +91,23 @@ function MyProfile(props) {
       axios
         .get(
           `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/replies/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+    if (route.pathname === `/Profile/${id}/media`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/media/${id}`,
           {
             headers: { Authorization: localStorage.getItem("accessToken") },
           }
@@ -261,6 +276,26 @@ function MyProfile(props) {
         )}
         {userTweets.length &&
         route.pathname === `/Profile/${id}/with_replies` ? (
+          userTweets.map((post) => (
+            <Post
+              post={post}
+              passdeletedTweet={passdeletedTweet}
+              isAdmin={props.isAdmin}
+              isPost={true}
+              canviewcomments={true}
+            />
+          ))
+        ) : (
+          <></>
+        )}
+
+        {/*Tweets Third Tab */}
+        {route.pathname === `/Profile/${id}/media` ? (
+          <MyProfileTabs Media />
+        ) : (
+          <></>
+        )}
+        {userTweets.length && route.pathname === `/Profile/${id}/media` ? (
           userTweets.map((post) => (
             <Post
               post={post}

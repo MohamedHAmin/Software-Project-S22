@@ -4,7 +4,6 @@ import ProfileName from "./ProfileName";
 import CreateCard from "./CreateCard";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FallingLines } from "react-loader-spinner";
 /**
  *
  * @returns Returns the people i follow.
@@ -16,7 +15,7 @@ function MyFollowing() {
   const [myFollowing, setMyFollowing] = useState([]);
   let userID = localStorage.getItem("userId");
   useEffect(() => {
-    if (id == userID) {
+    if (id === userID) {
       axios
         .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`, {
           headers: { Authorization: localStorage.getItem("accessToken") },
@@ -58,7 +57,7 @@ function MyFollowing() {
           setMyFollowing(res.data);
         }
       });
-  }, [userID]);
+  }, [id,userID]);
 
   return (
     <div className="myFollowing">
