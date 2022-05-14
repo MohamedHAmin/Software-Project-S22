@@ -5,6 +5,7 @@
 }
 .comments
 {
+    margin-left: 22px;
     border-width: 2px; 
     border-style: solid;
     border-color: var(--color-border);
@@ -13,7 +14,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     overflow: hidden;
-    width: 100%;
+    width: 95%;
     color: var(--color-mode);
     cursor: pointer;
 }

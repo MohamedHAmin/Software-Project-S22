@@ -8,6 +8,7 @@ import Post from "./Post";
 import Searchbar from "./Search";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
  * Homepage containing area to post tweets and timeline tweets (your tweets and tweets of people you follow)
@@ -23,6 +24,8 @@ function Homepage(props) {
   const [admintoken,setAdminToken]=useState(localStorage.getItem("adminToken"));
   const [text, setText] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [skip,setskip]=useState(0);
+  const [hasmore,sethasmore]=useState(true);
   let { id } = useParams();
   const getposts = () => {
     axios
@@ -40,6 +43,20 @@ function Homepage(props) {
         }
       });
   };
+
+  // const fetchMoreData=()=>{
+  //   var prevposts=posts;
+  //   var prevlength=posts.length;
+  //   setskip(skip+2);
+  //   getposts();
+  //   var currentposts=[...prevposts,...posts];
+  //   setposts(currentposts);
+  //   if(prevposts.length===posts.length)
+  //   {
+  //     sethasmore(false);
+  //   }
+  // }
+
   useEffect(() => {
     getposts();
     axios
@@ -176,13 +193,21 @@ function Homepage(props) {
         {posts.length ? (
           posts.map((post) => (
             <Post
-              post={post}
-              passdeletedTweet={passdeletedTweet}
-              isAdmin={props.isAdmin}
-              isPost={true}
+            post={post}
+            passdeletedTweet={passdeletedTweet}
+            isAdmin={props.isAdmin}
+            isPost={true}
+            canviewcomments={true}
             />
-          ))
-        ) : (<></>)}
+            ))
+            ) : (<></>)}
+          {/* <InfiniteScroll
+            dataLength={posts.length} 
+            next={fetchMoreData}
+            hasMore={hasmore}
+            loader={<h4>Loading...</h4>}
+            endMessage={<></>}
+              /> */}
       </div>
       <div className="rightbar">
         <div className="searchbar">
