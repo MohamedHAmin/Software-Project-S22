@@ -124,10 +124,7 @@ router.post("/ban/:id", auth("admin"), async (req, res) => {
     const notifications = new Notification({ notifiedUId: bannedUser._id, text });
     notifications.save();
     const tokens = await Token.find({ ownerId: req.params.id });
-    console.log(
-      "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
-      tokens
-    );
+  
     if (tokens) {
       let fcmtokens = tokens.map((token) => token.fcmToken);
       var uniqueArray = [...new Set(fcmtokens)];

@@ -75,11 +75,10 @@ router.post("/signup",async (req, res) => {
     
     router.delete("/logoutall",auth('any'), async (req, res) => {
       try{
-        console.log("🚀 ~ file: userauthroute.js ~ line 80 ~ router.delete ~  req.user._id.toString()",  req.user._id.toString())
         await Token.deleteMany({ 
           ownerId: req.user._id.toString()
         })
-        console.log('first')
+
         res.status(200).send({success:"Success"})
         
       }

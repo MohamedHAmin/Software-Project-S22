@@ -127,27 +127,17 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
   try {
     
     const user = await User.findById(req.params.id);
-    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ user", user)
-    console.log("🚀 ~ file: followroute.js ~ line 107 ~ router.get ~ req.params.id", req.params.id)
     if(!user){
       throw new Error("no user found");
     }
-    console.log("🚀 ~ file: followroute.js ~ line 106 ~ router.get ~ user", user)
-
-    console.log("🚀 ~ file: followroute.js ~ line 116 ~ router.get ~ req.user._id.toString()", req.user._id.toString())
     const privateRequest2 = await PrivateRequest.find({
       userId: req.user._id.toString(),
       requestUser:req.params.id
     });
-    console.log("🚀 ~ file: followroute.js ~ line 142 ~ router.get ~ privateRequest2", privateRequest2)
     const privateRequest = await PrivateRequest.deleteMany({
       userId: req.user._id.toString(),
       requestUser:req.params.id
     });
-    console.log("🚀 ~ file: followroute.js ~ line 140 ~ router.get ~ req.user._id", req.user._id)
-    console.log("🚀 ~ file: followroute.js ~ line 141 ~ router.get ~ req.params.id", req.params.id)
-
-    console.log("🚀 ~ file: followroute.js ~ line 111 ~ router.get ~ privateRequest", privateRequest)
     if(privateRequest.deletedCount==0){
       throw new Error("no user found");
     }
@@ -156,10 +146,7 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     await user.save();
     req.user.followercount++;
     await req.user.save();
-    
     res.send({ sccuss: true });
-
-  
   }catch (e) {
     res.status(400).send({ error: e.toString() });
   }
@@ -172,13 +159,13 @@ router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
       throw new Error("no user found");
     }
     const private3 = await PrivateRequest.find({
-      requestUser: user._id,
-      userId: req.user._id,
+      userId: req.user._id.toString(),
+      requestUser:req.params.id
     });
     if (private3.length === 1) {
       const private3 = await PrivateRequest.deleteOne({
-       userId:req.user._id,
-        requestUser: user._id,
+        userId: req.user._id.toString(),
+      requestUser:req.params.id
       });
       return res.send({ispending:false});
     }

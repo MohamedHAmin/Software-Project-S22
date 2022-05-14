@@ -445,12 +445,12 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
             resultTweets[i].authorId.toString() === resultUser._id.toString()
           ) {
             modifiedresultTweets.push(resultTweets[i]);
-            console.log("check");
+       
           }
         }
       }
       resultTweets = modifiedresultTweets;
-      console.log(resultTweets);
+
     }
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
@@ -543,7 +543,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       .limit(limit)
       .skip(skip)
       .sort({ createdAt: -1 });
-    console.log(likedtweets);
+   
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
       throw e;
@@ -830,15 +830,12 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       throw e;
     }
      // ["ahmed",mohamed ,ziad]
-    let tags=req.body.tags
-    console.log("🚀 ~ file: tweetroute.js ~ line 834 ~ router.post ~ tags", tags)
+   let tags=req.body.tags
     let realTags=[]
     //tags array are put in variable called tags for ease of use
     //if tags is null or an empty error we assume that there is
     //no tags in this post
     if(Array.isArray(req.body.tags)){
-    console.log("🚀 ~ file: tweetroute.js ~ line 840 ~ router.post ~ req.body.tags", req.body.tags)
-       
     
     if (tags && tags.length != 0 && tags.length > 10) {
       //if tags are not a null and not an empty list but
@@ -858,12 +855,8 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
           realTags.splice(i, 1);
           i--;
         }else{
-          console.log('first')
-          console.log("🚀 ~ file: tweetroute.js ~ line 863 ~ router.post ~ counter", counter)
-          console.log("🚀 ~ file: tweetroute.js ~ line 864 ~ router.post ~ tags[i]", tags[i])
-          console.log("🚀 ~ file: tweetroute.js ~ line 865 ~ router.post ~ realTags[counter]", realTags[counter])
+
           realTags.push({tag:tags[i]})
-          console.log("🚀 ~ file: tweetroute.js ~ line 862 ~ router.post ~  realTags[counter].tag",  realTags)
           counter++
         }
 
@@ -1199,10 +1192,7 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
         const notifications = new Notification({ userId: req.user._id, text,notifiedUId:user._id });
         notifications.save();
         const tokens = await Token.find({ ownerId: user._id });
-        console.log(
-          "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
-          tokens
-        );
+      
         if (tokens) {
           let fcmtokens = tokens.map((token) => token.fcmToken);
           var uniqueArray = [...new Set(fcmtokens)];
