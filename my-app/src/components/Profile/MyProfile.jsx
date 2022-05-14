@@ -254,6 +254,7 @@ function MyProfile(props) {
               passdeletedTweet={passdeletedTweet}
               isAdmin={props.isAdmin}
               isPost={true}
+              canviewcomments={false}
             />
           ))
         ) : (
@@ -274,6 +275,7 @@ function MyProfile(props) {
               passdeletedTweet={passdeletedTweet}
               isAdmin={props.isAdmin}
               isPost={true}
+              canviewcomments={true}
             />
           ))
         ) : (

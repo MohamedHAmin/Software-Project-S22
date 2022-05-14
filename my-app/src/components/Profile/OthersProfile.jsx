@@ -527,6 +527,7 @@ function OthersProfile(props) {
                 passdeletedTweet={passdeletedTweet}
                 isAdmin={props.isAdmin}
                 isPost={true}
+                canviewcomments={false}
               />
             ))
           ) : (
@@ -540,6 +541,7 @@ function OthersProfile(props) {
                 passdeletedTweet={passdeletedTweet}
                 isAdmin={props.isAdmin}
                 isPost={true}
+                canviewcomments={false}
               />
             ))
           ) : (
@@ -587,6 +589,7 @@ function OthersProfile(props) {
                 passdeletedTweet={passdeletedTweet}
                 isAdmin={props.isAdmin}
                 isPost={true}
+                canviewcomments={true}
               />
             ))
           ) : (
@@ -600,6 +603,7 @@ function OthersProfile(props) {
                 passdeletedTweet={passdeletedTweet}
                 isAdmin={props.isAdmin}
                 isPost={true}
+                canviewcomments={true}
               />
             ))
           ) : (

@@ -23,6 +23,7 @@ function Homepage(props) {
   const [admintoken,setAdminToken]=useState(localStorage.getItem("adminToken"));
   const [text, setText] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [page,setpage]=useState(0);
   let { id } = useParams();
   const getposts = () => {
     axios
@@ -180,6 +181,7 @@ function Homepage(props) {
               passdeletedTweet={passdeletedTweet}
               isAdmin={props.isAdmin}
               isPost={true}
+              canviewcomments={true}
             />
           ))
         ) : (<></>)}

@@ -61,17 +61,10 @@ function Reacts (props) {
     {
         if(!open && props.canretweet)
         setOpen(true);
-        //setclose(false);
     }
-    //const [close, setclose]=useState(false);
-    //const [numberOfRetweets,setNumberOfRetweets]=useState(props.numberOfRetweets);
     const [numberOfLikes,setNumberOfLikes]=useState(props.numberOfLikes);
     const [likeStatus,setLikeStatus]=useState(props.isLiked);
     const [value, setValue] = useState("");
-    /*const handleClosebtn=()=>
-    {
-        setclose(true);
-    }*/
     const Like=()=>{
         setNumberOfLikes(numberOfLikes+1);
         setLikeStatus(true);
@@ -107,18 +100,6 @@ function Reacts (props) {
           });
     }
     const RetweetHandler=()=>{
-        /*posts.push({
-            id:props.count,
-            innerpostid:props.postId,
-            username:"Ahmed_Emad",
-            displayName:"AhmedEmad71",
-            content:value,
-            posthour:moment().format('hh:mm'),
-            postdate:moment().format('DD/MM/YYYY'),
-            numberOfRetweets:0,
-            innerpostimage:props.image,
-            images:selectedImage
-        });*/
         let data=
         {
             text: value,
@@ -142,14 +123,6 @@ function Reacts (props) {
               props.setNumberOfRetweets(props.numberOfRetweets+1);
               window.location.reload();
           }
-        /*var index=posts.map((post)=>post.id).indexOf(props.postId);
-        console.log(index);
-        console.log(posts[index].numberOfRetweets);
-        posts[index].numberOfRetweets=posts[index].numberOfRetweets+1;
-        console.log(posts[index].numberOfRetweets);*/
-        /*var temp=posts.filter((post)=> post.innerpostid===props.postId);
-        setNumberOfRetweets(temp);*/
-        //props.setCount(props.count+1);
     })
     .catch((err) => {
         //err.message; // 'Oops!'
@@ -189,7 +162,8 @@ function Reacts (props) {
               username={props.username}
               tagName={props.displayName}
               image={props.image}
-              authorId={props.authorId}
+              authorId={props.authorId._id}
+              avatar={props.authorId.profileAvater.url}
               content={props.tweetcontent}/> 
               <TweetBar postHandeler={RetweetHandler} onimgChange={onimgSelectedChange}/>   
                 </Box>    
