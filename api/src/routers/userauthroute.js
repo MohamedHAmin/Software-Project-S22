@@ -38,7 +38,7 @@ router.post("/signup",async (req, res) => {
        sendVerificationEmail(result,res)
       }
       //don't generate token unless verified [with login now]
-      res.status(201).send({ status:"success"});
+      res.status(201).send(user);
     } catch (e) {
       if(e.index){
         res.status(400).send({ error:e });
