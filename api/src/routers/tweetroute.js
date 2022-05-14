@@ -484,7 +484,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
           from: User.collection.name,
           localField: "authorId",
           foreignField: "_id",
-          pipeline: [
+          pipeline: 
             {
               $project: {
                 _id: 1,
@@ -493,7 +493,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
                 "profileAvater.url": 1,
               },
             },
-          ],
+          
           as: "authorId",
         },
       },
@@ -811,7 +811,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       e = "Empty Post";
       throw e;
     } else {
-      texttrimmed = req.body.text.trim();
+      texttrimmed = req.body.text;
     }
     if (texttrimmed.length > 280) {
       //checks if post exceeded 280 characters
@@ -829,27 +829,50 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       e = "bad word";
       throw e;
     }
-
-    let tags = req.body.tags;
+     // ["ahmed",mohamed ,ziad]
+    let tags=req.body.tags
+    console.log("🚀 ~ file: tweetroute.js ~ line 834 ~ router.post ~ tags", tags)
+    let realTags=[]
     //tags array are put in variable called tags for ease of use
     //if tags is null or an empty error we assume that there is
     //no tags in this post
+    if(Array.isArray(req.body.tags)){
+    console.log("🚀 ~ file: tweetroute.js ~ line 840 ~ router.post ~ req.body.tags", req.body.tags)
+       
+    
     if (tags && tags.length != 0 && tags.length > 10) {
       //if tags are not a null and not an empty list but
       //exceeds 10 tags refuse this post and send an error
       e = "tags exceeded limit";
       throw e;
-    } else if (tags && tags.length != 0 && tags.length <= 10) {
+    } 
+    else if (tags && tags.length != 0 && tags.length <= 10) {
       //if tags are not a null and don't exceed 10 tags then
       //then enter a loop on all tag object inside tags
+      let counter=0
       for (let i = 0; i < tags.length; i++) {
-        if (!tags[i].tag || tags[i].tag.trim().length === 0) {
+       
+        if (!tags[i] || tags[i].trim().length === 0) {
           //if tag is "" (empty) or null remove it from array
           //and decrease index of loop
-          tags.splice(i, 1);
+          realTags.splice(i, 1);
           i--;
+        }else{
+          console.log('first')
+          console.log("🚀 ~ file: tweetroute.js ~ line 863 ~ router.post ~ counter", counter)
+          console.log("🚀 ~ file: tweetroute.js ~ line 864 ~ router.post ~ tags[i]", tags[i])
+          console.log("🚀 ~ file: tweetroute.js ~ line 865 ~ router.post ~ realTags[counter]", realTags[counter])
+          realTags.push({tag:tags[i]})
+          console.log("🚀 ~ file: tweetroute.js ~ line 862 ~ router.post ~  realTags[counter].tag",  realTags)
+          counter++
         }
+
       }
+    }}else{
+      if(tags){
+          realTags.push({tag:tags}) 
+      }
+    
     }
     if (req.body.imageCheck === "true") {
       // const uploader = (path) => cloudinary.uploads(path, "Images");
@@ -877,7 +900,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
         gallery: urls,
       });
     } else {
-      await Tweet.create({ ...req.body, authorId: req.user._id });
+      await Tweet.create({ ...req.body,tags:realTags, authorId: req.user._id });
     }
       const nottext=req.user.tag+" posted a new lar"
       notifiy(req.user,nottext,req.user.tag,"newtweet")

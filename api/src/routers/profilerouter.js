@@ -6,8 +6,29 @@ const auth = require("../middleware/auth");
 const PrivateRequest = require("../models/PrivateRequest");
 const bcrypt = require("bcryptjs");
 const { request } = require("express");
+const assert = require("assert");
+const _ = require("lodash");
 
 const router = new express.Router();
+
+router.get("/suggestedAccounts", auth("any"), async (req, res) => {
+  try {
+    console.log("first")
+    const followingsId = req.user.following.map((user) => {
+      return user.followingId;
+    });
+    const user = req.user;
+    followingsId.push(req.user._id);
+    let suggestedAccounts = await User.find({ _id: { $nin: followingsId }})
+    suggestedAccounts=_.sampleSize(suggestedAccounts,4)
+    res.send(suggestedAccounts);
+  }
+    catch(e){
+      res.status(400).send({ error: e.toString() });
+    }
+})
+
+
 
 router.get("/:id", auth("any"), async (req, res) => {
   try {
