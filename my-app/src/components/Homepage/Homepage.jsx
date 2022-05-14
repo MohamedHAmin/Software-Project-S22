@@ -24,8 +24,13 @@ function Homepage(props) {
   const [admintoken,setAdminToken]=useState(localStorage.getItem("adminToken"));
   const [text, setText] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [photos, setuploadphotos] = useState([]);
   const [skip,setskip]=useState(0);
   const [hasmore,sethasmore]=useState(true);
+  const [at, setats] = useState([]);
+  const [final, setfinal] = useState([]);
+  const [finalfinal, setfinalfinal] = useState([]);
+  const [space, setspaces] = useState([]);
   let { id } = useParams();
   const getposts = () => {
     axios
@@ -56,7 +61,28 @@ function Homepage(props) {
   //     sethasmore(false);
   //   }
   // }
+  if(photos.length ===0){
+  }
+  else{
 
+        
+    // fileInput is an HTML input element: <input type="file" id="myfileinput" multiple>
+    var fileInput = document.getElementById("icon-button-file");
+
+    // files is a FileList object (similar to NodeList)
+    var files = fileInput.files;
+    var file;
+
+    // loop through files
+    for (var i = 0; i < files.length; i++) {
+
+        // get item
+        file = files.item(i);
+        photos[i]=file
+        // alert(photos[i].name);
+
+    }
+  }
   useEffect(() => {
     getposts();
     axios
@@ -74,8 +100,9 @@ function Homepage(props) {
   }, [id]);
   const [selectedImage, setSelectedImage] = useState(null);
   function onimgSelectedChange(newimg) {
-    setSelectedImage(newimg);
-    console.log(selectedImage);
+    setuploadphotos(newimg);
+    console.log(photos);
+    console.log(photos.length);
   }
   const passdeletedTweet = (id) => {
     if(props.isAdmin)
@@ -126,7 +153,7 @@ function Homepage(props) {
     }
   };
   const postHandeler = () => {
-    if (text != "" || selectedImage) {
+    if (text != "" || photos.length) {
       let data = {
         authorId: localStorage.getItem("userId"),
         text: text,
@@ -135,14 +162,96 @@ function Homepage(props) {
       if (text === "") {
         data.text = "No-text";
       }
-      if (selectedImage) {
-        data.gallery.push({ photo: selectedImage });
+      if (text != "") {
+
+
+        let j=0;
+        for (var i = 0; i < text.length; i++) {
+      
+          let d=text.slice(i,i+1);
+          if(d==="@"){
+            at[j]=i;
+            j++;
+          }
+        
+        }
+        let q=0;
+        for (var i = 0; i < text.length; i++) {
+      
+          let d=text.slice(i,i+1);
+          if(d===" "){
+            space[q]=i;
+            q++;
+          }
+        
+        }
+        let r=0
+        let w=0;
+        for (var i = 0; i < space.length; i++) {
+          // console.log(at[w]);
+          // console.log(space[i]);
+          if(space[i]===at[w]+1){
+            w++;
+          }
+          if(space[i]>at[w]+1){
+            // console.log(at[w]);
+            // console.log(space[i]);
+            // console.log(r);
+            // console.log(w);
+            final[r]=at[w];
+            final[r+1]=space[i];
+            // console.log(final[r]);
+            // console.log(final[r+1]);
+            // console.log(space[i]);
+            // console.log(at[w]);
+            w++;
+            r+=2;
+          }
+        }
+          let u=0;
+        if(final.length!=0){
+         
+          for (var i = 0; i < final.length; i+=2) {
+            // console.log(final[i]);
+            // console.log(final[i+1]);
+            let t=text.slice(final[i],final[i+1]);
+            // console.log(t)
+            finalfinal[u]=t;
+            u++;
+          }
+        }
+        // console.log(at[w]);
+        // console.log(text.length);
+      
+        if(w<at.length){
+          // let p=finalfinal.length
+          let x=text.slice(at[w],text.length);
+          // console.log(p);
+          // console.log(finalfinal.length);
+          finalfinal[w]=x;
+          // console.log(finalfinal.length);
+          // p=-2;
+          // w++;
+          // console.log("doneeeeeee");
+        }
+        if(finalfinal.length!=0){
+          for (var i = 0; i < finalfinal.length; i++) {
+             console.log(finalfinal[i]);
+          }
+        }
+      }
+      if (photos.length) {
+        data.gallery.push({ photo: photos[0]});
       }
       let data2 = new FormData();
-      data2.append("authorId", data.authorId);
-      data2.append("text", data.text);
-      data2.append("image", selectedImage);
-      data2.append("imageCheck", "true");
+        alert(photos.length);
+        data2.append("authorId", data.authorId);
+        data2.append("text", data.text);
+        for(var i=0;i<photos.length;i++){
+          data2.append("image", photos[i]);
+        }
+         data2.append("tags", finalfinal);
+        data2.append("imageCheck", "true");
       let x = localStorage.getItem("accessToken");
       console.log(data);
       console.log(data2);
@@ -169,7 +278,7 @@ function Homepage(props) {
         });
 
       setText("");
-      setSelectedImage();
+      setuploadphotos([]);
     }
   };
   console.log(posts);
@@ -184,7 +293,7 @@ function Homepage(props) {
         <Tweet
           value={text}
           onChangeHandeler={onChangeHandeler}
-          ali={selectedImage}
+          ali={photos}
         />
         <TweetBar
           postHandeler={postHandeler}
