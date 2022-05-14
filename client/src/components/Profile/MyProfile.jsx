@@ -69,7 +69,7 @@ function MyProfile(props) {
       route.pathname == `/Profile/${id}/with_replies` &&
         axios
           .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api//profile/replies/${id}`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/replies/${id}`,
             {
               headers: { Authorization: localStorage.getItem("accessToken") },
             }
@@ -254,6 +254,7 @@ function MyProfile(props) {
               passdeletedTweet={passdeletedTweet}
               isAdmin={props.isAdmin}
               isPost={true}
+              canviewcomments={false}
             />
           ))
         ) : (
@@ -274,6 +275,7 @@ function MyProfile(props) {
               passdeletedTweet={passdeletedTweet}
               isAdmin={props.isAdmin}
               isPost={true}
+              canviewcomments={true}
             />
           ))
         ) : (
