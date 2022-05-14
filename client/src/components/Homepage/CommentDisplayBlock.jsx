@@ -187,7 +187,7 @@ function deletepost(){
             commentsCount={commentsperpost}
             image={props.post.gallery[0]}
             canretweet={canretweet}
-            authorId={props.post.authorId._id}
+            authorId={props.post.authorId}
             CommentHandler={CommentHandler}
             />:(<></>)}
         </div>
