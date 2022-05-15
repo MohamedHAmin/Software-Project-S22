@@ -13,10 +13,10 @@ module.exports = function (passport){
     const newUser = { 
         googleId : profile.id,
         screenName: profile.displayName,
-        tag: profile.name,
+        tag: profile.name.givenName,
         profileAvater: profile.photos[0].value,
         verified:true,
-        email:profile.emails,
+        email:profile.emails.value,
         password:"googledummy123"
     }
  try {

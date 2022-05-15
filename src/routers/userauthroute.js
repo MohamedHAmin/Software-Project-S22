@@ -12,6 +12,7 @@ const {v4: uuidv4 } = require("uuid")
 const { urlencoded } = require("express")
 const { identity } = require("lodash")
 require('env-cmd')
+require('../passport/passport')(passport)
 //nodemailer setup [less secure option on ]
 let transporter = nodemailer.createTransport({
   service:"gmail",
@@ -198,7 +199,7 @@ router.post("/signup",async (req, res) => {
    //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
    router.get('/auth/google', passport.authenticate('google', {scope:['profile'] }))
 
-   router.get('auth/google/callback',passport.authenticate('google', {failureRedirect:'/googlelogin/failed',successRedirect:"/googlelogin/success"}))
+   router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'/googlelogin/failed',successRedirect:"/Home"}))
    //redirect pages will be later on implemented by FE
  
  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
