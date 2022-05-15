@@ -18,13 +18,25 @@
     color: var(--color-mode);
     cursor: pointer;
 }
+.image-containerx{
+    
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+      
+}
 .uploadedimage
 {
-    max-height: 300px;
+    /* max-height: 300px;
     height: auto;
     max-width: inherit;
     width: auto;
-    margin-right: 100%;
+    margin-right: 100%; */
+    width: 48% ;
+    min-width: 200px ;
+    padding: 2px;
+
 }
 .profilePic
 {

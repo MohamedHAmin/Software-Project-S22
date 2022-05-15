@@ -21,13 +21,15 @@ function TweetBar(props){
     //const [selectedImage, setSelectedImage] = useState(null);
     /*const [uploadCount,setuploadCount]=useState(0);
     console.log(uploadCount);*/
+    const [photos, setuploadphotos] = useState([]);
     return(
        
     <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
         <label  htmlFor="icon-button-file">
-        <Input  accept="image/*" id="icon-button-file" type="file" name="myImage"
+        <Input  accept="image/png, image/jpeg, image/jpg" id="icon-button-file" type="file" name="myImage" multiple 
          onChange={(event) => {
-          props.onimgChange(event.target.files[0]);
+          photos.push(event.target.files);
+          props.onimgChange(photos);
           /*var temp2=uploadCount;
           temp2++;
           setuploadCount(temp2);*/

@@ -3,10 +3,7 @@ import "./Styles/MyProfile.css";
 import ProfileName from "./ProfileName";
 import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
-import EditProfile from "./EditProfile";
 import { Button, Typography, Modal } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import CloseIcon from "@mui/icons-material/Close";
 import MyProfileTabs from "./MyProfileTabs";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,7 +12,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Post from "../Homepage/Post";
 import { FallingLines } from "react-loader-spinner";
-import { Web } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
 /**
  *
@@ -54,64 +50,6 @@ function OthersProfile(props) {
   console.log(route.pathname);
   useEffect(() => {
     setUserTweets([]);
-
-    {
-      route.pathname == `/Profile/${id}` &&
-        axios
-          .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
-            {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setUserTweets(res.data);
-            }
-          });
-    }
-
-    {
-      route.pathname == `/Profile/${id}/with_replies` &&
-        axios
-          .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api//profile/replies/${id}`,
-            {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setUserTweets(res.data);
-            }
-          });
-    }
-
-    {
-      route.pathname == `/Profile/${id}/likes` &&
-        axios
-          .get(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/likedtweets/${id}`,
-            {
-              headers: { Authorization: localStorage.getItem("accessToken") },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.error) {
-              console.log("Error");
-            } else {
-              setUserTweets(res.data);
-            }
-          });
-    }
-
     axios
       .get(
         `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
@@ -145,7 +83,76 @@ function OthersProfile(props) {
           setIsPrivate(res.data.user.isPrivate);
         }
       });
-  }, [route.pathname]);
+
+    if (route.pathname === `/Profile/${id}`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/user/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+    if (route.pathname === `/Profile/${id}/with_replies`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/replies/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+    if (route.pathname === `/Profile/${id}/media`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/media/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+    if (route.pathname === `/Profile/${id}/likes`) {
+      axios
+        .get(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/likedtweets/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("accessToken") },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+            console.log("Error");
+          } else {
+            setUserTweets(res.data);
+          }
+        });
+    }
+  }, [route.pathname, id]);
 
   const passdeletedTweet = (id) => {
     axios
@@ -330,7 +337,7 @@ function OthersProfile(props) {
             src={profilePhoto}
           />
 
-          {isAdmin != "" ? (
+          {isAdmin !== "" ? (
             <Button
               className="optionProfileButton"
               variant="outlined"
@@ -373,7 +380,7 @@ function OthersProfile(props) {
             aria-describedby="modal-modal-description"
             keepMounted
           >
-            {isAdmin != "" ? (
+            {isAdmin !== "" ? (
               <FormControl className="editProfileCloseContainer">
                 <Typography id="modal-modal-title" variant="h6">
                   Ban @{Tag}?
@@ -494,18 +501,18 @@ function OthersProfile(props) {
         />
 
         {/*Tweets First Tab */}
-        {!isPrivate && route.pathname == `/Profile/${id}` ? (
+        {!isPrivate && route.pathname === `/Profile/${id}` ? (
           <MyProfileTabs Tweets />
         ) : (
           <></>
         )}
-        {isPrivate && isFollowed && route.pathname == `/Profile/${id}` ? (
+        {isPrivate && isFollowed && route.pathname === `/Profile/${id}` ? (
           <MyProfileTabs Tweets />
         ) : (
           <></>
         )}
         {/* if any user account is private do NOT show Tweets */}
-        {isPrivate && !isFollowed && route.pathname == `/Profile/${id}` ? (
+        {isPrivate && !isFollowed && route.pathname === `/Profile/${id}` ? (
           <div className="privateAccMessageHeader">
             These Lars are protected!
             <div className="privateAccMessageParagraph">
@@ -519,7 +526,7 @@ function OthersProfile(props) {
         {/* if any user account public -> show his tweets  
             OR if user account is private: -> if he follows me -> show his tweets
                                           -> if he doesn't follows me -> dont show his tweets*/}
-        {!isPrivate && route.pathname == `/Profile/${id}` ? (
+        {!isPrivate && route.pathname === `/Profile/${id}` ? (
           userTweets?.length ? (
             userTweets.map((post) => (
               <Post
@@ -534,7 +541,7 @@ function OthersProfile(props) {
             <></>
           )
         ) : userTweets?.length && isFollowed ? (
-          route.pathname == `/Profile/${id}` ? (
+          route.pathname === `/Profile/${id}` ? (
             userTweets.map((post) => (
               <Post
                 post={post}
@@ -552,14 +559,14 @@ function OthersProfile(props) {
         )}
 
         {/*Tweets Second Tab */}
-        {!isPrivate && route.pathname == `/Profile/${id}/with_replies` ? (
+        {!isPrivate && route.pathname === `/Profile/${id}/with_replies` ? (
           <MyProfileTabs Replies />
         ) : (
           <></>
         )}
         {isPrivate &&
         isFollowed &&
-        route.pathname == `/Profile/${id}/with_replies` ? (
+        route.pathname === `/Profile/${id}/with_replies` ? (
           <MyProfileTabs Replies />
         ) : (
           <></>
@@ -567,7 +574,7 @@ function OthersProfile(props) {
         {/* if any user account is private do NOT show Tweets */}
         {isPrivate &&
         !isFollowed &&
-        route.pathname == `/Profile/${id}/with_replies` ? (
+        route.pathname === `/Profile/${id}/with_replies` ? (
           <div className="privateAccMessageHeader">
             These Lars are protected!
             <div className="privateAccMessageParagraph">
@@ -581,7 +588,7 @@ function OthersProfile(props) {
         {/* if any user account public -> show his tweets  
             OR if user account is private: -> if he follows me -> show his tweets
                                           -> if he doesn't follows me -> dont show his tweets*/}
-        {!isPrivate && route.pathname == `/Profile/${id}/with_replies` ? (
+        {!isPrivate && route.pathname === `/Profile/${id}/with_replies` ? (
           userTweets?.length ? (
             userTweets.map((post) => (
               <Post
@@ -596,7 +603,7 @@ function OthersProfile(props) {
             <></>
           )
         ) : userTweets?.length && isFollowed ? (
-          route.pathname == `/Profile/${id}/with_replies` ? (
+          route.pathname === `/Profile/${id}/with_replies` ? (
             userTweets.map((post) => (
               <Post
                 post={post}
@@ -613,21 +620,23 @@ function OthersProfile(props) {
           <></>
         )}
 
-        {/*Tweets Second Tab */}
-        {!isPrivate && route.pathname == `/Profile/${id}/likes` ? (
-          <MyProfileTabs Likes />
+        {/*Tweets Third Tab */}
+        {!isPrivate && route.pathname === `/Profile/${id}/media` ? (
+          <MyProfileTabs Media />
         ) : (
           <></>
         )}
-        {isPrivate && isFollowed && route.pathname == `/Profile/${id}/likes` ? (
-          <MyProfileTabs Likes />
+        {isPrivate &&
+        isFollowed &&
+        route.pathname === `/Profile/${id}/media` ? (
+          <MyProfileTabs Media />
         ) : (
           <></>
         )}
         {/* if any user account is private do NOT show Tweets */}
         {isPrivate &&
         !isFollowed &&
-        route.pathname == `/Profile/${id}/likes` ? (
+        route.pathname === `/Profile/${id}/media` ? (
           <div className="privateAccMessageHeader">
             These Lars are protected!
             <div className="privateAccMessageParagraph">
@@ -641,7 +650,69 @@ function OthersProfile(props) {
         {/* if any user account public -> show his tweets  
             OR if user account is private: -> if he follows me -> show his tweets
                                           -> if he doesn't follows me -> dont show his tweets*/}
-        {!isPrivate && route.pathname == `/Profile/${id}/likes` ? (
+        {!isPrivate && route.pathname === `/Profile/${id}/media` ? (
+          userTweets?.length ? (
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+                canviewcomments={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
+        ) : userTweets?.length && isFollowed ? (
+          route.pathname === `/Profile/${id}/media` ? (
+            userTweets.map((post) => (
+              <Post
+                post={post}
+                passdeletedTweet={passdeletedTweet}
+                isAdmin={props.isAdmin}
+                isPost={true}
+                canviewcomments={true}
+              />
+            ))
+          ) : (
+            <></>
+          )
+        ) : (
+          <></>
+        )}
+
+        {/*Tweets Fourth Tab */}
+        {!isPrivate && route.pathname === `/Profile/${id}/likes` ? (
+          <MyProfileTabs Likes />
+        ) : (
+          <></>
+        )}
+        {isPrivate &&
+        isFollowed &&
+        route.pathname === `/Profile/${id}/likes` ? (
+          <MyProfileTabs Likes />
+        ) : (
+          <></>
+        )}
+        {/* if any user account is private do NOT show Tweets */}
+        {isPrivate &&
+        !isFollowed &&
+        route.pathname === `/Profile/${id}/likes` ? (
+          <div className="privateAccMessageHeader">
+            These Lars are protected!
+            <div className="privateAccMessageParagraph">
+              Only approved followers can see @{Tag} Tweets. To request access,
+              click Follow.
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+        {/* if any user account public -> show his tweets  
+            OR if user account is private: -> if he follows me -> show his tweets
+                                          -> if he doesn't follows me -> dont show his tweets*/}
+        {!isPrivate && route.pathname === `/Profile/${id}/likes` ? (
           userTweets?.length ? (
             userTweets.map((post) => (
               <Post
@@ -655,7 +726,7 @@ function OthersProfile(props) {
             <></>
           )
         ) : userTweets?.length && isFollowed ? (
-          route.pathname == `/Profile/${id}/likes` ? (
+          route.pathname === `/Profile/${id}/likes` ? (
             userTweets.map((post) => (
               <Post
                 post={post}

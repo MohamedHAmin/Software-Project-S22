@@ -37,7 +37,7 @@ after_success:
 
 deploy:
   provider: elasticbeanstalk
-  wait_until_deployed: true
+  #wait_until_deployed: true
   region: 'us-east-1'
   app: 'Larry'
   env: 'Larry-env'

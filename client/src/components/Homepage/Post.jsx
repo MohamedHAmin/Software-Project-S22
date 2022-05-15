@@ -129,12 +129,14 @@ function deletepost(){
             </div>
         </div>
         {tweetcontent!=="No-text" && <div className="tweetContent">{tweetcontent}</div>}
-        {props.post.gallery[0]? (<img className="uploadedimage" alt="not found" key={props.post.gallery[0]._id} src={props.post.gallery[0].photo}/>):<></>}
+        <div className="image-containerx">
+        {props.post.gallery.length>0?props.post.gallery.map(m=>(<img className="uploadedimage" alt="not found" key={m._id} src={m.photo}/>)):<></> }
+        </div>
         {props.post.retweetedTweet.tweetId && <RetweetDisplayBlock key={props.post.retweetedTweet.tweetId._id}
               username={props.post.retweetedTweet.tweetId.authorId.screenName}
               tagName={props.post.retweetedTweet.tweetId.authorId.tag}
               avatar={props.post.retweetedTweet.tweetId.authorId.profileAvater.url}
-              image={props.post.retweetedTweet.tweetId.gallery[0]}
+              image={props.post.retweetedTweet.tweetId.gallery}
               authorId={props.post.retweetedTweet.tweetId.authorId._id}
               content={props.post.retweetedTweet.tweetId.text}/>}
         {(props.post.retweetedTweet.tweetExisted==true && !props.post.retweetedTweet.tweetId) && <div className="comments">This Lar has been deleted</div>}
@@ -154,7 +156,7 @@ function deletepost(){
             username={username}
             displayName={displayName} 
             commentsCount={commentsperpost}
-            image={props.post.gallery[0]}
+            image={props.post.gallery}
             canretweet={canretweet}
             authorId={props.post.authorId}
             CommentHandler={CommentHandler}

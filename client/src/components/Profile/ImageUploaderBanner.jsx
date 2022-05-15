@@ -9,7 +9,6 @@ import { dataURLtoFile } from "./dataURLtoFile";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-
 /**
  *
  * @param {props} props Getting the name and photo of the banner.

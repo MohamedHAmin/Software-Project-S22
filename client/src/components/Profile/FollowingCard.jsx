@@ -1,8 +1,8 @@
 import React from "react";
 import "./Styles/FollowingCard.css";
 import { Avatar, Button, Typography, Modal } from "@mui/material";
-import { NavLink, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 /**
@@ -11,7 +11,6 @@ import FormControl from "@mui/material/FormControl";
  * @returns Returns the setted the information of the people i follow.
  */
 function FollowingCard(props) {
-  let { id } = useParams();
   const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing);
   const [followModalState, setFollowModalState] = useState(false);
   let userID = localStorage.getItem("userId");
@@ -21,31 +20,29 @@ function FollowingCard(props) {
    * Handling the following request
    */
   function handleButtonClick() {
-    if(isPending===false)
-    {  
-    console.log(isFollowed);
-    if (isFollowed) {
-      setFollowModalState(true);
+    if (isPending === false) {
+      console.log(isFollowed);
+      if (isFollowed) {
+        setFollowModalState(true);
+      } else {
+        axios
+          .post(
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact.followingId._id}`,
+            null,
+            { headers: { Authorization: localStorage.getItem("accessToken") } }
+          )
+          .then((res) => {
+            setFollowers(Followers + 1);
+            //profileData.followercount=Followers+1
+            setIsFollowed(true);
+            console.log(res);
+            window.location.reload();
+          })
+          .catch((err) => {
+            setFollowModalState(true); // 'Oops!'
+          });
+      }
     } else {
-      axios
-        .post(
-          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact.followingId._id}`,
-          null,
-          { headers: { Authorization: localStorage.getItem("accessToken") } }
-        )
-        .then((res) => {
-          setFollowers(Followers + 1);
-          //profileData.followercount=Followers+1
-          setIsFollowed(true);
-          console.log(res);
-          window.location.reload();
-        })
-        .catch((err) => {
-          setFollowModalState(true); // 'Oops!'
-        });
-    }
-    }
-    else{
       handleUnfollowAction();
       setIsPending(false);
     }
@@ -61,17 +58,15 @@ function FollowingCard(props) {
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
-        if(isPending===true)
-        {
+        if (isPending === true) {
           setIsPending(false);
+        } else {
+          console.log(res);
+          setFollowers(Followers - 1);
+          setFollowModalState(false);
+          setIsFollowed(false);
+          window.location.reload();
         }
-        else{
-        console.log(res);
-        setFollowers(Followers - 1);
-        setFollowModalState(false);
-        setIsFollowed(false);
-        window.location.reload();
-      }
       })
       .catch((err) => {}); // 'Oops!';
   }
@@ -162,7 +157,11 @@ function FollowingCard(props) {
             props.contact.isfollowing ? "followButton1" : "followButton2"
           }
         >
-          {isPending?("Pending"):(props.contact.isfollowing ? "Following" : "Follow")}
+          {isPending
+            ? "Pending"
+            : props.contact.isfollowing
+            ? "Following"
+            : "Follow"}
         </Button>
       ) : null}
     </div>

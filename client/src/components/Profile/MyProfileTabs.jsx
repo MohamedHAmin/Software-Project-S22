@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tab, Box } from "@mui/material";
 import { NavLink, useParams } from "react-router-dom";
 import "./Styles/MyProfileTabs.css";
 /**
