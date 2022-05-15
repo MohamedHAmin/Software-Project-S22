@@ -16,7 +16,6 @@ module.exports = function (passport){
         tag: profile.name,
         profileAvater: profile.photos[0].value,
         verified:true,
-        birthDate: profile.birthday,
         email:profile.emails,
         password:"googledummy123"
     }
@@ -28,6 +27,7 @@ module.exports = function (passport){
      else{
          // creates a new user if not found 
         user = await User.create(newUser)
+        //user.generateAuthToken();
         done(null,user)
         }
 } catch (err) {

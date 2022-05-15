@@ -16,7 +16,22 @@ const cors = require("cors")
 
 
 const app=express()
-app.use(cors())
+
+app.use(
+    cookieSession({ name: "session", keys: ["ozer"], maxAge: 24 * 60 * 60 * 100 })
+  );
+  
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  app.use(
+    cors({
+      origin: "http://localhost:5000",
+      methods: "GET,POST,PUT,DELETE",
+      credentials: true,
+    })
+  );
+  
 const port=process.env.PORT
 app.use(express.json())
 app.set('trust proxy', 1) 

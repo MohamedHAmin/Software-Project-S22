@@ -203,7 +203,7 @@ router.post("/signup",async (req, res) => {
  
  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
  router.get("/googlelogin/failed",(req,res)=>{
-   res.status(401).json({
+   res.status(403).json({
      success: false,
      message: "failure"
    })
