@@ -30,6 +30,7 @@ function Homepage(props) {
   const [at, setats] = useState([]);
   const [final, setfinal] = useState([]);
   const [finalfinal, setfinalfinal] = useState([]);
+  console.log( "tags"+ finalfinal[0]);
   const [space, setspaces] = useState([]);
   let { id } = useParams();
   const getposts = () => {
@@ -250,8 +251,15 @@ function Homepage(props) {
         for(var i=0;i<photos.length;i++){
           data2.append("image", photos[i]);
         }
-         data2.append("tags", finalfinal);
-        data2.append("imageCheck", "true");
+        // for(var i=0;i<finalfinal.length;i++){
+          //   data2.append("tags", finalfinal[i]);
+          // }
+          if(photos.length)
+          {
+            data2.append("imageCheck", "true");
+          }
+        data2.append("tags", finalfinal[0]);
+        //data2.append("tags", "1112122");
       let x = localStorage.getItem("accessToken");
       console.log(data);
       console.log(data2);
