@@ -16,7 +16,7 @@ module.exports = function (passport){
         tag: profile.name.givenName,
         profileAvater: profile.photos[0].value,
         verified:true,
-        email:profile.emails.value,
+        email:profile.emails[0].value,
         password:"googledummy123"
     }
  try {
