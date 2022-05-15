@@ -360,6 +360,8 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
     }
     let resultTweets = await Tweet.find({
       text: { $regex: searchedItem, $options: "i" },
+      "replyingTo.tweetId": null,
+      "replyingTo.tweetExisted": false,
     })
       .sort({ createdAt: -1 })
       .limit(limit)
@@ -466,7 +468,6 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 
 router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let requiredId = mongoose.Types.ObjectId(req.params.id);
@@ -479,88 +480,39 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": requiredId } },
       { $project: { likes: 0 } },
-      {
-        $lookup: {
-          from: User.collection.name,
-          localField: "authorId",
-          foreignField: "_id",
-          pipeline: 
-            {
-              $project: {
-                _id: 1,
-                screenName: 1,
-                tag: 1,
-                "profileAvater.url": 1,
-              },
-            },
-          
-          as: "authorId",
-        },
-      },
-      {
-        $lookup: {
-          from: Tweet.collection.name,
-          localField: "retweetedTweet.tweetId",
-          pipeline: [
-            {
-              $project: {
-                _id: 1,
-                replyingTo: 1,
-                authorId: 1,
-                text: 1,
-                tags: 1,
-                likeCount: 1,
-                retweetCount: 1,
-                gallery: 1,
-                replyCount: 1,
-                createdAt: 1,
-              },
-            },
-            {
-              $lookup: {
-                from: User.collection.name,
-                localField: "authorId",
-                foreignField: "_id",
-                pipeline: [
-                  {
-                    $project: {
-                      _id: 1,
-                      screenName: 1,
-                      tag: 1,
-                      "profileAvater.url": 1,
-                    },
-                  },
-                ],
-                as: "authorId",
-              },
-            },
-          ],
-          foreignField: "_id",
-          as: "retweetedTweet.tweetId",
-        },
-      },
     ])
       .limit(limit)
       .skip(skip)
       .sort({ createdAt: -1 });
-   
+    for (likedtweet of likedtweets) {
+      await User.populate(likedtweet, {
+        path: "authorId",
+        select: "_id screenName tag profileAvater.url",
+      });
+      await Tweet.populate(likedtweet, {
+        path: "retweetedTweet.tweetId",
+        select:
+          "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
+      });
+      await Tweet.populate(likedtweet, {
+        path: "replyingTo.tweetId",
+        select:
+          "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
+      });
+    }
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
       throw e;
-    }
-    for (let i = 0; i < likedtweets.length; i++) {
-      if (
-        !Array.isArray(likedtweets[i].retweetedTweet.tweetId) ||
-        !likedtweets[i].retweetedTweet.tweetId.length
-      ) {
-        likedtweets[i].retweetedTweet.tweetId = null;
-      }
-      if (likedtweets[i].replyingTo.tweetExisted) {
-        temp = await Tweet.findById(likedtweets[i].replyingTo.tweetId);
-        if (!temp) {
-          likedtweets[i].replyingTo.tweetId = null;
-        }
-      }
     }
 
     res.send(likedtweets);
@@ -724,6 +676,8 @@ router.get("/explore", auth("any"), async (req, res) => {
 
     let exploredTweet = await Tweet.find({
       authorId: { $nin: followingsId, $ne: req.user._id },
+      "replyingTo.tweetId": null,
+      "replyingTo.tweetExisted": false,
     })
       .sort({ createdAt: -1 })
       .limit(limit)
@@ -898,7 +852,12 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       await Tweet.create({ ...req.body,tags:realTags, authorId: req.user._id });
     }
       const nottext=req.user.tag+" posted a new lar"
-      notifiy(req.user,nottext,req.user.tag,"newtweet")
+      const tagtext="@"+req.user.tag+" mentioned you in his lar"
+      console.log("🚀 ~ file: tweetroute.js ~ line 902 ~ router.post ~ tagtext", tagtext)
+
+      console.log("🚀 ~ file: tweetroute.js ~ line 905 ~ router.post ~ realTags", realTags)
+      notifiy(req.user,nottext,req.user.tag,"newtweet",realTags,tagtext)
+      console.log("🚀 ~ file: tweetroute.js ~ line 905 ~ router.post ~ tagtext", tagtext)
   
 
     res.status(200).send({ AddedTweetStatus: "Tweet Stored" });
@@ -968,7 +927,10 @@ router.post("/retweet", auth("user"), async (req, res) => {
       retweetedTweet: { tweetId: req.body.retweetedTweet, tweetExisted: true },
     });
     const nottext=req.user.tag+" has relar"
-    notifiy(req.user,nottext,req.user.tag,"newtweet")
+    const tagtext="@"+req.user.tag+" mentioned you in his relar"
+    console.log("🚀 ~ file: tweetroute.js ~ line 974 ~ router.post ~ tagtext", tagtext)
+
+    notifiy(req.user,nottext,req.user.tag,"newtweet",req.body.tags,tagtext)
 
     res.status(200).send({ AddedTweetStatus: "Retweet Stored" }).end();
   } catch (e) {
