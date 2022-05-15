@@ -63,9 +63,10 @@ router.post("/signup",async (req, res) => {
   //token is put in header [in postman]
   router.delete("/logout" ,auth('any'),async (req, res) => {
     try{
-      await Token.deleteMany({ token: req.token })
+     const a= await Token.deleteMany({ token: req.token })
+     console.log("🚀 ~ file: userauthroute.js ~ line 67 ~ router.delete ~ a", a)
       
-      res.status(200).end({success:"Success"})}
+      res.status(200).send({success:"Success"})}
       
       
       catch (e) {

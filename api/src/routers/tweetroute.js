@@ -864,9 +864,10 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
     }}else{
       if(tags){
           realTags.push({tag:tags}) 
+        }
+        
       }
-    
-    }
+      console.log("🚀 ~ file: tweetroute.js ~ line 867 ~ router.post ~ realTags", realTags)
     if (req.body.imageCheck === "true") {
       // const uploader = (path) => cloudinary.uploads(path, "Images");
       const urls = [];
@@ -890,6 +891,7 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       await Tweet.create({
         ...req.body,
         authorId: req.user._id,
+        tags:realTags,
         gallery: urls,
       });
     } else {
