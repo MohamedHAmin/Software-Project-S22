@@ -1,6 +1,7 @@
 const  User = require('../models/User')
 const mongoose = require('mongoose')
 require('env-cmd')
+const {v4: uuidv4 } = require("uuid")
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 //Please be noted that no duplicate emails are allowed 
 module.exports = function (passport){
@@ -13,7 +14,7 @@ module.exports = function (passport){
     const newUser = { 
         googleId : profile.id,
         screenName: profile.displayName,
-        tag: profile.name.givenName + profile.name.familyName,
+        tag: profile.name.givenName + Math.floor(Math.random() *10000),
         profileAvater: profile.photos[0].value,
         verified:true,
         email:profile.emails[0].value,
