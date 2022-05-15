@@ -6,6 +6,12 @@ const tokenSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    fcmToken:{
+        type:String,
+        trim:true,
+    default:null
+
+    },
     ownerId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true

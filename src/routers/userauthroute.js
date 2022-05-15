@@ -38,7 +38,7 @@ router.post("/signup",async (req, res) => {
        sendVerificationEmail(result,res)
       }
       //don't generate token unless verified [with login now]
-      res.status(201).send({ status:"success"});
+      res.status(201).send(user);
     } catch (e) {
       if(e.index){
         res.status(400).send({ error:e });
@@ -75,11 +75,10 @@ router.post("/signup",async (req, res) => {
     
     router.delete("/logoutall",auth('any'), async (req, res) => {
       try{
-        console.log("🚀 ~ file: userauthroute.js ~ line 80 ~ router.delete ~  req.user._id.toString()",  req.user._id.toString())
         await Token.deleteMany({ 
           ownerId: req.user._id.toString()
         })
-        console.log('first')
+
         res.status(200).send({success:"Success"})
         
       }
