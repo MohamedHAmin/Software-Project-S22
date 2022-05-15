@@ -6,7 +6,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import LarryIcon from "../../Images/Logo Default.png";
 import DashboardIcon from "@mui/icons-material/DashboardRounded";
 import LarryIconDark from "../../Images/Logo Dark Mode.png";
