@@ -197,9 +197,9 @@ router.post("/signup",async (req, res) => {
     }
   }
    //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
-   router.get('/auth/google', passport.authenticate('google', {scope:['profile'] }))
+   router.get('/auth/google', passport.authenticate('google', {scope:['profile','email']}))
 
-   router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'/googlelogin/failed',successRedirect:"/Home"}))
+   router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'/login',successRedirect:"/Home"}))
    //redirect pages will be later on implemented by FE
  
  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
