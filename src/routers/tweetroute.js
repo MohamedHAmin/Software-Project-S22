@@ -477,6 +477,16 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
           select: "_id screenName tag profileAvater.url",
         },
       });
+      await Tweet.populate(likedtweet, {
+        path: "replyingTo.tweetId",
+        select:
+          "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
+      });
     }
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
