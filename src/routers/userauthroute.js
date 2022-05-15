@@ -203,23 +203,7 @@ router.post("/signup",async (req, res) => {
    //redirect pages will be later on implemented by FE
  
  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
- router.get("/googlelogin/failed",(req,res)=>{
-   res.status(403).json({
-     success: false,
-     message: "failure"
-   })
- })
- router.get("/googlelogin/success",(req,res)=>{
-   if(req.user){
-   res.status(200).json({
-     success: true,
-     message : "successful",
-     user:req.user,
-     //cookies: req.cookies
-   })
-   
- }
- })
+
 
 module.exports = router;
 
