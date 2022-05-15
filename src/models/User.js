@@ -29,7 +29,9 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber:{
     type:String,
-    default:0
+    default:0,
+    maxlength: 11
+
   },
   darkMode:{
        type:Boolean,
