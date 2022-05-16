@@ -18,6 +18,11 @@ import Modal from "./ModalForgotPass";
  * @returns Returns Login form and its fields [tag, password] and login button
  */
 const Login = () => {
+    
+     const google = () => {
+        window.open("http://localhost:5000/user/auth/google", "_self");
+    };
+    
     const [error, setError] = useState(false);
     const initialValues = {
         email_or_username: "",
@@ -69,9 +74,10 @@ const Login = () => {
                 <div className={classes.loginContainer}>
                     <div className={classes.title}>Login Form </div>
 
-                    <div className={classes.GoogleLogin}>
-                        <LoginwithGoogle />
-                    </div>
+                     <button className={classes.logingoogle} onClick={google}>
+                        <img src="https://raw.githubusercontent.com/safak/youtube/react-social-login/client/src/img/google.png" alt="" className={classes.icon} />
+                        Google
+                    </button>
 
                     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} className={classes.form}>
                         <Form>
