@@ -839,10 +839,11 @@ router.post("/tweet", auth("user"), upload.array("image"), async (req, res) => {
       }
     }}else{
       if(tags){
+      if(tags.slice(0,1)==="@"){
           realTags.push({tag:tags}) 
         }
         
-      }
+      }}
       console.log("🚀 ~ file: tweetroute.js ~ line 867 ~ router.post ~ realTags", realTags)
     if (req.body.imageCheck === "true") {
       // const uploader = (path) => cloudinary.uploads(path, "Images");

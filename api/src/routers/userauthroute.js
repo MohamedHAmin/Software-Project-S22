@@ -221,7 +221,7 @@ router.post("/signup",async (req, res) => {
     //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
     router.get('/auth/google', passport.authenticate('google', {scope:['profile','email']}))
 
-    router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'/login',successRedirect:"/Home"}))
+    router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/',successRedirect:"http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/"}))
     //redirect pages will be later on implemented by FE
   
   //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//

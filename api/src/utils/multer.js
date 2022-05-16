@@ -12,7 +12,7 @@ module.exports = multer({
       throw new Error("no imge cc1 found")
     }
     let ext = path.extname(file.originalname);  
-    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
+    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png"&& ext !== ".gif") {
       cb(null, false);
       throw new Error("no imgecfd1 found")
       return;
