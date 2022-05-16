@@ -47,7 +47,7 @@ function SideBar({
           </NavLink>
         </li>
         <li>
-          <NavLink to="/Home">
+          <NavLink to="/Explore">
             <SideBarIcon active={Search} text="Explore" Icon={SearchIcon} />
           </NavLink>
         </li>
