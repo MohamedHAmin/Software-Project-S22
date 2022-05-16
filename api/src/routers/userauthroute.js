@@ -225,4 +225,4 @@ router.post("/signup",async (req, res) => {
     //redirect pages will be later on implemented by FE
   
   //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
-    module.exports = router;
+   module.exports = router;
