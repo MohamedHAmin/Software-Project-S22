@@ -492,7 +492,13 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "no liked tweets found";
       throw e;
     }
-
+    let modifiedlikedtweets=[];
+    let modifiedlikedtweet;
+    for(likedtweet of likedtweets){
+      modifiedlikedtweet={...likedtweet,isliked:true};
+      modifiedlikedtweets.push(modifiedlikedtweet);
+    }
+    likedtweets=modifiedlikedtweets;
     res.send(likedtweets);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
