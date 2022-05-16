@@ -7,8 +7,6 @@ import Signup from "./components/login/Signup";
 import "./components/Homepage/Styles/Homepage.css";
 import ProfilePage from "./components/Profile/ProfilePage";
 import SettingsPage from "./components/settings/SettingsPage";
-import NextSignUp from "./components/login/NextSignUp";
-import Modal from "./components/login/Modal";
 import Report from "./components/Homepage/Report";
 import axios from "axios";
 import ReportAction from "./components/Homepage/ReportAction";
@@ -17,6 +15,37 @@ import FollowingPage from "./components/Profile/FollowingPage";
 import FollowersPage from "./components/Profile/FollowersPage";
 import Notifications from "./components/Homepage/Notifications";
 function App() {
+  
+   //Login with Google 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = () => {
+      fetch("http://localhost:5000/user/googlelogin/success", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) return response.json();
+          throw new Error("authentication has been failed!");
+        })
+        .then((resObject) => {
+          setUser(resObject.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
+
+  ///////////////////////////////////////////////////////////////////////////////
+
   // DUMMY VAR dark mode just to make useeffect work when clicked on changing mode
   const [DarkMode, setDarkMode] = useState(false);
   function handleChangeDisplayMode() {
@@ -131,14 +160,6 @@ function App() {
         </BrowserRouter>
       </div>
       {/*  */}
-      <div>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/NextStepSignup" element={<NextSignUp />}></Route>
-            <Route path="/Verification" element={<Modal />}></Route>
-          </Routes>
-        </BrowserRouter>
-      </div>
     </div>
   );
 }

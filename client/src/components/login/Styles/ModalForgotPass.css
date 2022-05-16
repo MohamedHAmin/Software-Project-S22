@@ -52,7 +52,7 @@
     text-align: center;
 }
 
-.modalContainer .body .field {
+.modalContainer .body .nada {
     margin-top: 50px;
 }
 
@@ -81,12 +81,12 @@
     transition: 0.5s;
 }
 
-.field {
+.nada {
     height: 70px;
     width: 100%;
 }
 
-.field input {
+.nada input {
     height: 80%;
     width: 100%;
     outline: none;
