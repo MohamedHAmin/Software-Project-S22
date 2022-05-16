@@ -1,5 +1,6 @@
 const request = require('supertest')
 const User = require('../models/User')
+const passport = require('../passport/passport')
 const Admin = require('../models/Admin')
 const Token = require('../models/Token')
 const app = require('../app')
@@ -9,12 +10,18 @@ jest.mock('nodemailer', () => ({
         sendMail: jest.fn().mockReturnValue((mailoptions, callback) => {})
     })
 }));
-  beforeEach(async ()=>{
+
+
+jest.mock('../passport/passport.js');
+
+
+beforeEach(async ()=>{
       await User.deleteMany()
       await Token.deleteMany()
       await Admin.deleteMany()
   
-  })
+    })
+
 test('Check User Login with wrong password', async ()=>{
      await User.create({
     screenName:"user6",
@@ -215,3 +222,10 @@ const res=await request(app).post('/user/forgotpassword')
 .expect(401)
 expect(res.text).toMatch("Email hasn't been verified yet")
 })
+
+test('Login With google', async ()=>{
+const res=await request(app).get('/user/auth/google')
+.expect(500)
+})
+
+
