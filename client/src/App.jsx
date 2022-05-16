@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/user/googlelogin/success", {
+      fetch("http://localhost:5000/user/googlelogin/success", {
         method: "GET",
         credentials: "include",
         headers: {
