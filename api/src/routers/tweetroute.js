@@ -22,8 +22,9 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
   try {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
- 
+  
     const tweet = await Tweet.findById(req.params.id);
+ 
     let sentTweet;
     if (!tweet) {
       e = "tweet not found";
@@ -157,7 +158,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         retweetedTweet: modifiedRetweet,
       };
     }
-
+    replyFilterFunc(req.user,sentTweet)
     res.send(sentTweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -177,6 +178,11 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
     const user = await User.findOne({ _id: req.params.id });
     if (!user) {
       e = "user doesn't exist";
+      throw e;
+    }
+    const isallowed=await allowView(req.user,req.params.id)
+    if(!isallowed){
+      e = "not allowed to see his tweet";
       throw e;
     }
     if(user.isPrivate){
@@ -282,7 +288,7 @@ router.get("/timeline", auth("any"), async (req, res) => {
       return user.followingId;
     });
     const user = req.user;
-
+  
     followingsId.push(req.user._id);
 
     let followerTweet = await Tweet.find({ authorId: { $in: followingsId } ,replyingTo:{tweetId:null,tweetExisted:false}})
@@ -476,7 +482,11 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "user doesn't exist ";
       throw e;
     }
-
+    const isallowed=await allowView(req.user,req.params.id)
+    if(!isallowed){
+      e = "not allowed to see his tweet";
+      throw e;
+    }
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": requiredId } },
       { $project: { likes: 0 } },
@@ -514,7 +524,9 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "no liked tweets found";
       throw e;
     }
+    likedtweets= tweetFilterFunc(req.user,likedtweets)
 
+       
     res.send(likedtweets);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
@@ -528,6 +540,11 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
     const user = await User.findOne({ _id: req.params.id });
     if (!user) {
       e = "user doesn't exist";
+      throw e;
+    }
+    const isallowed=await allowView(req.user,req.params.id)
+    if(!isallowed){
+      e = "not allowed to see his tweet";
       throw e;
     }
     const sort = [{ createdAt: -1 }];
@@ -618,6 +635,11 @@ router.get("/profile/media/:id", auth("user"), async (req, res) => {
     let user = await User.findById(req.params.id);
     if (!user) {
       e = "user doesn't exist";
+      throw e;
+    }
+    const isallowed=await allowView(req.user,req.params.id)
+    if(!isallowed){
+      e = "not allowed to see his tweet";
       throw e;
     }
     let userTweetsWithImages = await Tweet.find({
@@ -1185,5 +1207,69 @@ router.put("/tweet/:id/like", auth("user"), async (req, res) => {
     res.send({ error: e.toString() });
   }
 });
+
+
+
+/**Provide Viewer and Tweet==>Filters the tweet's replies*/
+function replyFilterFunc(viewer,tweet){
+  const viewerId=viewer._id;
+  if(viewerId.equals(tweet.authorId._id)){return;}
+  let followArr=viewer.following;
+  followArr = followArr.map((follow) => {
+    return follow.followingId.toString();
+  });
+  tweet.reply=tweet.reply.filter(function visCheck(reply){
+    if(viewerId.equals(reply.authorId._id)){return true;}
+    else if(followArr.includes(reply.authorId._id.toString())){return true;}
+    else if(!reply.authorId.isPrivate){return true;}
+    else{return false;}
+  })
+}
+/**Provide Viewer and Tweet==>Returns an editted tweet if replyingTo tweet is Private else returns null*/
+function reptoFilterFunc(viewer,tweet){
+  if(!tweet.replyingTo.tweetId){return null;}
+  const viewerId=viewer._id;
+  if(viewerId.equals(tweet.replyingTo.tweetId.authorId)){return null;}
+  if(!tweet.replyingTo.tweetId.authorId.isPrivate){return null;}
+  let followArr=viewer.following;
+  followArr = followArr.map((follow) => {
+    return follow.followingId.toString();
+  });
+  if(followArr.includes(tweet.replyingTo.tweetId.authorId._id.toString())){console.log(followArr);return null;}
+  const temp={...tweet._doc};
+  temp.replyingTo={
+    tweetId:"Content is Private",
+    tweetExisted:true
+  };
+  return temp;
+}
+/**Provide Viewer and Tweets==>Filters Tweets*/
+function tweetFilterFunc(viewer,tweets){
+  const viewerId=viewer._id;
+  let followArr=viewer.following;
+  followArr = followArr.map((follow) => {
+    return follow.followingId.toString();
+  });
+  tweets=tweets.filter(function visCheck(tweet){
+    if(viewerId.equals(tweet.authorId._id)){return true;}
+    else if(followArr.includes(tweet.authorId._id.toString())){return true;}
+    else if(!tweet.authorId.isPrivate){return true;}
+    else{return false;}
+  })
+  return tweets;
+}
+/**Provide Viewer and Target User ID==>Determines if the Viewer is allowed to view the Target*/
+async function allowView(viewer,targetId){
+  if(viewer._id.equals(targetId)){return true;}
+  let followArr=viewer.following;
+  followArr = followArr.map((follow) => {
+    return follow.followingId.toString();
+  });
+  if(followArr.includes(targetId)){return true;}
+  const target=await User.findById(targetId);
+  if(!target.isPrivate){return true;}
+  return false;
+}
+
 
 module.exports = router;
