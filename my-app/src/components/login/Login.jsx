@@ -95,7 +95,7 @@ const Login = () => {
                             <button className={classes.button} type="submit" >Login</button>
 
                             <div className={classes.passLink}>
-                                <button className={classes.button} onClick={() => { setOpenModal(true); }}>Forgot password?</button>
+                                <button type="button" className={classes.button} onClick={() => { setOpenModal(true); }}>Forgot password?</button>
                                 {openModal && <Modal closeModal={setOpenModal} />}
                             </div>
 
