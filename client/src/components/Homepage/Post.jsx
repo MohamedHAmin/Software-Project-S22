@@ -8,7 +8,7 @@ import Button from "./dropDownButton"
 import RetweetDisplayBlock from './RetweetDisplayBlock';
 import LoadMore from '@mui/icons-material/MoreHoriz';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { NavLink } from "react-router-dom";
+import { NavLink,useParams } from "react-router-dom";
 import axios from 'axios';
 /**
  * post component that is called to map tweets or retweets (it contains structure of tweet or retweet as well as reactsbar where users can comment, retweet or like the tweet)
@@ -40,6 +40,8 @@ function Post(props) {
   const [displaylimit,setdisplaylimit] = useState(5);
   const [displayload,setdisplayload] = useState(false);
   const [loading, setLoading] = useState(false);
+  localStorage.setItem("screenName",props.post.authorId.screenName)
+  // alert(screenName);
 useEffect(()=>{
   if(tweetcontent==="No-text" && !props.post.gallery[0])
   {
@@ -120,7 +122,7 @@ function deletepost(){
     <React.Fragment>
  
     <div className="tweet">
-        <div className="deleteIcon" onClick={checkifsameuser}><NavLink to={`/Report/Lar/${postId}`}><Button onDeleteHandler={deletepost} postid={postId} sameuser={sameuser} isAdmin={isAdmin}/></NavLink></div>
+        <div className="deleteIcon" onClick={checkifsameuser}><NavLink to={`/Report/Lar/${postId}`}><Button onDeleteHandler={deletepost} postid={postId}  sameuser={sameuser} isAdmin={isAdmin}/></NavLink></div>
         <div className="userInfo">
             <Avatar className="profilePic" src={props.post.authorId.profileAvater.url}/>
             <div className="profileInfo">

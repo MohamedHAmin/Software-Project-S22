@@ -124,6 +124,7 @@ a:hover{
 .repanch{
     padding-top: 80px!important;
     color: var(--color-mode);
+    padding-bottom: 127px;
 
 }
 @media (min-width: 707px) and (max-width: 1338px) {

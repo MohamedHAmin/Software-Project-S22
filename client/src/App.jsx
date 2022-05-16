@@ -14,6 +14,9 @@ import ReportsPage from "./components/Admin/ReportsPage";
 import FollowingPage from "./components/Profile/FollowingPage";
 import FollowersPage from "./components/Profile/FollowersPage";
 import Notifications from "./components/Homepage/Notifications";
+import Explore from "./components/Homepage/Explore";
+
+
 function App() {
   
    //Login with Google 
@@ -155,6 +158,10 @@ function App() {
             <Route
               path="/Notifications"
               element={<Notifications isAdmin={isAdmin} />}
+            ></Route>
+             <Route
+              path="/Explore"
+              element={<Explore isAdmin={isAdmin} />}
             ></Route>
           </Routes>
         </BrowserRouter>
