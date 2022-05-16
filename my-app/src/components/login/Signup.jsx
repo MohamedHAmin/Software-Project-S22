@@ -162,10 +162,6 @@ const Signup = () => {
         <div className={classes.signupContainer}>
           <div className={classes.title}>Signup Form </div>
 
-          <div className={classes.GoogleLogin}>
-            <SignupwithGoogle />
-          </div>
-
           {!next && (
             <Formik
               initialValues={initialValues1}
