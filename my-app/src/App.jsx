@@ -7,8 +7,6 @@ import Signup from "./components/login/Signup";
 import "./components/Homepage/Styles/Homepage.css";
 import ProfilePage from "./components/Profile/ProfilePage";
 import SettingsPage from "./components/settings/SettingsPage";
-import NextSignUp from "./components/login/NextSignUp";
-import Modal from "./components/login/Modal";
 import Report from "./components/Homepage/Report";
 import axios from "axios";
 import ReportAction from "./components/Homepage/ReportAction";
@@ -162,14 +160,6 @@ function App() {
         </BrowserRouter>
       </div>
       {/*  */}
-      <div>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/NextStepSignup" element={<NextSignUp />}></Route>
-            <Route path="/Verification" element={<Modal />}></Route>
-          </Routes>
-        </BrowserRouter>
-      </div>
     </div>
   );
 }
