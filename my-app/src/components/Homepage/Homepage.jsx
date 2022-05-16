@@ -246,7 +246,7 @@ function Homepage(props) {
         data.gallery.push({ photo: photos[0]});
       }
       let data2 = new FormData();
-        alert(photos.length);
+        //alert(photos.length);
         data2.append("authorId", data.authorId);
         data2.append("text", data.text);
         for(var i=0;i<photos.length;i++){

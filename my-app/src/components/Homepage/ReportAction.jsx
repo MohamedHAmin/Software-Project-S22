@@ -43,6 +43,7 @@ const reportHandeler = () => {
             if (res.error) {
               alert("Erorr")
             } else {
+              window.location.reload();
             }
         })
         navigate(-2);
@@ -58,7 +59,7 @@ const reportHandeler = () => {
         </div>
         <h3 className="b33">Thanks for letting us know</h3>
         <p className="repActanch"><a href="https://support.twitter.com/articles/20170134">Learn more</a> about ways to improve your experience at Twitter.</p>
-        <h3 className="b33">{"Mute"+username}</h3>
+        <h3 className="b33">{"Mute "+username}</h3>
         <div className="u">
         <p className="Ptag">Since you are not following {"@"+tagname}, you will no longer see Tweets, Retweets, or notifications from {"@"+tagname}.</p>
         <Button onClick={reportHandeler} className="yy" variant="outlined">UnFollow</Button>

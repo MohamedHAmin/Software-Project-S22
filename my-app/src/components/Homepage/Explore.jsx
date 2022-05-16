@@ -39,7 +39,7 @@ useEffect(() => {
 
 return (
     <div className="Homepage">
-      <SideBar Search darkMode={darkMode}/>
+      <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode}/>
       <div className="postConatiner">
       <div className="Expsearch">
           <Searchbar />
@@ -58,6 +58,7 @@ return (
             ) : (<></>)}
         </div>
       </div>
+      <div className="Notificationrightbar"></div>
       </div>
   );
 }
