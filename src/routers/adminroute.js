@@ -10,7 +10,7 @@ const notifiy = require("../utils/firbase");
 const Token = require("../models/Token.js");
 const router = new express.Router();
 
-router.post("/create", auth("admin"), async (req, res) => {
+router.post("/create",auth("admin") ,async (req, res) => {
   try {
     const deletedUser = await User.deleteOne({
       $and: [{ email: req.body.email }, { verified: false }],
@@ -34,7 +34,6 @@ router.post("/create", auth("admin"), async (req, res) => {
 });
 //~~~~~~Report~~~~~~~~
 
-// TODO: IN NEXT PHASES
 router.delete("/report/:id", auth("admin"), async (req, res) => {
   try {
     let deletedreports;
@@ -220,15 +219,90 @@ router.get("/tweets/:pageNum", auth("admin"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-// router.get("/dashboard",auth("admin"),async (req, res) => {
-//   try {
-//     res.status(200).end("<h1>Placeholder<h1>")
-
-//   } catch (e) {
-//     console.log(e)
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
+router.get("/dashboard",auth("admin"),async (req, res) => {
+  try {
+    let stats={
+      Current:{},
+      Past:{},
+      TopTweet:{}
+    };
+    const duration=(req.query.duration==="Week")?7:((req.query.duration==="Month")?30:7);
+    const thisDur = new Date();
+    const pastDur = new Date();
+    thisDur.setDate(thisDur.getDate() - duration);
+    pastDur.setDate(pastDur.getDate() - duration*2);
+    const tweetsCurrent=await Tweet.countDocuments({
+      createdAt:{$gte:thisDur},
+      replyingTo:{tweetId:null,tweetExisted:false}
+    });
+    const tweetsPast=await Tweet.countDocuments({
+        createdAt:{$gte:pastDur},
+        createdAt:{$lt:thisDur},
+        replyingTo:{tweetId:null,tweetExisted:false}
+    });
+    stats.Current.tweetCount=tweetsCurrent;
+    stats.Past.tweetCount=tweetsPast;
+    const repliesCurrent=await Tweet.countDocuments({
+      createdAt:{$gte:thisDur},
+      "replyingTo.tweetExisted":true
+    });
+    const repliesPast=await Tweet.countDocuments({
+        createdAt:{$gte:pastDur},
+        createdAt:{$lt:thisDur},
+        "replyingTo.tweetExisted":true
+    });
+    stats.Current.replyCount=repliesCurrent;
+    stats.Past.replyCount=repliesPast;
+    const retweetsCurrent=await Tweet.countDocuments({
+      createdAt:{$gte:thisDur},
+      "retweetedTweet.tweetExisted":true
+    });
+    const retweetsPast=await Tweet.countDocuments({
+        createdAt:{$gte:pastDur},
+        createdAt:{$lt:thisDur},
+        "retweetedTweet.tweetExisted":true
+    });
+    stats.Current.retweetCount=retweetsCurrent;
+    stats.Past.retweetCount=retweetsPast;
+    const reportsCurrent=await Report.countDocuments({
+      createdAt:{$gte:thisDur},
+    });
+    const reportsPast=await Report.countDocuments({
+        createdAt:{$gte:pastDur},
+        createdAt:{$lt:thisDur},
+    });
+    stats.Current.reportsCount=reportsCurrent;
+    stats.Past.reportsCount=reportsPast;
+    const usersCurrent=await User.countDocuments({
+      createdAt:{$gte:thisDur},
+    });
+    const usersPast=await User.countDocuments({
+        createdAt:{$gte:pastDur},
+        createdAt:{$lt:thisDur},
+    });
+    const adminsCurrent=await Admin.countDocuments({
+      createdAt:{$gte:thisDur},
+    });
+    const adminsPast=await Admin.countDocuments({
+        createdAt:{$gte:pastDur},
+        createdAt:{$lt:thisDur},
+    });
+    stats.Current.usersCount=usersCurrent-adminsCurrent;
+    stats.Past.usersCount=usersPast-adminsPast;
+    const topTweet=await Tweet.find({
+      createdAt:{$gte:thisDur},
+      replyingTo:{tweetId:null,tweetExisted:false},
+      "retweetedTweet.tweetExisted":false
+    })
+    .sort({likeCount:-1})
+    .limit(1);
+    stats.TopTweet=topTweet;
+    res.status(200).json(stats).end();
+  } catch (e) {
+    console.log(e)
+    res.status(400).send({error:e.toString()});
+  }
+});
 
 //~~~~~~Search for user or tweet~~~~~~~~
 //Search will take the text from the search bar in req.body and search for the keyword in all tweets
