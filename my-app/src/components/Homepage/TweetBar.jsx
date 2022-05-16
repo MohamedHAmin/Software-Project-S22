@@ -39,7 +39,7 @@ function TweetBar(props){
         </IconButton>
         </label>
 
-        <label htmlFor="icon-button">
+        {/* <label htmlFor="icon-button">
         <Input accept="image/*" id="icon-button-file" type="button" />
         <IconButton style ={{color:"#2b3dbc"}} aria-label="upload picture" component="span">
         <GifBoxIcon />
@@ -72,7 +72,7 @@ function TweetBar(props){
         <IconButton style ={{color:"#2b3dbc"}} aria-label="upload picture" component="span">
         <AddLocationAltIcon />
         </IconButton>
-        </label>
+        </label> */}
 
         <Button onClick={props.postHandeler} style={{fontSize:20}} className="sidexarTweet" variant="contained">
           LAR

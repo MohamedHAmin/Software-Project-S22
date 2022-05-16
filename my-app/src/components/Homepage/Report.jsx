@@ -16,6 +16,7 @@ function Report(props) {
   let { id } = useParams();
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
+  localStorage.setItem("id",id);
   const reportHandeler = () => {
     var bla={
       headers: {
@@ -30,6 +31,7 @@ function Report(props) {
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
             console.log(res);
+            console.log()
             if (res.error) {
               alert("Erorr")
             } else {
@@ -45,7 +47,7 @@ function Report(props) {
     var data={
     type:"Tweet",
     msg:"It's suspicious or spam",
-    reportedId:"626569714da8e6986213c0b0"
+    reportedId:id
     }
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
@@ -65,7 +67,7 @@ function Report(props) {
     var data={
     type:"Tweet",
     msg:"It displays a senstive photo or video",
-    reportedId:"626569714da8e6986213c0b0"
+    reportedId:id
     }
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
@@ -85,7 +87,7 @@ function Report(props) {
     var data={
     type:"Tweet",
     msg:" It's abusive or harmful",
-    reportedId:"626569714da8e6986213c0b0"
+    reportedId:id
     }
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
@@ -105,7 +107,7 @@ function Report(props) {
     var data={
     type:"Tweet",
     msg:" It expresses intentions of self-harm or sucide",
-    reportedId:"626569714da8e6986213c0b0"
+    reportedId:id
     }
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
@@ -117,6 +119,7 @@ function Report(props) {
         })
   };
   let { reportType } = useParams();
+  console.log(reportType);
   // let { id } = useParams();
   let type;
   if (reportType == "Profile") {

@@ -64,6 +64,9 @@ a:hover{
     color: var(--color-mode);
 
 }
+.u{
+    padding-bottom: 385px;
+}
 .yy{
     width: 50%!important;
     font-size: large!important;

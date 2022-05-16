@@ -33,6 +33,7 @@ function Homepage(props) {
   console.log( "tags"+ finalfinal[0]);
   const [space, setspaces] = useState([]);
   let { id } = useParams();
+  let { screenName } = useParams();
   const getposts = () => {
     axios
       .get(
@@ -237,7 +238,7 @@ function Homepage(props) {
         }
         if(finalfinal.length!=0){
           for (var i = 0; i < finalfinal.length; i++) {
-             console.log(finalfinal[i]);
+            console.log(finalfinal[i]);
           }
         }
       }
@@ -289,6 +290,7 @@ function Homepage(props) {
       setuploadphotos([]);
     }
   };
+  // alert(id);
   console.log(posts);
   const onChangeHandeler = (event) => {
     setText(event.target.value);
