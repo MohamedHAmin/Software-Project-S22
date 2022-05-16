@@ -79,7 +79,7 @@ const Modal = ({ closeModal }) => {
                 {/*<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>*/}
                 <form >
                     <div className='body'>
-                        <div className="field">
+                        <div className="nada">
                             <input onChange={onChangeHandeler} value={email} name="email" placeholder="Please enter your Email" autoComplete="off" type="email" />
                         </div>
                     </div>

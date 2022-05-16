@@ -5,7 +5,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import classes from "./Styles/Signup.module.css";
-import SignupwithGoogle from "./SignupwithGoogle";
 import Navbar from "./navbar";
 import { Avatar } from "@material-ui/core";
 import Addpic from "./Addpic";
@@ -161,10 +160,6 @@ const Signup = () => {
 
         <div className={classes.signupContainer}>
           <div className={classes.title}>Signup Form </div>
-
-          <div className={classes.GoogleLogin}>
-            <SignupwithGoogle />
-          </div>
 
           {!next && (
             <Formik

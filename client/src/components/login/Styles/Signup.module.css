@@ -39,7 +39,6 @@
 }
 
 .signupContainer {
-
   min-width: 320px;
   width: 40%;
   max-width: 400px;
@@ -57,6 +56,7 @@
   user-select: none;
   border-radius: 15px 15px 0 0;
   background: linear-gradient(-135deg, #c850c0, #2B3DBC);
+  margin-bottom: 20px;
 }
 
 .signupContainer form {
@@ -66,6 +66,7 @@
 .field {
   height: 50px;
   width: 100%;
+  margin-top: 15px;
 }
 
 .field input {
@@ -90,7 +91,7 @@
   font-weight: 700;
   cursor: pointer;
   outline: none;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .content {
@@ -174,13 +175,14 @@ form .signupLink a:hover {
 
 .container p {
   text-align: center;
-  padding-top:5%;
+  padding-top: 5%;
   color: rgb(221, 28, 28);
 }
-.success{
-  color: rgb(7,217,7);
+
+.success {
+  color: rgb(7, 217, 7);
 }
 
 .error {
-  color: rgb(221,28,28);
+  color: rgb(221, 28, 28);
 }
