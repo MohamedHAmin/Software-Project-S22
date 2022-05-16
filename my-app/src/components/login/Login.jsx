@@ -9,7 +9,6 @@ import { getMessaging, getToken } from "firebase/messaging";
 
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
-import LoginwithGoogle from "./LoginwithGoogle";
 import Modal from "./ModalForgotPass";
 
 /**
