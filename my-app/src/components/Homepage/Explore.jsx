@@ -5,6 +5,7 @@ import SideBar from "../Profile/SideBar";
 import Searchbar from "./Search";
 import axios from "axios";
 import Post from "./Post";
+import { useParams } from "react-router-dom";
 /**
  * this function renders explore page component
  * @param {*} props this props passes the explore posts to EplorePost component
@@ -13,7 +14,23 @@ import Post from "./Post";
 function Explore(props) {
 const [darkMode, setDarkMode] = useState(false);
 const[Postt,setpostt]=useState([]);
+let { id } = useParams();
 useEffect(() => {
+  
+  axios
+    .get(
+      `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    )
+    .then((res) => {
+      if (res.error) {
+        console.log("Error");
+      } else {
+        setDarkMode(res.data.darkMode);
+      }
+    });
   axios
     .get(
       `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/explore`,

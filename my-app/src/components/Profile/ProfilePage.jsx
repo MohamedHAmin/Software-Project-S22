@@ -22,7 +22,6 @@ function ProfilePage(props) {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
-        console.log(res);
         if (res.error) {
           console.log("Error");
         } else {

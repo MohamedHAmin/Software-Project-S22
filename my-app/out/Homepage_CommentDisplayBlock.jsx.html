@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Homepage/Post.jsx</title>
+    <title>JSDoc: Source: Homepage/CommentDisplayBlock.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Homepage/Post.jsx</h1>
+    <h1 class="page-title">Source: Homepage/CommentDisplayBlock.jsx</h1>
 
     
 
@@ -31,12 +31,11 @@ import Reacts from "./Reacts";
 import Comment from "./Comment";
 import Avatar from '@mui/material/Avatar';
 import "./Styles/Post.css";
-import CommentDisplayBlock from "./CommentDisplayBlock";
 import Button from "./dropDownButton"
 import RetweetDisplayBlock from './RetweetDisplayBlock';
 import LoadMore from '@mui/icons-material/MoreHoriz';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { NavLink,useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import axios from 'axios';
 /**
  * post component that is called to map tweets or retweets (it contains structure of tweet or retweet as well as reactsbar where users can comment, retweet or like the tweet)
@@ -52,11 +51,10 @@ import axios from 'axios';
               isAdmin={props.isAdmin}
               isPost={true}>
  */
-function Post(props) {
+function CommentDisplayBlock(props) {
   const [postId]=useState(props.post._id);
   const date=new Date(props.post.createdAt);
   const [isAdmin]=useState(props.isAdmin);
-  const [hasimage,sethasimage]=useState(false);
   const [canretweet,setcanretweet]=useState(true);
   const [numberOfRetweets,setNumberOfRetweets]=useState(props.post.retweetCount);
   const [commentsperpost,setcommentsperpost]=useState(props.post.replyCount);
@@ -65,11 +63,6 @@ function Post(props) {
   const [displayName]=useState(props.post.authorId.tag);
   const [sameuser,setsameuser]=useState(false);
   const [comments,setComments]=useState([]);
-  const [displaylimit,setdisplaylimit] = useState(5);
-  const [displayload,setdisplayload] = useState(false);
-  const [loading, setLoading] = useState(false);
-  localStorage.setItem("screenName",props.post.authorId.screenName)
-  // alert(screenName);
 useEffect(()=>{
   if(tweetcontent==="No-text" &amp;&amp; !props.post.gallery[0])
   {
@@ -87,6 +80,9 @@ useEffect(()=>{
     }
   });
 },[])
+const [displaylimit,setdisplaylimit] = useState(5);
+const [displayload,setdisplayload] = useState(false);
+const [loading, setLoading] = useState(false);
 function handleClick() {
     setLoading(true);
     if(commentsperpost > displaylimit)
@@ -135,7 +131,48 @@ const passData = (text) => {
   }
 
 function deletepost(){   
-  props.passdeletedTweet(postId);
+  if(props.isAdmin)
+    {
+      axios
+      .delete(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${postId}`,
+        { headers: { Authorization: localStorage.getItem("adminToken") } }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error || !res.data === "success") {
+          alert("something went wrong");
+        } else {
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        //err.message; // 'Oops!'
+        alert("Error occured while deleting");
+        console.log(err);
+      });
+    }
+    else
+    {
+      axios
+        .delete(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${postId}`,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.error || !res.data === "success") {
+            alert("something went wrong");
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          //err.message; // 'Oops!'
+          alert("Error occured while deleting");
+          console.log(err);
+        });
+    }
 }
   const [displayComments,setdisplayComments]=useState(false);
   const CommentHandler=()=>
@@ -146,11 +183,12 @@ function deletepost(){
         setdisplayload(true);;
       }
   }
+
   return (
     &lt;React.Fragment>
  
-    &lt;div className="tweet">
-        &lt;div className="deleteIcon" onClick={checkifsameuser}>&lt;NavLink to={`/Report/Lar/${postId}`}>&lt;Button onDeleteHandler={deletepost} postid={postId}  sameuser={sameuser} isAdmin={isAdmin}/>&lt;/NavLink>&lt;/div>
+    &lt;div className="comments">
+        &lt;div className="deleteIcon" onClick={checkifsameuser}>&lt;NavLink to={`/Report/Lar/${postId}`}>&lt;Button onDeleteHandler={deletepost} postid={postId} sameuser={sameuser} isAdmin={isAdmin}/>&lt;/NavLink>&lt;/div>
         &lt;div className="userInfo">
             &lt;Avatar className="profilePic" src={props.post.authorId.profileAvater.url}/>
             &lt;div className="profileInfo">
@@ -159,49 +197,37 @@ function deletepost(){
             &lt;/div>
         &lt;/div>
         {tweetcontent!=="No-text" &amp;&amp; &lt;div className="tweetContent">{tweetcontent}&lt;/div>}
-        &lt;div className="image-containerx">
-        {props.post.gallery.length>0?props.post.gallery.map(m=>(&lt;img className="uploadedimage" alt="not found" key={m._id} src={m.photo}/>)):&lt;>&lt;/> }
-        &lt;/div>
-        {props.post.retweetedTweet?.tweetId &amp;&amp; &lt;RetweetDisplayBlock key={props.post.retweetedTweet.tweetId._id}
-              username={props.post.retweetedTweet.tweetId.authorId.screenName}
-              tagName={props.post.retweetedTweet.tweetId.authorId.tag}
-              avatar={props.post.retweetedTweet.tweetId.authorId.profileAvater.url}
-              image={props.post.retweetedTweet.tweetId.gallery}
-              authorId={props.post.retweetedTweet.tweetId.authorId._id}
-              content={props.post.retweetedTweet.tweetId.text}/>}
-        {(props.post.retweetedTweet?.tweetExisted==true &amp;&amp; !props.post.retweetedTweet?.tweetId) &amp;&amp; &lt;div className="comments">This Lar has been deleted&lt;/div>}
         {props.post.createdAt &amp;&amp; &lt;div className="time">
             &lt;p>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}&amp;nbsp;&amp;nbsp;&lt;/p>
             &lt;p>{date.getHours()}:{date.getMinutes()}&lt;/p>
         &lt;/div>}
         &lt;div className="reactsBar">
-            &lt;Reacts 
+            {(props.ReplyOnReply==false) ? &lt;Reacts 
             postId={postId}
             numberOfRetweets={numberOfRetweets}
             numberOfLikes={props.post.likeCount}
             isLiked={props.post.isliked}
             setNumberOfRetweets={setNumberOfRetweets}
-            isPost={props.isPost}
+            isPost={!props.ReplyOnReply}
             tweetcontent={tweetcontent}
             username={username}
             displayName={displayName} 
             commentsCount={commentsperpost}
-            image={props.post.gallery}
+            image={props.post.gallery[0]}
             canretweet={canretweet}
             authorId={props.post.authorId}
             CommentHandler={CommentHandler}
-            />
+            />:(&lt;>&lt;/>)}
         &lt;/div>
         {(props.canviewcomments &amp;&amp; displayComments) ? ( 
           comments.slice(0,displaylimit).map((comment) =>
             &lt;CommentDisplayBlock
-              post={comment}
-              //passdeletedTweet={deletepost}
-              isAdmin={props.isAdmin}
-              isPost={true}
-              ReplyOnReply={false}
-              canviewcomments={props.canviewcomments}
-            />)
+            post={comment}
+            //passdeletedTweet={deletepost}
+            isAdmin={props.isAdmin}
+            isPost={true}
+            ReplyOnReply={true}
+          />)
           ):(&lt;>&lt;/>)}
           &lt;div className="loadmore">
           {displayComments &amp;&amp; displayload &amp;&amp; &lt;LoadingButton
@@ -210,19 +236,20 @@ function deletepost(){
           endIcon={&lt;LoadMore />}
           loading={loading}
           loadingPosition="end"
+          //variant="outlined"
           color="primary" 
         >
           Load More
         &lt;/LoadingButton>}
           &lt;/div>
-        {props.isPost &amp;&amp; &lt;div className="comment">
+        {(props.ReplyOnReply==false) &amp;&amp; &lt;div className="comment">
             &lt;Comment passData={passData}/>
         &lt;/div>}
     &lt;/div>
 &lt;/React.Fragment>
     );
 }
-export default Post;</code></pre>
+export default CommentDisplayBlock;</code></pre>
         </article>
     </section>
 
