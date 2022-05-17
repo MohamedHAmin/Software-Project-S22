@@ -134,14 +134,14 @@ function deletepost(){
         <div className="image-containerx">
         {props.post.gallery.length>0?props.post.gallery.map(m=>(<img className="uploadedimage" alt="not found" key={m._id} src={m.photo}/>)):<></> }
         </div>
-        {props.post.retweetedTweet.tweetId && <RetweetDisplayBlock key={props.post.retweetedTweet.tweetId._id}
+        {props.post.retweetedTweet?.tweetId && <RetweetDisplayBlock key={props.post.retweetedTweet.tweetId._id}
               username={props.post.retweetedTweet.tweetId.authorId.screenName}
               tagName={props.post.retweetedTweet.tweetId.authorId.tag}
               avatar={props.post.retweetedTweet.tweetId.authorId.profileAvater.url}
               image={props.post.retweetedTweet.tweetId.gallery}
               authorId={props.post.retweetedTweet.tweetId.authorId._id}
               content={props.post.retweetedTweet.tweetId.text}/>}
-        {(props.post.retweetedTweet.tweetExisted==true && !props.post.retweetedTweet.tweetId) && <div className="comments">This Lar has been deleted</div>}
+        {(props.post.retweetedTweet?.tweetExisted==true && !props.post.retweetedTweet?.tweetId) && <div className="comments">This Lar has been deleted</div>}
         {props.post.createdAt && <div className="time">
             <p>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}&nbsp;&nbsp;</p>
             <p>{date.getHours()}:{date.getMinutes()}</p>
