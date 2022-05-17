@@ -183,6 +183,7 @@ function ReportsPage(props)
                         <></>
                     )}
                 </div>
+                <div className="Notificationrightbar"></div>
             </div>
         </React.Fragment>
     );

@@ -26,6 +26,7 @@ function SideBar({
   Logout,
   isAdmin,
   darkMode,
+  Dashboard
 }) {
   let id = localStorage.getItem("userId");
   return (
@@ -47,7 +48,7 @@ function SideBar({
           </NavLink>
         </li>
         <li>
-          <NavLink to="/Home">
+          <NavLink to="/Explore">
             <SideBarIcon active={Search} text="Explore" Icon={SearchIcon} />
           </NavLink>
         </li>
@@ -91,9 +92,12 @@ function SideBar({
         </li>
         <li>
           {isAdmin && (
-            <NavLink to="/Home">
-              <SideBarIcon text="Dashboard" Icon={DashboardIcon} />
-            </NavLink>
+            <NavLink to="/Admin/Dashboard">
+            <SideBarIcon
+            active={Dashboard}
+             text="Dashboard" 
+             Icon={DashboardIcon} />
+          </NavLink>
           )}
         </li>
       </ul>

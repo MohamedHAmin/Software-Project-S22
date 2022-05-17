@@ -33,6 +33,7 @@ function Homepage(props) {
   console.log( "tags"+ finalfinal[0]);
   const [space, setspaces] = useState([]);
   let { id } = useParams();
+  let { screenName } = useParams();
   const getposts = () => {
     axios
       .get(
@@ -237,7 +238,7 @@ function Homepage(props) {
         }
         if(finalfinal.length!=0){
           for (var i = 0; i < finalfinal.length; i++) {
-             console.log(finalfinal[i]);
+            console.log(finalfinal[i]);
           }
         }
       }
@@ -245,7 +246,7 @@ function Homepage(props) {
         data.gallery.push({ photo: photos[0]});
       }
       let data2 = new FormData();
-        alert(photos.length);
+        //alert(photos.length);
         data2.append("authorId", data.authorId);
         data2.append("text", data.text);
         for(var i=0;i<photos.length;i++){
@@ -289,6 +290,7 @@ function Homepage(props) {
       setuploadphotos([]);
     }
   };
+  // alert(id);
   console.log(posts);
   const onChangeHandeler = (event) => {
     setText(event.target.value);
