@@ -42,7 +42,7 @@ return (
       <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode}/>
       <div className="postConatiner">
       <div className="Expsearch">
-          <Searchbar />
+          <Searchbar viewSuggestedAccounts={false}/>
         </div>
         <div className="blabla">
         {Postt.length ? (

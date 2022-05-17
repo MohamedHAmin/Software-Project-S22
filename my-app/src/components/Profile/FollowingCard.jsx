@@ -11,11 +11,12 @@ import FormControl from "@mui/material/FormControl";
  * @returns Returns the setted the information of the people i follow.
  */
 function FollowingCard(props) {
-  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing);
+  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing||false);
+  const [isPending, setIsPending] = useState(props.contact.ispending||false);
   const [followModalState, setFollowModalState] = useState(false);
   let userID = localStorage.getItem("userId");
   const [Followers, setFollowers] = useState(0);
-  const [isPending, setIsPending] = useState(props.contact.ispending);
+  
   /**
    * Handling the following request
    */
@@ -27,7 +28,7 @@ function FollowingCard(props) {
       } else {
         axios
           .post(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact.followingId._id}`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.randomUser?(props.contact._id):(props.contact.followingId._id)}`,
             null,
             { headers: { Authorization: localStorage.getItem("accessToken") } }
           )
@@ -53,7 +54,7 @@ function FollowingCard(props) {
   function handleUnfollowAction() {
     axios
       .post(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.contact.followingId._id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.randomUser?(props.contact._id):(props.contact.followingId._id)}`,
         null,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
@@ -153,15 +154,15 @@ function FollowingCard(props) {
       {(props.randomUser?(props.contact._id):(props.contact.followingId._id)) !== userID ? (
         <Button
           onClick={handleButtonClick}
-          className={
-            props.contact.isfollowing ? "followButton1" : "followButton2"
+          className={props.randomUser?(
+             "followButton2"):(props.contact.isfollowing ?"followButton1" : "followButton2")
           }
         >
-          {isPending
+          {!props.randomUser?( isPending
             ? "Pending"
             : props.contact.isfollowing
             ? "Following"
-            : "Follow"}
+            : "Follow"):("Follow")}
         </Button>
       ) : null}
     </div>

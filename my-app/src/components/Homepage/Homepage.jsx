@@ -330,7 +330,7 @@ function Homepage(props) {
       </div>
       <div className="rightbar">
         <div className="searchbar">
-          <Searchbar />
+          <Searchbar viewSuggestedAccounts={true}/>
         </div>
       </div>
     </div>

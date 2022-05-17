@@ -37,7 +37,7 @@ function ProfilePage(props) {
       {id == userID ? <MyProfile /> : <OthersProfile isAdmin={props.isAdmin} />}
       <div className="rightbar">
         <div className="searchbar">
-          <Searchbar />
+          <Searchbar viewSuggestedAccounts={true}/>
         </div>
       </div>
     </div>
