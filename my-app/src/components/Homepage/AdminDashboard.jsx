@@ -90,7 +90,8 @@ function AdminDashboard() {
             setRetweetsPercentage(((Math.abs(res.data.Current.retweetCount-res.data.Past.retweetCount)/res.data.Current.retweetCount)*100).toFixed(2));
             setReportsPercentage(((Math.abs(res.data.Current.reportsCount-res.data.Past.reportsCount)/res.data.Current.reportsCount)*100).toFixed(2));
             //get top tweet
-            axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${res.data.TopTweet[0].id}`,
+            console.log(res.data.TopTweet._id);
+            axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${res.data.TopTweet._id}`,
             { headers: { Authorization: localStorage.getItem("accessToken") }}).then((res) => {
                 if (res.error) {
                 console.log(
@@ -269,9 +270,6 @@ function AdminDashboard() {
                         <div className="TopLarConatiner">
                             <h4 className="DashboardHeader" >Top lar</h4>
                             <div>
-                           
-                            </div>
-                            
                                 {ready?(<Post
                                     post={toppTweet}
                                     passdeletedTweet={passdeletedTweet}
@@ -279,6 +277,7 @@ function AdminDashboard() {
                                     isPost={true}
                                     canviewcomments={false}
                                 />):(<></>)}
+                            </div>
                                 
                         </div>
                         <div className="CountBox">
