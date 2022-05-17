@@ -36,7 +36,7 @@ function RetweetDisplayBlock(props) {
             </div>
         </div>
         <div className="tweetContent">{props.content}</div>
-        {props.image.length>0?props.image.map(m=>(<img className="uploadedimage" alt="not found" key={props.image._id} src={props.image.photo}/>)):<></> }
+        {props.image?.length>0?props.image.map(m=>(<img className="uploadedimage" alt="not found" key={props.image._id} src={props.image.photo}/>)):<></> }
     </div>
 </React.Fragment>
     );

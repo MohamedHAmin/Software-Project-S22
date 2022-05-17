@@ -1,0 +1,152 @@
+.AdminDashboardPage{
+    display:flex
+}
+.AdminDashboardWholeContainer{
+    
+    width:100%;
+    height:100vh;
+    margin-left: 24%;
+    margin-right: 4%;
+}
+.DashboardCountsContainer{
+    display:flex;
+}
+.DashboardHeader{
+    padding-top: 10px;
+    padding-left: 10px;
+    color: var(--color-mode);
+}
+.DashboardParagraph{
+    font-weight: 400;
+    font-size: 14px;
+    padding-left: 20px;
+    margin-bottom: 5px;
+    color: var(--color-mode);
+}
+.DashboardCountsContainer{
+    margin-top: 4%;
+    color: var(--color-mode);
+    display:flex;
+}
+.UsersActivity{
+    color: var(--color-mode);
+    margin-top: 20px;
+    display:flex;
+}
+.DashboardTextSubtext{
+  flex:0.7;
+}
+.ButtonsDuration{
+    padding-top: 10px;
+    float: right;
+    flex:0.3;
+    text-align:left !important;
+    vertical-align: center !important;
+}
+.buttonDurationActive{
+    background-color: #8d94cb !important;
+      border: none !important;
+      color: white !important;
+      font-weight: 500 !important;
+      font-size: 17px !important;
+      text-transform: inherit !important;
+      border-radius: 40px !important;
+      width: 40% !important;
+}
+.buttonDurationStyling{
+    background-color: #2b3dbc !important;
+      border: none !important;
+      color: white !important;
+      font-weight: 500 !important;
+      font-size: 17px !important;
+      text-transform: inherit !important;
+      border-radius: 40px !important;
+      width: 40% !important;
+}
+.buttonDurationStyling:hover {
+    background-color: #6d71ff !important;
+}
+.CountBox{
+    flex:0.3;
+}
+.PastCurrentdispflex{
+    flex:0.07;
+    margin-left: 1%;
+}
+.PastCurrentdisp{
+    margin-top: 55%;
+}
+.CountBoxHeader{
+
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center !important;
+    color: var(--color-mode);
+}
+.CountBoxNumbers{
+    flex:0.5;
+    font-weight: 400;
+    font-size: 22px;
+    text-align: right !important;
+    color: var(--color-mode);
+}
+.CountBoxSubHeader{
+    vertical-align: middle !important;
+    margin-top: 12%;
+    font-weight: 400;
+    font-size: 15px;
+    text-align: left !important;
+    padding-left: 2%;
+    color: var(--color-mode);
+}
+.CurrentDurationInfo{
+    display: flex;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+.PastDurationInfo{
+    margin-top: 9%;
+    display: flex;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+.ArrowUpDownStyling{
+    flex:0.3;
+    font-weight: 400;
+    font-size: 20px;
+    text-align: center !important;
+}
+.PercentUpDownStyling{
+    flex:0.7;
+    font-weight: 400;
+    font-size: 22px;
+    text-align: left !important;
+}
+.WrapPercentArrowUp{
+    flex:0.5;
+    display:flex;
+    color: rgb(25, 204, 19);
+}
+.WrapPercentArrowDown{
+    flex:0.5;
+    display:flex;
+    color: rgb(195, 31, 28)
+}
+
+.TopLarConatiner{
+    flex:0.97;
+}
+.ReportsConatiner{
+    margin-top: 20%;
+}
+.Nochange{
+    flex:0.5;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center !important;
+   
+    color: var(--color-mode);
+    vertical-align: middle !important;
+    
+}
