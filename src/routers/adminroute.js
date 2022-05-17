@@ -63,7 +63,7 @@ router.get("/report/:pageNum", auth("admin"), async (req, res) => {
     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
     const skip = (parseInt(req.params.pageNum) - 1) * perPage;
     let reports = await Report.find(filter)
-      .populate({ path: "reporterId", select: "tag" })
+      .populate({ path: "reporterId", select: "screenName tag profileAvater" })
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 });
@@ -82,7 +82,16 @@ router.get("/report/:pageNum", auth("admin"), async (req, res) => {
               path: "authorId",
               select: "screenName tag profileAvater",
             },
-            select: "text authorId likeCount replyCount retweetCount gallery",
+            populate: {
+              path: "retweetedTweet.tweetId",
+              select:
+                "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+              populate: {
+                path: "authorId",
+                select: "_id screenName tag profileAvater.url",
+              },
+            },
+            select: "text authorId retweetedTweet likeCount replyCount retweetCount gallery",
             model: Tweet,
           });
         }
@@ -167,6 +176,7 @@ router.get("/users/:pageNum", auth("admin"), async (req, res) => {
       .project({
         _id: 1,
         screenName: 1,
+        profileAvater:1,
         tag: 1,
         Reports: 1,
       })
@@ -198,6 +208,7 @@ router.get("/tweets/:pageNum", auth("admin"), async (req, res) => {
       .project({
         Reports: 1,
         text: 1,
+        retweetedTweet: 1,
         authorId: 1,
         likeCount: 1,
         replyCount: 1,
@@ -210,6 +221,15 @@ router.get("/tweets/:pageNum", auth("admin"), async (req, res) => {
     await Tweet.populate(tweets, {
       path: "authorId",
       select: "screenName tag profileAvater",
+    });
+    await Tweet.populate(tweets, {
+      path: "retweetedTweet.tweetId",
+      select:
+        "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+      populate: {
+        path: "authorId",
+        select: "_id screenName tag profileAvater.url",
+      }
     });
     if (!tweets.length) {
       throw Error("Not Found");
