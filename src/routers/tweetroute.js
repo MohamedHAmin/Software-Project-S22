@@ -364,7 +364,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       });
 
     let resultUsers = await User.find({
-      tag: { $regex: searchedItem, $options: "i" },
+      $or: [
+        {tag: { $regex: searchedItem, $options: "i" }},
+        {screenName: { $regex: searchedItem, $options: "i" }},
+      ],
     })
       .sort({ tag: 1 })
       .limit(limit)
@@ -455,7 +458,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "user doesn't exist ";
       throw e;
     }
-    
+
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": requiredId } },
       { $project: { likes: 0 } },
@@ -463,25 +466,25 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       .limit(limit)
       .skip(skip)
       .sort({ createdAt: -1 });
-      for (likedtweet of likedtweets) {
-        await User.populate(likedtweet, {
-          path: "authorId",
-          select: "_id screenName tag profileAvater.url",
-        });
-        await Tweet.populate(likedtweet, {
-          path: "retweetedTweet.tweetId",
-          select:
+    for (likedtweet of likedtweets) {
+      await User.populate(likedtweet, {
+        path: "authorId",
+        select: "_id screenName tag profileAvater.url",
+      });
+      await Tweet.populate(likedtweet, {
+        path: "retweetedTweet.tweetId",
+        select:
           "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-          populate: {
-            path: "authorId",
-            strictPopulate: false,
-            select: "_id screenName tag profileAvater.url",
-          },
-        });
+        populate: {
+          path: "authorId",
+          strictPopulate: false,
+          select: "_id screenName tag profileAvater.url",
+        },
+      });
       await Tweet.populate(likedtweet, {
         path: "replyingTo.tweetId",
         select:
-        "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+          "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
         populate: {
           path: "authorId",
           strictPopulate: false,
@@ -516,6 +519,8 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
       throw e;
     }
     let originalTweets = [];
+    let sentTweets = [];
+    let notreplies=[];
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
@@ -534,7 +539,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           path: "retweetedTweet.tweetId",
           strictPopulate: false,
           select:
-          "_id replyingTo authorId text tags retweetedTweet likeCount retweetCount gallery likes replyCount createdAt",
+            "_id replyingTo authorId text tags retweetedTweet likeCount retweetCount gallery likes replyCount createdAt",
           populate: {
             path: "authorId",
             strictPopulate: false,
@@ -545,8 +550,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           path: "replyingTo.tweetId",
           strictPopulate: true,
           select:
-          "_id replyingTo authorId text tags retweetedTweet likeCount retweetCount gallery likes replyCount createdAt",
-          //add is liked
+            "_id replyingTo authorId text tags retweetedTweet likeCount retweetCount gallery likes replyCount createdAt",
           populate: {
             path: "authorId",
             strictPopulate: false,
@@ -554,7 +558,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           },
         },
       ],
-      
+
       options: { sort },
     });
 
@@ -562,15 +566,15 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
       user.Tweets = user.Tweets.map((tweet) => {
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
-          );
-          if (isliked) {
-            delete tweet._doc.likes;
-            const tweets = {
-              ...tweet._doc,
-              isliked: true,
-            };
-            return tweets;
-          } else {
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+          };
+          return tweets;
+        } else {
           delete tweet._doc.likes;
           const tweets = {
             ...tweet._doc,
@@ -579,6 +583,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           return tweets;
         }
       });
+      const UserTweets = user.Tweets;
       let temp;
       for (let i = 0; i < user.Tweets.length; i++) {
         if (user.Tweets[i].replyingTo.tweetExisted) {
@@ -588,7 +593,6 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           }
         }
       }
-      let UserTweets = user.Tweets;
       let UserReplies = [];
       for (UserTweet of UserTweets) {
         if (UserTweet.replyingTo.tweetExisted) {
@@ -600,10 +604,8 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           if (UserReply.replyingTo.tweetId) {
             originalTweets.push(UserReply.replyingTo);
             delete originalTweets.replyingTo;
-            delete UserReply.replyingTo;
           } else {
             originalTweets.push(UserReply.replyingTo);
-            delete UserReply.replyingTo;
           }
         }
         for (let i = 0; i < UserReplies.length; i++) {
@@ -613,21 +615,23 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           };
         }
       }
-      // originalTweet = UserReply.replyingTo;
-      // originalTweet.tweetId.reply = UserReply;
-      // delete originalTweet.tweetId.reply.replyingTo;
-      // ModifiedUserReplies.push(originalTweet);
-
-      console.log(originalTweets);
-      console.log(
-        "-------------------------------------------------------------------------------"
-      );
-      console.log(UserReplies);
     } else {
       e = "user has no tweets";
       throw e;
     }
-    res.send(originalTweets);
+    for (let i = 0; i < user.Tweets.length; i++) {
+      if (
+        user.Tweets[i].replyingTo.tweetId === null &&
+        user.Tweets[i].replyingTo.tweetExisted === false
+      ) {
+        sentTweets.push({tweetId:user.Tweets[i]});
+      }
+    }
+    for (let i = 0; i < originalTweets.length; i++) {
+      sentTweets.push(originalTweets[i]);
+    }
+
+    res.send(sentTweets);
   } catch (e) {
     //here all caught errors are sent to the client
     res.status(400).send({ error: e.toString() });
