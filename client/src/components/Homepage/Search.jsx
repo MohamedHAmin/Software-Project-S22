@@ -3,6 +3,7 @@ import "./Styles/Search.css"
 import { TextField } from "@mui/material";
 import { InputAdornment } from "@material-ui/core";
 import SearchIcon from '@mui/icons-material/SearchOutlined';
+import SuggestedAccounts from "./SuggestedAccounts";
 
 function Search(){
     const [content,setcontent]=useState("");  
@@ -29,6 +30,7 @@ function Search(){
                         }}
                 />
             </span>
+            {/* <SuggestedAccounts/> */}
         </React.Fragment>
     );
 }

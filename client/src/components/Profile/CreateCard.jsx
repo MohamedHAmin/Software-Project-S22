@@ -10,7 +10,7 @@ function CreateCard(props) {
   console.log(props);
   return (
     <div className="CreateFollowing">
-      <FollowingCard contact={props.contact} />
+      <FollowingCard randomUser={props.randomUser} contact={props.contact} />
     </div>
   );
 }

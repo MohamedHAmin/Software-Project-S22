@@ -15,6 +15,8 @@ import FollowingPage from "./components/Profile/FollowingPage";
 import FollowersPage from "./components/Profile/FollowersPage";
 import Notifications from "./components/Homepage/Notifications";
 import Explore from "./components/Homepage/Explore";
+import AdminDashboard from "./components/Homepage/AdminDashboard";
+
 
 
 function App() {
@@ -24,7 +26,7 @@ function App() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/googlelogin/success", {
+      fetch("http://localhost:5000/user/googlelogin/success", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -162,6 +164,10 @@ function App() {
              <Route
               path="/Explore"
               element={<Explore isAdmin={isAdmin} />}
+            ></Route>
+            <Route
+              path="/Admin/Dashboard"
+              element={<AdminDashboard />}
             ></Route>
           </Routes>
         </BrowserRouter>
