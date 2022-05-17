@@ -23,7 +23,7 @@
   --color-hover: #6d71ff;
   --color-mode: #ffffff;
   --color-settingsHover:rgb(53, 49, 77);
-  --color-suggestedAccContainer:rgb(41, 37, 59);
+  --color-suggestedAccContainer:#141a27;
   background-color: var(--color-background);
   height: 100% !important;
 }

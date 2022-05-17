@@ -16,12 +16,10 @@ import FollowersPage from "./components/Profile/FollowersPage";
 import Notifications from "./components/Homepage/Notifications";
 import Explore from "./components/Homepage/Explore";
 import AdminDashboard from "./components/Homepage/AdminDashboard";
-
-
+import SearchResults from "./components/Homepage/SearchResults";
 
 function App() {
-  
-   //Login with Google 
+  //Login with Google
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -158,17 +156,18 @@ function App() {
               element={<ReportsPage isAdmin={isAdmin} />}
             ></Route>
             <Route
+              path="/search/:searchtext"
+              element={<SearchResults />}
+            ></Route>
+            <Route
               path="/Notifications"
               element={<Notifications isAdmin={isAdmin} />}
             ></Route>
-             <Route
+            <Route
               path="/Explore"
               element={<Explore isAdmin={isAdmin} />}
             ></Route>
-            <Route
-              path="/Admin/Dashboard"
-              element={<AdminDashboard />}
-            ></Route>
+            <Route path="/Admin/Dashboard" element={<AdminDashboard />}></Route>
           </Routes>
         </BrowserRouter>
       </div>
