@@ -16,6 +16,7 @@
     margin-right: 0%;
     height: 100%;
     min-width: 200px;
+    width:27%;
   }
 @media screen and (max-width: 859px) {
     .searchbar
@@ -34,13 +35,14 @@
     margin-right: 0%;
     height: 100vh;
     min-width: 200px;
+    width:27%;
   }
 .searchbar
 {
   position: relative;
   top: 15px;
   left :5%;
-  width: inherit;
+  width: 100%;
 }
 @media screen and (max-width: 1060px) {
     .Homepage {

@@ -10,6 +10,8 @@
   --color-background: #ffffff;
   --color-hover: #6d71ff;
   --color-mode: rgb(0, 0, 0);
+  --color-settingsHover:rgb(247, 246, 246);
+  --color-suggestedAccContainer:rgb(227, 227, 227);
   background-color: var(--color-background);
   height: 100%;
 }
@@ -20,6 +22,8 @@
   --color-border: #dcdada13;
   --color-hover: #6d71ff;
   --color-mode: #ffffff;
+  --color-settingsHover:rgb(53, 49, 77);
+  --color-suggestedAccContainer:rgb(41, 37, 59);
   background-color: var(--color-background);
   height: 100% !important;
 }

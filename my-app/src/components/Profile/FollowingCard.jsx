@@ -76,13 +76,13 @@ function FollowingCard(props) {
   }
   return (
     <div className="FollowingCard">
-      <NavLink to={`/Profile/${props.contact.followingId._id}`}>
+      <NavLink to={`/Profile/${props.randomUser?(props.contact._id):(props.contact.followingId._id)}`}>
         <div className="FollowingCard">
           <div>
             <Avatar
               style={{ marginRight: "4px" }}
-              src={props.contact.followingId.profileAvater.url}
-              alt={props.contact.followingId.screenName}
+              src={props.randomUser?(props.contact.profileAvater.url):(props.contact.followingId.profileAvater.url)}
+              alt={props.randomUser?(props.contact.screenName):(props.contact.followingId.screenName)}
             />
           </div>
 
@@ -90,7 +90,7 @@ function FollowingCard(props) {
             <p
               style={{ margin: "0px 0px 4px 4px", color: "var(--color-mode)" }}
             >
-              <b>{props.contact.followingId.screenName}</b>
+              <b>{props.randomUser?(props.contact.screenName):(props.contact.followingId.screenName)}</b>
             </p>
             <p
               style={{
@@ -100,7 +100,7 @@ function FollowingCard(props) {
                 opacity: "0.8",
               }}
             >
-              @{props.contact.followingId.tag}
+              @{props.randomUser?(props.contact.tag):(props.contact.followingId.tag)}
             </p>
 
             <h6
@@ -110,7 +110,7 @@ function FollowingCard(props) {
                 color: "var(--color-mode)",
               }}
             >
-              {props.contact.followingId.Biography}
+              {props.randomUser?(props.contact.Biography):(props.contact.followingId.Biography)}
             </h6>
           </div>
         </div>
@@ -125,7 +125,7 @@ function FollowingCard(props) {
       >
         <FormControl className="editProfileCloseContainer">
           <Typography id="modal-modal-title" variant="h6">
-            Unfollow @{props.contact.followingId.tag}?
+          Unfollow @{props.randomUser?(props.contact.tag):(props.contact.followingId.tag)}?
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Their Tweets will no longer show up in your home timeline. You can
@@ -150,7 +150,7 @@ function FollowingCard(props) {
           </div>
         </FormControl>
       </Modal>
-      {props.contact.followingId._id !== userID ? (
+      {(props.randomUser?(props.contact._id):(props.contact.followingId._id)) !== userID ? (
         <Button
           onClick={handleButtonClick}
           className={
