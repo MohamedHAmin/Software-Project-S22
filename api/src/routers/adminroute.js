@@ -10,7 +10,7 @@ const notifiy = require("../utils/firbase");
 const Token = require("../models/Token.js");
 const router = new express.Router();
 
-router.post("/create", auth("admin"), async (req, res) => {
+router.post("/create",auth("admin") ,async (req, res) => {
   try {
     const deletedUser = await User.deleteOne({
       $and: [{ email: req.body.email }, { verified: false }],
@@ -34,7 +34,6 @@ router.post("/create", auth("admin"), async (req, res) => {
 });
 //~~~~~~Report~~~~~~~~
 
-// TODO: IN NEXT PHASES
 router.delete("/report/:id", auth("admin"), async (req, res) => {
   try {
     let deletedreports;
@@ -64,7 +63,7 @@ router.get("/report/:pageNum", auth("admin"), async (req, res) => {
     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 1;
     const skip = (parseInt(req.params.pageNum) - 1) * perPage;
     let reports = await Report.find(filter)
-      .populate({ path: "reporterId", select: "tag" })
+      .populate({ path: "reporterId", select: "screenName tag profileAvater" })
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 });
@@ -83,7 +82,16 @@ router.get("/report/:pageNum", auth("admin"), async (req, res) => {
               path: "authorId",
               select: "screenName tag profileAvater",
             },
-            select: "text authorId likeCount replyCount retweetCount gallery",
+            populate: {
+              path: "retweetedTweet.tweetId",
+              select:
+                "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+              populate: {
+                path: "authorId",
+                select: "_id screenName tag profileAvater.url",
+              },
+            },
+            select: "text authorId retweetedTweet likeCount replyCount retweetCount gallery",
             model: Tweet,
           });
         }
@@ -124,7 +132,10 @@ router.post("/ban/:id", auth("admin"), async (req, res) => {
     const notifications = new Notification({ notifiedUId: bannedUser._id, text });
     notifications.save();
     const tokens = await Token.find({ ownerId: req.params.id });
-  
+    console.log(
+      "🚀 ~ file: followroute.js ~ line 43 ~ router.post ~ tokens",
+      tokens
+    );
     if (tokens) {
       let fcmtokens = tokens.map((token) => token.fcmToken);
       var uniqueArray = [...new Set(fcmtokens)];
@@ -165,6 +176,7 @@ router.get("/users/:pageNum", auth("admin"), async (req, res) => {
       .project({
         _id: 1,
         screenName: 1,
+        profileAvater:1,
         tag: 1,
         Reports: 1,
       })
@@ -196,6 +208,7 @@ router.get("/tweets/:pageNum", auth("admin"), async (req, res) => {
       .project({
         Reports: 1,
         text: 1,
+        retweetedTweet: 1,
         authorId: 1,
         likeCount: 1,
         replyCount: 1,
@@ -209,6 +222,15 @@ router.get("/tweets/:pageNum", auth("admin"), async (req, res) => {
       path: "authorId",
       select: "screenName tag profileAvater",
     });
+    await Tweet.populate(tweets, {
+      path: "retweetedTweet.tweetId",
+      select:
+        "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+      populate: {
+        path: "authorId",
+        select: "_id screenName tag profileAvater.url",
+      }
+    });
     if (!tweets.length) {
       throw Error("Not Found");
     }
@@ -217,17 +239,6 @@ router.get("/tweets/:pageNum", auth("admin"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-// router.get("/dashboard",auth("admin"),async (req, res) => {
-//   try {
-//     res.status(200).end("<h1>Placeholder<h1>")
-
-//   } catch (e) {
-//     console.log(e)
-//     res.status(400).send({error:e.toString()});
-//   }
-// });
-
-
 router.get("/dashboard",auth("admin"),async (req, res) => {
   try {
     let stats={
@@ -303,15 +314,24 @@ router.get("/dashboard",auth("admin"),async (req, res) => {
       replyingTo:{tweetId:null,tweetExisted:false},
       "retweetedTweet.tweetExisted":false
     })
+    .populate({
+      path:"authorId",
+      select:"screenName tag followercount followingcount profileAvater"
+    })
     .sort({likeCount:-1})
     .limit(1);
-    stats.TopTweet=topTweet;
+    stats.TopTweet={
+      ...topTweet[0]._doc,
+      reply:[],
+      isliked:false
+    }
     res.status(200).json(stats).end();
   } catch (e) {
     console.log(e)
     res.status(400).send({error:e.toString()});
   }
 });
+
 //~~~~~~Search for user or tweet~~~~~~~~
 //Search will take the text from the search bar in req.body and search for the keyword in all tweets
 //and return all matching tweets and will also lookup users that has this keyword and return them
