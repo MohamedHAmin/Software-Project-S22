@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../Profile/Styles/MyFollowing.css";
-import { useParams } from "react-router-dom";
+
 import axios from "axios";
 import "./Styles/AdminDashboard.css";
 import SideBar from "../Profile/SideBar";
@@ -33,6 +33,9 @@ function AdminDashboard() {
     const[duration,setDuration]=useState(7);//7 means week, 30 means month
     const[durationText,setDurationText]=useState("Week");//7 means week, 30 means month
     const[topTweet,setTopTweet]=useState([]);
+    const[toppTweet,setToppTweet]=useState();
+    const [ready, setReady]=useState(false);
+    
     const handleClickWeek =()=>{
         setDuration(7);
         setDurationText("Week");
@@ -87,13 +90,47 @@ function AdminDashboard() {
             setRetweetsPercentage(((Math.abs(res.data.Current.retweetCount-res.data.Past.retweetCount)/res.data.Current.retweetCount)*100).toFixed(2));
             setReportsPercentage(((Math.abs(res.data.Current.reportsCount-res.data.Past.reportsCount)/res.data.Current.reportsCount)*100).toFixed(2));
             //get top tweet
-            setTopTweet(res.data.TopTweet);
+            console.log(res.data.TopTweet._id);
+            axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${res.data.TopTweet._id}`,
+            { headers: { Authorization: localStorage.getItem("accessToken") }}).then((res) => {
+                if (res.error) {
+                console.log(
+                    "There was error while attempting to retrieve tweet"
+                );
+                } else {
+                console.log(res.data);
+                setToppTweet(res.data);
+                setReady(true);
+            }
+            });
         }
+        
       });
   },[duration]);
-  const passdeletedTweet=()=>{
-      alert("can't delete Lar in dashboard page!");
-  }
+  const passdeletedTweet = () => {
+    axios
+      .delete(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${toppTweet._id}`,
+        {
+          headers: { Authorization: localStorage.getItem("adminToken") },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error || !res.data === "success") {
+          alert("something went wrong");
+        } else {
+          window.location.reload();
+         
+        }
+        //retweetCount();
+      })
+      .catch((err) => {
+        //err.message; // 'Oops!'
+        alert("Error occured while deleting");
+        console.log(err);
+      });
+  };
 
     return (
         <div className="AdminDashboardPage">
@@ -228,18 +265,20 @@ function AdminDashboard() {
                     </div>
                     
                 </div>
-                <div style={{marginTop:40}}>
+                <div style={{marginTop:30}}>
                     <div style={{display:"flex"}}>
                         <div className="TopLarConatiner">
                             <h4 className="DashboardHeader" >Top lar</h4>
-                            {/* {topTweet.map((post) => (
-                                <Post
-                                    post={post}
+                            <div>
+                                {ready?(<Post
+                                    post={toppTweet}
                                     passdeletedTweet={passdeletedTweet}
                                     isAdmin={true}
                                     isPost={true}
-                                />
-                                ))} */}
+                                    canviewcomments={false}
+                                />):(<></>)}
+                            </div>
+                                
                         </div>
                         <div className="CountBox">
                             <div className="ReportsConatiner">
