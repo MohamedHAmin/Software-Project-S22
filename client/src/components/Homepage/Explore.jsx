@@ -58,6 +58,7 @@ return (
             ) : (<></>)}
         </div>
       </div>
+      <div className="Notificationrightbar"></div>
       </div>
   );
 }
