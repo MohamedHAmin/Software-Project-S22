@@ -1,0 +1,76 @@
+.profileInfo2 {
+  margin-left: 20px;
+}
+
+.profileInfo2 > h2 {
+  font-weight: 550;
+  font-size: 19px;
+  margin-bottom: 3px;
+}
+
+.profileInfo2 > h6 {
+  font-weight: 550;
+  font-size: 12px;
+  opacity: 0.7;
+  
+}
+
+.moreInfo {
+  margin-top: 6px;
+  margin-left: -3px;
+  
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.moreInfo > h5 {
+  color:var(--color-mode);
+  font-size: 15px;
+  
+  margin-left: 4px;
+  word-break: break-all;
+}
+
+.moreInfo span .MuiSvgIcon-root {
+  height: 20px !important;
+  width: 20px !important;
+  margin-right: 3px;
+
+  color: var(--color-mode);
+  opacity: 0.8;
+}
+
+.moreInfo span {
+  align-items: center;
+  margin-right: 10px;
+  display:inline-flex;
+}
+
+.moreInfo a {
+  text-decoration: none;
+}
+
+.followInfo a {
+  text-decoration: none;
+  color:var(--color-mode);
+}
+
+.followInfo a:hover {
+  text-decoration: underline;
+  
+}
+
+.followInfo {
+  display: flex;
+  margin-top: -10px;
+}
+.followInfo span {
+  margin-right: 20px;
+  margin-top: 0px;
+  margin-left: 3px;
+  margin-bottom: 3px;
+  font-size: 14px;
+  font-weight: 450;
+}
+
+

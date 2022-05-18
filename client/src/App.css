@@ -1,0 +1,42 @@
+* {
+  margin:0;
+}
+
+
+.AppLight {
+  font-family: "Montserrat", "Verdana", "Times New Roman";
+  --larry-color: #2b3dbc;
+  --color-border: #2b3cbc13;
+  --color-background: #ffffff;
+  --color-hover: #6d71ff;
+  --color-mode: rgb(0, 0, 0);
+  --color-settingsHover:rgb(247, 246, 246);
+  --color-suggestedAccContainer:rgb(227, 227, 227);
+  background-color: var(--color-background);
+  height: 100%;
+}
+.AppDark {
+  --color-background: #192030;
+  font-family: "Montserrat", "Verdana", "Times New Roman";
+  --larry-color: #2b3dbc;
+  --color-border: #dcdada13;
+  --color-hover: #6d71ff;
+  --color-mode: #ffffff;
+  --color-settingsHover:rgb(53, 49, 77);
+  --color-suggestedAccContainer:#141a27;
+  background-color: var(--color-background);
+  height: 100% !important;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.settingsPageDiv {
+  flex: 0.8;
+}

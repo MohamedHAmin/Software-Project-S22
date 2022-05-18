@@ -1,0 +1,188 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  padding: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+  background: rgb(247, 247, 247);
+  font-family: "Montserrat", "Verdana", "Times New Roman";
+}
+
+.GoogleLogin {
+  width: 50%;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 1000;
+  cursor: pointer;
+  outline: none;
+  margin-left: 100px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.imageContainer {
+  width: 40%;
+  min-width: 320px;
+}
+
+.imageContainer img {
+  margin-bottom: 40px;
+  width: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+::selection {
+  background: #4158d0;
+  color: #fff;
+}
+
+.signupContainer {
+  min-width: 320px;
+  width: 40%;
+  max-width: 400px;
+  background: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(1 1 1 / 15%);
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 90px;
+  color: #fff;
+  user-select: none;
+  border-radius: 15px 15px 0 0;
+  background: linear-gradient(-135deg, #c850c0, #2B3DBC);
+  margin-bottom: 20px;
+}
+
+.signupContainer form {
+  padding: 10px 30px 30px 30px;
+}
+
+.field {
+  height: 50px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.field input {
+  height: 80%;
+  width: 100%;
+  outline: none;
+  font-size: 17px;
+  padding-left: 20px;
+  border: 1px solid lightgrey;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.container button {
+  width: 100%;
+  height: 50px;
+  border: 1px solid;
+  background: rgb(43, 61, 188);
+  border-radius: 25px;
+  font-size: 18px;
+  color: #e9f4fb;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  margin-top: 20px;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.content .checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content input {
+  width: 15px;
+  height: 15px;
+  background: red;
+}
+
+.content label {
+  color: #262626;
+  user-select: none;
+  padding-left: 5px;
+}
+
+.container form .field input:focus,
+form .field input:valid {
+  border-color: lightgrey;
+}
+
+.field label {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  color: #999999;
+  font-weight: 400;
+  font-size: 17px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+.label input:focus~label,
+.label input:valid~label {
+  top: 0%;
+  font-size: 16px;
+  color: #4158d0;
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+form .passLink {
+  color: "";
+}
+
+.container button:hover {
+  border-color: #2691d9;
+  transition: 0.5s;
+}
+
+form .signupLink {
+  color: #262626;
+  margin-top: 20px;
+  text-align: center;
+}
+
+form .passLink a,
+form .signupLink a {
+  color: #4158d0;
+  text-decoration: none;
+}
+
+form .passLink a:hover,
+form .signupLink a:hover {
+  text-decoration: underline;
+}
+
+.container p {
+  text-align: center;
+  padding-top: 5%;
+  color: rgb(221, 28, 28);
+}
+
+.success {
+  color: rgb(7, 217, 7);
+}
+
+.error {
+  color: rgb(221, 28, 28);
+}

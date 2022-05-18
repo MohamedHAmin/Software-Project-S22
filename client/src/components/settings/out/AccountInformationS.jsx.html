@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSDoc: Source: AccountInformationS.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="styles/prettify-tomorrow.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1 class="page-title">Source: AccountInformationS.jsx</h1>
+
+      <section>
+        <article>
+          <pre
+            class="prettyprint source linenums"
+          ><code>import React , {useState,useEffect} from 'react';
+import PrivacySettings from './PrivacySettings';
+import './Styles/SettingsMenu.css'
+import './Styles/SettingsMenuOptions.css'
+import ChangeUserTag from './ChangeUserTag';
+import TemplateFormEditAccInfo from './TemplateFormEditAccInfo';
+import AccInfoOptions from './AccInfoOptions';
+import MakeBDvisible from './MakeBDvisible';
+import MakeLocVisible from './MakeLocVisible';
+import axios from 'axios';
+import AddPhoneNum from './AddPhoneNum';
+import ChangePhoneNum from './ChangePhoneNum';
+
+/**
+ * component to display the whole page of Account information SUB menu.(it renders inside it &lt;AccInfoOptions/> to display each option only)
+ * @component
+ * @param {boolean} darkMode
+ * @example
+ * props.darkMode = true
+ * const anythingClicked = false
+ * return (
+ * &lt;div>
+ *    &lt;h1>Account information&lt;/h1>
+ *    >See information about your account, download an archive of your data, or learn about your account deactivation options&lt;/p>
+ *    &lt;AccInfoOptions Username/>
+ *    &lt;AccInfoOptions Phone/>
+ *    &lt;AccInfoOptions Email/>
+ *    ...
+ * &lt;/div>
+ * )
+ *  
+ */
+function AccountInformationS(props) {
+    
+    const [isClickedUsername,setUsernameActive]=useState(false);
+    const [isClickedPhone,setPhoneActive]=useState(false);
+    const [isClickedEmail,setEmailActive]=useState(false);
+    const [isClickedProtectedLars,setProtectedLarsActive]=useState(false);
+    const [isClickedBirthDate,setBirthDateActive]=useState(false);
+    const [isClickedLocation,setLocationActive]=useState(false);
+    const [anythingClicked,setanythingClicked]=useState(false);
+    function clickedUsername(){
+        setUsernameActive(true);
+        setPhoneActive(false);       
+        setEmailActive(false);
+        setProtectedLarsActive(false);
+        setBirthDateActive(false);
+        setLocationActive(true);
+        //set var that something is clicked to true
+        setanythingClicked(true);
+    }
+    function clickedPhone(){
+        setUsernameActive(false);
+        setPhoneActive(true);       
+        setEmailActive(false);
+        setProtectedLarsActive(false);
+        setBirthDateActive(false);
+        setLocationActive(true);
+        //set var that something is clicked to true
+        setanythingClicked(true);        
+    }
+    function clickedEmail(){
+        setUsernameActive(false);
+        setPhoneActive(false);       
+        setEmailActive(true);  
+        setProtectedLarsActive(false);
+        setBirthDateActive(false);
+        setLocationActive(true);
+        //set var that something is clicked to true
+        setanythingClicked(true);      
+    }
+    function clickedProtectedLars(){
+        setUsernameActive(false);
+        setPhoneActive(false);       
+        setEmailActive(false);
+        setProtectedLarsActive(true);
+        setBirthDateActive(false);
+        setLocationActive(false);
+        //set var that something is clicked to true
+        setanythingClicked(true);
+    }
+    function clickedGender(){
+        setUsernameActive(false);
+        setPhoneActive(false);       
+        setEmailActive(false);
+        setProtectedLarsActive(false);
+        setBirthDateActive(false);
+        setLocationActive(false);
+        //set var that something is clicked to true
+        setanythingClicked(true);        
+    }
+    function clickedBirthDate(){
+        setUsernameActive(false);
+        setPhoneActive(false);       
+        setEmailActive(false);  
+        setProtectedLarsActive(false);
+        setBirthDateActive(true);
+        setLocationActive(false);
+        //do not set var that something is clicked to true    
+    }
+    function clickedLocation(){
+        setUsernameActive(false);
+        setPhoneActive(false);       
+        setEmailActive(false);  
+        setProtectedLarsActive(false);
+        setBirthDateActive(false);
+        setLocationActive(true);
+        //do not set var that something is clicked to true  
+    }
+    //to refresh the page after adding phone
+    const [refreshAfterPhone, setrefreshAfterPhone] = useState(false);
+    function handleChangerefreshAfterPhone() {
+        setrefreshAfterPhone(!refreshAfterPhone);
+        
+    }
+    //related to request to back end
+    const userId=localStorage.getItem("userId");
+    // request data from backend
+    const [profileData, setProfileData]=useState([]);
+    const [ready, setReady]=useState(false);
+    useEffect(()=>{
+        // console.log(localStorage.getItem("accessToken"));
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}/me`, 
+            { headers: {
+                Authorization: localStorage.getItem("accessToken")}
+            }
+        ).then((res)=>{
+            
+            if(res.data.error){
+                
+            }
+            else{
+                setProfileData(res.data)
+                setReady(true);
+            }
+        })
+        
+    }, [refreshAfterPhone])
+    return (
+        &lt;div >
+            {!anythingClicked&amp;&amp;(&lt;h1 className={!props.darkMode? "settingsMenuHeaderLight":"settingsMenuHeaderDark" }>Account information&lt;/h1>)}
+            {!anythingClicked&amp;&amp;(&lt;p className={!props.darkMode? "settingsMenuParagraphLight":"settingsMenuParagraphDark" }>See information about your account, download an archive of your data, or learn about your account deactivation options&lt;/p>)}
+            {!anythingClicked&amp;&amp;(&lt;div onClick={clickedUsername} >&lt;AccInfoOptions id="12" darkMode={props.darkMode}  active={isClickedUsername} text="Username" subtext={profileData.tag} isSubtextExist={true} />&lt;/div>)}{/*profileData.screenName*/}
+            {!anythingClicked &amp;&amp;(&lt;div onClick={clickedPhone} >&lt;AccInfoOptions id="13" darkMode={props.darkMode}  active={isClickedPhone} text="Phone" subtext={profileData.phoneNumber} isSubtextExist={true} />&lt;/div>)}
+            {!anythingClicked &amp;&amp;(&lt;div onClick={clickedEmail} >&lt;AccInfoOptions id="14" darkMode={props.darkMode} active={isClickedEmail} text="Email" subtext={profileData.email} isSubtextExist={true} />&lt;/div>)}
+            {!anythingClicked &amp;&amp;(&lt;div className='karim2'>&lt;span className={!props.darkMode?`settingsMenuOptionsLight_Acc`:`settingsMenuOptionsDark_Acc `} style={{fontWeight:500, fontSize:18,cursor:"default"}}>Verified&lt;/span>&lt;span className={!props.darkMode?`subtextsettingsMenuOptionsLight`:`subtextsettingsMenuOptionsDark `}  style={{marginBottom:10,marginLeft: 10, fontWeight: 200, fontSize:12,cursor:"default"}}>{profileData.verified?"Yes":"No"}&lt;/span>&lt;/div>)}{/*profileData.verified*/}
+            {!anythingClicked &amp;&amp;(&lt;div className='borderHorizontal' >&lt;/div>)}
+            {!anythingClicked &amp;&amp;(&lt;div onClick={clickedProtectedLars} >&lt;AccInfoOptions id="15" darkMode={props.darkMode} active={isClickedProtectedLars} text="Protected Lars" subtext={profileData.isPrivate? "Yes":"No"} isSubtextExist={true} />&lt;/div>)}{/*profileData.isPrivate*/ }
+            {!anythingClicked &amp;&amp;(&lt;div className='karim2'>&lt;span className={!props.darkMode?`settingsMenuOptionsLight_Acc`:`settingsMenuOptionsDark_Acc `} style={{ fontWeight:500, fontSize:18,cursor:"default"}}>Account creation&lt;/span>&lt;span className={!props.darkMode?`subtextsettingsMenuOptionsLight`:`subtextsettingsMenuOptionsDark `}  style={{marginBottom:10,marginLeft: 10, fontWeight: 200, fontSize:12,cursor:"default"}}>{profileData.createdAt}&lt;/span>&lt;/div>)}{/*profileData.isPrivate*/ }
+            {!anythingClicked &amp;&amp;(&lt;div className='borderHorizontal' >&lt;/div>)}       
+            {!anythingClicked &amp;&amp; ready &amp;&amp;(&lt;div onClick={clickedBirthDate} >&lt;MakeBDvisible darkMode={props.darkMode} profileData={profileData}/>&lt;/div>)}
+            {!anythingClicked &amp;&amp; ready &amp;&amp; profileData.location.place&amp;&amp;(&lt;div onClick={clickedLocation}>&lt;MakeLocVisible darkMode={props.darkMode} profileData={profileData}/>&lt;/div>)}
+            {/*if the clicked option is Username */}
+            {isClickedUsername &amp;&amp;(&lt;div>&lt;ChangeUserTag  oldValue={profileData.tag} darkMode={props.darkMode}/>&lt;/div>)}
+            {isClickedPhone &amp;&amp; !profileData.phoneNumber&amp;&amp;(&lt;div>&lt;AddPhoneNum  darkMode={props.darkMode} onChangerefreshAfterPhone={handleChangerefreshAfterPhone}/>&lt;/div>)} 
+            {isClickedPhone &amp;&amp; profileData.phoneNumber&amp;&amp;(&lt;div>&lt;ChangePhoneNum oldValue={profileData.phoneNumber}  darkMode={props.darkMode} onChangerefreshAfterPhone={handleChangerefreshAfterPhone}/>&lt;/div>)}
+            {isClickedEmail &amp;&amp;(&lt;div>&lt;TemplateFormEditAccInfo id="131" text="email" oldValue={profileData.email} darkMode={props.darkMode}/>&lt;/div>)} 
+            {isClickedProtectedLars &amp;&amp;(&lt;PrivacySettings isDarkMode={props.darkMode} />)}  
+        &lt;/div>
+      );
+}
+
+export default AccountInformationS;</code></pre>
+        </article>
+      </section>
+    </div>
+
+    <nav>
+      <h2><a href="index.html">Home</a></h2>
+      <h3>Global</h3>
+      <ul>
+        <li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li>
+        <li>
+          <a href="global.html#AccountInformationS">AccountInformationS</a>
+        </li>
+        <li><a href="global.html#AccountSettings">AccountSettings</a></li>
+        <li><a href="global.html#blue">blue</a></li>
+        <li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li>
+        <li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li>
+        <li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li>
+        <li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li>
+        <li>
+          <a href="global.html#NotificationSettings">NotificationSettings</a>
+        </li>
+        <li><a href="global.html#PrivacySettings">PrivacySettings</a></li>
+        <li><a href="global.html#SettingsMenu">SettingsMenu</a></li>
+        <li>
+          <a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a>
+        </li>
+        <li><a href="global.html#SettingsPage">SettingsPage</a></li>
+        <li><a href="global.html#UpdatePassword">UpdatePassword</a></li>
+      </ul>
+    </nav>
+
+    <br class="clear" />
+
+    <footer>
+      Documentation generated by
+      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26
+      2022 23:52:36 GMT+0200 (Eastern European Standard Time)
+    </footer>
+
+    <script>
+      prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

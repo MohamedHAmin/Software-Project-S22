@@ -1,0 +1,6 @@
+.CreateFollower a {
+  text-decoration: none;
+}
+.CreateFollower:hover {
+  opacity: 0.85;
+}

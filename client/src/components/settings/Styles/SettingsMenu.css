@@ -1,0 +1,103 @@
+.settingsMenu {
+  border-right: 2px solid var(--color-border);
+  min-width: 200px;
+  width: 50%;
+}
+.settingsSubMenu {
+  min-width: 250px;
+  width: 100%;
+  border-right: 2px solid var(--color-border);
+}
+
+.settingsMenuHeaderLight {
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 10px;
+  margin-bottom: 7px;
+  margin-top: 15px;
+  color: var(--color-mode);
+}
+.settingsMenuHeaderDark {
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 10px;
+  color: var(--color-mode);
+  margin-bottom: 7px;
+  margin-top: 15px;
+}
+
+.settingsMenuParagraphLight {
+  font-weight: 400;
+  font-size: 14px;
+  padding-left: 20px;
+  margin-bottom: 5px;
+  color: var(--color-mode);
+}
+
+.settingsMenuParagraphDark {
+  font-weight: 400;
+  font-size: 14px;
+  padding-left: 20px;
+  color: var(--color-mode);
+  margin-bottom: 5px;
+}
+
+.karim{
+  display: flex;
+  width:100%;
+  height:100vh;
+  margin-left: 24%;
+  margin-right: 4%;
+}
+
+.settingsMenu a {
+  text-decoration: none;
+}
+
+.subMenuDisplay {
+  display: flex;
+  width:70%;
+  
+}
+
+.App-link {
+  color: var(--color-hover) ;
+}
+.App-link:hover {
+  text-decoration: underline;
+  color: var(--larry-color);
+}
+
+.forceChangePasswordMUIDarkMode {
+  color: var(--color-mode) !important;
+}
+
+.SettingsPage{
+  display:flex
+}
+
+
+.TextFieldStyling{
+  margin-top: 2em;
+  margin-bottom: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  display:flex;
+}
+
+@media only screen and (min-width: 860px) and (max-width: 1060px) {
+  .karim {
+  
+    margin-left: 22%;
+    
+  }
+}
+
+@media only screen and (max-width: 859px) {
+  .karim {
+  
+    margin-left: 29%;
+  
+  }
+}
+

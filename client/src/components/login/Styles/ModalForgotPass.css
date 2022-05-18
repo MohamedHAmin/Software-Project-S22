@@ -1,0 +1,104 @@
+.modalBackground {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(200, 200, 200);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.modalContainer {
+    width: 600px;
+    height: 600px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.modalContainer .title {
+    display: inline-block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.titleCloseBtn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.titleCloseBtn button {
+    background-color: transparent;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    color: rgb(241, 223, 223);
+    width: 50px;
+}
+
+.modalContainer .body {
+    flex: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    text-align: center;
+}
+
+.modalContainer .body .nada {
+    margin-top: 50px;
+}
+
+.modalContainer .footer {
+    flex: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalContainer .footer button {
+    width: 150px;
+    height: 45px;
+    margin: 10px;
+    border: none;
+    background-color: rgb(43, 61, 188);
+    color: white;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 160px;
+}
+
+.modalContainer .footer button:hover {
+    background-color: #2691d9;
+    transition: 0.5s;
+}
+
+.nada {
+    height: 70px;
+    width: 100%;
+}
+
+.nada input {
+    height: 80%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    padding-left: 20px;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.error {
+    color: rgb(221, 28, 28);
+    font-weight: 500;
+    font-size: large;
+}

@@ -1,0 +1,85 @@
+.Follower {
+  height: auto;
+}
+
+.FollowerData {
+  font-size: 14px;
+}
+.searchCard {
+  position: relative;
+}
+
+.searchFollow1 {
+  background-color: var(--larry-color) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 30px !important;
+  width: auto !important;
+  position: absolute !important;
+  margin-top: 10px !important;
+  right: 20px !important;
+}
+
+.searchFollow2 {
+  background-color: var(--color-mode) !important;
+  border: none !important;
+  color: var(--color-background) !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 30px !important;
+  width: auto !important;
+  position: absolute !important;
+  float: right !important;
+  margin-top: 10px !important;
+  right: 20px !important;
+}
+.FollowerCard {
+  display: flex;
+  padding: 5px;
+  height: auto;
+}
+
+.FollowerCardInfo {
+  display: flex;
+  
+}
+
+.followButton1 {
+  background-color: var(--larry-color) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 30px !important;
+  width: auto !important;
+  position: absolute !important;
+  margin-top: 10px !important;
+  right: 20px !important;
+}
+
+.followButton2 {
+  background-color: var(--color-mode) !important;
+  border: none !important;
+  color: var(--color-background) !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 30px !important;
+  width: auto !important;
+  position: absolute !important;
+  margin-top: 10px !important;
+  right: 20px !important;
+}
+
+.FollowerData a {
+  text-decoration: none;
+}

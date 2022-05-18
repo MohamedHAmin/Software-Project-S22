@@ -1,0 +1,166 @@
+.settingsMenuOptionsLight {
+  font-weight: 400 ;
+  font-size: 10px;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  cursor: pointer;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  padding-left: 1.5em;
+  color: rgb(48, 48, 49);
+  color: var(--color-mode);
+}
+.settingsMenuOptionsDark {
+  font-weight: 400;
+  font-size: 10px;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  align-items: center;
+  cursor: pointer;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  padding-left: 1.5em;
+  color: var(--color-mode);
+}
+.settingsMenuOptionsLight_Acc {
+  font-weight: 400 ;
+  font-size: 10px;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  cursor: pointer;
+  padding-top: 2em;
+  
+  padding-left: 1.5em;
+  color:  var(--color-mode);
+}
+.settingsMenuOptionsDark_Acc {
+  font-weight: 400;
+  font-size: 10px;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  align-items: center;
+  cursor: pointer;
+  padding-top: 2em;
+
+  padding-left: 1.5em;
+  color:  var(--color-mode);
+}
+.subtextsettingsMenuOptionsLight{
+  font-weight: 400 ;
+  font-size: 13px !important;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  cursor: pointer;
+  padding-left: 1.5em;
+  color: var(--color-mode);
+}
+.subtextsettingsMenuOptionsDark {
+  font-weight: 400;
+  font-size: 13px;
+  font-stretch: normal;
+  display:flex;
+  flex:0.97;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 1.5em;
+  color: var(--color-mode);
+}
+.WholeSettingsAddPhoneOption{
+  display: flex;
+  align-items: center;
+}
+.WholeSettingsAddPhoneOption:hover {
+  background-color: var(--color-hover);
+  transition: background 100ms ease-in-out;
+}
+.WholeSettingsDeletePhoneOption{
+  display: flex;
+  align-items: center;
+  text-align:center;
+  
+}
+.WholeSettingsDeletePhoneOption:hover {
+  background-color: rgb(254, 167, 167);
+  transition: background 100ms ease-in-out;
+}
+
+.WholeSettingOptionLight:hover {
+  background-color: var(--color-settingsHover);
+  transition: background 100ms ease-in-out;
+}
+.WholeSettingOptionLight--active {
+  background-color: var(--color-settingsHover);
+}
+
+.WholeSettingOptionDark:hover {
+  background-color: var(--color-settingsHover);
+  transition: background 100ms ease-in-out;
+}
+.WholeSettingOptionDark--active {
+  background-color: var(--color-settingsHover);
+}
+.arrowIconLight {
+  float: right;
+  flex:0.03;
+  text-align:right !important;
+  color: var(--color-mode);
+}
+.arrowIconDark {
+  float: right;
+  flex:0.03;
+  text-align:right !important;
+  color: var(--color-mode) !important;
+  
+}
+
+.WholeSettingOptionLight{
+
+  display: flex;
+  align-items: center;
+}
+.WholeSettingOptionDark{
+
+  display: flex;
+  align-items: center;
+}
+
+.karim2{
+  display:flex;
+  flex:0.97;
+  flex-direction: column;
+}
+.borderHorizontal{
+  border-bottom: 2px solid var(--color-border);
+}
+.buttonSettings{
+background-color: #2b3dbc !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 500 !important;
+  font-size: 17px !important;
+  text-transform: inherit !important;
+  border-radius: 40px !important;
+  height: 7.5% !important;
+  margin-top: 5px !important;
+  width: 40% !important;
+}
+.buttonSettingsDisabled{
+  background-color: var(--color-border) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500 !important;
+    font-size: 17px !important;
+    text-transform: inherit !important;
+    border-radius: 40px !important;
+    height: 7.5% !important;
+    margin-top: 5px !important;
+    width: 40% !important;
+  }
+.buttonSettings:hover {
+  background-color: #6d71ff !important;
+}

@@ -1,0 +1,48 @@
+.Notifications
+{
+    color: var(--color-mode);
+    margin-right: 4%;
+    display: flex;
+    margin-left: 24% ;
+    
+}
+
+.Notificationrightbar {
+    position: sticky;
+    height: 100vh;
+}
+.notificationbuttons {
+    background-color: #2b3dbc !important;
+    height: 25px !important;
+    border-radius: 10px !important;
+    margin: 5px;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    } 
+.NotificationsContainer
+{
+    flex:0.8;
+}
+
+.onenotification
+{
+    border: 2px solid var(--color-border);
+    padding: 3%;
+    max-width:inherit;
+    width:100%;
+}
+
+@media screen and (max-width: 1060px) {
+    .Notifications
+    {
+        margin-left: 22%;
+    }
+}
+
+@media screen and (max-width: 859px) {
+    .Notifications
+    {
+        margin-left: 29%;
+        width: 92%;
+    }
+}

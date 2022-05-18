@@ -1,0 +1,28 @@
+.input-group{
+    padding-left: 20px;
+    padding-bottom: 4px;
+    /* border: none; */
+    width: auto;
+    /* box-shadow: 0px 1px 0 0 rgba(0, 0, 0, 0.1); */
+}
+.btn{
+    border: none;
+    outline: none;
+    outline:0px !important;
+    box-shadow: none !important;
+    color: rgb(43, 61, 188);
+    width:auto;
+}
+.dropdown-toggle::after {
+    content: none;
+}
+.btn:hover{
+    color: rgb(43, 61, 188);
+}
+.bo{
+    align-items: center!important;
+}
+.dropdown-item.active, .dropdown-item:active {
+    background-color: white;
+    color: rgb(43, 61, 188);
+}

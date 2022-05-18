@@ -1,0 +1,7 @@
+.CreateFollowing a {
+  text-decoration: none;
+}
+
+.CreateFollowing:hover {
+  opacity: 0.85;
+}

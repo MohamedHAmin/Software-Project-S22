@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSDoc: Source: MakeBDvisible.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="styles/prettify-tomorrow.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1 class="page-title">Source: MakeBDvisible.jsx</h1>
+
+      <section>
+        <article>
+          <pre
+            class="prettyprint source linenums"
+          ><code>import React, { useState,useEffect } from 'react';
+import "./Styles/SettingsMenuOptions.css"
+import "./Styles/SettingsMenu.css"
+import Checkbox from '@mui/material/Checkbox';
+import "./Styles/SettingsModals.css"
+import axios from 'axios'
+
+/**
+ * component to let the user change the visibility of the birth date
+ * @component
+ * @param {boolean} darkMode
+ * @param {Array} profileData all the profile data of the user
+ * @example
+ * props.darkMode = true
+ * props.profileData.birth.visability = false
+ * props.profileData.birth.date = "20-8-2001"
+ * return (
+ * &lt;div>
+ *    &lt;div>Make birthdate visible&lt;/div>
+ *    &lt;span>20-8-2001&lt;/span>
+ *    &lt;Checkbox>
+ * &lt;/div>
+ * )
+ *  
+ */
+
+function MakeBDvisible(props) {
+    //request to back end
+    //related to request to back end
+    const userId=localStorage.getItem("userId");
+   // const [profileData, setProfileData]=useState(props.profileData.birth.date);
+
+    // const privateAcc={
+    //     privateVal:false
+    //profileData.birthDate.visability
+    // }
+
+    const [checked, setChecked] = useState(props.profileData.birth.visability);
+
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+    
+
+    const handleChange = (event) => {
+        
+            //make request to back end here
+            
+            let data={
+                birth:{visability:!checked}
+            }
+            axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userId}`,data, {
+
+              headers: {
+                Authorization: localStorage.getItem("accessToken")
+              }
+      
+            }).then((res)=>{
+                console.log(res);
+                if(res.error){
+                    alert("error nothing changed!")
+                }
+                else{
+                    
+                    setChecked(!checked);
+                }
+            })   
+    };
+    
+    return ( 
+        
+                
+        &lt;div style={{display: 'flex',alignItems: 'center'}}>
+            &lt;div className='karim2'>
+            &lt;div onClick={handleChange} className={!props.darkMode? "settingsMenuOptionsLight_Acc":"settingsMenuOptionsDark_Acc" }>
+                &lt;div  style={{marginLeft: 10, fontWeight: 500, fontSize:18, display:'center'}}>Make birthdate visible&lt;/div>
+               
+            &lt;/div>
+            &lt;div>&lt;span className={!props.darkMode?`subtextsettingsMenuOptionsLight`:`subtextsettingsMenuOptionsDark `}  style={{marginLeft: 10, fontWeight: 200, fontSize:12}}>{props.profileData.birth.date}&lt;/span>&lt;/div>
+            &lt;/div>
+            &lt;div className={!props.darkMode?`arrowIconLight`:`arrowIconDark `} >
+                &lt;Checkbox {...label}
+                data-testid="checkbox1"
+                checked={checked}
+                onChange={handleChange}
+                />
+            &lt;/div>
+            
+        &lt;/div>
+
+                
+           
+     );
+}
+
+export default MakeBDvisible;</code></pre>
+        </article>
+      </section>
+    </div>
+
+    <nav>
+      <h2><a href="index.html">Home</a></h2>
+      <h3>Global</h3>
+      <ul>
+        <li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li>
+        <li>
+          <a href="global.html#AccountInformationS">AccountInformationS</a>
+        </li>
+        <li><a href="global.html#AccountSettings">AccountSettings</a></li>
+        <li><a href="global.html#blue">blue</a></li>
+        <li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li>
+        <li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li>
+        <li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li>
+        <li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li>
+        <li>
+          <a href="global.html#NotificationSettings">NotificationSettings</a>
+        </li>
+        <li><a href="global.html#PrivacySettings">PrivacySettings</a></li>
+        <li><a href="global.html#SettingsMenu">SettingsMenu</a></li>
+        <li>
+          <a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a>
+        </li>
+        <li><a href="global.html#SettingsPage">SettingsPage</a></li>
+        <li><a href="global.html#UpdatePassword">UpdatePassword</a></li>
+      </ul>
+    </nav>
+
+    <br class="clear" />
+
+    <footer>
+      Documentation generated by
+      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26
+      2022 23:52:37 GMT+0200 (Eastern European Standard Time)
+    </footer>
+
+    <script>
+      prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

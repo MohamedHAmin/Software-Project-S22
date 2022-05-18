@@ -1,0 +1,58 @@
+.btn-group{
+    height: 50px;
+    margin-top: 10px;
+    outline: none;
+    /* box-shadow: 0 0 0 1px rgb(0 0 0 / 10%); */
+    border: 2px solid var(--color-border);
+    border-left: 0;
+    border-right: 0;
+    width:100% ;
+    padding-right: 15px;
+    justify-content: space-between;
+    align-items: center !important;
+}
+.sidexarTweet {
+background-color: #2b3dbc !important;
+height: 20px !important;
+border-radius: 10px !important;
+margin: 5px;
+padding-top: 12px !important;
+padding-bottom: 12px !important;
+
+} 
+@media screen and (max-width: 1000px) {
+.Icon-control {
+display: none;
+}
+.btn-group{
+    height: 40px;
+    margin-top: 30px;
+    outline: none;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+    width:100% ;
+    padding-right: 15px;
+    justify-content: space-between;
+    align-items: center !important;
+    padding-top: 9px;
+}
+}
+@media screen and (min-width: 860px) and (max-width: 1000px) {
+    .btn-group{
+        padding-top: 1px;
+
+    }
+    .sidexarTweet {
+        margin-bottom: 0px!important;
+        
+    }
+}
+@media screen  and (max-width: 860px) {
+    .sidexarTweet {
+        margin-bottom: 0px!important;
+        
+    }
+    .btn-group{
+        padding-top: 0px;
+
+    }
+}

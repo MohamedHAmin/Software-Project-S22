@@ -1,0 +1,102 @@
+.ReportAction{
+    display:flex;
+    margin-left: 24%;
+}
+.subrebActdiv{
+    flex: 0.8;
+    flex-direction: column;
+}
+.subsubrepActdiv{
+    display: flex;
+    flex-direction: row;
+}
+.b3{
+    padding-top: 20px;
+    font-family: 'Roboto', sans-serif!important;
+    font-weight: bold!important;
+    color: var(--color-mode);
+
+}
+.b33{
+    padding-top: 40px;
+    font-family: 'Roboto', sans-serif!important;
+    font-weight: bold!important;
+    font-size:large;
+    color: var(--color-mode);
+
+}
+.b334{
+    padding-top: 60px;
+    font-family: 'Roboto', sans-serif!important;
+    font-weight: bold!important;
+    font-size:large;
+    color: var(--color-mode);
+
+    
+}
+/* a{
+    color: var(--color-hover);
+}
+a:hover{
+    color: var(--color-hover);
+} */
+
+.subsubrepActdiv .MuiSvgIcon-root {
+    height: 21px !important;
+    width: 30px !important;
+    margin-right: 30px !important;
+    margin-left: 13px !important;
+    cursor: pointer !important;
+    margin-top: 20px !important;
+    margin-bottom: 0 !important;
+    color: var(--color-mode) !important;
+  }
+  
+.subsubrepActdiv .MuiSvgIcon-root:hover {
+    background-color: var(--color-hover);
+    border-radius: 40px;
+    color: white;
+    transition: color 100ms ease-out;
+    padding: auto;
+  }
+.repActanch{
+    padding-top: 20px;
+    color: var(--color-mode);
+
+}
+.u{
+    padding-bottom: 385px;
+}
+.yy{
+    width: 50%!important;
+    font-size: large!important;
+    font-weight: bold!important;
+    color: var(--color-mode);
+
+}
+.Ptag{
+    color: var(--color-mode);
+
+}
+@media (min-width: 707px) and (max-width: 1338px) {
+    .H33{
+        top: 100px;
+    }
+  }
+
+  @media (max-width: 707px) {
+    .H33{
+        top: 130px;
+    }
+  }
+  @media (min-width: 860px) and (max-width: 1060px) {
+    .ReportAction{
+        margin-left: 22%;
+    }
+
+  }
+  @media (max-width: 860px) {
+    .ReportAction{
+    margin-left: 29%;
+    }
+  }

@@ -1,0 +1,79 @@
+*,*::after, *::before{
+    margin: 0;
+    box-sizing: border-box;
+}
+.nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 8vh;
+    background: rgb(43,61,188);
+    font-family: "Montserrat", "Verdana", "Times New Roman";
+}
+.nav li{
+    list-style: none;
+}
+.nav a{
+    text-decoration: none;
+    color: darkgray;
+}
+.nav a:hover{
+    color: rgb(0, 0, 0);
+}
+
+.navBrand{
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.navMenue{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 7rem;
+}
+.navToggler div{
+width: 2.5rem;
+height: 0.2rem;
+margin: 0.4rem;
+background: darkgray;
+transition: 0.4s ease-in;
+}
+.navToggler{
+    cursor: pointer;
+    display: none;
+}
+@media screen  and (max-width:768px){
+    .navToggler{
+        display: block;
+    }
+    .navMenue{
+        position: fixed;
+        top:7vh;
+        right: 0;
+        width: 50%;
+        height: 93vh;
+        background:  rgb(43,61,188);
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: 0.5s ease-in;
+    }
+}
+.navActive{
+    transform: translateX(0);
+}
+.toggle.line1{
+transform: rotate(-45deg) translate(-4px,5px);
+}
+.toggle.line2{
+    opacity: 0;
+}
+.toggle.line3{
+    transform: rotate(45deg) translate(-4px,-5px); 
+}
+.logoImage{
+    width: 150px;
+    height: 50px;
+    display: flex;
+    overflow: hidden;
+    margin-top: 0px;
+}
