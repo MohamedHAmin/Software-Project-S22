@@ -16,12 +16,7 @@ import FollowersPage from "./components/Profile/FollowersPage";
 import Notifications from "./components/Homepage/Notifications";
 import Explore from "./components/Homepage/Explore";
 import AdminDashboard from "./components/Homepage/AdminDashboard";
-<<<<<<< HEAD:client/src/App.jsx
-
-
-=======
 import SearchResults from "./components/Homepage/SearchResults";
->>>>>>> 665f76c1bf8c0b091036c7b818560cb5240d6411:my-app/src/App.jsx
 
 function App() {
   //Login with Google
@@ -29,7 +24,7 @@ function App() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/googlelogin/success", {
+      fetch("http://localhost:5000/user/googlelogin/success", {
         method: "GET",
         credentials: "include",
         headers: {

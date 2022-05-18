@@ -3,10 +3,7 @@ import "./Styles/Search.css"
 import { TextField } from "@mui/material";
 import { InputAdornment } from "@material-ui/core";
 import SearchIcon from '@mui/icons-material/SearchOutlined';
-<<<<<<< HEAD:client/src/components/Homepage/Search.jsx
-=======
 import { useNavigate } from "react-router-dom";
->>>>>>> 665f76c1bf8c0b091036c7b818560cb5240d6411:my-app/src/components/Homepage/Search.jsx
 import SuggestedAccounts from "./SuggestedAccounts";
 
 function Search(props){
@@ -52,11 +49,7 @@ function Search(props){
                         }}
                 />
             </span>
-<<<<<<< HEAD:client/src/components/Homepage/Search.jsx
-            {/* <SuggestedAccounts/> */}
-=======
             {props.viewSuggestedAccounts ? (<SuggestedAccounts />) : (<></>)}
->>>>>>> 665f76c1bf8c0b091036c7b818560cb5240d6411:my-app/src/components/Homepage/Search.jsx
         </React.Fragment>
     );
 }

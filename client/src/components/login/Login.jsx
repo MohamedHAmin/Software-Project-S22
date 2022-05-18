@@ -19,7 +19,7 @@ import Modal from "./ModalForgotPass";
 const Login = () => {
     
      const google = () => {
-        window.open("http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/auth/google", "_self");
+        window.open("http://localhost:5000/user/auth/google", "_self");
     };
     
     const [error, setError] = useState(false);
