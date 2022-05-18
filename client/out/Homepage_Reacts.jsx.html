@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8">
     <title>JSDoc: Source: Homepage/Reacts.jsx</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="styles/prettify-tomorrow.css"
-    />
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
-  </head>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
 
-  <body>
-    <div id="main">
-      <h1 class="page-title">Source: Homepage/Reacts.jsx</h1>
+<body>
 
-      <section>
+<div id="main">
+
+    <h1 class="page-title">Source: Homepage/Reacts.jsx</h1>
+
+    
+
+
+
+    
+    <section>
         <article>
-          <pre
-            class="prettyprint source linenums"
-          ><code>import React,{useState} from "react";
+            <pre class="prettyprint source linenums"><code>import React,{useState} from "react";
 import ReactsIcon from "./ReactsIcon";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
 import RetweetIcon from '@mui/icons-material/AutorenewOutlined';
@@ -88,17 +89,10 @@ function Reacts (props) {
     {
         if(!open &amp;&amp; props.canretweet)
         setOpen(true);
-        //setclose(false);
     }
-    //const [close, setclose]=useState(false);
-    //const [numberOfRetweets,setNumberOfRetweets]=useState(props.numberOfRetweets);
     const [numberOfLikes,setNumberOfLikes]=useState(props.numberOfLikes);
     const [likeStatus,setLikeStatus]=useState(props.isLiked);
     const [value, setValue] = useState("");
-    /*const handleClosebtn=()=>
-    {
-        setclose(true);
-    }*/
     const Like=()=>{
         setNumberOfLikes(numberOfLikes+1);
         setLikeStatus(true);
@@ -108,7 +102,7 @@ function Reacts (props) {
         setLikeStatus(false);
     }
     const LikeClickHandler=()=>{
-        axios.put(`http://localhost:4000/tweet/${props.postId}/like`,{},{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
+        axios.put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${props.postId}/like`,{},{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
         {
             console.log(res);
             if(res.error)
@@ -134,18 +128,6 @@ function Reacts (props) {
           });
     }
     const RetweetHandler=()=>{
-        /*posts.push({
-            id:props.count,
-            innerpostid:props.postId,
-            username:"Ahmed_Emad",
-            displayName:"AhmedEmad71",
-            content:value,
-            posthour:moment().format('hh:mm'),
-            postdate:moment().format('DD/MM/YYYY'),
-            numberOfRetweets:0,
-            innerpostimage:props.image,
-            images:selectedImage
-        });*/
         let data=
         {
             text: value,
@@ -155,7 +137,7 @@ function Reacts (props) {
       {
           data.text="No-text";
       }
-        axios.post(`http://localhost:4000/retweet`, data,{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/retweet`, data,{headers: {Authorization: localStorage.getItem("accessToken")}}).then((res)=>
       {
         console.log(res);
           if(res.error)
@@ -169,14 +151,6 @@ function Reacts (props) {
               props.setNumberOfRetweets(props.numberOfRetweets+1);
               window.location.reload();
           }
-        /*var index=posts.map((post)=>post.id).indexOf(props.postId);
-        console.log(index);
-        console.log(posts[index].numberOfRetweets);
-        posts[index].numberOfRetweets=posts[index].numberOfRetweets+1;
-        console.log(posts[index].numberOfRetweets);*/
-        /*var temp=posts.filter((post)=> post.innerpostid===props.postId);
-        setNumberOfRetweets(temp);*/
-        //props.setCount(props.count+1);
     })
     .catch((err) => {
         //err.message; // 'Oops!'
@@ -216,7 +190,8 @@ function Reacts (props) {
               username={props.username}
               tagName={props.displayName}
               image={props.image}
-              authorId={props.authorId}
+              authorId={props.authorId._id}
+              avatar={props.authorId.profileAvater.url}
               content={props.tweetcontent}/> 
               &lt;TweetBar postHandeler={RetweetHandler} onimgChange={onimgSelectedChange}/>   
                 &lt;/Box>    
@@ -232,88 +207,24 @@ function Reacts (props) {
 } 
 export default Reacts;</code></pre>
         </article>
-      </section>
-    </div>
+    </section>
 
-    <nav>
-      <h2><a href="index.html">Home</a></h2>
-      <h3>Global</h3>
-      <ul>
-        <li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li>
-        <li>
-          <a href="global.html#AccountInformationS">AccountInformationS</a>
-        </li>
-        <li><a href="global.html#AccountSettings">AccountSettings</a></li>
-        <li><a href="global.html#blue">blue</a></li>
-        <li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li>
-        <li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li>
-        <li><a href="global.html#contact">contact</a></li>
-        <li><a href="global.html#CreateCard">CreateCard</a></li>
-        <li><a href="global.html#CreateFollower">CreateFollower</a></li>
-        <li><a href="global.html#createImage">createImage</a></li>
-        <li><a href="global.html#EditProfile">EditProfile</a></li>
-        <li><a href="global.html#FollowerCard">FollowerCard</a></li>
-        <li><a href="global.html#FollowersPage">FollowersPage</a></li>
-        <li><a href="global.html#FollowingCard">FollowingCard</a></li>
-        <li><a href="global.html#FollowingPage">FollowingPage</a></li>
-        <li><a href="global.html#Header">Header</a></li>
-        <li><a href="global.html#Homepage">Homepage</a></li>
-        <li>
-          <a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a>
-        </li>
-        <li>
-          <a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a>
-        </li>
-        <li><a href="global.html#Login">Login</a></li>
-        <li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li>
-        <li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li>
-        <li><a href="global.html#MyFollowers">MyFollowers</a></li>
-        <li><a href="global.html#MyFollowing">MyFollowing</a></li>
-        <li><a href="global.html#MyProfile">MyProfile</a></li>
-        <li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li>
-        <li><a href="global.html#Navbar">Navbar</a></li>
-        <li>
-          <a href="global.html#NotificationSettings">NotificationSettings</a>
-        </li>
-        <li><a href="global.html#Post">Post</a></li>
-        <li><a href="global.html#PrivacySettings">PrivacySettings</a></li>
-        <li><a href="global.html#ProfileInfo">ProfileInfo</a></li>
-        <li><a href="global.html#ProfileName">ProfileName</a></li>
-        <li><a href="global.html#ProfilePage">ProfilePage</a></li>
-        <li><a href="global.html#Reacts">Reacts</a></li>
-        <li><a href="global.html#ReactsIcon">ReactsIcon</a></li>
-        <li><a href="global.html#Report">Report</a></li>
-        <li><a href="global.html#ReportAction">ReportAction</a></li>
-        <li><a href="global.html#ReportsPage">ReportsPage</a></li>
-        <li><a href="global.html#ReportsView">ReportsView</a></li>
-        <li>
-          <a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a>
-        </li>
-        <li><a href="global.html#SettingsMenu">SettingsMenu</a></li>
-        <li>
-          <a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a>
-        </li>
-        <li><a href="global.html#SettingsPage">SettingsPage</a></li>
-        <li><a href="global.html#SideBar">SideBar</a></li>
-        <li><a href="global.html#SideBarIcon">SideBarIcon</a></li>
-        <li><a href="global.html#Signup">Signup</a></li>
-        <li><a href="global.html#Tweet">Tweet</a></li>
-        <li><a href="global.html#TweetBar">TweetBar</a></li>
-        <li><a href="global.html#UpdatePassword">UpdatePassword</a></li>
-      </ul>
-    </nav>
 
-    <br class="clear" />
 
-    <footer>
-      Documentation generated by
-      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06
-      2022 16:53:59 GMT+0200 (Eastern European Standard Time)
-    </footer>
 
-    <script>
-      prettyPrint();
-    </script>
-    <script src="scripts/linenumber.js"></script>
-  </body>
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue May 17 2022 19:59:05 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>

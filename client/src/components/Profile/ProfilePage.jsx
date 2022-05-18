@@ -22,7 +22,6 @@ function ProfilePage(props) {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
-        console.log(res);
         if (res.error) {
           console.log("Error");
         } else {
@@ -37,7 +36,7 @@ function ProfilePage(props) {
       {id == userID ? <MyProfile /> : <OthersProfile isAdmin={props.isAdmin} />}
       <div className="rightbar">
         <div className="searchbar">
-          <Searchbar />
+          <Searchbar viewSuggestedAccounts={true}/>
         </div>
       </div>
     </div>

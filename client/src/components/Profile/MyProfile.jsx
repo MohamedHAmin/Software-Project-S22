@@ -3,12 +3,13 @@ import "./Styles/MyProfile.css";
 import ProfileName from "./ProfileName";
 import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
-import EditProfile from "./EditProfile";
+import EditProfile from "./editProfile";
 import { Button } from "@mui/material";
 import MyProfileTabs from "./MyProfileTabs";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Post from "../Homepage/Post";
+import PostReplies from "../Homepage/PostReplies";
 import { FallingLines } from "react-loader-spinner";
 import { useLocation } from "react-router-dom";
 /**
@@ -277,7 +278,7 @@ function MyProfile(props) {
         {userTweets.length &&
         route.pathname === `/Profile/${id}/with_replies` ? (
           userTweets.map((post) => (
-            <Post
+            <PostReplies
               post={post}
               passdeletedTweet={passdeletedTweet}
               isAdmin={props.isAdmin}

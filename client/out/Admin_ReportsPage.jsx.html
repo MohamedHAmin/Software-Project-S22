@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8">
     <title>JSDoc: Source: Admin/ReportsPage.jsx</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="styles/prettify-tomorrow.css"
-    />
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
-  </head>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
 
-  <body>
-    <div id="main">
-      <h1 class="page-title">Source: Admin/ReportsPage.jsx</h1>
+<body>
 
-      <section>
+<div id="main">
+
+    <h1 class="page-title">Source: Admin/ReportsPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
         <article>
-          <pre
-            class="prettyprint source linenums"
-          ><code>import React, { useState,useEffect } from "react";
+            <pre class="prettyprint source linenums"><code>import React, { useState,useEffect } from "react";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import SideBar from './../Profile/SideBar';
@@ -49,7 +50,7 @@ function ReportsPage(props)
     const [tweetReports,settweetReports]=useState([]);
     console.log(tweetReports);
     useEffect(()=>{
-        axios.get(`http://localhost:4000/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
         console.log(res);
         if (res.error){console.log("Error")}
         else {
@@ -58,7 +59,7 @@ function ReportsPage(props)
           console.log(res.data);
         }
     })
-        axios.get(`http://localhost:4000/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
         console.log(res);
         if (res.error){console.log("Error")}
         else {
@@ -70,7 +71,7 @@ function ReportsPage(props)
     const passdeletedTweet = (id) => {
         axios
           .delete(
-            `http://localhost:4000/tweet/${id}`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${id}`,
             { headers: { Authorization: localStorage.getItem("adminToken") } }
           )
           .then((res) => {
@@ -79,7 +80,7 @@ function ReportsPage(props)
               alert("something went wrong");
             } else {
               window.location.reload();
-              axios.get(`http://localhost:4000/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
                 console.log(res);
                 if (res.error){console.log("Error")}
                 else {
@@ -101,7 +102,7 @@ function ReportsPage(props)
       const ondeleteuserreport = (id) => {
         axios
           .delete(
-            `http://localhost:4000/admin/report/${id}?IDType=Reported`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/report/${id}?IDType=Reported`,
             { headers: { Authorization: localStorage.getItem("adminToken") } }
           )
           .then((res) => {
@@ -110,7 +111,7 @@ function ReportsPage(props)
               alert("something went wrong");
             } else {
               window.location.reload();
-              axios.get(`http://localhost:4000/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
                     console.log(res);
                     if (res.error){console.log("Error")}
                     else {
@@ -132,7 +133,7 @@ function ReportsPage(props)
       const ondeletetweetreport = (id) => {
         axios
           .delete(
-            `http://localhost:4000/admin/report/${id}?IDType=Reported`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/report/${id}?IDType=Reported`,
             { headers: { Authorization: localStorage.getItem("adminToken") } }
           )
           .then((res) => {
@@ -141,7 +142,7 @@ function ReportsPage(props)
               alert("something went wrong");
             } else {
               window.location.reload();
-              axios.get(`http://localhost:4000/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
                 console.log(res);
                 if (res.error){console.log("Error")}
                 else {
@@ -210,94 +211,31 @@ function ReportsPage(props)
                         &lt;>&lt;/>
                     )}
                 &lt;/div>
+                &lt;div className="Notificationrightbar">&lt;/div>
             &lt;/div>
         &lt;/React.Fragment>
     );
 }
 export default ReportsPage;</code></pre>
         </article>
-      </section>
-    </div>
+    </section>
 
-    <nav>
-      <h2><a href="index.html">Home</a></h2>
-      <h3>Global</h3>
-      <ul>
-        <li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li>
-        <li>
-          <a href="global.html#AccountInformationS">AccountInformationS</a>
-        </li>
-        <li><a href="global.html#AccountSettings">AccountSettings</a></li>
-        <li><a href="global.html#blue">blue</a></li>
-        <li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li>
-        <li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li>
-        <li><a href="global.html#contact">contact</a></li>
-        <li><a href="global.html#CreateCard">CreateCard</a></li>
-        <li><a href="global.html#CreateFollower">CreateFollower</a></li>
-        <li><a href="global.html#createImage">createImage</a></li>
-        <li><a href="global.html#EditProfile">EditProfile</a></li>
-        <li><a href="global.html#FollowerCard">FollowerCard</a></li>
-        <li><a href="global.html#FollowersPage">FollowersPage</a></li>
-        <li><a href="global.html#FollowingCard">FollowingCard</a></li>
-        <li><a href="global.html#FollowingPage">FollowingPage</a></li>
-        <li><a href="global.html#Header">Header</a></li>
-        <li><a href="global.html#Homepage">Homepage</a></li>
-        <li>
-          <a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a>
-        </li>
-        <li>
-          <a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a>
-        </li>
-        <li><a href="global.html#Login">Login</a></li>
-        <li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li>
-        <li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li>
-        <li><a href="global.html#MyFollowers">MyFollowers</a></li>
-        <li><a href="global.html#MyFollowing">MyFollowing</a></li>
-        <li><a href="global.html#MyProfile">MyProfile</a></li>
-        <li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li>
-        <li><a href="global.html#Navbar">Navbar</a></li>
-        <li>
-          <a href="global.html#NotificationSettings">NotificationSettings</a>
-        </li>
-        <li><a href="global.html#Post">Post</a></li>
-        <li><a href="global.html#PrivacySettings">PrivacySettings</a></li>
-        <li><a href="global.html#ProfileInfo">ProfileInfo</a></li>
-        <li><a href="global.html#ProfileName">ProfileName</a></li>
-        <li><a href="global.html#ProfilePage">ProfilePage</a></li>
-        <li><a href="global.html#Reacts">Reacts</a></li>
-        <li><a href="global.html#ReactsIcon">ReactsIcon</a></li>
-        <li><a href="global.html#Report">Report</a></li>
-        <li><a href="global.html#ReportAction">ReportAction</a></li>
-        <li><a href="global.html#ReportsPage">ReportsPage</a></li>
-        <li><a href="global.html#ReportsView">ReportsView</a></li>
-        <li>
-          <a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a>
-        </li>
-        <li><a href="global.html#SettingsMenu">SettingsMenu</a></li>
-        <li>
-          <a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a>
-        </li>
-        <li><a href="global.html#SettingsPage">SettingsPage</a></li>
-        <li><a href="global.html#SideBar">SideBar</a></li>
-        <li><a href="global.html#SideBarIcon">SideBarIcon</a></li>
-        <li><a href="global.html#Signup">Signup</a></li>
-        <li><a href="global.html#Tweet">Tweet</a></li>
-        <li><a href="global.html#TweetBar">TweetBar</a></li>
-        <li><a href="global.html#UpdatePassword">UpdatePassword</a></li>
-      </ul>
-    </nav>
 
-    <br class="clear" />
 
-    <footer>
-      Documentation generated by
-      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06
-      2022 16:53:59 GMT+0200 (Eastern European Standard Time)
-    </footer>
 
-    <script>
-      prettyPrint();
-    </script>
-    <script src="scripts/linenumber.js"></script>
-  </body>
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue May 17 2022 19:59:05 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>

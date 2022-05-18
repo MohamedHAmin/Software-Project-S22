@@ -162,8 +162,8 @@ function Reacts (props) {
               username={props.username}
               tagName={props.displayName}
               image={props.image}
-              authorId={props.authorId._id}
-              avatar={props.authorId.profileAvater.url}
+              authorId={props.authorId?._id}
+              avatar={props.authorId?.profileAvater.url}
               content={props.tweetcontent}/> 
               <TweetBar postHandeler={RetweetHandler} onimgChange={onimgSelectedChange}/>   
                 </Box>    
