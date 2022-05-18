@@ -181,22 +181,18 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
       e = "user doesn't exist";
       throw e;
     }
-    const isallowed=await allowView(req.user,req.params.id)
+   // if(req.user._id.toString()!=req.params.id){
+
+      const isallowed=await allowView(req.user,req.params.id)
+      console.log("🚀 ~ file: tweetroute.js ~ line 187 ~ router.get ~ req.params.id", req.params.id)
+      console.log("🚀 ~ file: tweetroute.js ~ line 187 ~ router.get ~ isallowed", isallowed)
+   // }
     if(!isallowed){
       e = "not allowed to see his tweet";
       throw e;
     }
-    if(user.isPrivate){
-      const isfollowed = req.user.following.some(
-        (followed) => followed.followingId.toString() == user._id.toString()
-      );
 
-      if (!isfollowed) {
-       return  res.status(400).send({error:"this content is private"});
 
-   
-      } 
-    }
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
@@ -490,6 +486,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       e = "no users or tweets found";
       throw e;
     }
+    
     let searchResults = { Tweets: resultTweets, Users: resultUsers };
     res.send(searchResults);
   } catch (e) {
@@ -499,129 +496,9 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 });
 
 
-router.get("/search/:searchedtext", auth("any"), async (req, res) => {
-  try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 30;
-    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    const filters = { followerfilter: req.query.followerfilter };
-    let searchedItem = req.params.searchedtext.trim();
-    //TODO : add search by screen name
-    if (!searchedItem || searchedItem.length < 1) {
-      e = "Attempting search of empty string";
-      throw e;
-    }
-    let resultTweets = await Tweet.find({
-      text: { $regex: searchedItem, $options: "i" },
-      "replyingTo.tweetId": null,
-      "replyingTo.tweetExisted": false,
-    })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .skip(skip)
-      .populate({
-        path: "retweetedTweet.tweetId",
-        strictPopulate: false,
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
-        populate: {
-          path: "authorId",
-          strictPopulate: false,
-          select: "_id screenName tag profileAvater.url",
-        },
-      })
-      .populate({
-        path: "authorId",
-        strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
-      });
-
-    let resultUsers = await User.find({
-      $or: [
-        {tag: { $regex: searchedItem, $options: "i" }},
-        {screenName: { $regex: searchedItem, $options: "i" }},
-      ],
-    })
-      .sort({ tag: 1 })
-      .limit(limit)
-      .skip(skip)
-      .select({
-        _id: 1,
-        screenName: 1,
-        tag: 1,
-        "profileAvatar.url": 1,
-        Biography: 1,
-      });
-    const followingsId = req.user.following.map((user) => {
-      return user.followingId.toString();
-    });
-    let found;
-    let modifiedresultUsers = [];
-    if (resultUsers.length < 1 && resultTweets.length < 1) {
-      e = "no users or tweets found";
-      throw e;
-    }
-    if (resultUsers.length > 0) {
-      for (let i = 0; i < resultUsers.length; i++) {
-        found = followingsId.includes(resultUsers[i]._id.toString());
-        if (found) {
-          modifiedresultUsers.push({
-            ...resultUsers[i]._doc,
-            isfollowed: true,
-          });
-        } else {
-          modifiedresultUsers.push({
-            ...resultUsers[i]._doc,
-            isfollowed: false,
-          });
-        }
-      }
-    }
-    resultUsers = modifiedresultUsers;
-
-    let temp;
-    for (let i = 0; i < resultTweets.length; i++) {
-      if (resultTweets[i].replyingTo.tweetExisted) {
-        temp = await Tweet.findById(resultTweets[i].replyingTo.tweetId);
-        if (!temp) {
-          resultTweets[i].replyingTo.tweetId = null;
-        }
-      }
-    }
-    if (filters.followerfilter) {
-      modifiedresultUsers = [];
-      for (let i = 0; i < resultUsers.length; i++) {
-        if (resultUsers[i].isfollowed) {
-          modifiedresultUsers.push(resultUsers[i]);
-        }
-      }
-      resultUsers = modifiedresultUsers;
-      let modifiedresultTweets = [];
-      for (let i = 0; i < resultTweets.length; i++) {
-        for (resultUser of resultUsers) {
-          if (
-            resultTweets[i].authorId.toString() === resultUser._id.toString()
-          ) {
-            modifiedresultTweets.push(resultTweets[i]);
-          }
-        }
-      }
-      resultTweets = modifiedresultTweets;
-    }
-    if (resultUsers.length < 1 && resultTweets.length < 1) {
-      e = "no users or tweets found";
-      throw e;
-    }
-    let searchResults = { Tweets: resultTweets, Users: resultUsers };
-    res.send(searchResults);
-  } catch (e) {
-    //here all caught errors are sent to the client
-    res.status(400).send({ error: e.toString() });
-  }
-});
 
 router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let requiredId = mongoose.Types.ObjectId(req.params.id);
@@ -675,7 +552,10 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       modifiedlikedtweets.push(modifiedlikedtweet);
     }
     likedtweets = modifiedlikedtweets;
-    likedtweets= tweetFilterFunc(req.user,likedtweets)
+    if(req.user._id.toString!==req.params.id){
+
+      likedtweets= tweetFilterFunc(req.user,likedtweets)
+    }
 
     res.send(likedtweets);
   } catch (e) {
@@ -684,7 +564,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
 });
 router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+  
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
     const user = await User.findOne({ _id: req.params.id });
@@ -694,6 +574,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
     }
     let originalTweets = [];
     let sentTweets = [];
+    let notreplies=[];
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
@@ -797,7 +678,7 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
         user.Tweets[i].replyingTo.tweetId === null &&
         user.Tweets[i].replyingTo.tweetExisted === false
       ) {
-        sentTweets.push(user.Tweets[i]);
+        sentTweets.push({tweetId:user.Tweets[i]});
       }
     }
     for (let i = 0; i < originalTweets.length; i++) {
@@ -810,10 +691,8 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-
 router.get("/profile/media/:id", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let user = await User.findById(req.params.id);
@@ -859,6 +738,10 @@ router.get("/profile/media/:id", auth("user"), async (req, res) => {
           userTweetsWithImages[i].replyingTo.tweetId = null;
         }
       }
+    }
+    if(req.user._id.toString!==req.params.id){
+
+      userTweetsWithImages= tweetFilterFunc(req.user,userTweetsWithImages)
     }
     res.send(userTweetsWithImages);
   } catch (e) {
@@ -1445,7 +1328,8 @@ function tweetFilterFunc(viewer,tweets){
 }
 /**Provide Viewer and Target User ID==>Determines if the Viewer is allowed to view the Target*/
 async function allowView(viewer,targetId){
-  if(viewer._id.equals(targetId)){return true;}
+  console.log("🚀 ~ file: tweetroute.js ~ line 1341 ~ allowView ~   viewer._id.toString()",   viewer._id.toString())
+  if(viewer._id.toString()===targetId){return true;}
   let followArr=viewer.following;
   followArr = followArr.map((follow) => {
     return follow.followingId.toString();

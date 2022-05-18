@@ -26,7 +26,7 @@ module.exports = function (passport){
     passport.use(new GoogleStrategy({
     clientID : process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL : '/user/auth/google/callback',
+    callbackURL : 'http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/auth/google/callback',
 }, async(accessToken, refreshToken , profile , done)=>{
 
 
