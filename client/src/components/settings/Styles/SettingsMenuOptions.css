@@ -9,6 +9,7 @@
   padding-bottom: 2em;
   padding-left: 1.5em;
   color: rgb(48, 48, 49);
+  color: var(--color-mode);
 }
 .settingsMenuOptionsDark {
   font-weight: 400;
@@ -21,7 +22,7 @@
   padding-top: 2em;
   padding-bottom: 2em;
   padding-left: 1.5em;
-  color: rgb(255, 255, 255);
+  color: var(--color-mode);
 }
 .settingsMenuOptionsLight_Acc {
   font-weight: 400 ;
@@ -33,7 +34,7 @@
   padding-top: 2em;
   
   padding-left: 1.5em;
-  color: rgb(48, 48, 49);
+  color:  var(--color-mode);
 }
 .settingsMenuOptionsDark_Acc {
   font-weight: 400;
@@ -46,7 +47,7 @@
   padding-top: 2em;
 
   padding-left: 1.5em;
-  color: rgb(255, 255, 255);
+  color:  var(--color-mode);
 }
 .subtextsettingsMenuOptionsLight{
   font-weight: 400 ;
@@ -56,7 +57,7 @@
   flex:0.97;
   cursor: pointer;
   padding-left: 1.5em;
-  color: rgb(48, 48, 49);
+  color: var(--color-mode);
 }
 .subtextsettingsMenuOptionsDark {
   font-weight: 400;
@@ -67,7 +68,7 @@
   align-items: center;
   cursor: pointer;
   padding-left: 1.5em;
-  color: rgb(255, 255, 255);
+  color: var(--color-mode);
 }
 .WholeSettingsAddPhoneOption{
   display: flex;
@@ -89,31 +90,31 @@
 }
 
 .WholeSettingOptionLight:hover {
-  background-color: rgb(247, 246, 246);
+  background-color: var(--color-settingsHover);
   transition: background 100ms ease-in-out;
 }
 .WholeSettingOptionLight--active {
-  background-color: rgb(247, 246, 246);
+  background-color: var(--color-settingsHover);
 }
 
 .WholeSettingOptionDark:hover {
-  background-color: rgb(53, 49, 77);
+  background-color: var(--color-settingsHover);
   transition: background 100ms ease-in-out;
 }
 .WholeSettingOptionDark--active {
-  background-color: rgb(53, 49, 77);
+  background-color: var(--color-settingsHover);
 }
 .arrowIconLight {
   float: right;
   flex:0.03;
   text-align:right !important;
-  color: rgb(48, 48, 49);
+  color: var(--color-mode);
 }
 .arrowIconDark {
   float: right;
   flex:0.03;
   text-align:right !important;
-  color:rgb(247, 246, 246) !important;
+  color: var(--color-mode) !important;
   
 }
 

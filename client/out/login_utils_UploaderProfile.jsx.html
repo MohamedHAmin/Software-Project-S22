@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Profile/ImageUploaderBanner.jsx</title>
+    <title>JSDoc: Source: login/utils/UploaderProfile.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Profile/ImageUploaderBanner.jsx</h1>
+    <h1 class="page-title">Source: login/utils/UploaderProfile.jsx</h1>
 
     
 
@@ -27,23 +27,23 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
-import "./Styles/ImageUploader.css";
-import getCroppedImg from "./cropImage";
+import "../Styles/ImageUploader.css";
+import getCroppedImg from "../../Profile/cropImage";
 import Cropper from "react-easy-crop";
 import Slider from "@material-ui/core/Slider";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
-import { dataURLtoFile } from "./dataURLtoFile";
+import { dataURLtoFile } from "../../Profile/dataURLtoFile";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+
 /**
  *
- * @param {props} props Getting the name and photo of the banner.
- * @returns Returns the banner photo uploader.
+ * @param {props} props Getting the name and photo of the profile.
+ * @returns Returns the profile photo uploader.
  */
-
-function ImageUploaderBanner(props) {
+function ImageUploaderProfile(props) {
   const inputRef = React.useRef();
 
   const triggerFileSelectPopup = () => inputRef.current.click();
@@ -75,16 +75,16 @@ function ImageUploaderBanner(props) {
       canvasDataUrl,
       "cropped-image.jpeg"
     );
-
-    formdata.append("image", convertedUrlToFile);
+ props.addAvatar(convertedUrlToFile)
+    /* formdata.append("image", convertedUrlToFile);
     axios
-      .put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/banner`, formdata, {
+      .put(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/avater`, formdata, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
         console.log(res);
 
-        setPhoto1(res.data.banner.url);
+        setPhoto1(res.data.profileAvater.url);
 
         if (res.error) {
           alert("something went wrong");
@@ -95,27 +95,27 @@ function ImageUploaderBanner(props) {
         alert(err.response.data.error);
         console.log(err);
       });
-    setImage(null);
+    setImage(null); */
   }
-
   async function onDelete() {
     await axios
-      .delete(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/banner`, {
+      .delete(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/avater`, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       })
       .then((res) => {
         console.log(res);
-        setPhoto1(res.data.banner.url);
+        setPhoto1(res.data.profileAvater.url);
         if (res.error) {
           alert("something went wrong");
         }
       })
       .catch((err) => {
+        console.log("🚀 ~ file: UploaderProfile.jsx ~ line 85 ~ onDelete ~ err", err)
         //err.message; // 'Oops!'
         alert(err.response.data.error);
-        console.log(err);
       });
   }
+
   return (
     &lt;div>
       {image ? (
@@ -126,11 +126,11 @@ function ImageUploaderBanner(props) {
                 image={image}
                 crop={crop}
                 zoom={zoom}
-                aspect={2}
+                aspect={1}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}
-                cropShape="rect"
+                cropShape="round"
               />
             &lt;/div>
             &lt;div className="cont">
@@ -161,27 +161,37 @@ function ImageUploaderBanner(props) {
             aria-label="upload picture"
             component="span"
             sx={{
-              width: 665,
-              height: 220,
+              width: 148,
+              height: 148,
+              mt: -9,
+              ml: 2,
+              border: 4,
+              borderColor: "white",
             }}
-            variant="square"
+            variant="round"
           >
             {!photo1 ? (
-              &lt;div>
-                &lt;Avatar
-                  className="coverImage"
-                  variant="square"
-                  sx={{ width: 665, height: 220 }}
-                  alt={props.Name}
-                  src={props.photo}
-                  onClick={() => triggerFileSelectPopup()}
-                />
-              &lt;/div>
+              &lt;Avatar
+                className="coverImage"
+                variant="round"
+                sx={{
+                  width: 140,
+                  height: 140,
+                  borderRadius: 30,
+                }}
+                alt={props.Name}
+                src={props.photo}
+                onClick={() => triggerFileSelectPopup()}
+              />
             ) : (
               &lt;Avatar
                 className="coverImage"
-                variant="square"
-                sx={{ width: 665, height: 220 }}
+                variant="round"
+                sx={{
+                  width: 140,
+                  height: 140,
+                  borderRadius: 30,
+                }}
                 alt={props.Name}
                 src={photo1}
                 onClick={() => triggerFileSelectPopup()}
@@ -189,7 +199,7 @@ function ImageUploaderBanner(props) {
             )}
           &lt;/IconButton>
           {props.photo ? (
-            &lt;DeleteIcon className="DeleteIcon" onClick={onDelete} />
+            &lt;DeleteIcon className="DeleteIconProfile" onClick={onDelete} />
           ) : null}
         &lt;/label>
       )}
@@ -204,7 +214,8 @@ function ImageUploaderBanner(props) {
     &lt;/div>
   );
 }
-export default ImageUploaderBanner;
+
+export default ImageUploaderProfile;
 </code></pre>
         </article>
     </section>

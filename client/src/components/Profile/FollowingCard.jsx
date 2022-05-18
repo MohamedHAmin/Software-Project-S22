@@ -11,11 +11,12 @@ import FormControl from "@mui/material/FormControl";
  * @returns Returns the setted the information of the people i follow.
  */
 function FollowingCard(props) {
-  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing);
+  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing||false);
+  const [isPending, setIsPending] = useState(props.contact.ispending||false);
   const [followModalState, setFollowModalState] = useState(false);
   let userID = localStorage.getItem("userId");
   const [Followers, setFollowers] = useState(0);
-  const [isPending, setIsPending] = useState(props.contact.ispending);
+  
   /**
    * Handling the following request
    */
@@ -27,7 +28,7 @@ function FollowingCard(props) {
       } else {
         axios
           .post(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact.followingId._id}`,
+            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.randomUser?(props.contact._id):(props.contact.followingId._id)}`,
             null,
             { headers: { Authorization: localStorage.getItem("accessToken") } }
           )
@@ -53,7 +54,7 @@ function FollowingCard(props) {
   function handleUnfollowAction() {
     axios
       .post(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.contact.followingId._id}`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.randomUser?(props.contact._id):(props.contact.followingId._id)}`,
         null,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
@@ -76,13 +77,13 @@ function FollowingCard(props) {
   }
   return (
     <div className="FollowingCard">
-      <NavLink to={`/Profile/${props.contact.followingId._id}`}>
+      <NavLink to={`/Profile/${props.randomUser?(props.contact._id):(props.contact.followingId._id)}`}>
         <div className="FollowingCard">
           <div>
             <Avatar
               style={{ marginRight: "4px" }}
-              src={props.contact.followingId.profileAvater.url}
-              alt={props.contact.followingId.screenName}
+              src={props.randomUser?(props.contact.profileAvater.url):(props.contact.followingId.profileAvater.url)}
+              alt={props.randomUser?(props.contact.screenName):(props.contact.followingId.screenName)}
             />
           </div>
 
@@ -90,7 +91,7 @@ function FollowingCard(props) {
             <p
               style={{ margin: "0px 0px 4px 4px", color: "var(--color-mode)" }}
             >
-              <b>{props.contact.followingId.screenName}</b>
+              <b>{props.randomUser?(props.contact.screenName):(props.contact.followingId.screenName)}</b>
             </p>
             <p
               style={{
@@ -100,7 +101,7 @@ function FollowingCard(props) {
                 opacity: "0.8",
               }}
             >
-              @{props.contact.followingId.tag}
+              @{props.randomUser?(props.contact.tag):(props.contact.followingId.tag)}
             </p>
 
             <h6
@@ -110,7 +111,7 @@ function FollowingCard(props) {
                 color: "var(--color-mode)",
               }}
             >
-              {props.contact.followingId.Biography}
+              {props.randomUser?(props.contact.Biography):(props.contact.followingId.Biography)}
             </h6>
           </div>
         </div>
@@ -125,7 +126,7 @@ function FollowingCard(props) {
       >
         <FormControl className="editProfileCloseContainer">
           <Typography id="modal-modal-title" variant="h6">
-            Unfollow @{props.contact.followingId.tag}?
+          Unfollow @{props.randomUser?(props.contact.tag):(props.contact.followingId.tag)}?
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Their Tweets will no longer show up in your home timeline. You can
@@ -150,18 +151,18 @@ function FollowingCard(props) {
           </div>
         </FormControl>
       </Modal>
-      {props.contact.followingId._id !== userID ? (
+      {(props.randomUser?(props.contact._id):(props.contact.followingId._id)) !== userID ? (
         <Button
           onClick={handleButtonClick}
-          className={
-            props.contact.isfollowing ? "followButton1" : "followButton2"
+          className={props.randomUser?(
+             "followButton2"):(props.contact.isfollowing ?"followButton1" : "followButton2")
           }
         >
-          {isPending
+          {!props.randomUser?( isPending
             ? "Pending"
             : props.contact.isfollowing
             ? "Following"
-            : "Follow"}
+            : "Follow"):("Follow")}
         </Button>
       ) : null}
     </div>
