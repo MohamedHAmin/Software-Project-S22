@@ -739,10 +739,32 @@ router.get("/profile/media/:id", auth("user"), async (req, res) => {
         }
       }
     }
-    if(req.user._id.toString!==req.params.id){
-
-      userTweetsWithImages= tweetFilterFunc(req.user,userTweetsWithImages)
+    let i=-1
+    if (!userTweetsWithImages.length < 1) {
+      userTweetsWithImages = userTweetsWithImages.map((tweet) => {
+        i++;
+        const isliked = tweet.likes.some(
+          (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+          };
+          return tweets;
+        } else {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+          };
+          return tweets;
+        }
+      });
     }
+    
+    
     res.send(userTweetsWithImages);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
