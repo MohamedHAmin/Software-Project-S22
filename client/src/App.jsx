@@ -172,14 +172,7 @@ function App() {
               path="/Explore"
               element={<Explore isAdmin={isAdmin} />}
             ></Route>
-<<<<<<< HEAD:client/src/App.jsx
-            <Route
-              path="/Admin/Dashboard"
-              element={<AdminDashboard />}
-            ></Route>
-=======
             <Route path="/Admin/Dashboard" element={<AdminDashboard />}></Route>
->>>>>>> 665f76c1bf8c0b091036c7b818560cb5240d6411:my-app/src/App.jsx
           </Routes>
         </BrowserRouter>
       </div>
