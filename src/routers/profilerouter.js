@@ -19,7 +19,7 @@ router.get("/suggestedAccounts", auth("any"), async (req, res) => {
     });
     const user = req.user;
     followingsId.push(req.user._id);
-    let suggestedAccounts = await User.find({ _id: { $nin: followingsId }})
+    let suggestedAccounts = await User.find({ _id: { $nin: followingsId },isPrivate:false})
     suggestedAccounts=_.sampleSize(suggestedAccounts,4)
     res.send(suggestedAccounts);
   }
