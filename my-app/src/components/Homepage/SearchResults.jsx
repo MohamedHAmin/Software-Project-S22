@@ -87,7 +87,7 @@ function SearchResults(props) {
         ) : (<></>)}
     </div>
     </div>
-    <div className="rightbar">
+    <div className="rightbarSearch">
 
     </div>
   </div>);
