@@ -22,19 +22,17 @@ module.exports = function (passport){
         length: 10,
         numbers: true
     });
-
     passport.use(new GoogleStrategy({
     clientID : process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL : process.env.CURRENTURL+'/user/auth/google/callback',
+    callbackURL : 'http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/auth/google/callback',
 }, async(accessToken, refreshToken , profile , done)=>{
-
 
     const newUser = { 
         googleId : profile.id,
         screenName: profile.displayName,
         tag: profile.name.givenName + Math.floor(Math.random() *10000),
-        profileAvater: profile.photos[0].value,
+        "profileAvater.url": profile.photos[0].value,
         verified:true,
         email:profile.emails[0].value,
         password:newPassword

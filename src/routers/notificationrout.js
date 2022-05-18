@@ -6,9 +6,14 @@ const notifiy = require("../utils/firbase");
 const { query } = require("express");
 const router = new express.Router();
 
-
-
-
+const seenall=async()=>{
+await Notification.updateMany({},{seen:false})
+}
+const unseenall=async()=>{
+  await Notification.updateMany({},{seen:true})
+}
+//seenall()
+//unseenall()
 router.get("/notification", auth("any"),async (req, res) => {
   try { 
     const sort = [{ createdAt: -1 }];
@@ -18,7 +23,13 @@ router.get("/notification", auth("any"),async (req, res) => {
     select:
       "_id screenName tag profileAvater.url ",
 })
-    notifications=notifications.reverse()
+notifications=notifications.reverse()
+
+
+  
+    let notifications2=await Notification.updateMany({notifiedUId:req.user._id},{seen:true})
+    console.log("🚀 ~ file: notificationrout.js ~ line 26 ~ router.get ~ notifications2", notifications2)
+    
     res.send({notifications});
   } catch (e) {
     res.status(400).send({ error: e.toString() });
