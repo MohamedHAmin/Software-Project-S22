@@ -1,0 +1,22 @@
+.SuggestedAccPage{
+    margin-top: 80px;
+    color: var(--color-mode);
+}
+.SuggestedAccContainer{
+    
+    position: sticky;
+    width:100%;
+    height: 100%;
+    background-color: var(--color-suggestedAccContainer);
+    border-radius: 25px;
+}
+.SuggestedAccHeader{
+    margin-left: 20px;
+    padding-top: 20px;
+    font-weight: 900;
+    font-size:large;
+}
+.SuggestedAccFooter{
+    margin-top: 30%;
+    margin-left: 10%;
+}
