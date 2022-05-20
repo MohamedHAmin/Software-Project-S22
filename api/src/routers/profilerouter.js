@@ -4,6 +4,8 @@ const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 const auth = require("../middleware/auth");
 const PrivateRequest = require("../models/PrivateRequest");
+const Notification = require("../models/Notification");
+
 const bcrypt = require("bcryptjs");
 const { request } = require("express");
 const assert = require("assert");
@@ -21,7 +23,9 @@ router.get("/suggestedAccounts", auth("any"), async (req, res) => {
     followingsId.push(req.user._id);
     let suggestedAccounts = await User.find({ _id: { $nin: followingsId },isPrivate:false})
     suggestedAccounts=_.sampleSize(suggestedAccounts,4)
-    res.send(suggestedAccounts);
+    count = await Notification.count({notifiedUId:req.user._id})
+    console.log("🚀 ~ file: profilerouter.js ~ line 27 ~ router.get ~ count", count)
+    res.send({suggestedAccounts,Notificationscount:count});
   }
     catch(e){
       res.status(400).send({ error: e.toString() });
