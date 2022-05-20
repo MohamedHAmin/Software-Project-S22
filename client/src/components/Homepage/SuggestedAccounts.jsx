@@ -18,7 +18,7 @@ function SuggestedAccounts() {
         if (res.error) {
           console.log("Error");
         } else {
-          setMyFollowing(res.data);
+          setMyFollowing(res.data.suggestedAccounts);
           console.log(res.data);
         }
       });
