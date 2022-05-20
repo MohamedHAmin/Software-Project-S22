@@ -9,6 +9,7 @@ import Searchbar from "./Search";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Stack from "@mui/material/Stack";
 
 /**
  * Homepage containing area to post tweets and timeline tweets (your tweets and tweets of people you follow)
@@ -16,6 +17,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
  * @component 
  * @param {boolean} isAdmin indicates whether or not this home is an admin's home or a normal user's home
  * @returns {div}
+ * @example
  *        <Homepage isAdmin={isAdmin}/>
  */
 function Homepage(props) {
@@ -37,7 +39,7 @@ function Homepage(props) {
   const getposts = () => {
     axios
       .get(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/timeline`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/timeline?limit=2&skip=${skip}`,
         { headers: { Authorization: token } }
       )
       .then((res) => {
@@ -46,23 +48,23 @@ function Homepage(props) {
             "There was error while attempting to retrieve tweets for timeline"
           );
         } else {
-          setposts(res.data);
+          var prevposts=posts;
+          setskip(skip+2);
+          //setposts(res.data);
+          var currentposts=[...prevposts,...res.data];
+          setposts(currentposts);
+          if(prevposts.length===currentposts.length)
+          {
+            sethasmore(false);
+          }
         }
       });
   };
 
-  // const fetchMoreData=()=>{
-  //   var prevposts=posts;
-  //   var prevlength=posts.length;
-  //   setskip(skip+2);
-  //   getposts();
-  //   var currentposts=[...prevposts,...posts];
-  //   setposts(currentposts);
-  //   if(prevposts.length===posts.length)
-  //   {
-  //     sethasmore(false);
-  //   }
-  // }
+  const fetchMoreData=()=>{
+    getposts();
+  }
+
   if(photos.length ===0){
   }
   else{
@@ -281,7 +283,6 @@ function Homepage(props) {
           }
         })
         .catch((err) => {
-          //err.message; // 'Oops!'
           alert(err.response.data.error);
           console.log(err);
         });
@@ -309,6 +310,13 @@ function Homepage(props) {
           postHandeler={postHandeler}
           onimgChange={onimgSelectedChange}
         />
+        <InfiniteScroll
+          dataLength={posts.length} 
+          next={fetchMoreData}
+          hasMore={hasmore}
+          loader={<h4>Loading...</h4>}
+          endMessage={<></>}
+          >
         {posts.length ? (
           posts.map((post) => (
             <Post
@@ -319,14 +327,20 @@ function Homepage(props) {
             canviewcomments={true}
             />
             ))
-            ) : (<></>)}
-          {/* <InfiniteScroll
-            dataLength={posts.length} 
-            next={fetchMoreData}
-            hasMore={hasmore}
-            loader={<h4>Loading...</h4>}
-            endMessage={<></>}
-              /> */}
+            ) : (
+              <Stack className="comments" direction="column">
+                <Stack direction="row">
+                  <p>No lars yet?</p>
+                </Stack>
+                <Stack direction="row">
+                  <p>
+                    Start following people, post lars, and
+                    enjoy Larry!
+                  </p>
+                </Stack>
+              </Stack>
+            )}
+          </InfiniteScroll>
       </div>
       <div className="rightbar">
         <div className="searchbar">
