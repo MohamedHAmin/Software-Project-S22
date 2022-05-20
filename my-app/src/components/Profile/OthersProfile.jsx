@@ -266,7 +266,7 @@ function OthersProfile(props) {
    */
   function handleOptionsClick() {
     if (!isAdmin) {
-      navigate(`/Report/Profile/${userID}`);
+      navigate(`/Report/Profile/${id}`);
     } else {
       setOptionsModalState(true);
     }

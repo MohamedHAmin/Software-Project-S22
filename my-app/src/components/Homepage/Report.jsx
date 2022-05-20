@@ -36,7 +36,7 @@ function Report(props) {
     var data={
     type:"Tweet",
     msg:"I'm not intersted in this Lar",
-    reportedId:"626554804da8e6986213b877",
+    reportedId:id,
     }
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
