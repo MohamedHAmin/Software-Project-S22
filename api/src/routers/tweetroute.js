@@ -385,6 +385,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         strictPopulate: false,
         select: "_id screenName tag profileAvater.url",
       });
+      console.log("🚀 ~ file: tweetroute.js ~ line 388 ~ router.get ~ resultTweets", resultTweets)
 
     let resultUsers = await User.find({
       $or: [
@@ -402,7 +403,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       "profileAvater.url": 1,
       "Biography": 1,
     });
-    console.log("🚀 ~ file: tweetroute.js ~ line 395 ~ router.get ~ resultUsers", resultUsers)
+   
     const followingsId = req.user.following.map((user) => {
       return user.followingId.toString();
     });
@@ -455,11 +456,13 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
     for (let i = 0; i < resultTweets.length; i++) {
       if (resultTweets[i].replyingTo.tweetExisted) {
         temp = await Tweet.findById(resultTweets[i].replyingTo.tweetId);
+        console.log("🚀 ~ file: tweetroute.js ~ line 458 ~ router.get ~ temp", temp)
         if (!temp) {
           resultTweets[i].replyingTo.tweetId = null;
         }
       }
     }
+  
     if (filters.followerfilter) {
       modifiedresultUsers = [];
       for (let i = 0; i < resultUsers.length; i++) {
@@ -468,14 +471,20 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
       resultUsers = modifiedresultUsers;
+      
       let modifiedresultTweets = [];
+     let l=req.user.following.length
       for (let i = 0; i < resultTweets.length; i++) {
-        for (resultUser of resultUsers) {
+
+        for (let j = 0; j < l; j++) {
+  
           if (
-            resultTweets[i].authorId.toString() === resultUser._id.toString()
+            resultTweets[i].authorId._id.toString() == req.user.following[j].followingId.toString()
+           
           ) {
+            console.log(i)
             modifiedresultTweets.push(resultTweets[i]);
-       
+            break;
           }
         }
       }
@@ -506,6 +515,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         return tweets;
       }
     });
+      
     let searchResults = { Tweets: resultTweets, Users: resultUsers };
     res.send(searchResults);
   } catch (e) {
@@ -513,7 +523,6 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-
 
 
 router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
