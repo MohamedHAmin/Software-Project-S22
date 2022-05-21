@@ -434,6 +434,26 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
       resultTweets = modifiedresultTweets;
+      resultTweets = resultTweets.map((tweet) => {
+        const isliked = tweet.likes.some(
+          (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet.likes;
+          const tweets = {
+            ...tweet,
+            isliked: true,
+          };
+          return tweets;
+        } else {
+          delete tweet.likes;
+          const tweets = {
+            ...tweet,
+            isliked: false,
+          };
+          return tweets;
+        }
+      });
     }
     if (resultUsers.length < 1 && resultTweets.length < 1) {
       e = "no users or tweets found";
