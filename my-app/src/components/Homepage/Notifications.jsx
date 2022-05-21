@@ -7,15 +7,21 @@ import Stack from "@mui/material/Stack";
 import SideBar from "./../Profile/SideBar";
 import PrivateFollowRequests from "./PrivateFollowRequests";
 import { useParams } from "react-router-dom";
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 function Notifications(props) {
   const [notifications, setnotifications] = useState([]);
   const [followrequests, setfollowrequests] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
+  const [hasmore,sethasmore]=useState(true);
+  const [skip,setskip]=useState(0);
   let { id } = useParams();
-  useEffect(() => {
+
+  console.log(notifications);
+  const getnotifications=()=>{
     axios
       .get(
-        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/notification`,
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/notification?limit=10&skip=${skip}`,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
@@ -23,9 +29,20 @@ function Notifications(props) {
         if (res.error) {
           console.log("Error");
         } else {
-          setnotifications(res.data.notifications);
+          var prevnotifications=notifications;
+          setskip(skip+10);
+          var currentnotifications=[...prevnotifications,...res.data.notifications];
+          setnotifications(currentnotifications);
+          if(prevnotifications.length===currentnotifications.length)
+          {
+            sethasmore(false);
+          }
         }
       });
+  }
+
+  useEffect(() => {
+    getnotifications();
     axios
       .get(
         `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/privateRequest`,
@@ -55,6 +72,11 @@ function Notifications(props) {
         }
       });
   }, [id]);
+
+  const fetchMoreData=()=>{
+    getnotifications();
+  }
+
   const handleAccept = (id) => {
     axios
       .get(
@@ -117,6 +139,13 @@ function Notifications(props) {
         ) : (
           <></>
         )}
+        <InfiniteScroll
+          dataLength={notifications.length} 
+          next={fetchMoreData}
+          hasMore={hasmore}
+          loader={<h4>Loading...</h4>}
+          endMessage={<></>}
+          >
         {notifications?.length ? (
           notifications.map((notification, index) => (
             <div key={index} className="comments">
@@ -150,6 +179,7 @@ function Notifications(props) {
         ) : (
           <></>
         )}
+        </InfiniteScroll>
         {!followrequests.length && !notifications.length && (
           <Stack className="comments" direction="column">
             <Stack direction="row">

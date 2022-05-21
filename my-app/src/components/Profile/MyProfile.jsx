@@ -3,7 +3,7 @@ import "./Styles/MyProfile.css";
 import ProfileName from "./ProfileName";
 import Avatar from "@mui/material/Avatar";
 import ProfileInfo from "./ProfileInfo";
-import EditProfile from "./editProfile";
+import EditProfile from "./EditProfile";
 import { Button } from "@mui/material";
 import MyProfileTabs from "./MyProfileTabs";
 import { useParams } from "react-router-dom";
