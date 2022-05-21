@@ -16,14 +16,14 @@ const unseenall=async()=>{
 //unseenall()
 router.get("/notification", auth("any"),async (req, res) => {
   try { 
-    const sort = [{ createdAt: -1 }];
+    const sort = { createdAt: -1 };
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    let notifications=await Notification.find({notifiedUId:req.user._id}).limit(limit).skip(skip).populate({ path: "userId",
+    let notifications=await Notification.find({notifiedUId:req.user._id}).sort(sort).limit(limit).skip(skip).populate({ path: "userId",
     select:
       "_id screenName tag profileAvater.url ",
 })
-notifications=notifications.reverse()
+     //notifications=notifications.reverse()
 
 
   

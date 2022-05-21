@@ -181,7 +181,12 @@ router.get("/tweet/user/:id", auth("any"), async (req, res) => {
       e = "user doesn't exist";
       throw e;
     }
+   // if(req.user._id.toString()!=req.params.id){
+
       const isallowed=await allowView(req.user,req.params.id)
+      console.log("🚀 ~ file: tweetroute.js ~ line 187 ~ router.get ~ req.params.id", req.params.id)
+      console.log("🚀 ~ file: tweetroute.js ~ line 187 ~ router.get ~ isallowed", isallowed)
+   // }
     if(!isallowed){
       e = "not allowed to see his tweet";
       throw e;
@@ -502,11 +507,6 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "user doesn't exist ";
       throw e;
     }
-    const isallowed=await allowView(req.user,req.params.id)
-    if(!isallowed){
-      e = "not allowed to see his tweet";
-      throw e;
-    }
 
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": requiredId } },
@@ -552,29 +552,26 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       modifiedlikedtweets.push(modifiedlikedtweet);
     }
     likedtweets = modifiedlikedtweets;
+    let likedtweetk
     if(req.user._id.toString!==req.params.id){
 
-      likedtweets= tweetFilterFunc(req.user,likedtweets)
+      likedtweetk= tweetFilterFunc(req.user,likedtweets)
+      console.log("🚀 ~ file: tweetroute.js ~ line 558 ~ router.get ~ likedtweets", likedtweetk)
     }
 
-    res.send(likedtweets);
+    res.send(likedtweetk);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
 });
 router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
-    await req.user.isBanned();
+  
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0; //? it defoult get first tweet and not skip any
     const user = await User.findOne({ _id: req.params.id });
     if (!user) {
       e = "user doesn't exist";
-      throw e;
-    }
-    const isallowed=await allowView(req.user,req.params.id)
-    if(!isallowed){
-      e = "not allowed to see his tweet";
       throw e;
     }
     let originalTweets = [];
@@ -696,7 +693,6 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 });
-
 router.get("/profile/media/:id", auth("user"), async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
