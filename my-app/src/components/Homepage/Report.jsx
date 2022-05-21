@@ -270,7 +270,7 @@ function Report(props) {
   };
   return (
     <div>
-      <SideBar Home isAdmin={props.isAdmin}/>
+      <SideBar Home isAdmin={props.isAdmin} newnotifications={props.newnotifications}/>
       <div className="Report">
         <div className="subrebdiv">
           <div className="subsubrepdiv">

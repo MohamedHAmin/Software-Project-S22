@@ -56,7 +56,7 @@ useEffect(() => {
 
 return (
     <div className="Homepage">
-      <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode}/>
+      <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode} newnotifications={props.newnotifications}/>
       <div className="postConatiner">
       <div className="Expsearch">
           <Searchbar viewSuggestedAccounts={false}/>

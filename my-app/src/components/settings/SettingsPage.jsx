@@ -74,7 +74,7 @@ function SettingsPage(props) {
 
   return (
     <div className="SettingsPage">
-      <SideBar Settings isAdmin={props.isAdmin} darkMode={darkMode}/>
+      <SideBar Settings isAdmin={props.isAdmin} darkMode={darkMode} newnotifications={props.newnotifications}/>
       <div className="karim">
         <div className="settingsMenu">
           <SettingsMenu

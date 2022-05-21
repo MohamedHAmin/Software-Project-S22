@@ -32,7 +32,7 @@ function ProfilePage(props) {
 
   return (
     <div className="ProfilePage">
-      <SideBar Profile isAdmin={props.isAdmin} darkMode={darkMode} />
+      <SideBar Profile isAdmin={props.isAdmin} darkMode={darkMode} newnotifications={props.newnotifications}/>
       {id == userID ? <MyProfile /> : <OthersProfile isAdmin={props.isAdmin} />}
       <div className="rightbar">
         <div className="searchbar">

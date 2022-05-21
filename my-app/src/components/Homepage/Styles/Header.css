@@ -13,6 +13,9 @@ header {
    z-index: 500;
    position: sticky;
   }
+  .header2{
+    height: 44px;
+  }
 .Header{
    display: inline-block;
   height: 44px;
@@ -22,6 +25,7 @@ header {
     opacity: 0.8;
     color: var(--color-mode);
     position: sticky;
+    z-index: +5;
     /* background: rgba(170, 187, 97, 0.5); */
     /* background-color: white; */
 }

@@ -226,7 +226,7 @@ function CommentDisplayBlock(props) {
             <></>
           )}
         </div>
-        {props.canviewcomments && displayComments && clicked ? (
+        {props.canviewcomments && displayComments ? (
           comments.slice(0, displaylimit).map((comment) => (
             <CommentDisplayBlock
               post={comment}
