@@ -486,7 +486,26 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       e = "no users or tweets found";
       throw e;
     }
-    
+    resultTweets = resultTweets.map((tweet) => {
+      const isliked = tweet.likes.some(
+        (like) => like.like.toString() == req.user._id.toString()
+      );
+      if (isliked) {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet._doc,
+          isliked: true,
+        };
+        return tweets;
+      } else {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet._doc,
+          isliked: false,
+        };
+        return tweets;
+      }
+    });
     let searchResults = { Tweets: resultTweets, Users: resultUsers };
     res.send(searchResults);
   } catch (e) {
@@ -499,6 +518,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 
 router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let requiredId = mongoose.Types.ObjectId(req.params.id);
