@@ -365,8 +365,8 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 
     let resultUsers = await User.find({
       $or: [
-        {tag: { $regex: searchedItem, $options: "i" }},
-        {screenName: { $regex: searchedItem, $options: "i" }},
+        { tag: { $regex: searchedItem, $options: "i" } },
+        { screenName: { $regex: searchedItem, $options: "i" } },
       ],
     })
       .sort({ tag: 1 })
@@ -518,9 +518,9 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
       e = "user doesn't exist";
       throw e;
     }
+    let UserTweets = [];
     let originalTweets = [];
     let sentTweets = [];
-    let notreplies=[];
     const sort = [{ createdAt: -1 }];
     const tweets = await user.populate({
       path: "Tweets",
@@ -562,8 +562,9 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
       options: { sort },
     });
 
-    if (!user.Tweets.length < 1) {
-      user.Tweets = user.Tweets.map((tweet) => {
+    UserTweets = user.Tweets;
+    if (UserTweets.length > 0) {
+      UserTweets = UserTweets.map((tweet) => {
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
         );
@@ -583,7 +584,6 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           return tweets;
         }
       });
-      const UserTweets = user.Tweets;
       let temp;
       for (let i = 0; i < user.Tweets.length; i++) {
         if (user.Tweets[i].replyingTo.tweetExisted) {
@@ -593,45 +593,12 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           }
         }
       }
-      let UserReplies = [];
-      for (UserTweet of UserTweets) {
-        if (UserTweet.replyingTo.tweetExisted) {
-          UserReplies.push(UserTweet);
-        }
-      }
-      if (UserReplies.length > 0) {
-        for (UserReply of UserReplies) {
-          if (UserReply.replyingTo.tweetId) {
-            originalTweets.push(UserReply.replyingTo);
-            delete originalTweets.replyingTo;
-          } else {
-            originalTweets.push(UserReply.replyingTo);
-          }
-        }
-        for (let i = 0; i < UserReplies.length; i++) {
-          originalTweets[i] = {
-            ...originalTweets[i],
-            reply: UserReplies[i],
-          };
-        }
-      }
+
+      res.send(UserTweets);
     } else {
       e = "user has no tweets";
       throw e;
     }
-    for (let i = 0; i < user.Tweets.length; i++) {
-      if (
-        user.Tweets[i].replyingTo.tweetId === null &&
-        user.Tweets[i].replyingTo.tweetExisted === false
-      ) {
-        sentTweets.push({tweetId:user.Tweets[i]});
-      }
-    }
-    for (let i = 0; i < originalTweets.length; i++) {
-      sentTweets.push(originalTweets[i]);
-    }
-
-    res.send(sentTweets);
   } catch (e) {
     //here all caught errors are sent to the client
     res.status(400).send({ error: e.toString() });
