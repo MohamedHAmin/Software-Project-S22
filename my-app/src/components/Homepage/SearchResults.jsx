@@ -112,7 +112,7 @@ function SearchResults(props) {
         ) : (<></>)}
     </div>
     </div>
-    <div className="rightbar">
+    <div className="rightbarSearch">
     <div className='filterContainer'>
     <h5>Search Filters</h5>
     <h6>People</h6>
