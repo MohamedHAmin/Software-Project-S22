@@ -510,7 +510,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
 
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": requiredId } },
-      { $project: { likes: 0 } },
+      
     ])
       .limit(limit)
       .skip(skip)
@@ -545,23 +545,39 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "no liked tweets found";
       throw e;
     }
-    let modifiedlikedtweets = [];
-    let modifiedlikedtweet;
-    for (likedtweet of likedtweets) {
-      modifiedlikedtweet = { ...likedtweet, isliked: true };
-      modifiedlikedtweets.push(modifiedlikedtweet);
-    }
-    likedtweets = modifiedlikedtweets;
-    if(req.user._id.toString!==req.params.id){
-
-      likedtweets= tweetFilterFunc(req.user,likedtweets)
-    }
+    // let modifiedlikedtweets = [];
+    // let modifiedlikedtweet;
+    // for (likedtweet of likedtweets) {
+    //   modifiedlikedtweet = { ...likedtweet, isliked: true };
+    //   modifiedlikedtweets.push(modifiedlikedtweet);
+    // }
+    likedtweets = likedtweets.map((tweet) => {
+      const isliked = tweet.likes.some(
+        (like) => like.like.toString() == req.user._id.toString()
+      );
+      if (isliked) {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet,
+          isliked: true,
+        };
+        return tweets;
+      } else {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet,
+          isliked: false,
+        };
+        return tweets;
+      }
+    });
 
     res.send(likedtweets);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
 });
+
 router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
   
