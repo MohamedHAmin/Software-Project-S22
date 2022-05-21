@@ -46,6 +46,20 @@
     color: var(--color-mode);
 
 }
+.btngroupofreppee{
+    border-radius: 0!important;
+    border-top: 2px!important;
+    /* border-bottom: px!important; */
+    border-left: 0!important;
+    border-right: 0!important;
+    border-style: solid!important;
+    border-color: black!important;
+    /* padding-top: 50px!important; */
+    font-size: 30px !important;
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none!important;
+    color: var(--color-mode);
+}
 .btngroupofreppp{
     border-radius: 0!important;
     /* border-top: 1px!important; */
@@ -109,6 +123,26 @@ a:hover{
     border-style: solid; */
     padding-top: 55px;
     align-self: center;
+    color: var(--color-mode);
+
+}
+.btngroupofrepplast{
+    border-radius: 0!important;
+    /* border-top: 1px!important; */
+    border-top: 1px!important;
+    border-bottom: 2px!important;
+    border-left: 0!important;
+    border-right: 0!important;
+    border-style: solid!important;
+    border-color: black!important;
+    /* padding-top: 50px!important; */
+    font-size: 30px !important;
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none!important;
+    color: var(--color-mode);
+}
+.btngroupofreppq{
+    border-bottom: 1px!important;
     color: var(--color-mode);
 
 }

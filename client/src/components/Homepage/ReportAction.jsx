@@ -17,6 +17,7 @@ function ReportAction(props) {
   const [iD,setdisplayid]=useState();
   const navigate = useNavigate();
   const d=localStorage.getItem("id");
+  // alert(d);
   axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${d}`,
   { headers: { Authorization: localStorage.getItem("accessToken") }}).then((res) => {
     if (res.error) {
@@ -43,7 +44,6 @@ const reportHandeler = () => {
             if (res.error) {
               alert("Erorr")
             } else {
-              window.location.reload();
             }
         })
         navigate(-2);

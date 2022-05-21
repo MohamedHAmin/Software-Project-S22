@@ -19,7 +19,7 @@ function SuggestedAccounts() {
           console.log("Error");
         } else {
           setMyFollowing(res.data.suggestedAccounts);
-          console.log(res.data);
+          console.log(res.data.suggestedAccounts);
         }
       });
   },[]);

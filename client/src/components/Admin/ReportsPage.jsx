@@ -5,6 +5,7 @@ import SideBar from './../Profile/SideBar';
 import ReportsView from './ReportView';
 import axios from 'axios'
 import "./Styles/ReportsPage.css";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { FallingLines } from "react-loader-spinner";
 /**
  * reports page for the admin view where it displays by default when first opened a list of reported tweets and then admin can toggle between two options (reprted tweets and reported users)
@@ -20,25 +21,59 @@ function ReportsPage(props)
 {
     const [userReports,setuserReports]=useState([]);
     const [tweetReports,settweetReports]=useState([]);
+    const [skiptweet,setskiptweet]=useState(1);
+    const [skipuser,setskipuser]=useState(1);
+    const [hasmoretweets,sethasmoretweets]=useState(true);
+    const [hasmoreusers,sethasmoreusers]=useState(true);
     console.log(tweetReports);
+    
+    const gettweets=()=>{
+      axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/${skiptweet}?perPage=2`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+      console.log(res);
+      if (res.error){console.log("Error")}
+      else {
+        var prevtweets=tweetReports;
+        setskiptweet(skiptweet+1);
+        var currenttweets=[...prevtweets,...res.data.tweets];
+        settweetReports(currenttweets);
+        if(currenttweets.filter((tweet)=>tweet.Reports===0).length)
+        {
+          sethasmoretweets(false);
+        }
+      }
+    });
+    }
+    
+    const getusers=()=>{
+      axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/${skipuser}?perPage=3`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+      console.log(res);
+      if (res.error){console.log("Error")}
+      else {
+        var prevusers=userReports;
+        setskipuser(skipuser+1);
+        var currentusers=[...prevusers,...res.data.users];
+        setuserReports(currentusers);
+        if(currentusers.filter((user)=>user.Reports===0).length)
+        {
+          sethasmoreusers(false);
+        }
+      }
+    });
+    }
+
     useEffect(()=>{
-        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-        console.log(res);
-        if (res.error){console.log("Error")}
-        else {
-          settweetReports(res.data);
-          console.log(tweetReports);
-          console.log(res.data);
-        }
-    })
-        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-        console.log(res);
-        if (res.error){console.log("Error")}
-        else {
-          setuserReports(res.data);
-        }
-    })
+      gettweets();
+      getusers();
     },[])
+
+    const fetchMoreData=()=>
+    {
+        gettweets();
+    }
+
+    const fetchMoreDataUsers=()=>{
+      getusers();
+    }
 
     const passdeletedTweet = (id) => {
         axios
@@ -51,18 +86,9 @@ function ReportsPage(props)
             if (res.error || !res.data === "success") {
               alert("something went wrong");
             } else {
+              gettweets();
               window.location.reload();
-              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-                console.log(res);
-                if (res.error){console.log("Error")}
-                else {
-                    settweetReports(res.data);
-                    window.location.reload();
-                    window.location.reload();
-                  }
-                });
             }
-            //retweetCount();
           })
           .catch((err) => {
             //err.message; // 'Oops!'
@@ -82,18 +108,9 @@ function ReportsPage(props)
             if (res.error || !res.data === "success") {
               alert("something went wrong");
             } else {
+              getusers();
               window.location.reload();
-              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-                    console.log(res);
-                    if (res.error){console.log("Error")}
-                    else {
-                    setuserReports(res.data);
-                    window.location.reload();
-                    window.location.reload();
-                  }
-                });
             }
-            //retweetCount();
           })
           .catch((err) => {
             //err.message; // 'Oops!'
@@ -113,16 +130,8 @@ function ReportsPage(props)
             if (res.error || !res.data === "success") {
               alert("something went wrong");
             } else {
+              gettweets();
               window.location.reload();
-              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-                console.log(res);
-                if (res.error){console.log("Error")}
-                else {
-                    settweetReports(res.data);
-                    window.location.reload();
-                    window.location.reload();
-                  }
-                });
             }
             //retweetCount();
           })
@@ -148,7 +157,7 @@ function ReportsPage(props)
     return(
         <React.Fragment>
             <div className="ReportsPage">
-                <SideBar Notifications isAdmin={props.isAdmin}/>
+                <SideBar Reports isAdmin={props.isAdmin}/>
                 <div className="ReportsContainer">
                     <Stack direction="row">
                         <Button variant="text" onClick={clickHandler}>Reported Tweets</Button>
@@ -161,9 +170,16 @@ function ReportsPage(props)
                             </>
                         })
                     )} */}
-                    {(clicked && tweetReports.tweets) ? ( 
-                        tweetReports.tweets.filter((tweet)=> tweet.Reports!==0).map((tweet) =>
-                            <ReportsView
+                    {clicked && <InfiniteScroll
+                      dataLength={tweetReports.length} 
+                      next={fetchMoreData}
+                      hasMore={hasmoretweets}
+                      loader={<h4>Loading...</h4>}
+                      endMessage={<></>}
+                      >
+                    {(clicked && tweetReports.length) ? ( 
+                      tweetReports.filter((tweet)=> tweet.Reports!==0).map((tweet) =>
+                      <ReportsView
                                 ondelete={ondeletetweetreport}
                                 times={tweet.Reports}
                                 passdeletedTweet={passdeletedTweet}
@@ -172,8 +188,16 @@ function ReportsPage(props)
                     ):(
                         <></>
                     )}
-                    {(!clicked && userReports.users) ? (
-                    userReports.users.filter((user)=> user.Reports!==0).map((user) =>
+                    </InfiniteScroll>}
+                    {!clicked && <InfiniteScroll
+                      dataLength={userReports.length} 
+                      next={fetchMoreDataUsers}
+                      hasMore={hasmoreusers}
+                      loader={<h4>Loading...</h4>}
+                      endMessage={<></>}
+                    >
+                    {(!clicked && userReports.length) ? (
+                    userReports.filter((user)=> user.Reports!==0).map((user) =>
                     <ReportsView
                         ondelete={ondeleteuserreport}
                         times={user.Reports}
@@ -182,6 +206,7 @@ function ReportsPage(props)
                     ):(
                         <></>
                     )}
+                    </InfiniteScroll>}
                 </div>
                 <div className="Notificationrightbar"></div>
             </div>

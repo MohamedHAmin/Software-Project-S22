@@ -25,9 +25,6 @@ function PrivateFollowRequests(props)
                                         <Button onClick={passdata} style={{fontSize:20}} className="notificationbuttons" variant="contained">
                                             Accept
                                         </Button>
-                                        <Button style={{fontSize:20}} className="notificationbuttons" variant="contained">
-                                            Deny
-                                        </Button>
                                     </Stack>
                             </Stack>
                         </Stack>

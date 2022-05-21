@@ -11,6 +11,7 @@ import DashboardIcon from "@mui/icons-material/DashboardRounded";
 import LarryIconDark from "../../Images/Logo Dark Mode.png";
 import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ReportIcon from '@mui/icons-material/OutlinedFlagSharp';
 import { NavLink } from "react-router-dom";
 /**
  *
@@ -26,6 +27,7 @@ function SideBar({
   Logout,
   isAdmin,
   darkMode,
+  Reports,
   Dashboard
 }) {
   let id = localStorage.getItem("userId");
@@ -53,24 +55,14 @@ function SideBar({
           </NavLink>
         </li>
         <li>
-          {isAdmin && (
-            <NavLink to="/ReportsPage">
-              <SideBarIcon
-                active={Notifications}
-                text="Reports"
-                Icon={NotificationsIcon}
-              />
-            </NavLink>
-          )}
-          {!isAdmin && (
-            <NavLink to="/Notifications">
+          {<NavLink to="/Notifications">
               <SideBarIcon
                 active={Notifications}
                 text="Notifications"
                 Icon={NotificationsIcon}
               />
             </NavLink>
-          )}
+          }
         </li>
         <li>
           <NavLink to="/Settings">
@@ -89,6 +81,17 @@ function SideBar({
               Icon={AccountBoxIcon}
             />
           </NavLink>
+        </li>
+        <li>
+        {isAdmin && (
+            <NavLink to="/ReportsPage">
+              <SideBarIcon
+                active={Reports}
+                text="Reports"
+                Icon={ReportIcon}
+              />
+            </NavLink>
+          )}
         </li>
         <li>
           {isAdmin && (
