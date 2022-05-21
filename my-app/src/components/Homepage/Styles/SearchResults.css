@@ -46,7 +46,7 @@ border-top: 2px solid var(--color-border);
 .rightbar {
     position: sticky;
     height: 100vh;
-    flex: 0.3;
+    width: 30%;
 }
 .rightbarSearch {
   position: sticky;
