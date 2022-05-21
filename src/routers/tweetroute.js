@@ -510,11 +510,12 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
 
     let likedtweets = await Tweet.aggregate([
       { $match: { "likes.like": requiredId } },
-      { $project: { likes: 0 } },
+      { $project: { likes:1,id:1, authorId:1, text:1, tags:1, likeCount:1, retweetCount:1, gallery:1, likes:1, replyCount:1, createdAt:1}},
     ])
-      .limit(limit)
-      .skip(skip)
-      .sort({ createdAt: -1 });
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 });
+    console.log("🚀 ~ file: tweetroute.js ~ line 512 ~ router.get ~ Tweet", likedtweets)
     for (likedtweet of likedtweets) {
       await User.populate(likedtweet, {
         path: "authorId",
@@ -545,18 +546,42 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       e = "no liked tweets found";
       throw e;
     }
-    let modifiedlikedtweets = [];
+   /*  let modifiedlikedtweets = [];
     let modifiedlikedtweet;
     for (likedtweet of likedtweets) {
       modifiedlikedtweet = { ...likedtweet, isliked: true };
       modifiedlikedtweets.push(modifiedlikedtweet);
+    } */
+    likedtweets = likedtweets;
+    let i=-1
+    if (!likedtweets.length < 1) {
+      likedtweets = likedtweets.map((tweet) => {
+        i++;
+        const isliked = tweet.likes.some(
+          (like) => like.like.toString() == req.user._id.toString()
+        );
+        if (isliked) {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: true,
+          };
+          return tweets;
+        } else {
+          delete tweet._doc.likes;
+          const tweets = {
+            ...tweet._doc,
+            isliked: false,
+          };
+          return tweets;
+        }
+      });
     }
-    likedtweets = modifiedlikedtweets;
     let likedtweetk
     if(req.user._id.toString!==req.params.id){
 
       likedtweetk= tweetFilterFunc(req.user,likedtweets)
-      console.log("🚀 ~ file: tweetroute.js ~ line 558 ~ router.get ~ likedtweets", likedtweetk)
+      //console.log("🚀 ~ file: tweetroute.js ~ line 558 ~ router.get ~ likedtweets", likedtweetk)
     }
 
     res.send(likedtweetk);
