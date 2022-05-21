@@ -32,6 +32,7 @@ function OthersProfile(props) {
   const [followModalState, setFollowModalState] = useState(false);
   const [optionsModalState, setOptionsModalState] = useState(false);
   const [userTweets, setUserTweets] = useState([]);
+  const [userRepliesTweets, setUserRepliesTweets] = useState([]);
   const [coverImage, setCoverImage] = useState("");
   const [Tag, setTag] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -51,6 +52,7 @@ function OthersProfile(props) {
   console.log(route.pathname);
   useEffect(() => {
     setUserTweets([]);
+    setUserRepliesTweets([]);
     axios
       .get(
         `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}`,
@@ -115,7 +117,7 @@ function OthersProfile(props) {
           if (res.error) {
             console.log("Error");
           } else {
-            setUserTweets(res.data);
+            setUserRepliesTweets(res.data);
           }
         });
     }
@@ -590,8 +592,8 @@ function OthersProfile(props) {
             OR if user account is private: -> if he follows me -> show his tweets
                                           -> if he doesn't follows me -> dont show his tweets*/}
         {!isPrivate && route.pathname === `/Profile/${id}/with_replies` ? (
-          userTweets?.length ? (
-            userTweets.map((post) => (
+          userRepliesTweets?.length ? (
+            userRepliesTweets.map((post) => (
               <PostReplies
                 post={post}
                 passdeletedTweet={passdeletedTweet}
@@ -603,9 +605,9 @@ function OthersProfile(props) {
           ) : (
             <></>
           )
-        ) : userTweets?.length && isFollowed ? (
+        ) : userRepliesTweets?.length && isFollowed ? (
           route.pathname === `/Profile/${id}/with_replies` ? (
-            userTweets.map((post) => (
+            userRepliesTweets.map((post) => (
               <PostReplies
                 post={post}
                 passdeletedTweet={passdeletedTweet}

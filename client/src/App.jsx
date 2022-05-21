@@ -21,6 +21,7 @@ import SearchResults from "./components/Homepage/SearchResults";
 function App() {
   //Login with Google
   const [user, setUser] = useState(null);
+  const [newnotifications,setnewnotifications]=useState(false);
 
   useEffect(() => {
     const getUser = () => {
@@ -46,6 +47,17 @@ function App() {
     };
     getUser();
   }, []);
+
+  const checkfornewnotifications=()=>{
+    if(localStorage.getItem("lastseennotifications") !== localStorage.getItem("currentnotifications"))
+    {
+      setnewnotifications(true);
+    }
+    else if(localStorage.getItem("lastseennotifications")===undefined)
+    {
+      setnewnotifications(true);
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////////
 
@@ -100,13 +112,14 @@ function App() {
       {/* Routing from Sidebar to all possible options */}
       <div
         className={profileData.darkMode === false ? "AppLight" : "AppDark"}
+        onClick={checkfornewnotifications}
         onLoad={checkAdmin}
       >
         <BrowserRouter>
           <Routes>
             <Route
               path="/Home"
-              element={<Homepage isAdmin={isAdmin} />}
+              element={<Homepage isAdmin={isAdmin} newnotifications={newnotifications} />}
             ></Route>
             <Route
               path="/Settings"
@@ -115,32 +128,33 @@ function App() {
                   isDark={profileData.darkMode}
                   onDarkModeChange={handleChangeDisplayMode}
                   isAdmin={isAdmin}
+                  newnotifications={newnotifications}
                 />
               }
             ></Route>
             <Route
               path="/Profile/:id"
-              element={<ProfilePage isAdmin={isAdmin} />}
+              element={<ProfilePage isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/Profile/:id/with_replies"
-              element={<ProfilePage isAdmin={isAdmin} />}
+              element={<ProfilePage isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/Profile/:id/media"
-              element={<ProfilePage isAdmin={isAdmin} />}
+              element={<ProfilePage isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/Profile/:id/likes"
-              element={<ProfilePage isAdmin={isAdmin} />}
+              element={<ProfilePage isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/Report/:reportType/:id"
-              element={<Report isAdmin={isAdmin} />}
+              element={<Report isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/ReportAction"
-              element={<ReportAction isAdmin={isAdmin} />}
+              element={<ReportAction isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/Profile/:id/Following"
@@ -153,21 +167,21 @@ function App() {
             <Route path="/Logout" element={<Login />}></Route>
             <Route
               path="/ReportsPage"
-              element={<ReportsPage isAdmin={isAdmin} />}
+              element={<ReportsPage isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/search/:searchtext"
-              element={<SearchResults />}
+              element={<SearchResults isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
             <Route
               path="/Notifications"
-              element={<Notifications isAdmin={isAdmin} />}
+              element={<Notifications isAdmin={isAdmin} newnotifications={false}/>}
             ></Route>
             <Route
               path="/Explore"
-              element={<Explore isAdmin={isAdmin} />}
+              element={<Explore isAdmin={isAdmin} newnotifications={newnotifications}/>}
             ></Route>
-            <Route path="/Admin/Dashboard" element={<AdminDashboard />}></Route>
+            <Route path="/Admin/Dashboard" element={<AdminDashboard newnotifications={newnotifications}/>}></Route>
           </Routes>
         </BrowserRouter>
       </div>

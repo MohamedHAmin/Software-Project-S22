@@ -8,7 +8,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 function Header(){    
     return(
         <div className='Header'>
-            <header>
+            <header className='header2'>
                 Home <AutoAwesomeIcon className='AutoAwsPhoto'  /> 
             </header>
         </div>

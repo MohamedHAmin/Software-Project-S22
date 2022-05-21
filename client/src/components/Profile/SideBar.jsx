@@ -1,6 +1,7 @@
 import React from "react";
 import "./Styles/SideBar.css";
 import SideBarIcon from "./SideBarIcon";
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -28,7 +29,8 @@ function SideBar({
   isAdmin,
   darkMode,
   Reports,
-  Dashboard
+  Dashboard,
+  newnotifications
 }) {
   let id = localStorage.getItem("userId");
   return (
@@ -55,11 +57,19 @@ function SideBar({
           </NavLink>
         </li>
         <li>
-          {<NavLink to="/Notifications">
+          {!newnotifications && <NavLink to="/Notifications">
               <SideBarIcon
                 active={Notifications}
                 text="Notifications"
                 Icon={NotificationsIcon}
+              />
+            </NavLink>
+          }
+          {newnotifications && <NavLink to="/Notifications">
+              <SideBarIcon
+                active={Notifications}
+                text="Notifications"
+                Icon={NotificationsActiveIcon}
               />
             </NavLink>
           }

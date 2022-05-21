@@ -23,6 +23,7 @@ function MyProfile(props) {
   const [joinedDate, setJoinedDate] = useState("");
   const [buttonPopup, setButtonPopup] = useState(false);
   const [userTweets, setUserTweets] = useState([]);
+  const [userRepliesTweets, setUserRepliesTweets] = useState([]);
   const [coverImage, setCoverImage] = useState("");
   const [Tag, setTag] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -41,7 +42,7 @@ function MyProfile(props) {
 
   useEffect(() => {
     setUserTweets([]);
-
+    setUserRepliesTweets([]);
     axios
       .get(
         `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${id}/me`,
@@ -101,7 +102,7 @@ function MyProfile(props) {
           if (res.error) {
             console.log("Error");
           } else {
-            setUserTweets(res.data);
+            setUserRepliesTweets(res.data);
           }
         });
     }
@@ -275,9 +276,9 @@ function MyProfile(props) {
         ) : (
           <></>
         )}
-        {userTweets.length &&
+        {userRepliesTweets?.length &&
         route.pathname === `/Profile/${id}/with_replies` ? (
-          userTweets.map((post) => (
+          userRepliesTweets.map((post) => (
             <PostReplies
               post={post}
               passdeletedTweet={passdeletedTweet}

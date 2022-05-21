@@ -5,9 +5,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./Styles/SuggestedAccounts.css";
 
-function SuggestedAccounts() {
+function SuggestedAccounts(props) {
     let userID = localStorage.getItem("userId");
     const [myFollowing, setMyFollowing] = useState([]);
+    const [notificationscount,setnotificationscount]=useState(0);
     useEffect(() => {
       axios
       .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/suggestedAccounts`, {
@@ -19,10 +20,13 @@ function SuggestedAccounts() {
           console.log("Error");
         } else {
           setMyFollowing(res.data.suggestedAccounts);
+          setnotificationscount(res.data.Notificationscount);
           console.log(res.data.suggestedAccounts);
+          localStorage.setItem("currentnotifications",res.data.Notificationscount);      
         }
       });
-  },[]);
+    },[]);
+    
 
     return (
         <div className="SuggestedAccPage">

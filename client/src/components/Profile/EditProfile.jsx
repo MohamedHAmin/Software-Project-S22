@@ -14,7 +14,6 @@ import axios from "axios";
  */
 
 function EditProfile(props) {
-  let x=1;
   let userID = localStorage.getItem("userId");
   const [buttonclosePopup, setButtonClosePopup] = useState(false);
   const [NameError, setNameError] = useState(false);

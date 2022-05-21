@@ -50,7 +50,7 @@ const reportHandeler = () => {
   };
     return (
       <div>
-        <SideBar Home isAdmin={props.isAdmin}/>
+        <SideBar Home isAdmin={props.isAdmin} newnotifications={props.newnotifications}/>
       <div className="ReportAction" >
         <div className="subrebActdiv">
         <div className="subsubrepActdiv">
