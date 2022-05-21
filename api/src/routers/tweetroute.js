@@ -1213,8 +1213,8 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
           await retweetedTweet.save();
         }
       }
-      const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).send({success:"Success"});
+      await Tweet.findByIdAndDelete(req.params.id);
+      res.status(200).send({Status:"Success"});
     } else {
       throw new Error("Unauthorized");
     }
