@@ -7,11 +7,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import SearchFollowers from '../Profile/SearchFollowers';
 import "./Styles/SearchResults.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Radio from '@mui/material/Radio';
 
 function SearchResults(props) {
     const [darkMode, setDarkMode] = useState(false);
     const [resultTweets,setResultTweets]=useState([]); 
     const [resultUsers,setResultUsers]=useState([]); 
+    const [filtered, setFiltered]=useState(false);
     const navigate = useNavigate();
     let searchKeyword = localStorage.getItem("searchKey");
     let { id } = useParams();
@@ -37,7 +39,7 @@ function SearchResults(props) {
         }
       });
     
-    if (searchKeyword!="")
+    if (!filtered)
     {
         axios
         .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/search/${searchKeyword}`,
@@ -53,8 +55,31 @@ function SearchResults(props) {
            alert(err.response.data.error);
        }
        );}
-    },[searchKeyword])
+       else {
+        axios
+        .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/search/${searchKeyword}?followerfilter=true`,
+           {
+               headers: { Authorization: localStorage.getItem("accessToken") },
+           }
+       )
+       .then((res) => {
+           console.log(res);
+           setResultTweets(res.data.Tweets);
+           setResultUsers(res.data.Users);
+       }).catch(err => {
+           alert(err.response.data.error);
+       }
+       );}
+    },[searchKeyword, filtered])
     
+    function handleFromAll() {
+        setFiltered(false);
+    }
+
+    function handleFollowedOnly() {
+      setFiltered(true);
+    }
+
     return (
   <div className="SearchResults">
     <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode}/>
@@ -87,8 +112,43 @@ function SearchResults(props) {
         ) : (<></>)}
     </div>
     </div>
-    <div className="rightbarSearch">
-
+    <div className="rightbar">
+    <div className='filterContainer'>
+    <h5>Search Filters</h5>
+    <h6>People</h6>
+    <div style={{display: 'flex',alignItems: 'center'}}>
+          <div className='searchFilter'>
+            <div onClick={handleFromAll} className='filterOptionsDisplay'>
+                <div  style={{marginLeft: 10, fontWeight: 500, fontSize:18, display:'center'}}>From Anyone</div>
+            </div>
+            </div>
+            <div className='radiobuttonStyling'>
+              <Radio
+                checked={!filtered}
+                onChange={handleFromAll}
+                // value="b"
+                name="radio-buttons"
+                inputProps={{ 'aria-label': 'B' }}
+              />
+            </div>
+      </div>
+      <div style={{display: 'flex',alignItems: 'center'}}>
+          <div className='searchFilter'>
+            <div onClick={handleFollowedOnly} className='filterOptionsDisplay'>
+                <div  style={{marginLeft: 10, fontWeight: 500, fontSize:18, display:'center'}}>People you follow</div>
+            </div>
+            </div>
+            <div className='radiobuttonStyling'>
+              <Radio
+                checked={filtered}
+                onChange={handleFollowedOnly}
+                // value="b"
+                name="radio-buttons"
+                inputProps={{ 'aria-label': 'B' }}
+              />
+            </div>
+      </div>
+    </div>
     </div>
   </div>);
 }
