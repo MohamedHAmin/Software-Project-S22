@@ -1,4 +1,3 @@
-
 const express = require("express");
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
