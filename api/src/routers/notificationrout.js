@@ -1,19 +1,11 @@
 const express = require("express");
 
-const Notification = require("../models/Notification");
 const auth = require("../middleware/auth");
 const notifiy = require("../utils/firbase");
 const { query } = require("express");
 const router = new express.Router();
 
-const seenall=async()=>{
-await Notification.updateMany({},{seen:false})
-}
-const unseenall=async()=>{
-  await Notification.updateMany({},{seen:true})
-}
-//seenall()
-//unseenall()
+
 router.get("/notification", auth("any"),async (req, res) => {
   try { 
     const sort = { createdAt: -1 };

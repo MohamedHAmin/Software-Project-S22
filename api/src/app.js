@@ -10,7 +10,16 @@ const tweetRouter =require('./routers/tweetroute')
 const followRouter =require('./routers/followroute')
 const profileRouter =require('./routers/profilerouter')
 const notficationRouter =require('./routers/notificationrout')
+const Notification = require("./models/Notification");
 
+const seenall=async()=>{
+  await Notification.updateMany({seen:undefined},{seen:true})
+  }
+  const unseenall=async()=>{
+    await Notification.updateMany({},{seen:false})
+  }
+  //seenall()
+  //unseenall()
 const session = require('cookie-session')
 const  passport = require("passport")
 require('./passport/passport')
