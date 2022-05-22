@@ -5,7 +5,9 @@
 .FollowingData {
   font-size: 14px;
 }
-
+a {
+  text-decoration: none;
+}
 .FollowingCard {
   display: flex;
   padding: 10px;
