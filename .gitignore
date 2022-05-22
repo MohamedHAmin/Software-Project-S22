@@ -23,4 +23,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 my-app/src/index.js
+=======
+my-app/src/index.js
+>>>>>>> 5cf4142442802f182123cbb32992fd6bf75f2709

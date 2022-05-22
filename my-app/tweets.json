@@ -1,0 +1,237 @@
+{
+    "posts": [
+      {
+        "authorId":{
+            "id": 1,
+            "profileAvater":{
+                "url": null
+            },
+            "screenName": "admin1",
+            "tag": "admintag1",
+            "_id": 1
+        },
+        "createdAt": "2022-05-22T07:41:19.279Z",
+        "gallery": [],
+        "isliked": false,
+        "likeCount": 0,
+        "replyCount": 0,
+        "replyingTo":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "retweetCount": 0,
+        "retweetedTweet":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "tags":[
+            {
+                "tag": "@amin",
+                "_id": 2
+            }
+        ],
+        "text": "@amin",
+        "updatedAt": "2022-05-22T07:41:19.279Z",
+        "__v": 0,
+        "_id": 1
+      },
+      {
+        "authorId":{
+            "id": 3,
+            "profileAvater":{
+                "url": "https://res.cloudinary.com/dj0etpud8/image/upload/v1652459680/hyjpqbomzduwmx8dsnum.jpg"
+            },
+            "screenName": "Mary",
+            "tag": "Mary24",
+            "_id": 3
+        },
+        "createdAt": "2022-04-22T07:41:19.279Z",
+        "gallery": [],
+        "isliked": true,
+        "likeCount": 10,
+        "replyCount": 0,
+        "replyingTo":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "retweetCount": 3,
+        "retweetedTweet":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "tags":[],
+        "text": "Trial tweet",
+        "updatedAt": "2022-05-22T07:41:19.279Z",
+        "__v": 0,
+        "_id": 2
+      },
+      {
+        "authorId":{
+            "id": 4,
+            "profileAvater":{
+                "url": null
+            },
+            "screenName": "Mocktest",
+            "tag": "Mocktest1",
+            "_id": 4
+        },
+        "createdAt": "2022-04-20T07:41:19.279Z",
+        "gallery": [],
+        "isliked": false,
+        "likeCount": 19,
+        "replyCount": 1,
+        "replyingTo":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "retweetCount": 3,
+        "retweetedTweet":{
+            "tweetExisted": true,
+            "tweetId": null
+        },
+        "tags":[],
+        "text": "Retweet a deleted tweet",
+        "updatedAt": "2022-05-22T07:41:19.279Z",
+        "__v": 0,
+        "_id": 3
+      },
+      {
+        "authorId":{
+            "id": 5,
+            "profileAvater":{
+                "url": null
+            },
+            "screenName": "admin2",
+            "tag": "admintag2",
+            "_id": 5
+        },
+        "createdAt": "2022-04-22T07:41:19.279Z",
+        "gallery": [
+            {
+                "photo": "https://res.cloudinary.com/dj0etpud8/image/upload/v1653133574/vjsvviw2fxxbxmgsuwvc.jpg",
+                "_id": "6288d107834b56da876d4cf0"
+            }
+        ],
+        "isliked": true,
+        "likeCount": 1,
+        "replyCount": 1,
+        "replyingTo":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "retweetCount": 3,
+        "retweetedTweet":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "tags":[],
+        "text": "Tweet with picture",
+        "updatedAt": "2022-05-22T07:41:19.279Z",
+        "__v": 0,
+        "_id": 4
+      },
+      {
+        "authorId":{
+            "id": 1,
+            "profileAvater":{
+                "url": null
+            },
+            "screenName": "admin1",
+            "tag": "admintag1",
+            "_id": 1
+        },
+        "createdAt": "2022-05-24T07:41:19.279Z",
+        "gallery": [],
+        "isliked": true,
+        "likeCount": 10,
+        "replyCount": 0,
+        "replyingTo":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "retweetCount": 3,
+        "retweetedTweet":{
+            "tweetExisted": true,
+            "tweetId": {
+                "authorId":{
+                    "id": 1,
+                    "profileAvater":{
+                        "url": null
+                    },
+                    "screenName": "admin1",
+                    "tag": "admintag1",
+                    "_id": 1
+                },
+                "createdAt": "2022-05-22T07:41:19.279Z",
+                "gallery": [],
+                "isliked": false,
+                "likeCount": 0,
+                "replyCount": 0,
+                "replyingTo":{
+                    "tweetExisted": false,
+                    "tweetId": null
+                },
+                "retweetCount": 0,
+                "retweetedTweet":{
+                    "tweetExisted": false,
+                    "tweetId": null
+                },
+                "tags":[
+                    {
+                        "tag": "@amin",
+                        "_id": 2
+                    }
+                ],
+                "text": "@amin",
+                "updatedAt": "2022-05-22T07:41:19.279Z",
+                "__v": 0,
+                "_id": 1
+            }
+        },
+        "tags":[],
+        "text": "Try retweet",
+        "updatedAt": "2022-05-22T07:41:19.279Z",
+        "__v": 0,
+        "_id": 5
+      },
+      {
+        "authorId":{
+            "id": 5,
+            "profileAvater":{
+                "url": null
+            },
+            "screenName": "admin2",
+            "tag": "admintag2",
+            "_id": 5
+        },
+        "createdAt": "2022-04-22T07:41:19.279Z",
+        "gallery": [
+            {
+                "photo": "https://res.cloudinary.com/dj0etpud8/image/upload/v1653133574/vjsvviw2fxxbxmgsuwvc.jpg",
+                "_id": "6288d107834b56da876d4cf0"
+            },
+            {
+                "photo": "https://res.cloudinary.com/dj0etpud8/image/upload/v1652900107/pea1g4y4tkndf04smuzq.jpg",
+                "_id": "6285410b82dec7f58ec68bc0"
+            }
+        ],
+        "isliked": true,
+        "likeCount": 1,
+        "replyCount": 1,
+        "replyingTo":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "retweetCount": 3,
+        "retweetedTweet":{
+            "tweetExisted": false,
+            "tweetId": null
+        },
+        "tags":[],
+        "text": "Tweet with multiple pictures",
+        "updatedAt": "2022-05-22T07:41:19.279Z",
+        "__v": 0,
+        "_id": 6
+      }
+    ]
+}
