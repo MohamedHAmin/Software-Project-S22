@@ -10,8 +10,17 @@ const tweetRouter =require('./routers/tweetroute')
 const followRouter =require('./routers/followroute')
 const profileRouter =require('./routers/profilerouter')
 const notficationRouter =require('./routers/notificationrout')
+const Notification = require("./models/Notification");
 
-const cookieSession = require('cookie-session')
+const seenall=async()=>{
+  await Notification.updateMany({seen:undefined},{seen:true})
+  }
+  const unseenall=async()=>{
+    await Notification.updateMany({},{seen:false})
+  }
+  //seenall()
+  //unseenall()
+const session = require('cookie-session')
 const  passport = require("passport")
 require('./passport/passport')
 const cors = require("cors")
@@ -22,6 +31,16 @@ app.use(cors())
 const port=process.env.PORT
 app.use(express.json())
 app.set('trust proxy', 1) 
+app.set('trust proxy', 1) 
+
+app.use(session({
+    secret: "SESSION_SECRET",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false ,
+      httpOnly: true,
+      maxAge: 3000000,
+    }}))
 app.use('/user',userAuthRouter)
 app.use('/user',userRouter)
 app.use(tweetRouter)

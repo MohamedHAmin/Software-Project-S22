@@ -7,15 +7,10 @@ const Token=require('../models/Token.js')
 
 const auth =(role)=>{
     return async(req,res,next)=>{
-
         try{
             const token =req.header('Authorization').replace('Bearer ','')
-
             const decoded =jwt.verify(token,process.env.SECRET)
              const tokenIn=await Token.findOne({token:token})
-
-
-             
              if (!tokenIn){ throw new Error()}
             let user;
             if(role==="admin"||role==="any")
@@ -38,7 +33,6 @@ const auth =(role)=>{
             next()
         }catch(e){
             res.status(401).send({error: 'Please Authenticate'})
-
         }
     }
 }

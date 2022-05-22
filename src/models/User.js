@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
   birth:{
     date:{
       type:Date,
-    default:Date.now()
+    default:"2001-04-24T13:35:32.392Z"
     },
     visability:{
       type:Boolean,

@@ -30,8 +30,8 @@ test('Check Admin Delete Authority', async ()=>{
     const res=await request(app).delete('/tweet/'+tweet1._id)
     .set('Authorization','Bearer '+admintoken.token)
     .send({})
-    //.expect(200)
-    //expect(res.text).toEqual("Success")
+    .expect(200)
+    expect(res.body.Status).toMatch("Success")
 })
 test('Check User Delete Authority', async ()=>{
     const user1=await User.create({
@@ -74,7 +74,7 @@ test('Check Wrong ID', async ()=>{
     .set('Authorization','Bearer '+admintoken.token)
     .send({})
     .expect(400)
-   // expect(res.text).toMatch("CastError")
+    expect(res.text).toMatch("CastError")
 })
 test('Check Non-existing ID', async ()=>{
     const user1=await User.create({
@@ -94,54 +94,4 @@ test('Check Non-existing ID', async ()=>{
     .send({})
     .expect(400)
     expect(res.text).toMatch("Not Found")
-});
-
-test("decrement retweetCount on a retweeted tweet after delete", async ()=>{
-    const user1=await User.create({
-        "screenName":"user1",
-        "tag":"user1",
-        "email":"user1@gmail.com",
-        "password":"123456"
-    });
-    const user1token=await user1.generateAuthToken()
-    const tweet=await Tweet.create({
-        authorId:user1._id,
-        text:"tweet"
-    });
-    const retweet=await Tweet.create({
-        authorId:user1._id,
-        text:"retweet",
-        retweetedTweet:{tweetid:tweet._id,tweetExisted:true}
-    });
-    tweet.retweetCount++;
-    await tweet.save();
-    const res = await request(app).delete('/tweet/'+retweet._id)
-    .set('Authorization','Bearer '+user1token.token)
-    .send({})
-    .expect(200);
-});
-
-test("decrement replyCount on a replyedOn tweet after delete", async ()=>{
-    const user1=await User.create({
-        "screenName":"user1",
-        "tag":"user1",
-        "email":"user1@gmail.com",
-        "password":"123456"
-    });
-    const user1token=await user1.generateAuthToken()
-    const tweet=await Tweet.create({
-        authorId:user1._id,
-        text:"tweet"
-    });
-    const reply=await Tweet.create({
-        authorId:user1._id,
-        text:"retweet",
-        replyingTo:{tweetid:tweet._id,tweetExisted:true}
-    });
-    tweet.replyCount++;
-    await tweet.save();
-    const res = await request(app).delete('/tweet/'+reply._id)
-    .set('Authorization','Bearer '+user1token.token)
-    .send({})
-    .expect(200);
-});
+})

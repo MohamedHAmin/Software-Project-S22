@@ -11,7 +11,9 @@ const nodemailer = require("nodemailer")
 const {v4: uuidv4 } = require("uuid")
 const { urlencoded } = require("express")
 const { identity } = require("lodash")
+const res = require("express/lib/response")
 require('env-cmd')
+require('../passport/passport')(passport)
 //nodemailer setup [less secure option on ]
 let transporter = nodemailer.createTransport({
   service:"gmail",
@@ -63,9 +65,10 @@ router.post("/signup",async (req, res) => {
   //token is put in header [in postman]
   router.delete("/logout" ,auth('any'),async (req, res) => {
     try{
-      await Token.deleteMany({ token: req.token })
+     const a= await Token.deleteMany({ token: req.token })
+     console.log("🚀 ~ file: userauthroute.js ~ line 67 ~ router.delete ~ a", a)
       
-      res.status(200).end({success:"Success"})}
+      res.status(200).send({success:"Success"})}
       
       
       catch (e) {
@@ -196,12 +199,7 @@ router.post("/signup",async (req, res) => {
       console.log(e);
     }
   }
-   //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
-   router.get('/auth/google', passport.authenticate('google', {scope:['profile'] }))
-
-   router.get('auth/google/callback',passport.authenticate('google', {failureRedirect:'/googlelogin/failed',successRedirect:"/googlelogin/success"}))
-   //redirect pages will be later on implemented by FE
- 
+  
  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
  router.get("/googlelogin/failed",(req,res)=>{
    res.status(401).json({
@@ -210,7 +208,7 @@ router.post("/signup",async (req, res) => {
    })
  })
  router.get("/googlelogin/success",(req,res)=>{
-   if(req.user){
+   if(req.cookies){
    res.status(200).json({
      success: true,
      message : "successful",
@@ -221,4 +219,14 @@ router.post("/signup",async (req, res) => {
  }
  })
 
+    //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
+    router.get('/auth/google', passport.authenticate('google', {scope:['profile','email']}),()=>{
+     
+      res.send({hy:"hy"})
+    })
+
+    router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/',successRedirect:"http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/"}))
+    //redirect pages will be later on implemented by FE
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
     module.exports = router;

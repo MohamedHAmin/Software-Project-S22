@@ -16,11 +16,11 @@ const adminSchema = new mongoose.Schema({
         unique:true,
         required: true,
         lowercase: true,
-        validate(value) {
-          if (!validator.isEmail(value)) {
-            throw new Error("not valid email");
-          }
-        }
+        // validate(value) {
+        //   if (!validator.isEmail(value)) {
+        //     throw new Error("not valid email");
+        //   }
+        // }
     },
 },
 {
@@ -44,13 +44,6 @@ const adminSchema = new mongoose.Schema({
   })
   return tokenObj
 }
-adminSchema.pre("save", async function (next) {
-  const admin = this;
-  if (admin.isModified("password")) {
-    admin.password = await bcrypt.hash(admin.password, 8);
-  }
-  next()
-});
-      
+ 
 const Admin = mongoose.model('Admin', adminSchema);     
 module.exports = Admin

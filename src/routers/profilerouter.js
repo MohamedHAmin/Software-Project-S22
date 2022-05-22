@@ -4,6 +4,8 @@ const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 const auth = require("../middleware/auth");
 const PrivateRequest = require("../models/PrivateRequest");
+const Notification = require("../models/Notification");
+
 const bcrypt = require("bcryptjs");
 const { request } = require("express");
 const assert = require("assert");
@@ -19,9 +21,11 @@ router.get("/suggestedAccounts", auth("any"), async (req, res) => {
     });
     const user = req.user;
     followingsId.push(req.user._id);
-    let suggestedAccounts = await User.find({ _id: { $nin: followingsId }})
+    let suggestedAccounts = await User.find({ _id: { $nin: followingsId },isPrivate:false})
     suggestedAccounts=_.sampleSize(suggestedAccounts,4)
-    res.send(suggestedAccounts);
+    count = await Notification.count({notifiedUId:req.user._id})
+    console.log("🚀 ~ file: profilerouter.js ~ line 27 ~ router.get ~ count", count)
+    res.send({suggestedAccounts,Notificationscount:count});
   }
     catch(e){
       res.status(400).send({ error: e.toString() });
@@ -90,6 +94,70 @@ router.get("/:id", auth("any"), async (req, res) => {
   } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
+});
+router.get("/tag/:tag", auth("any"), async (req, res) => {
+  try {
+    let user = await User.find({tag:req.params.tag});
+    user=user[0]
+    if (!user) {
+      throw new Error("no user found");
+    }
+
+    const isfollowed = req.user.following.some(
+      (followed) => followed.followingId.toString() == user._id.toString()
+    );
+    let isfollowing;
+    if (isfollowed) {
+      isfollowing = true;
+    } else {
+      isfollowing = false;
+    }
+    if (user.location.visability === false) {
+      user.location = undefined;
+    }
+    if (user.birth.visability === false) {
+      user.birth = undefined;
+    }
+    user.ban = undefined;
+    user.email = undefined;
+    user.Notificationssetting = undefined;
+
+    if (user.isPrivate === true) {
+      user.birth=null;
+      user.location="";
+      user.banner.url=null;
+      user.Biography="";
+      user.phoneNumber = 0;
+      user.verified = null;
+      user.website = "";
+      user.darkMode = undefined;
+
+      let privateRequest = await PrivateRequest.find({
+        requestUser: req.user._id,
+      });
+
+      privateRequest = privateRequest.map((request) => {
+        return request.userId.toString();
+      });
+
+      if (privateRequest.includes(user._id)) {
+        const ispending = true;
+        return res.status(200).send({ ispending, user,isfollowing });
+      }else{
+        const ispending = false;
+        return res.status(200).send({ ispending, user,isfollowing });
+      }
+    }
+    //*if you send private request
+  
+
+
+
+    res.send({ user, isfollowing: isfollowing });
+  } catch (e) {
+    res.status(400).send({ error: e.toString() });
+  }
+    
 });
 router.get("/:id/me", auth("user"), async (req, res) => {
   try {

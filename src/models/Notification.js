@@ -16,6 +16,11 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+    seen:{
+      type:Boolean,
+      default:false
+    },
+
     tweetId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
