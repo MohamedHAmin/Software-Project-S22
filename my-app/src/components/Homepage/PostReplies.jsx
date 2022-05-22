@@ -25,7 +25,7 @@ import axios from "axios";
               isPost={true}>
  */
 function PostReplies(props) {
-  const [postId] = useState(props.post.tweetId?.id);
+  const [postId] = useState(props.post.tweetId?._id);
   const date = new Date(props.post.tweetId?.createdAt);
   const [isAdmin] = useState(props.isAdmin);
   const [canretweet, setcanretweet] = useState(true);
