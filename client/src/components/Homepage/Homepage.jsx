@@ -32,6 +32,8 @@ function Homepage(props) {
   const [at, setats] = useState([]);
   const [final, setfinal] = useState([]);
   const [finalfinal, setfinalfinal] = useState([]);
+  const [notificationscount,setnotificationscount]=useState(0);
+
   console.log( "tags"+ finalfinal[0]);
   const [space, setspaces] = useState([]);
   let { id } = useParams();
@@ -68,8 +70,7 @@ function Homepage(props) {
   if(photos.length ===0){
   }
   else{
-
-        
+  
     // fileInput is an HTML input element: <input type="file" id="myfileinput" multiple>
     var fileInput = document.getElementById("icon-button-file");
 
@@ -87,6 +88,11 @@ function Homepage(props) {
 
     }
   }
+
+  // useEffect(()=>{
+  //   checkfornewnotifications();
+  // },[])
+
   useEffect(() => {
     getposts();
     axios
@@ -298,7 +304,7 @@ function Homepage(props) {
   };
   return (
     <div className="Homepage">
-      <SideBar Home isAdmin={props.isAdmin} darkMode={darkMode} />
+      <SideBar Home isAdmin={props.isAdmin} darkMode={darkMode} newnotifications={props.newnotifications}/>
       <div className="postConatiner">
         <Header />
         <Tweet

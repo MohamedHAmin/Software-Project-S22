@@ -45,6 +45,19 @@ function Notifications(props) {
     getnotifications();
     axios
       .get(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/notification?limit=1000`,
+        { headers: { Authorization: localStorage.getItem("accessToken") } }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          localStorage.setItem("lastseennotifications",res.data.notifications.length);
+          console.log(res.data.notifications.length)
+        }});
+    axios
+      .get(
         `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/privateRequest`,
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )

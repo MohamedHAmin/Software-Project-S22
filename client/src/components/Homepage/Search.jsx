@@ -10,6 +10,10 @@ function Search(props){
     const navigate = useNavigate();
     const [content,setcontent]=useState(""); 
     
+    const passnotificationcount=(value)=>{
+        props.passnotificationcount(value)
+    }
+
     function enterHandler (event)
     {
         if (event.keyCode == 13) {
@@ -49,7 +53,7 @@ function Search(props){
                         }}
                 />
             </span>
-            {props.viewSuggestedAccounts ? (<SuggestedAccounts />) : (<></>)}
+            {props.viewSuggestedAccounts ? (<SuggestedAccounts passnotificationcount={passnotificationcount} />) : (<></>)}
         </React.Fragment>
     );
 }

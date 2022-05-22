@@ -165,23 +165,25 @@ function PostReplies(props) {
                 <></>
               )}
             </div>
-            {props.post.retweetedTweet?.tweetId.tweetExisted && (
+            {props.post.tweetId.retweetedTweet.tweetId?.authorId && (
               <RetweetDisplayBlock
-                key={props.post.retweetedTweet?.tweetId._id}
+                key={props.post.tweetId.retweetedTweet.tweetId?._id}
                 username={
-                  props.post.retweetedTweet?.tweetId.authorId.screenName
+                  props.post.tweetId.retweetedTweet.tweetId?.authorId?.screenName
                 }
-                tagName={props.post.retweetedTweet?.tweetId.authorId.tag}
+                tagName={props.post.tweetId.retweetedTweet.tweetId?.authorId?.tag}
                 avatar={
-                  props.post.retweetedTweet?.tweetId.authorId.profileAvater.url
+                  props.post.tweetId.retweetedTweet.tweetId?.authorId?.profileAvater.url
                 }
-                image={props.post.retweetedTweet?.tweetId.gallery}
-                authorId={props.post.retweetedTweet?.tweetId.authorId._id}
-                content={props.post.retweetedTweet?.tweetId.text}
+                image={props.post.tweetId.retweetedTweet.tweetId?.gallery}
+                authorId={
+                  props.post.tweetId.retweetedTweet.tweetId?.authorId?._id
+                }
+                content={props.post.tweetId.retweetedTweet.tweetId?.text}
               />
             )}
-            {props.post.retweetedTweet?.tweetExisted == true &&
-              !props.post.retweetedTweet?.tweetId && (
+            {props.post.tweetId.retweetedTweet.tweetExisted == true &&
+              !props.post.tweetId.retweetedTweet.tweetId && (
                 <div className="comments">This Lar has been deleted</div>
               )}
             {props.post.tweetId?.createdAt && (
@@ -216,7 +218,7 @@ function PostReplies(props) {
         ) : (
           <></>
         )}
-        {props.canviewcomments ? (
+        {props.canviewcomments && props.post.reply ? (
           <CommentDisplayBlock
             post={props.post.reply}
             isAdmin={props.isAdmin}
