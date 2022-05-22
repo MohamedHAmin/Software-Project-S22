@@ -529,7 +529,6 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
     }
 
     let likedtweets = await Tweet.find({ "likes.like": requiredId })
-    .select({likes:0})
     .populate([
       {
       path: "authorId",
@@ -559,7 +558,7 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       .limit(limit)
       .skip(skip)
       .sort({ createdAt: -1 });
-    if(req.user._id.toString!==req.params.id){
+    if(!req.user._id.equals(req.params.id)){
       likedtweets= tweetFilterFunc(req.user,likedtweets)
     }
     // for (likedtweet of likedtweets) {
@@ -605,14 +604,14 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       if (isliked) {
         delete tweet.likes;
         const tweets = {
-          ...tweet,
+          ...tweet._doc,
           isliked: true,
         };
         return tweets;
       } else {
         delete tweet.likes;
         const tweets = {
-          ...tweet,
+          ...tweet._doc,
           isliked: false,
         };
         return tweets;
