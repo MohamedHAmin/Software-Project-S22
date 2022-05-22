@@ -26,6 +26,7 @@ border-bottom: 2px solid var(--color-border);
   width: 100%;
 }
 .suggestedAccRightbar{
+  top:0;
   position:sticky;
   margin-right: 0%;
   height: 100vh;
