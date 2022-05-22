@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../Profile/Styles/MyFollowing.css";
-
 import axios from "axios";
 import "./Styles/AdminDashboard.css";
 import SideBar from "../Profile/SideBar";
@@ -8,7 +7,24 @@ import { Button } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import Post from "./Post";
-
+/**
+ * component to show the Admin user the statistics of the application. 
+ * @component
+ * return (
+ * <div>
+ *      <h2> Larry statistics</h2>
+ *      <Button>Week</Button>
+ *      <Button>Month</Button>  
+ *      <span>current</span>
+ *      <span>past</span>
+ *      <span>Lars</span> 
+ *      <span>{currentNumNewUsers}</span>
+ *      ...
+ *   
+ * </div>
+ * )
+ *  
+ */
 function AdminDashboard() {
   let userID = localStorage.getItem("userId");
   const [darkMode, setDarkMode] = useState(false);

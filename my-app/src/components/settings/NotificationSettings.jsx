@@ -16,7 +16,7 @@ import axios from 'axios';
  *    <h1>Notifications prefrences</h1>
  *    <p>Select your preferences by notification type.</p>
  *    <SettingsMenuOptions "Push notification"/>
- *    <SettingsMenuOptions "Email notification"/>
+ *    ...
  * </div>
  * )
  *  
