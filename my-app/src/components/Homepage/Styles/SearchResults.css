@@ -43,7 +43,7 @@ h6 {
 border-top: 2px solid var(--color-border);
 }
 
-.rightbar {
+.SearchResults .rightbar {
     position: sticky;
     height: 100vh;
     flex: 0.3;
