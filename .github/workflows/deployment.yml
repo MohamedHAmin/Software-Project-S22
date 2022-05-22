@@ -14,8 +14,18 @@ jobs:
         uses: actions/checkout@v2
       - 
         name: test
-        run: docker-compose up --exit-code-from backend_test
+        run: docker-compose up --exit-code-from api
         shell: bash
+        env:
+          SECRET: ${secrets.SECRET}
+          CLOUDINARY_CLOUD_NAME: ${secrets.CLOUDINARY_CLOUD_NAME}
+          CLOUDINARY_API_KEY: ${secrets.CLOUDINARY_API_KEY}
+          CLOUDINARY_API_SECRET: ${secrets.CLOUDINARY_API_SECRET}
+          GOOGLE_CLIENT_ID: ${secrets.GOOGLE_CLIENT_ID}
+          GOOGLE_CLIENT_SECRET: ${secrets.GOOGLE_CLIENT_SECRET}
+          AUTH_EMAIL: ${secrets.AUTH_EMAIL}
+          AUTH_PASS: ${secrets.AUTH_PASS}
+          CURRENTURL: http://localhost:3000/
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -26,8 +36,8 @@ jobs:
         name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_ID }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       -
         name: Push old version to old image
@@ -65,3 +75,15 @@ jobs:
           context: ./router
           push: true
           tags: mostafaelnashar/router:latest
+      -     
+        name: Deploy to AWS Elastic Beanstalk
+        uses: Amraneze/aws-beanstalk-deploy@master
+        with:
+          region: AWS_REGION
+          environment_name: Larry-env
+          application_name: Larry
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          s3_bucket_name: elasticbeanstalk-us-east-1-284489073366
+          s3_file_path: larry
+          ebs_wait_for_env_to_be_green: true
