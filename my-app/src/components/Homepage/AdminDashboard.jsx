@@ -25,7 +25,7 @@ import Post from "./Post";
  * )
  *  
  */
-function AdminDashboard() {
+function AdminDashboard(props) {
   let userID = localStorage.getItem("userId");
   const [darkMode, setDarkMode] = useState(false);
   //vars for information displayed for admin
@@ -200,7 +200,7 @@ function AdminDashboard() {
 
   return (
     <div className="AdminDashboardPage">
-      <SideBar Dashboard isAdmin={true} darkMode={darkMode} />
+      <SideBar Dashboard isAdmin={true} darkMode={darkMode} newnotifications={props.newnotifications}/>
       <div className="AdminDashboardWholeContainer">
         <h2 className="DashboardHeader"> Larry statistics</h2>
         <h3 className="DashboardParagraph">

@@ -8,10 +8,9 @@
 }
 .resultsPage
 {
-    width: 100%;
+    width: 60%;
     min-width: 350px;
     border-right: 2px solid var(--color-border);
-    flex: 0.65;
 }
 
 .filterContainer{
@@ -43,13 +42,14 @@ h6 {
 border-top: 2px solid var(--color-border);
 }
 
-.rightbarSearchResults {
+.SearchResults .rightbar {
     position: sticky;
     height: 100vh;
-    flex: 0.3;
+    width: 30%;
 }
 .rightbarSearch {
   position: sticky;
+  width: 50%;
     height: 100vh;
 }
 

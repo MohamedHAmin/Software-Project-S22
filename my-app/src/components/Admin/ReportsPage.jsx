@@ -157,7 +157,7 @@ function ReportsPage(props)
     return(
         <React.Fragment>
             <div className="ReportsPage">
-                <SideBar Reports isAdmin={props.isAdmin}/>
+                <SideBar Reports isAdmin={props.isAdmin} newnotifications={props.newnotifications}/>
                 <div className="ReportsContainer">
                     <Stack direction="row">
                         <Button variant="text" onClick={clickHandler}>Reported Tweets</Button>

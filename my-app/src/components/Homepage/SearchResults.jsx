@@ -82,7 +82,7 @@ function SearchResults(props) {
 
     return (
   <div className="SearchResults">
-    <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode}/>
+    <SideBar Search isAdmin={props.isAdmin} darkMode={darkMode} newnotifications={props.newnotifications}/>
     <div className='resultsPage'>
     <div className="backAndSearchbar">
     <ArrowBackIcon className='arrowback' onClick={() => navigate(-1)} />
@@ -112,7 +112,7 @@ function SearchResults(props) {
         ) : (<></>)}
     </div>
     </div>
-    <div className="rightbarSearchResults">
+    <div className="rightbarSearch">
     <div className='filterContainer'>
     <h5>Search Filters</h5>
     <h6>People</h6>
