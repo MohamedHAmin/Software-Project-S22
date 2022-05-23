@@ -42,15 +42,15 @@ jobs:
       -
         name: Push old version to old image
         run: |
-          docker pull mostafaelnashar/api:latest
-          docker tag mostafaelnashar/api:latest mostafaelnashar/api:old
-          docker push mostafaelnashar/api:old
-          docker pull mostafaelnashar/router:latest
-          docker tag mostafaelnashar/router:latest mostafaelnashar/router:old
-          docker push mostafaelnashar/router:old
-          docker pull mostafaelnashar/client:latest
-          docker tag mostafaelnashar/client:latest mostafaelnashar/client:old
-          docker push mostafaelnashar/client:old
+          docker pull mostafaelnashar/larry-api:latest
+          docker tag mostafaelnashar/larry-api:latest mostafaelnashar/larry-api:old
+          docker push mostafaelnashar/larry-api:old
+          docker pull mostafaelnashar/larry-router:latest
+          docker tag mostafaelnashar/larry-router:latest mostafaelnashar/larry-router:old
+          docker push mostafaelnashar/larry-router:old
+          docker pull mostafaelnashar/larry-client:latest
+          docker tag mostafaelnashar/larry-client:latest mostafaelnashar/larry-client:old
+          docker push mostafaelnashar/larry-client:old
 
       -
         name: Build and push
@@ -58,7 +58,7 @@ jobs:
         with:
           context: ./client
           push: true
-          tags: mostafaelnashar/client:latest
+          tags: mostafaelnashar/larry-client:latest
       
       -
         name: Build and push
@@ -66,7 +66,7 @@ jobs:
         with:
           context: ./api
           push: true
-          tags: mostafaelnashar/api:latest
+          tags: mostafaelnashar/larry-api:latest
           
       -
         name: Build and push
@@ -74,7 +74,7 @@ jobs:
         with:
           context: ./router
           push: true
-          tags: mostafaelnashar/router:latest
+          tags: mostafaelnashar/larry-router:latest
       -     
         name: Deploy to AWS Elastic Beanstalk
         uses: Amraneze/aws-beanstalk-deploy@master
