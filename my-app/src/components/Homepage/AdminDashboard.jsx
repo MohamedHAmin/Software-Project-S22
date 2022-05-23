@@ -10,6 +10,9 @@ import Post from "./Post";
 /**
  * component to show the Admin user the statistics of the application. 
  * @component
+ * @param {boolean} newnotifications
+ * @example
+ * props.newnotifications = false
  * return (
  * <div>
  *      <h2> Larry statistics</h2>

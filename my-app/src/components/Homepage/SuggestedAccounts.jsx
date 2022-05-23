@@ -7,6 +7,7 @@ import "./Styles/SuggestedAccounts.css";
 /**
  * component to show the user suggested accounts he could follow them.
  * @component
+ * @example
  * return (
  * <div>
  *      <div>Who to follow</div>
