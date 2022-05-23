@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Profile/FollowerCard.jsx</title>
+    <title>JSDoc: Source: Profile/SearchFollowers.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Profile/FollowerCard.jsx</h1>
+    <h1 class="page-title">Source: Profile/SearchFollowers.jsx</h1>
 
     
 
@@ -29,8 +29,8 @@
             <pre class="prettyprint source linenums"><code>import React from "react";
 import "./Styles/FollowerCard.css";
 import { Avatar, Button, Typography, Modal } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 /**
@@ -38,8 +38,9 @@ import FormControl from "@mui/material/FormControl";
  * @param {props} props Setting the information of my followers.
  * @returns Returns the setted the information of my followers.
  */
-function FollowerCard(props) {
-  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowing);
+function SearchFollowers(props) {
+  let { id } = useParams();
+  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowed);
   const [followModalState, setFollowModalState] = useState(false);
   let userID = localStorage.getItem("userId");
   const [Followers, setFollowers] = useState(0);
@@ -48,32 +49,34 @@ function FollowerCard(props) {
    * Handling the following request
    */
   function handleButtonClick() {
-    if (isPending === false) {
-      console.log(isFollowed);
-      if (isFollowed) {
-        setFollowModalState(true);
-      } else {
-        axios
-          .post(
-            `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact._id}`,
-            null,
-            { headers: { Authorization: localStorage.getItem("accessToken") } }
-          )
-          .then((res) => {
-            setFollowers(Followers + 1);
-
-            setIsFollowed(true);
-            console.log(res);
-            window.location.reload();
-          })
-          .catch((err) => {
-            setFollowModalState(true); // 'Oops!'
-          });
-      }
+    if(isPending===false)
+    {  
+    console.log(isFollowed);
+    if (isFollowed) {
+      setFollowModalState(true);
     } else {
-      handleUnfollowAction();
-      setIsPending(false);
+      axios
+        .post(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact._id}`,
+          null,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          setFollowers(Followers + 1);
+
+          setIsFollowed(true);
+          console.log(res);
+          window.location.reload();
+        })
+        .catch((err) => {
+          setFollowModalState(true); // 'Oops!'
+        });
     }
+  }
+  else{
+   handleUnfollowAction();
+   setIsPending(false);
+  }
   }
   /**
    * Handling the unfollowing request
@@ -86,14 +89,17 @@ function FollowerCard(props) {
         { headers: { Authorization: localStorage.getItem("accessToken") } }
       )
       .then((res) => {
-        if (isPending === true) {
+        if(isPending===true)
+        {
           setIsPending(false);
-        } else {
-          console.log(res);
-          setFollowers(Followers - 1);
-          setFollowModalState(false);
-          setIsFollowed(false);
-          window.location.reload();
+        }
+        else
+        {
+        console.log(res);
+        setFollowers(Followers - 1);
+        setFollowModalState(false);
+        setIsFollowed(false);
+        window.location.reload();
         }
       })
       .catch((err) => {}); // 'Oops!';
@@ -101,23 +107,26 @@ function FollowerCard(props) {
   function handleCancelAction() {
     setFollowModalState(false);
   }
+  console.log(props.contact);
   return (
-    &lt;div className="FollowerCard">
+    &lt;div className="FollowerCard searchCard">
       &lt;NavLink to={`/Profile/${props.contact._id}`}>
-        &lt;div className="FollowingCard">
+        &lt;div className="FollowingCard" style={{}}>
           &lt;div>
             &lt;Avatar
               style={{ marginRight: "4px" }}
               src={props.contact.profileAvater.url}
               alt={props.contact.screenName}
-            />
+            />{" "}
           &lt;/div>
+
           &lt;div className="FollowerData">
             &lt;p
               style={{ margin: "0px 0px 4px 4px", color: "var(--color-mode)" }}
             >
               &lt;b>{props.contact.screenName}&lt;/b>
             &lt;/p>
+
             &lt;p
               style={{
                 margin: "-7px 0px 4px 4px",
@@ -128,6 +137,7 @@ function FollowerCard(props) {
             >
               @{props.contact.tag}
             &lt;/p>
+
             &lt;h6
               style={{
                 margin: "0px 0px 4px 4px",
@@ -179,21 +189,18 @@ function FollowerCard(props) {
         &lt;Button
           onClick={handleButtonClick}
           className={
-            props.contact.isfollowing ? "followButton1" : "followButton2"
+            props.contact.isfollowed ? " searchFollow1" : " searchFollow2"
           }
+          // "followButton1 " : "followButton2"
         >
-          {isPending
-            ? "Pending"
-            : props.contact.isfollowing
-            ? "Following"
-            : "Follow"}
+          {isPending?("Pending"):(props.contact.isfollowed ? "Following" : "Follow")}
         &lt;/Button>
       ) : null}
     &lt;/div>
   );
 }
 
-export default FollowerCard;
+export default SearchFollowers;
 </code></pre>
         </article>
     </section>

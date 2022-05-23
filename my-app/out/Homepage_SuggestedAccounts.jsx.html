@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Profile/CreateFollower.jsx</title>
+    <title>JSDoc: Source: Homepage/SuggestedAccounts.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Profile/CreateFollower.jsx</h1>
+    <h1 class="page-title">Source: Homepage/SuggestedAccounts.jsx</h1>
 
     
 
@@ -26,23 +26,66 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import FollowerCard from "./FollowerCard";
-
-import "./Styles/CreateFollower.css";
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
+import "../Profile/Styles/MyFollowing.css";
+import CreateCard from "../Profile/CreateCard";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import "./Styles/SuggestedAccounts.css";
 /**
- *
- * @param {props} props Getting the information of my followers.
- * @returns Returns the card of my followers.
+ * component to show the user suggested accounts he could follow them.
+ * @component
+ * @example
+ * return (
+ * &lt;div>
+ *      &lt;div>Who to follow&lt;/div>
+ *      &lt;div>user1&lt;/div>
+ *      &lt;div>Follow&lt;/div>
+ *      ...
+ *   
+ * &lt;/div>
+ * )
+ *  
  */
-function CreateFollower(props) {
-  return (
-    &lt;div className="CreateFollower">
-      &lt;FollowerCard contact={props.contact} />
-    &lt;/div>
-  );
+function SuggestedAccounts() {
+    let userID = localStorage.getItem("userId");
+    const [myFollowing, setMyFollowing] = useState([]);
+    const [notificationscount,setnotificationscount]=useState(0);
+    useEffect(() => {
+      axios
+      .get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/suggestedAccounts`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          setMyFollowing(res.data.suggestedAccounts);
+          setnotificationscount(res.data.Notificationscount);
+          console.log(res.data.suggestedAccounts);
+          localStorage.setItem("currentnotifications",res.data.Notificationscount);      
+        }
+      });
+    },[]);
+    
+
+    return (
+        &lt;div className="SuggestedAccPage">
+            &lt;div className="SuggestedAccContainer">
+                &lt;div className="SuggestedAccHeader">Who to follow&lt;/div>
+                {myFollowing.map((following) => (
+                    &lt;CreateCard randomUser={true} contact={following} />
+                ))}  
+            &lt;/div>
+            &lt;div className="SuggestedAccFooter">© 2022 Larry, Inc.&lt;/div>
+        &lt;/div> 
+     );
 }
 
-export default CreateFollower;
+export default SuggestedAccounts;
+
+
 </code></pre>
         </article>
     </section>

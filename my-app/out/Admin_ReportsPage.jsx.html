@@ -33,6 +33,7 @@ import SideBar from './../Profile/SideBar';
 import ReportsView from './ReportView';
 import axios from 'axios'
 import "./Styles/ReportsPage.css";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { FallingLines } from "react-loader-spinner";
 /**
  * reports page for the admin view where it displays by default when first opened a list of reported tweets and then admin can toggle between two options (reprted tweets and reported users)
@@ -48,25 +49,59 @@ function ReportsPage(props)
 {
     const [userReports,setuserReports]=useState([]);
     const [tweetReports,settweetReports]=useState([]);
+    const [skiptweet,setskiptweet]=useState(1);
+    const [skipuser,setskipuser]=useState(1);
+    const [hasmoretweets,sethasmoretweets]=useState(true);
+    const [hasmoreusers,sethasmoreusers]=useState(true);
     console.log(tweetReports);
+    
+    const gettweets=()=>{
+      axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/${skiptweet}?perPage=2`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+      console.log(res);
+      if (res.error){console.log("Error")}
+      else {
+        var prevtweets=tweetReports;
+        setskiptweet(skiptweet+1);
+        var currenttweets=[...prevtweets,...res.data.tweets];
+        settweetReports(currenttweets);
+        if(currenttweets.filter((tweet)=>tweet.Reports===0).length)
+        {
+          sethasmoretweets(false);
+        }
+      }
+    });
+    }
+    
+    const getusers=()=>{
+      axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/${skipuser}?perPage=3`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
+      console.log(res);
+      if (res.error){console.log("Error")}
+      else {
+        var prevusers=userReports;
+        setskipuser(skipuser+1);
+        var currentusers=[...prevusers,...res.data.users];
+        setuserReports(currentusers);
+        if(currentusers.filter((user)=>user.Reports===0).length)
+        {
+          sethasmoreusers(false);
+        }
+      }
+    });
+    }
+
     useEffect(()=>{
-        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-        console.log(res);
-        if (res.error){console.log("Error")}
-        else {
-          settweetReports(res.data);
-          console.log(tweetReports);
-          console.log(res.data);
-        }
-    })
-        axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-        console.log(res);
-        if (res.error){console.log("Error")}
-        else {
-          setuserReports(res.data);
-        }
-    })
+      gettweets();
+      getusers();
     },[])
+
+    const fetchMoreData=()=>
+    {
+        gettweets();
+    }
+
+    const fetchMoreDataUsers=()=>{
+      getusers();
+    }
 
     const passdeletedTweet = (id) => {
         axios
@@ -79,18 +114,9 @@ function ReportsPage(props)
             if (res.error || !res.data === "success") {
               alert("something went wrong");
             } else {
+              gettweets();
               window.location.reload();
-              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-                console.log(res);
-                if (res.error){console.log("Error")}
-                else {
-                    settweetReports(res.data);
-                    window.location.reload();
-                    window.location.reload();
-                  }
-                });
             }
-            //retweetCount();
           })
           .catch((err) => {
             //err.message; // 'Oops!'
@@ -110,18 +136,9 @@ function ReportsPage(props)
             if (res.error || !res.data === "success") {
               alert("something went wrong");
             } else {
+              getusers();
               window.location.reload();
-              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/users/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-                    console.log(res);
-                    if (res.error){console.log("Error")}
-                    else {
-                    setuserReports(res.data);
-                    window.location.reload();
-                    window.location.reload();
-                  }
-                });
             }
-            //retweetCount();
           })
           .catch((err) => {
             //err.message; // 'Oops!'
@@ -141,16 +158,8 @@ function ReportsPage(props)
             if (res.error || !res.data === "success") {
               alert("something went wrong");
             } else {
+              gettweets();
               window.location.reload();
-              axios.get(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/tweets/1?perPage=5`,{headers: {Authorization: localStorage.getItem("adminToken")}}).then((res)=>{
-                console.log(res);
-                if (res.error){console.log("Error")}
-                else {
-                    settweetReports(res.data);
-                    window.location.reload();
-                    window.location.reload();
-                  }
-                });
             }
             //retweetCount();
           })
@@ -176,7 +185,7 @@ function ReportsPage(props)
     return(
         &lt;React.Fragment>
             &lt;div className="ReportsPage">
-                &lt;SideBar Notifications isAdmin={props.isAdmin}/>
+                &lt;SideBar Reports isAdmin={props.isAdmin} newnotifications={props.newnotifications}/>
                 &lt;div className="ReportsContainer">
                     &lt;Stack direction="row">
                         &lt;Button variant="text" onClick={clickHandler}>Reported Tweets&lt;/Button>
@@ -189,9 +198,16 @@ function ReportsPage(props)
                             &lt;/>
                         })
                     )} */}
-                    {(clicked &amp;&amp; tweetReports.tweets) ? ( 
-                        tweetReports.tweets.filter((tweet)=> tweet.Reports!==0).map((tweet) =>
-                            &lt;ReportsView
+                    {clicked &amp;&amp; &lt;InfiniteScroll
+                      dataLength={tweetReports.length} 
+                      next={fetchMoreData}
+                      hasMore={hasmoretweets}
+                      loader={&lt;h4>Loading...&lt;/h4>}
+                      endMessage={&lt;>&lt;/>}
+                      >
+                    {(clicked &amp;&amp; tweetReports.length) ? ( 
+                      tweetReports.filter((tweet)=> tweet.Reports!==0).map((tweet) =>
+                      &lt;ReportsView
                                 ondelete={ondeletetweetreport}
                                 times={tweet.Reports}
                                 passdeletedTweet={passdeletedTweet}
@@ -200,8 +216,16 @@ function ReportsPage(props)
                     ):(
                         &lt;>&lt;/>
                     )}
-                    {(!clicked &amp;&amp; userReports.users) ? (
-                    userReports.users.filter((user)=> user.Reports!==0).map((user) =>
+                    &lt;/InfiniteScroll>}
+                    {!clicked &amp;&amp; &lt;InfiniteScroll
+                      dataLength={userReports.length} 
+                      next={fetchMoreDataUsers}
+                      hasMore={hasmoreusers}
+                      loader={&lt;h4>Loading...&lt;/h4>}
+                      endMessage={&lt;>&lt;/>}
+                    >
+                    {(!clicked &amp;&amp; userReports.length) ? (
+                    userReports.filter((user)=> user.Reports!==0).map((user) =>
                     &lt;ReportsView
                         ondelete={ondeleteuserreport}
                         times={user.Reports}
@@ -210,6 +234,7 @@ function ReportsPage(props)
                     ):(
                         &lt;>&lt;/>
                     )}
+                    &lt;/InfiniteScroll>}
                 &lt;/div>
                 &lt;div className="Notificationrightbar">&lt;/div>
             &lt;/div>
@@ -226,13 +251,13 @@ export default ReportsPage;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#CreateSearchCard">CreateSearchCard</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SearchFollowers">SearchFollowers</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#SuggestedAccounts">SuggestedAccounts</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue May 17 2022 19:59:05 GMT+0200 (Eastern European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon May 23 2022 20:33:00 GMT+0200 (Eastern European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
