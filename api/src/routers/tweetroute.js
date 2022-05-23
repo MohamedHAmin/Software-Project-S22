@@ -383,10 +383,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       .populate({
         path: "authorId",
         strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName tag isPrivate profileAvater.url",
       });
       console.log("🚀 ~ file: tweetroute.js ~ line 388 ~ router.get ~ resultTweets", resultTweets)
-
+      resultTweets=tweetFilterFunc(req.user,resultTweets);
     let resultUsers = await User.find({
       $or: [
         {tag: { $regex: searchedItem, $options: "i" }},
@@ -689,6 +689,8 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
 
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
+        const priv=reptoFilterFunc(req.user,tweet);
+        if(priv){return priv;}
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
         );
@@ -878,19 +880,9 @@ router.get("/explore", auth("any"), async (req, res) => {
       .populate({
         path: "authorId",
         strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName tag isPrivate profileAvater.url",
       })
-      .populate({
-        path: "replyingTo.tweetId",
-        strictPopulate: true,
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes createdAt",
-        populate: {
-          path: "authorId",
-          strictPopulate: true,
-          select: "_id screenName tag profileAvater.url",
-        },
-      });
+      exploredTweet=tweetFilterFunc(req.user,exploredTweet);
     let i = -1;
     if (!exploredTweet.length < 1) {
       exploredTweet = exploredTweet.map((tweet) => {
@@ -1399,8 +1391,9 @@ function reptoFilterFunc(viewer,tweet){
   if(followArr.includes(tweet.replyingTo.tweetId.authorId._id.toString())){console.log(followArr);return null;}
   const temp={...tweet._doc};
   temp.replyingTo={
-    tweetId:"Content is Private",
-    tweetExisted:true
+    tweetId: null,
+    tweetExisted:true,
+    isPrivate:true
   };
   return temp;
 }
