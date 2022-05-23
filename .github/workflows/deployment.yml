@@ -85,6 +85,6 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
           s3_bucket_name: elasticbeanstalk-us-east-1-284489073366
-          s3_file_path: larry/github-dep.zip
+          s3_file_path: \larry\github-dep-${{ github.event.repository.updated_at}}.zip
           ebs_wait_for_env_to_be_green: true
-          ebs_version_label: latest
+          ebs_version_label: ${{ github.event.repository.updated_at}}
