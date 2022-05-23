@@ -88,3 +88,15 @@ jobs:
           s3_file_path: ./larry
           ebs_wait_for_env_to_be_green: true
           ebs_version_label: ${{ github.event.repository.updated_at}}
+      -
+        name: Elastic Beanstalk Action
+        # You may pin to the exact commit or the version.
+        # uses: nohmad/elastic-beanstalk-action@b29c1109b0499e49cfde1b533630b967ff04ef1b
+        uses: nohmad/elastic-beanstalk-action@v1
+        with:
+          # Environment name you want to deploy
+          environment: Larry-env
+          # secrets.AWS_ACCESS_KEY_ID
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          # secrets.AWS_ACCESS_KEY_ID
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
