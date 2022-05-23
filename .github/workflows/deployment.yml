@@ -40,41 +40,41 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       -
-        name: Push old version to old image
-        run: |
-          docker pull mostafaelnashar/larry-api:latest
-          docker tag mostafaelnashar/larry-api:latest mostafaelnashar/larry-api:old
-          docker push mostafaelnashar/larry-api:old
-          docker pull mostafaelnashar/larry-router:latest
-          docker tag mostafaelnashar/larry-router:latest mostafaelnashar/larry-router:old
-          docker push mostafaelnashar/larry-router:old
-          docker pull mostafaelnashar/larry-client:latest
-          docker tag mostafaelnashar/larry-client:latest mostafaelnashar/larry-client:old
-          docker push mostafaelnashar/larry-client:old
+#         name: Push old version to old image
+#         run: |
+#           docker pull mostafaelnashar/larry-api:latest
+#           docker tag mostafaelnashar/larry-api:latest mostafaelnashar/larry-api:old
+#           docker push mostafaelnashar/larry-api:old
+#           docker pull mostafaelnashar/larry-router:latest
+#           docker tag mostafaelnashar/larry-router:latest mostafaelnashar/larry-router:old
+#           docker push mostafaelnashar/larry-router:old
+#           docker pull mostafaelnashar/larry-client:latest
+#           docker tag mostafaelnashar/larry-client:latest mostafaelnashar/larry-client:old
+#           docker push mostafaelnashar/larry-client:old
 
-      -
-        name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: ./client
-          push: true
-          tags: mostafaelnashar/larry-client:latest
+#       -
+#         name: Build and push
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: ./client
+#           push: true
+#           tags: mostafaelnashar/larry-client:latest
       
-      -
-        name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: ./api
-          push: true
-          tags: mostafaelnashar/larry-api:latest
+#       -
+#         name: Build and push
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: ./api
+#           push: true
+#           tags: mostafaelnashar/larry-api:latest
           
-      -
-        name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: ./router
-          push: true
-          tags: mostafaelnashar/larry-router:latest
+#       -
+#         name: Build and push
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: ./router
+#           push: true
+#           tags: mostafaelnashar/larry-router:latest
       -     
         name: Deploy to AWS Elastic Beanstalk
         uses: Amraneze/aws-beanstalk-deploy@master
@@ -85,6 +85,6 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
           s3_bucket_name: elasticbeanstalk-us-east-1-284489073366
-          s3_file_path: .\larry
+          s3_file_path: ./larry
           ebs_wait_for_env_to_be_green: true
           ebs_version_label: ${{ github.event.repository.updated_at}}
