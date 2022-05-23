@@ -38,7 +38,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_ID }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
 #       -
 #         name: Push old version to old image
 #         run: |
@@ -51,7 +50,6 @@ jobs:
 #           docker pull mostafaelnashar/larry-client:latest
 #           docker tag mostafaelnashar/larry-client:latest mostafaelnashar/larry-client:old
 #           docker push mostafaelnashar/larry-client:old
-
 #       -
 #         name: Build and push
 #         uses: docker/build-push-action@v2
@@ -59,15 +57,13 @@ jobs:
 #           context: ./client
 #           push: true
 #           tags: mostafaelnashar/larry-client:latest
-      
 #       -
 #         name: Build and push
 #         uses: docker/build-push-action@v2
 #         with:
 #           context: ./api
 #           push: true
-#           tags: mostafaelnashar/larry-api:latest
-          
+#           tags: mostafaelnashar/larry-api:latest     
 #       -
 #         name: Build and push
 #         uses: docker/build-push-action@v2
@@ -75,6 +71,33 @@ jobs:
 #           context: ./router
 #           push: true
 #           tags: mostafaelnashar/larry-router:latest
+
+      -
+        name: Create ZIP deployment package
+        run: zip -r deploy_package.zip ./
+      -          
+        name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+      -
+        name: Upload package to S3 bucket
+        run: aws s3 cp deploy_package${{ github.event.repository.updated_at}}.zip s3://elasticbeanstalk-us-east-1-284489073366/larry/
+
+      -
+        name: Create new ElasticBeanstalk Application Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name Larry \
+          --source-bundle S3Bucket="elasticbeanstalk-us-east-1-284489073366",S3Key="larry/deploy_package${{ github.event.repository.updated_at}}.zip" \
+          --version-label "larry-${{ github.event.repository.updated_at}}" \
+          --description "larry-${{ github.event.repository.updated_at}}"
+
+      -
+        name: Deploy new ElasticBeanstalk Application Version
+        run: aws elasticbeanstalk update-environment --environment-name Larry-env --version-label "larry-${{ github.event.repository.updated_at}}"
 #       -     
 #         name: Deploy to AWS Elastic Beanstalk
 #         uses: Amraneze/aws-beanstalk-deploy@master
@@ -88,15 +111,3 @@ jobs:
 #           s3_file_path: ./larry
 #           ebs_wait_for_env_to_be_green: true
 #           ebs_version_label: ${{ github.event.repository.updated_at}}
-      -
-        name: Elastic Beanstalk Action
-        # You may pin to the exact commit or the version.
-        # uses: nohmad/elastic-beanstalk-action@b29c1109b0499e49cfde1b533630b967ff04ef1b
-        uses: nohmad/elastic-beanstalk-action@v1
-        with:
-          # Environment name you want to deploy
-          environment: Larry-env
-          # secrets.AWS_ACCESS_KEY_ID
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          # secrets.AWS_ACCESS_KEY_ID
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
