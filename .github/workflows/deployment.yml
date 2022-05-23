@@ -84,14 +84,14 @@ jobs:
           aws-region: us-east-1
       -
         name: Upload package to S3 bucket
-        run: aws s3 cp deploy_package${{ github.event.repository.updated_at}}.zip s3://elasticbeanstalk-us-east-1-284489073366/larry/
+        run: aws s3 cp deploy_package.zip s3://elasticbeanstalk-us-east-1-284489073366/
 
       -
         name: Create new ElasticBeanstalk Application Version
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name Larry \
-          --source-bundle S3Bucket="elasticbeanstalk-us-east-1-284489073366",S3Key="larry/deploy_package${{ github.event.repository.updated_at}}.zip" \
+          --source-bundle S3Bucket="elasticbeanstalk-us-east-1-284489073366",S3Key="deploy_package.zip" \
           --version-label "larry-${{ github.event.repository.updated_at}}" \
           --description "larry-${{ github.event.repository.updated_at}}"
 
