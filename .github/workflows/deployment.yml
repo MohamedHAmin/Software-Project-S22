@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.DOCKER_ID }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      -
+#       -
 #         name: Push old version to old image
 #         run: |
 #           docker pull mostafaelnashar/larry-api:latest
