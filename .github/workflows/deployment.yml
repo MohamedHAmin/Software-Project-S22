@@ -75,19 +75,19 @@ jobs:
 #           context: ./router
 #           push: true
 #           tags: mostafaelnashar/larry-router:latest
-      -     
-        name: Deploy to AWS Elastic Beanstalk
-        uses: Amraneze/aws-beanstalk-deploy@master
-        with:
-          region: us-east-1
-          environment_name: Larry-env
-          application_name: Larry
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-          s3_bucket_name: elasticbeanstalk-us-east-1-284489073366
-          s3_file_path: ./larry
-          ebs_wait_for_env_to_be_green: true
-          ebs_version_label: ${{ github.event.repository.updated_at}}
+#       -     
+#         name: Deploy to AWS Elastic Beanstalk
+#         uses: Amraneze/aws-beanstalk-deploy@master
+#         with:
+#           region: us-east-1
+#           environment_name: Larry-env
+#           application_name: Larry
+#           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+#           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+#           s3_bucket_name: elasticbeanstalk-us-east-1-284489073366
+#           s3_file_path: ./larry
+#           ebs_wait_for_env_to_be_green: true
+#           ebs_version_label: ${{ github.event.repository.updated_at}}
       -
         name: Elastic Beanstalk Action
         # You may pin to the exact commit or the version.
