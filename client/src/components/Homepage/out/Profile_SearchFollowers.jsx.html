@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Profile/SearchFollowers.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Profile/SearchFollowers.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import "./Styles/FollowerCard.css";
+import { Avatar, Button, Typography, Modal } from "@mui/material";
+import { NavLink, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import FormControl from "@mui/material/FormControl";
+/**
+ *
+ * @param {props} props Setting the information of my followers.
+ * @returns Returns the setted the information of my followers.
+ */
+function SearchFollowers(props) {
+  let { id } = useParams();
+  const [isFollowed, setIsFollowed] = useState(props.contact.isfollowed);
+  const [followModalState, setFollowModalState] = useState(false);
+  let userID = localStorage.getItem("userId");
+  const [Followers, setFollowers] = useState(0);
+  const [isPending, setIsPending] = useState(props.contact.ispending);
+  /**
+   * Handling the following request
+   */
+  function handleButtonClick() {
+    if(isPending===false)
+    {  
+    console.log(isFollowed);
+    if (isFollowed) {
+      setFollowModalState(true);
+    } else {
+      axios
+        .post(
+          `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/follow/${props.contact._id}`,
+          null,
+          { headers: { Authorization: localStorage.getItem("accessToken") } }
+        )
+        .then((res) => {
+          setFollowers(Followers + 1);
+
+          setIsFollowed(true);
+          console.log(res);
+          window.location.reload();
+        })
+        .catch((err) => {
+          setFollowModalState(true); // 'Oops!'
+        });
+    }
+  }
+  else{
+   handleUnfollowAction();
+   setIsPending(false);
+  }
+  }
+  /**
+   * Handling the unfollowing request
+   */
+  function handleUnfollowAction() {
+    axios
+      .post(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/${userID}/unfollow/${props.contact._id}`,
+        null,
+        { headers: { Authorization: localStorage.getItem("accessToken") } }
+      )
+      .then((res) => {
+        if(isPending===true)
+        {
+          setIsPending(false);
+        }
+        else
+        {
+        console.log(res);
+        setFollowers(Followers - 1);
+        setFollowModalState(false);
+        setIsFollowed(false);
+        window.location.reload();
+        }
+      })
+      .catch((err) => {}); // 'Oops!';
+  }
+  function handleCancelAction() {
+    setFollowModalState(false);
+  }
+  console.log(props.contact);
+  return (
+    &lt;div className="FollowerCard searchCard">
+      &lt;NavLink to={`/Profile/${props.contact._id}`}>
+        &lt;div className="FollowingCard" style={{}}>
+          &lt;div>
+            &lt;Avatar
+              style={{ marginRight: "4px" }}
+              src={props.contact.profileAvater.url}
+              alt={props.contact.screenName}
+            />{" "}
+          &lt;/div>
+
+          &lt;div className="FollowerData">
+            &lt;p
+              style={{ margin: "0px 0px 4px 4px", color: "var(--color-mode)" }}
+            >
+              &lt;b>{props.contact.screenName}&lt;/b>
+            &lt;/p>
+
+            &lt;p
+              style={{
+                margin: "-7px 0px 4px 4px",
+                fontSize: "13px",
+                color: "var(--color-mode)",
+                opacity: "0.8",
+              }}
+            >
+              @{props.contact.tag}
+            &lt;/p>
+
+            &lt;h6
+              style={{
+                margin: "0px 0px 4px 4px",
+                fontSize: "13px",
+                color: "var(--color-mode)",
+              }}
+            >
+              {props.contact.Biography}
+            &lt;/h6>
+          &lt;/div>
+        &lt;/div>
+      &lt;/NavLink>
+
+      &lt;Modal
+        open={followModalState}
+        onClose={handleCancelAction}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        keepMounted
+      >
+        &lt;FormControl className="editProfileCloseContainer">
+          &lt;Typography id="modal-modal-title" variant="h6">
+            Unfollow @{props.contact.tag}?
+          &lt;/Typography>
+          &lt;Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Their Tweets will no longer show up in your home timeline. You can
+            still view their profile, unless their Tweets are protected.
+          &lt;/Typography>
+          &lt;div style={{ textAlign: "center" }}>
+            &lt;Button
+              onClick={handleUnfollowAction}
+              className="profileDiscardContainerButton"
+              data-testid="Follow-Profile-Pop-Button"
+            >
+              Unfollow
+            &lt;/Button>
+          &lt;/div>
+          &lt;div style={{ textAlign: "center" }}>
+            &lt;Button
+              onClick={handleCancelAction}
+              className="profileCloseContainerButton"
+            >
+              Cancel
+            &lt;/Button>
+          &lt;/div>
+        &lt;/FormControl>
+      &lt;/Modal>
+      {props.contact._id !== userID ? (
+        &lt;Button
+          onClick={handleButtonClick}
+          className={
+            props.contact.isfollowed ? " searchFollow1" : " searchFollow2"
+          }
+          // "followButton1 " : "followButton2"
+        >
+          {isPending?("Pending"):(props.contact.isfollowed ? "Following" : "Follow")}
+        &lt;/Button>
+      ) : null}
+    &lt;/div>
+  );
+}
+
+export default SearchFollowers;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#CreateSearchCard">CreateSearchCard</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SearchFollowers">SearchFollowers</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#SuggestedAccounts">SuggestedAccounts</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon May 23 2022 20:33:00 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

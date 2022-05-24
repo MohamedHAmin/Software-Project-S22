@@ -4,8 +4,22 @@ import CreateCard from "../Profile/CreateCard";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./Styles/SuggestedAccounts.css";
-
-function SuggestedAccounts(props) {
+/**
+ * component to show the user suggested accounts he could follow them.
+ * @component
+ * @example
+ * return (
+ * <div>
+ *      <div>Who to follow</div>
+ *      <div>user1</div>
+ *      <div>Follow</div>
+ *      ...
+ *   
+ * </div>
+ * )
+ *  
+ */
+function SuggestedAccounts() {
     let userID = localStorage.getItem("userId");
     const [myFollowing, setMyFollowing] = useState([]);
     const [notificationscount,setnotificationscount]=useState(0);

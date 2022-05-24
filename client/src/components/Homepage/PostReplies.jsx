@@ -25,8 +25,9 @@ import axios from "axios";
               isPost={true}>
  */
 function PostReplies(props) {
-  const [postId] = useState(props.post.tweetId?.id);
+  const [postId] = useState(props.post.tweetId?._id);
   const date = new Date(props.post.tweetId?.createdAt);
+  const [isPrivate] = useState(props.post.isPrivate);
   const [isAdmin] = useState(props.isAdmin);
   const [canretweet, setcanretweet] = useState(true);
   const [numberOfRetweets, setNumberOfRetweets] = useState(
@@ -111,6 +112,7 @@ function PostReplies(props) {
   return (
     <React.Fragment>
       <div className="tweet">
+        {isPrivate ? "This content is private" : <></>}
         {props.post.tweetId ? (
           <div>
             <div className="deleteIcon" onClick={checkifsameuser}>
@@ -169,11 +171,15 @@ function PostReplies(props) {
               <RetweetDisplayBlock
                 key={props.post.tweetId.retweetedTweet.tweetId?._id}
                 username={
-                  props.post.tweetId.retweetedTweet.tweetId?.authorId?.screenName
+                  props.post.tweetId.retweetedTweet.tweetId?.authorId
+                    ?.screenName
                 }
-                tagName={props.post.tweetId.retweetedTweet.tweetId?.authorId?.tag}
+                tagName={
+                  props.post.tweetId.retweetedTweet.tweetId?.authorId?.tag
+                }
                 avatar={
-                  props.post.tweetId.retweetedTweet.tweetId?.authorId?.profileAvater.url
+                  props.post.tweetId.retweetedTweet.tweetId?.authorId
+                    ?.profileAvater.url
                 }
                 image={props.post.tweetId.retweetedTweet.tweetId?.gallery}
                 authorId={

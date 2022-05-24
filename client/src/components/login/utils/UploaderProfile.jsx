@@ -178,6 +178,7 @@ function ImageUploaderProfile(props) {
 
       <input
         type="file"
+        data-testid="profile"
         accept="image/*"
         ref={inputRef}
         onChange={onSelectFile}
