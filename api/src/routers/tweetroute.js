@@ -679,14 +679,13 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           populate: {
             path: "authorId",
             strictPopulate: false,
-            select: "_id screenName tag profileAvater.url",
+            select: "_id screenName tag isPrivate profileAvater.url",
           },
         },
       ],
 
       options: { sort },
     });
-
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
         const priv=reptoFilterFunc(req.user,tweet);
@@ -710,55 +709,56 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           return tweets;
         }
       });
-      const UserTweets = user.Tweets;
-      let temp;
-      for (let i = 0; i < user.Tweets.length; i++) {
-        if (user.Tweets[i].replyingTo.tweetExisted) {
-          temp = await Tweet.findById(user.Tweets[i].replyingTo.tweetId);
-          if (!temp) {
-            user.Tweets[i].replyingTo.tweetId = null;
-          }
-        }
-      }
-      let UserReplies = [];
-      for (UserTweet of UserTweets) {
-        if (UserTweet.replyingTo.tweetExisted) {
-          UserReplies.push(UserTweet);
-        }
-      }
-      if (UserReplies.length > 0) {
-        for (UserReply of UserReplies) {
-          if (UserReply.replyingTo.tweetId) {
-            originalTweets.push(UserReply.replyingTo);
-            delete originalTweets.replyingTo;
-          } else {
-            originalTweets.push(UserReply.replyingTo);
-          }
-        }
-        for (let i = 0; i < UserReplies.length; i++) {
-          originalTweets[i] = {
-            ...originalTweets[i],
-            reply: UserReplies[i],
-          };
-        }
-      }
+      //const UserTweets = user.Tweets;
+      //console.log(user.Tweets);
+      //let temp;
+      // for (let i = 0; i < user.Tweets.length; i++) {
+      //   if (user.Tweets[i].replyingTo.tweetExisted) {
+      //     temp = await Tweet.findById(user.Tweets[i].replyingTo.tweetId);
+      //     if (!temp) {
+      //       user.Tweets[i].replyingTo.tweetId = null;
+      //     }
+      //   }
+      // }
+      // let UserReplies = [];
+      // for (UserTweet of UserTweets) {
+      //   if (UserTweet.replyingTo.tweetExisted) {
+      //     UserReplies.push(UserTweet);
+      //   }
+      // }
+      // if (UserReplies.length > 0) {
+      //   for (UserReply of UserReplies) {
+      //     if (UserReply.replyingTo.tweetId) {
+      //       originalTweets.push(UserReply.replyingTo);
+      //       delete originalTweets.replyingTo;
+      //     } else {
+      //       originalTweets.push(UserReply.replyingTo);
+      //     }
+      //   }
+        // for (let i = 0; i < UserReplies.length; i++) {
+        //   originalTweets[i] = {
+        //     ...originalTweets[i],
+        //     reply: UserReplies[i],
+        //   };
+        // }
+      //}
     } else {
       e = "user has no tweets";
       throw e;
     }
-    for (let i = 0; i < user.Tweets.length; i++) {
-      if (
-        user.Tweets[i].replyingTo.tweetId === null &&
-        user.Tweets[i].replyingTo.tweetExisted === false
-      ) {
-        sentTweets.push({tweetId:user.Tweets[i]});
-      }
-    }
-    for (let i = 0; i < originalTweets.length; i++) {
-      sentTweets.push(originalTweets[i]);
-    }
+    // for (let i = 0; i < user.Tweets.length; i++) {
+    //   if (
+    //     user.Tweets[i].replyingTo.tweetId === null &&
+    //     user.Tweets[i].replyingTo.tweetExisted === false
+    //   ) {
+    //     sentTweets.push({tweetId:user.Tweets[i]});
+    //   }
+    // }
+    // for (let i = 0; i < originalTweets.length; i++) {
+    //   sentTweets.push(originalTweets[i]);
+    // }
 
-    res.send(sentTweets);
+    res.send(user.Tweets);
   } catch (e) {
     //here all caught errors are sent to the client
     res.status(400).send({ error: e.toString() });
