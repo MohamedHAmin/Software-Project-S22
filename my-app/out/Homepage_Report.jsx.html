@@ -42,8 +42,18 @@ import axios from 'axios'
  */
 function Report(props) {
   let { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
+  let { reportType } = useParams();
+  console.log(reportType);
+  // let { id } = useParams();
+  let type;
+  if (reportType == "Profile") {
+    type = false;
+  } else if (reportType == "Lar") {
+    type = true;
+  }
   localStorage.setItem("id",id);
   const reportHandeler = () => {
     var bla={
@@ -54,7 +64,7 @@ function Report(props) {
     var data={
     type:"Tweet",
     msg:"I'm not intersted in this Lar",
-    reportedId:id
+    reportedId:id,
     }
     console.log(data);
         axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
@@ -146,18 +156,149 @@ function Report(props) {
             }
         })
   };
-  let { reportType } = useParams();
-  console.log(reportType);
-  // let { id } = useParams();
-  let type;
-  if (reportType == "Profile") {
-    type = false;
-  } else if (reportType == "Lar") {
-    type = true;
-  }
+  const reportHandeler5 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:"I'm not intersted in this Account",
+    reportedId:id
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
+  const reportHandeler6 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:"It's suspicious or spam",
+    reportedId:id
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
+  const reportHandeler7 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:"It appears thier account is hacked",
+    reportedId:id
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
+  const reportHandeler8 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:"They are pretending to be me or some one else",
+    reportedId:id
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
+  const reportHandeler9 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:"Their profile info and/or images include abusive or hateful content",
+    reportedId:id
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
+  const reportHandeler10 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:"Their Lars are abusive or hateful",
+    reportedId:id
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
+  const reportHandeler11 = () => {
+    var bla={
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+    }
+    var data={
+    type:"User",
+    msg:" They're expressing intentions of self-harm or suicide",
+    reportedId:id,
+    }
+    console.log(data);
+        axios.post(`http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/user/report`, data,bla).then((res) => {
+            console.log(res);
+            if (res.error) {
+              alert("Erorr")
+            } else {
+            }
+        })
+  };
   return (
     &lt;div>
-      &lt;SideBar Home isAdmin={props.isAdmin}/>
+      &lt;SideBar Home isAdmin={props.isAdmin} newnotifications={props.newnotifications}/>
       &lt;div className="Report">
         &lt;div className="subrebdiv">
           &lt;div className="subsubrepdiv">
@@ -183,40 +324,91 @@ function Report(props) {
               color="inherit"
             >
               {type ? (
-                &lt;Button onClick={reportHandeler} className="btngroupofrepp">
+                &lt;Button onClick={reportHandeler} className="btngroupofreppee">
                   &lt;NavLink className="Repbtnanchor" to="/ReportAction">
                     I'm not intersted in this Lar
                   &lt;/NavLink>
                 &lt;/Button>
               ) : (
-                &lt;Button className="btngroupofrepp">
-                  &lt;NavLink className="Repbtnanchor" to="/ReportAction">
-                    I'm not intersted in this Profile
+                &lt;Button onClick={reportHandeler5} className="btngroupofreppee">
+                  &lt;NavLink className="Repbtnanchor" to="/Home">
+                    I'm not intersted in this Account
                   &lt;/NavLink>
                 &lt;/Button>
               )}
-              &lt;Button onClick={reportHandeler1} className="btngroupofrep">
+              {type ? (
+                &lt;Button onClick={reportHandeler1} className="btngroupofrepp">
                 &lt;NavLink className="Repbtnanchor" to="/ReportAction">
                   It's suspicious or spam
                 &lt;/NavLink>
               &lt;/Button>
-              &lt;Button onClick={reportHandeler2} className="btngroupofrep">
-                {" "}
-                &lt;NavLink className="Repbtnanchor" to="/ReportAction">
-                  It displays a senstive photo or video
+              ) : (
+                &lt;Button onClick={reportHandeler6} className="btngroupofrepp">
+                &lt;NavLink className="Repbtnanchor" to="/Home">
+                  It's suspicious or spam
                 &lt;/NavLink>
               &lt;/Button>
-              &lt;Button onClick={reportHandeler3} className="btngroupofrep">
-                {" "}
-                &lt;NavLink className="Repbtnanchor" to="/ReportAction">
+              )}
+              {type ? (
+                &lt;Button onClick={reportHandeler2} className="btngroupofrepp">
+                  &lt;NavLink className="Repbtnanchor" to="/ReportAction">
+                    it displays sestive photo or video 
+                  &lt;/NavLink>
+                &lt;/Button>
+              ) : (
+                &lt;Button onClick={reportHandeler7} className="btngroupofrepp">
+                  &lt;NavLink className="Repbtnanchor" to="/Home">
+                  It appears thier account is hacked 
+                  &lt;/NavLink>
+                &lt;/Button>
+              )}                 
+              {type ? (
+                &lt;Button onClick={reportHandeler3} className="btngroupofrepp">
+                  &lt;NavLink className="Repbtnanchor" to="/ReportAction">
                   It's abusive or harmful
-                &lt;/NavLink>
-              &lt;/Button>
-              &lt;Button onClick={reportHandeler4} className="btngroupofreppp">
-                &lt;NavLink className="Repbtnanchor" to="/ReportAction">
+                  &lt;/NavLink>
+                &lt;/Button>
+              ) : (
+                &lt;Button onClick={reportHandeler8} className="btngroupofrepp">
+                  &lt;NavLink className="Repbtnanchor" to="/Home">
+                    They are pretending to be me or some one else 
+                  &lt;/NavLink>
+                &lt;/Button>
+              )}
+              {type ? (
+                &lt;div>
+                &lt;/div>
+              ) : (
+                &lt;Button onClick={reportHandeler9} className="btngroupofrepp   ">
+                  &lt;NavLink className="Repbtnanchor" to="/Home">
+                  Their profile info and/or images include abusive or hateful content
+                  &lt;/NavLink>
+                &lt;/Button>
+              )}
+              {type ? (
+                &lt;div>
+                &lt;/div>
+              ) : (
+                &lt;Button onClick={reportHandeler10} className="btngroupofrepp   ">
+                  &lt;NavLink className="Repbtnanchor" to="/Home">
+                  Their Lars are abusive or hateful
+                  &lt;/NavLink>
+                &lt;/Button>
+              )}
+              {type ? (
+                &lt;Button onClick={reportHandeler4} className="btngroupofrepplast">
+                  &lt;NavLink className="Repbtnanchor" to="/ReportAction">
                   It expresses intentions of self-harm or sucide
-                &lt;/NavLink>
-              &lt;/Button>
+                  &lt;/NavLink>
+                &lt;/Button>
+              ) : (
+                &lt;Button onClick={reportHandeler11} className="btngroupofrepplast">
+                  &lt;NavLink className="Repbtnanchor" to="/Home">
+                  They're expressing intentions of self-harm or suicide
+                  &lt;/NavLink>
+                &lt;/Button>
+              )}
+            
             &lt;/ButtonGroup>
           &lt;/div>
           &lt;p className="repanch">
@@ -241,13 +433,13 @@ export default Report;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#CreateSearchCard">CreateSearchCard</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#Notifications">Notifications</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SearchFollowers">SearchFollowers</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue May 17 2022 19:59:05 GMT+0200 (Eastern European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue May 24 2022 21:59:25 GMT+0200 (Eastern European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

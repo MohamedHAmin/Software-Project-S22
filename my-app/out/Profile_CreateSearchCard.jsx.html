@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Profile/ProfileName.jsx</title>
+    <title>JSDoc: Source: Profile/CreateSearchCard.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Profile/ProfileName.jsx</h1>
+    <h1 class="page-title">Source: Profile/CreateSearchCard.jsx</h1>
 
     
 
@@ -26,28 +26,23 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-import "./Styles/ProfileName.css";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+            <pre class="prettyprint source linenums"><code>import SearchFollowers from "./SearchFollowers";
+import { NavLink } from "react-router-dom";
+import "./Styles/CreateFollower.css";
 /**
  *
- * @param {props} props Getting the name and the tag of the profile.
- * @returns Returns the header of the profile.
+ * @param {props} props Getting the information of my followers.
+ * @returns Returns the card of my followers.
  */
-function ProfileName({ pName, pID }) {
-  const navigate = useNavigate();
+function CreateSearchCard(props) {
   return (
-    &lt;div className="profileName">
-      &lt;ArrowBackIcon onClick={() => navigate(-1)} />
-      &lt;div className="description">
-        &lt;h2>{pName}&lt;/h2>
-        &lt;p> @{pID} &lt;/p>
-      &lt;/div>
+    &lt;div className="CreateFollower">
+      &lt;SearchFollowers contact={props} />
     &lt;/div>
   );
 }
-export default ProfileName;
+
+export default CreateSearchCard;
 </code></pre>
         </article>
     </section>

@@ -16,9 +16,8 @@ import Stack from "@mui/material/Stack";
  * it also contains sidebar to navigate through pages and it also contains searchbar
  * @component 
  * @param {boolean} isAdmin indicates whether or not this home is an admin's home or a normal user's home
+ * @param {boolean} newnotifications indicates whether the user have new notifications or not 
  * @returns {div}
- * @example
- *        <Homepage isAdmin={isAdmin}/>
  */
 function Homepage(props) {
   const [posts, setposts] = useState([]);

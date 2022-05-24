@@ -9,6 +9,13 @@ import PrivateFollowRequests from "./PrivateFollowRequests";
 import { useParams } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+/**
+ * Notifications page containing dedicated notifications for each user
+ * it also contains sidebar to navigate through pages
+ * @component 
+ * @param {boolean} isAdmin indicates whether or not this page is an admin's page or a normal user's page
+ * @returns {div}
+ */
 function Notifications(props) {
   const [notifications, setnotifications] = useState([]);
   const [followrequests, setfollowrequests] = useState([]);
