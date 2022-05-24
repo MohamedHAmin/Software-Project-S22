@@ -48,7 +48,6 @@ test("explore sucessful", async () => {
   const res = request(app)
     .get("/explore")
     .set("Authorization", "Bearer " + usertoken.token)
-    .send({})
     .expect(200);
 
 });

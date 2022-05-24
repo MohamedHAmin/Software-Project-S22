@@ -49,12 +49,66 @@ test('refuse nonexistent retweet', async ()=>{
         "authorId":user._id,
         "text":"I am Abdelkhalek"
     })
-    const nonexitent =123456789
+    const nonexitent ="624302b293c3005534908f6d";
     const res=await request(app).post('/retweet')
     .set('Authorization','Bearer '+usertoken.token)
     .send({
         text:"",
-        retweetedTweet:nonexitent.toString()
+        retweetedTweet:nonexitent
     })
     .expect(400)
 });
+
+test('bad word retweet', async ()=>{
+    const newtweet=await Tweet.create({
+        "authorId":user._id,
+        "text":"fuck tron"
+    })
+    const res=await request(app).post('/retweet')
+    .set('Authorization','Bearer '+usertoken.token)
+    .send({
+        text:"Lorem fuck Ipsum",
+        retweetedTweet:newtweet._id.toString()
+    })
+    .expect(400);
+});
+
+test('tag exceeded limit retweet', async ()=>{
+    const newtweet=await Tweet.create({
+        "authorId":user._id,
+        "text":"fuck tron"
+    })
+    const res=await request(app).post('/retweet')
+    .set('Authorization','Bearer '+usertoken.token)
+    .send({
+        text:"Lorem Ipsum",
+        tags:[{ tag: "Youssef" },
+        { tag: "Hany" },
+        { tag: "Ahmed" },
+        { tag: "Tarek" },
+        { tag: "Abdelkhalek" },
+        { tag: "Noureldin" },
+        { tag: "Hamada" },
+        { tag: "Ahmed" },
+        { tag: "Mohamed" },
+        { tag: "Omar" },
+        { tag: "Amr" },],
+        retweetedTweet:newtweet._id.toString()
+    })
+    .expect(400);
+});
+
+test('post exceeded character limit retweet', async ()=>{
+    const newtweet=await Tweet.create({
+        "authorId":user._id,
+        "text":"tron"
+    })
+    const res=await request(app).post('/retweet')
+    .set('Authorization','Bearer '+usertoken.token)
+    .send({
+        text:"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        retweetedTweet:newtweet._id.toString()
+    })
+    .expect(400);
+});
+

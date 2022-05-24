@@ -227,7 +227,7 @@ test("Get all user's tweets but he has no tweets", async () => {
   const res = await request(app)
     .get("/tweet/user/" + user._id)
     .set("Authorization", "Bearer " + usertoken.token)
-   // .expect(200);
+   .expect(400);
 });
 
 test("Get retweet with No-text in text element on a retweet", async () => {
@@ -244,7 +244,7 @@ test("Get retweet with No-text in text element on a retweet", async () => {
   });
   const tweet4 = await Tweet.create({
     authorId: user._id,
-    text: "No-text",
+    text: " ",
     retweetedTweet: tweet3._id,
   });
   const res = await request(app)
@@ -252,3 +252,4 @@ test("Get retweet with No-text in text element on a retweet", async () => {
     .set("Authorization", "Bearer " + usertoken.token)
     .expect(200);
 });
+

@@ -26,7 +26,11 @@ test("reply successful", async () => {
   const res = await request(app)
     .post("/reply")
     .set("Authorization", "Bearer " + usertoken.token)
-    .send({ text: "new reply",tags:[{tag:""},{tag:"youssef"}] ,replyingTo: newtweet._id })
+    .send({
+      text: "new reply",
+      tags: [{ tag: "" }, { tag: "youssef" }],
+      replyingTo: newtweet._id,
+    })
     .expect(200);
 });
 
@@ -34,7 +38,7 @@ test("no replied on tweet", async () => {
   const res = await request(app)
     .post("/reply")
     .set("Authorization", "Bearer " + usertoken.token)
-    .send({ text: "new reply",replyingTo: "123456789" })
+    .send({ text: "new reply", replyingTo: "123456789" })
     .expect(400);
 });
 
@@ -95,3 +99,71 @@ test("reply exceeded tag limit", async () => {
     })
     .expect(400);
 });
+
+test("reply with image", async () => {
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .field("text", "try this for size dude")
+    .field("replyingTo",newtweet._id.toString())
+    .field("imageCheck", "true")
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .expect(200);
+});
+
+test("reply with image exceeds image limit", async () => {
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .field("text", "try this for size dude")
+    .field("replyingTo",newtweet._id.toString())
+    .field("imageCheck", "true")
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .expect(400);
+});
+
+test("reply with image and no text", async () => {
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .field("replyingTo",newtweet._id.toString())
+    .field("imageCheck", "true")
+    .attach('image','src/tests/fixtures/sunflower.jpg')
+    .expect(200);
+});
+
+test("empty reply", async () => {
+  const newtweet = await Tweet.create({
+    authorId: user._id,
+    text: "I am Abdelkhalek",
+  });
+
+  const res = await request(app)
+    .post("/reply")
+    .set("Authorization", "Bearer " + usertoken.token)
+    .expect(400);
+});
+
+

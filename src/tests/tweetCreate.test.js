@@ -12,6 +12,7 @@ beforeEach(async () => {
     tag: "user1",
     email: "user1@gmail.com",
     password: "123456",
+    verified:true
   });
   usertoken = await user.generateAuthToken();
 });
@@ -146,16 +147,17 @@ test("Refuse a tweet that exceeds tag limit", async () => {
  // expect(res.body).toEqual({ error: "tags exceeded limit" });
 });
 
+
  test("post with images", async () => {
   const res = await request(app)
     .post("/tweet")
     .set("Authorization", "Bearer " + usertoken.token)
     .field("text", "try this for size dude")
     .field("imageCheck", "true")
-    .attach('image','src/tests/fixtures/favicon-32x32.png')
+    .attach('image','src/tests/fixtures/sunflower.jpg')
     .expect(200);
 });
-test("post with images", async () => {
+test("post with images exceeds limit", async () => {
   const res = await request(app)
     .post("/tweet")
     .set("Authorization", "Bearer " + usertoken.token)
