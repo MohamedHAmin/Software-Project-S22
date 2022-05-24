@@ -12,13 +12,6 @@ import { NavLink } from "react-router-dom";
  * @param {string} content text written inside the retweeted post
  * @param {object} image an object that contains the url of the posted image in the retweeted post (if exists) as well as the image id 
  * @returns {div}
- *          <RetweetDisplayBlock key={props.post.retweetedTweet._id}
-              username={props.post.retweetedTweet.authorId.screenName}
-              tagName={props.post.retweetedTweet.authorId.tag}
-              avatar={props.post.retweetedTweet.authorId.profileAvater.url}
-              image={props.post.retweetedTweet.gallery[0]}
-              authorId={props.post.retweetedTweet.authorId._id}
-              content={props.post.retweetedTweet.text}/>
  */
 function RetweetDisplayBlock(props) {
   return (

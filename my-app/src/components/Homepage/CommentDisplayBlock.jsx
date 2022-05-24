@@ -10,18 +10,14 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 /**
- * post component that is called to map tweets or retweets (it contains structure of tweet or retweet as well as reactsbar where users can comment, retweet or like the tweet)
+ * comment component that is called to map comments on tweets or retweets (For the first level of comments it contains structure of tweet or retweet as well as reactsbar where users can comment, retweet or like the tweet)
  * @component
- * @param {object} post an object that contains all needed details about a certain post
+ * @param {object} post an object that contains all needed details about a certain comment
  * @param {boolean} isAdmin indicates whether or not this user is an admin to be passed in drpdownbutton component (to display delete option not report option)
  * @param {boolean} isPost indicates whether this post is a tweet/retweet or if is is a comment on a post
- * @param {object} passdeletedTweet a function that takes id of tweet from child component (post) and pass it to the parent component (homepage) to call BE
+ * @param {boolean} ReplyOnReply indicates wheather this comment is a comment on a tweet/retweet or a comment on another comment
+ * @param {boolean} canviewcomments indicates whether the comments button click is disabled or not 
  * @returns {div}
- *           <Post
-              post={post}
-              passdeletedTweet={passdeletedTweet}
-              isAdmin={props.isAdmin}
-              isPost={true}>
  */
 
 function CommentDisplayBlock(props) {

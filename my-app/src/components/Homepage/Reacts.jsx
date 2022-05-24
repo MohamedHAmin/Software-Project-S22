@@ -26,26 +26,29 @@ import { PhotoCamera } from '@mui/icons-material/PhotoCamera';
  * @param {boolean} isLiked indicates whether or not the user liked this post or not (to show dislike option)
  * @param {boolean} isPost indicates whether this post is a tweet/retweet or if is is a comment on a post
  * @param {string} tweetcontent text written inside the meant post (to be sent to BE if retweet option is selected)
- * @param {object} image an object that contains the url of the posted image (if exists) as well as the image id
+ * @param {object} image an object that contains the url of the posted image(s) (if exists) as well as the image(s) id
  * @param {string} username the screenName of the user who posted the tweet
  * @param {string} displayName the tag of the user who posted the tweet
  * @param {string} authorId the id of the user who posted the tweet (needed in routing to his profile) 
  * @param {object} setNumberOfRetweets function from parent to change the state of current number of retweets on the post if the post is retweeted if the BE request was successful
  * @param {boolean} canretweet indicates whether this post can be retweeted or not (the post can't be retweeted if it is a retweet with no caption)
+ * @param {object} CommentHandler function passed from parent to hanle the comment action
  * @returns {div}
+ * @example
  *          <Reacts 
-            postId={postId}
-            numberOfRetweets={numberOfRetweets}
-            numberOfLikes={props.post.likeCount}
-            isLiked={props.post.isliked}
-            setNumberOfRetweets={setNumberOfRetweets}
-            isPost={props.isPost}
-            tweetcontent={tweetcontent}
-            username={username}
-            displayName={displayName} 
-            image={props.post.gallery[0]}
-            canretweet={canretweet}
-            authorId={props.post.authorId._id}
+                postId={1}
+                numberOfRetweets={2}
+                numberOfLikes={12}
+                isLiked={false}
+                setNumberOfRetweets={setNumberOfRetweets}
+                isPost={true}
+                tweetcontent={"trial"}
+                username={"username"}
+                displayName={"displayName1"} 
+                image={[]}
+                canretweet={false}
+                authorId={1}
+                CommentHandler={CommentHandler}
             />
  */
 function Reacts (props) {

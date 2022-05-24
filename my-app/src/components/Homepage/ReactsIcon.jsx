@@ -6,7 +6,6 @@ import "./Styles/ReactsIcon.css"
  * @param {string} text the desired text to be displayed for the user describing the react (example: like)
  * @param {number} number the number of users who reacted (example: number of likes on a post)  
  * @returns {div}
- *          <ReactsIcon text="Like" number={numberOfLikes} Icon={LikeIcon}/>
  */
 function ReactsIcon (props) {
         return(

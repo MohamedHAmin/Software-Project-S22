@@ -17,12 +17,8 @@ import axios from 'axios';
  * @param {boolean} isAdmin indicates whether or not this user is an admin to be passed in drpdownbutton component (to display delete option not report option)
  * @param {boolean} isPost indicates whether this post is a tweet/retweet or if is is a comment on a post
  * @param {object} passdeletedTweet a function that takes id of tweet from child component (post) and pass it to the parent component (homepage) to call BE
+ * @param {boolean} canviewcomments indicates whether the comments button click is disabled or not 
  * @returns {div}
- *           <Post
-              post={post}
-              passdeletedTweet={passdeletedTweet}
-              isAdmin={props.isAdmin}
-              isPost={true}>
  */
 function Post(props) {
   const [postId]=useState(props.post._id);
