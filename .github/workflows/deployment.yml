@@ -92,9 +92,9 @@ jobs:
           aws elasticbeanstalk create-application-version \
           --application-name Larry \
           --source-bundle S3Bucket="elasticbeanstalk-us-east-1-284489073366",S3Key="deploy_package.zip" \
-          --version-label "larry-${{ github.event.repository.updated_at}}" \
+          --version-label "larry-${{ github.sha }}" \
           --description "larry-${{ github.event.repository.updated_at}}"
 
       -
         name: Deploy new ElasticBeanstalk Application Version
-        run: aws elasticbeanstalk update-environment --environment-name Larry-env --version-label "larry-${{ github.event.repository.updated_at}}"
+        run: aws elasticbeanstalk update-environment --environment-name Larry-env --version-label "larry-${{ github.sha }}"
