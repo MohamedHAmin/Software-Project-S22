@@ -173,6 +173,7 @@ function UploaderBanner(props) {
 
       <input
         type="file"
+        data-testid="image"
         accept="image/*"
         ref={inputRef}
         onChange={onSelectFile}

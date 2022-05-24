@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Homepage/AdminDashboard.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Homepage/AdminDashboard.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
+import "../Profile/Styles/MyFollowing.css";
+import axios from "axios";
+import "./Styles/AdminDashboard.css";
+import SideBar from "../Profile/SideBar";
+import { Button } from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import Post from "./Post";
+/**
+ * component to show the Admin user the statistics of the application. 
+ * @component
+ * @param {boolean} newnotifications
+ * @example
+ * props.newnotifications = false
+ * return (
+ * &lt;div>
+ *      &lt;h2> Larry statistics&lt;/h2>
+ *      &lt;Button>Week&lt;/Button>
+ *      &lt;Button>Month&lt;/Button>  
+ *      &lt;span>current&lt;/span>
+ *      &lt;span>past&lt;/span>
+ *      &lt;span>Lars&lt;/span> 
+ *      &lt;span>{currentNumNewUsers}&lt;/span>
+ *      ...
+ *   
+ * &lt;/div>
+ * )
+ *  
+ */
+function AdminDashboard(props) {
+  let userID = localStorage.getItem("userId");
+  const [darkMode, setDarkMode] = useState(false);
+  //vars for information displayed for admin
+  const [currentNumTweets, setCurrentNumTweets] = useState(206);
+  const [pastNumTweets, setPastNumTweets] = useState(189);
+  const [currentNumComments, setCurrentNumComments] = useState(78);
+  const [pastNumComments, setPastNumComments] = useState(84);
+  const [currentNumNewUsers, setCurrentNumNewUsers] = useState(9);
+  const [pastNumNewUsers, setPastNumNewUsers] = useState(6);
+  const [currentNumRetweets, setCurrentNumRetweets] = useState(5);
+  const [pastNumRetweets, setPastNumRetweets] = useState(5);
+  const [currentNumReports, setCurrentNumReports] = useState(8);
+  const [pastNumReports, setPastNumReports] = useState(10);
+  //vars for calculating percentages
+  const [tweetsPercentage, setTweetsPercentage] = useState(0);
+  const [commentsPercentage, setCommentsPercentage] = useState(0);
+  const [newUsersPercentage, setNewUsersPercentage] = useState(0);
+  const [retweetsPercentage, setRetweetsPercentage] = useState(0);
+  const [reportsPercentage, setReportsPercentage] = useState(0);
+  //to check what is the duration the user wants
+  const [duration, setDuration] = useState(7); //7 means week, 30 means month
+  const [durationText, setDurationText] = useState("Week"); //7 means week, 30 means month
+  const [topTweet, setTopTweet] = useState([]);
+  const [toppTweet, setToppTweet] = useState();
+  const [ready, setReady] = useState(false);
+
+  const handleClickWeek = () => {
+    setDuration(7);
+    setDurationText("Week");
+  };
+  const handleClickMonth = () => {
+    setDuration(30);
+    setDurationText("Month");
+  };
+
+  useEffect(() => {
+    //to get the display mode for the side bar
+    axios
+      .get(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/profile/${userID}/me`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          setDarkMode(res.data.darkMode);
+        }
+      });
+    //retrieve statistics from backend
+    axios
+      .get(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/admin/dashboard?duration=${durationText}`,
+        {
+          headers: { Authorization: localStorage.getItem("adminToken") },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          console.log("Error");
+        } else {
+          console.log(res.data);
+          //set current info
+          setCurrentNumReports(res.data.Current.reportsCount);
+          setCurrentNumRetweets(res.data.Current.retweetCount);
+          setCurrentNumNewUsers(res.data.Current.usersCount);
+          setCurrentNumComments(res.data.Current.replyCount);
+          setCurrentNumTweets(res.data.Current.tweetCount);
+          //set past info
+          setPastNumReports(res.data.Past.reportsCount);
+          setPastNumRetweets(res.data.Past.retweetCount);
+          setPastNumNewUsers(res.data.Past.usersCount);
+          setPastNumComments(res.data.Past.replyCount);
+          setPastNumTweets(res.data.Past.tweetCount);
+          setTopTweet(res.data.TopTweet);
+          //calculate percentages
+          setTweetsPercentage(
+            (
+              (Math.abs(
+                res.data.Current.tweetCount - res.data.Past.tweetCount
+              ) /
+                res.data.Current.tweetCount) *
+              100
+            ).toFixed(2)
+          );
+          setCommentsPercentage(
+            (
+              (Math.abs(
+                res.data.Current.replyCount - res.data.Past.replyCount
+              ) /
+                res.data.Current.replyCount) *
+              100
+            ).toFixed(2)
+          );
+          setNewUsersPercentage(
+            (
+              (Math.abs(
+                res.data.Current.usersCount - res.data.Past.usersCount
+              ) /
+                res.data.Current.usersCount) *
+              100
+            ).toFixed(2)
+          );
+          setRetweetsPercentage(
+            (
+              (Math.abs(
+                res.data.Current.retweetCount - res.data.Past.retweetCount
+              ) /
+                res.data.Current.retweetCount) *
+              100
+            ).toFixed(2)
+          );
+          setReportsPercentage(
+            (
+              (Math.abs(
+                res.data.Current.reportsCount - res.data.Past.reportsCount
+              ) /
+                res.data.Current.reportsCount) *
+              100
+            ).toFixed(2)
+          );
+          //get top tweet
+          console.log(res.data.TopTweet._id);
+          axios
+            .get(
+              `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${res.data.TopTweet._id}`,
+              {
+                headers: { Authorization: localStorage.getItem("accessToken") },
+              }
+            )
+            .then((res) => {
+              if (res.error) {
+                console.log(
+                  "There was error while attempting to retrieve tweet"
+                );
+              } else {
+                console.log(res.data);
+                setToppTweet(res.data);
+                setReady(true);
+              }
+            });
+        }
+      });
+  }, [duration]);
+  const passdeletedTweet = () => {
+    axios
+      .delete(
+        `http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/api/tweet/${toppTweet._id}`,
+        {
+          headers: { Authorization: localStorage.getItem("adminToken") },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.error || !res.data === "success") {
+          alert("something went wrong");
+        } else {
+          window.location.reload();
+        }
+        //retweetCount();
+      })
+      .catch((err) => {
+        //err.message; // 'Oops!'
+        alert("Error occured while deleting");
+        console.log(err);
+      });
+  };
+
+  return (
+    &lt;div className="AdminDashboardPage">
+      &lt;SideBar Dashboard isAdmin={true} darkMode={darkMode} newnotifications={props.newnotifications}/>
+      &lt;div className="AdminDashboardWholeContainer">
+        &lt;h2 className="DashboardHeader"> Larry statistics&lt;/h2>
+        &lt;h3 className="DashboardParagraph">
+          Larry provides insights to help you understand the Larry community as
+          a whole.
+        &lt;/h3>
+        &lt;h4 className="DashboardParagraph">
+          Use this data to optimize your future Larry campaigns and get better
+          results.
+        &lt;/h4>
+        &lt;div className="UsersActivity">
+          &lt;div className="DashboardTextSubtext">
+            &lt;h4 className="DashboardHeader">Users activity&lt;/h4>
+            &lt;div className="DashboardParagraph">
+              {duration} day summary with change over previous period
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="ButtonsDuration">
+            &lt;Button
+              onClick={handleClickWeek}
+              className={
+                duration === 7
+                  ? "buttonDurationActive"
+                  : "buttonDurationStyling"
+              }
+            >
+              Week
+            &lt;/Button>
+            &lt;Button
+              onClick={handleClickMonth}
+              className={
+                duration === 30
+                  ? "buttonDurationActive"
+                  : "buttonDurationStyling"
+              }
+            >
+              Month
+            &lt;/Button>
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="DashboardCountsContainer">
+          &lt;div className="PastCurrentdispflex">
+            &lt;div className="PastCurrentdisp">
+              &lt;span className="CountBoxSubHeader">current&lt;/span>
+            &lt;/div>
+            &lt;div className="PastCurrentdisp">
+              &lt;span className="CountBoxSubHeader">past&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="CountBox">
+            &lt;h3 className="CountBoxHeader">Users&lt;/h3>
+            &lt;div className="CurrentDurationInfo">
+              &lt;span className="CountBoxNumbers">{currentNumNewUsers}&lt;/span>
+              {currentNumNewUsers !== pastNumNewUsers ? (
+                currentNumNewUsers > pastNumNewUsers ? (
+                  &lt;div className="WrapPercentArrowUp">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowUpwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {newUsersPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                ) : (
+                  &lt;div className="WrapPercentArrowDown">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowDownwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {newUsersPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                )
+              ) : (
+                &lt;div className="Nochange">No change&lt;/div>
+              )}
+            &lt;/div>
+            &lt;div className="PastDurationInfo">
+              &lt;span className="CountBoxNumbers">{pastNumNewUsers}&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="CountBox">
+            &lt;h3 className="CountBoxHeader">Lars&lt;/h3>
+            &lt;div className="CurrentDurationInfo">
+              &lt;span className="CountBoxNumbers">{currentNumTweets}&lt;/span>
+              {currentNumTweets !== pastNumTweets ? (
+                currentNumTweets > pastNumTweets ? (
+                  &lt;div className="WrapPercentArrowUp">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowUpwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {tweetsPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                ) : (
+                  &lt;div className="WrapPercentArrowDown">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowDownwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {tweetsPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                )
+              ) : (
+                &lt;div className="Nochange">No change&lt;/div>
+              )}
+            &lt;/div>
+            &lt;div className="PastDurationInfo">
+              &lt;span className="CountBoxNumbers">{pastNumTweets}&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="CountBox">
+            &lt;h3 className="CountBoxHeader">Comments&lt;/h3>
+            &lt;div className="CurrentDurationInfo">
+              &lt;span className="CountBoxNumbers">{currentNumComments}&lt;/span>
+              {currentNumComments !== pastNumComments ? (
+                currentNumComments > pastNumComments ? (
+                  &lt;div className="WrapPercentArrowUp">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowUpwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {commentsPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                ) : (
+                  &lt;div className="WrapPercentArrowDown">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowDownwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {commentsPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                )
+              ) : (
+                &lt;div className="Nochange">No change&lt;/div>
+              )}
+            &lt;/div>
+            &lt;div className="PastDurationInfo">
+              &lt;span className="CountBoxNumbers">{pastNumComments}&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="CountBox">
+            &lt;h3 className="CountBoxHeader">ReLars&lt;/h3>
+            &lt;div className="CurrentDurationInfo">
+              &lt;span className="CountBoxNumbers">{currentNumRetweets}&lt;/span>
+              {currentNumRetweets !== pastNumRetweets ? (
+                currentNumRetweets > pastNumRetweets ? (
+                  &lt;div className="WrapPercentArrowUp">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowUpwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {retweetsPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                ) : (
+                  &lt;div className="WrapPercentArrowDown">
+                    &lt;span className="ArrowUpDownStyling">
+                      &lt;ArrowDownwardIcon />
+                    &lt;/span>
+                    &lt;span className="PercentUpDownStyling">
+                      {retweetsPercentage}%
+                    &lt;/span>
+                  &lt;/div>
+                )
+              ) : (
+                &lt;div className="Nochange">No change&lt;/div>
+              )}
+            &lt;/div>
+            &lt;div className="PastDurationInfo">
+              &lt;span className="CountBoxNumbers">{pastNumRetweets}&lt;/span>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+        &lt;div style={{ marginTop: 30 }}>
+          &lt;div style={{ display: "flex" }}>
+            &lt;div className="TopLarConatiner">
+              &lt;h4 className="DashboardHeader">Top lar&lt;/h4>
+              &lt;div>
+                {ready ? (
+                  &lt;Post
+                    post={toppTweet}
+                    passdeletedTweet={passdeletedTweet}
+                    isAdmin={true}
+                    isPost={true}
+                    canviewcomments={false}
+                  />
+                ) : (
+                  &lt;>&lt;/>
+                )}
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="CountBox">
+              &lt;div className="ReportsConatiner">
+                &lt;h3 className="CountBoxHeader">Reports&lt;/h3>
+                &lt;div className="CurrentDurationInfo">
+                  &lt;span className="CountBoxNumbers">{currentNumReports}&lt;/span>
+                  {currentNumReports !== pastNumReports ? (
+                    currentNumReports > pastNumReports ? (
+                      &lt;div className="WrapPercentArrowUp">
+                        &lt;span className="ArrowUpDownStyling">
+                          &lt;ArrowUpwardIcon />
+                        &lt;/span>
+                        &lt;span className="PercentUpDownStyling">
+                          {reportsPercentage}%
+                        &lt;/span>
+                      &lt;/div>
+                    ) : (
+                      &lt;div className="WrapPercentArrowDown">
+                        &lt;span className="ArrowUpDownStyling">
+                          &lt;ArrowDownwardIcon />
+                        &lt;/span>
+                        &lt;span className="PercentUpDownStyling">
+                          {reportsPercentage}%
+                        &lt;/span>
+                      &lt;/div>
+                    )
+                  ) : (
+                    &lt;div className="Nochange">No change&lt;/div>
+                  )}
+                &lt;/div>
+                &lt;div className="PastDurationInfo">
+                  &lt;span className="CountBoxNumbers">{pastNumReports}&lt;/span>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+      &lt;div className="rightbarSearch">&lt;/div>
+    &lt;/div>
+  );
+}
+
+export default AdminDashboard;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccInfoOptions">AccInfoOptions</a></li><li><a href="global.html#AccountInformationS">AccountInformationS</a></li><li><a href="global.html#AccountSettings">AccountSettings</a></li><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#blue">blue</a></li><li><a href="global.html#ChangeNotificationsSettings">ChangeNotificationsSettings</a></li><li><a href="global.html#ChangePhoneNum">ChangePhoneNum</a></li><li><a href="global.html#ChangeUserTag">ChangeUserTag</a></li><li><a href="global.html#CommentDisplayBlock">CommentDisplayBlock</a></li><li><a href="global.html#contact">contact</a></li><li><a href="global.html#CreateCard">CreateCard</a></li><li><a href="global.html#CreateFollower">CreateFollower</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#CreateSearchCard">CreateSearchCard</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#FollowerCard">FollowerCard</a></li><li><a href="global.html#FollowersPage">FollowersPage</a></li><li><a href="global.html#FollowingCard">FollowingCard</a></li><li><a href="global.html#FollowingPage">FollowingPage</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Homepage">Homepage</a></li><li><a href="global.html#ImageUploaderBanner">ImageUploaderBanner</a></li><li><a href="global.html#ImageUploaderProfile">ImageUploaderProfile</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#MakeBDvisible">MakeBDvisible</a></li><li><a href="global.html#MakeLocVisible">MakeLocVisible</a></li><li><a href="global.html#MyFollowers">MyFollowers</a></li><li><a href="global.html#MyFollowing">MyFollowing</a></li><li><a href="global.html#MyProfile">MyProfile</a></li><li><a href="global.html#MyProfileTabs">MyProfileTabs</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#NotificationSettings">NotificationSettings</a></li><li><a href="global.html#OthersProfile">OthersProfile</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#PostReplies">PostReplies</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#ProfileName">ProfileName</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Reacts">Reacts</a></li><li><a href="global.html#ReactsIcon">ReactsIcon</a></li><li><a href="global.html#Report">Report</a></li><li><a href="global.html#ReportAction">ReportAction</a></li><li><a href="global.html#ReportsPage">ReportsPage</a></li><li><a href="global.html#ReportsView">ReportsView</a></li><li><a href="global.html#RetweetDisplayBlock">RetweetDisplayBlock</a></li><li><a href="global.html#SearchFollowers">SearchFollowers</a></li><li><a href="global.html#SettingsMenu">SettingsMenu</a></li><li><a href="global.html#SettingsMenuOptions">SettingsMenuOptions</a></li><li><a href="global.html#SettingsPage">SettingsPage</a></li><li><a href="global.html#SideBar">SideBar</a></li><li><a href="global.html#SideBarIcon">SideBarIcon</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#SuggestedAccounts">SuggestedAccounts</a></li><li><a href="global.html#Tweet">Tweet</a></li><li><a href="global.html#TweetBar">TweetBar</a></li><li><a href="global.html#UpdatePassword">UpdatePassword</a></li><li><a href="global.html#UploaderBanner">UploaderBanner</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon May 23 2022 20:33:00 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -6,6 +6,7 @@ import Searchbar from "./Search";
 import axios from "axios";
 import Post from "./Post";
 import { useParams } from "react-router-dom";
+import SuggestedAccounts from "./SuggestedAccounts";
 /**
  * this function renders explore page component
  * @param {*} props this props passes the explore posts to EplorePost component
@@ -75,7 +76,11 @@ return (
             ) : (<></>)}
         </div>
       </div>
-      <div className="Notificationrightbar"></div>
+      <div className="suggestedAccRightbar">
+        <div className="suggestedAccBlock">
+          <SuggestedAccounts/>
+        </div>
+      </div>
       </div>
   );
 }
