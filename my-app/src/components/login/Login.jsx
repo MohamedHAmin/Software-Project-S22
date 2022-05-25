@@ -15,6 +15,7 @@ import Modal from "./ModalForgotPass";
  *
  *
  * @returns Returns Login form and its fields [tag, password] and a button for forgotpassword and another one for login 
+ * it also contains a button to login with Google
  */
 const Login = () => {
     
