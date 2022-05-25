@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as Yup from 'yup'
 
+/**
+ * popup for forgot password 
+ * @param {boolean} closeModal 
+ * @returns a popup with one input field for e-mail and two buttons one to search and the other one is to close the popup
+ */
 const Modal = ({ closeModal }) => {
     const [error1, setError1] = useState(false);
     const [email, setemail] = useState("");
