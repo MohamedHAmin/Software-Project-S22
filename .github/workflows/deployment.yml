@@ -12,20 +12,20 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-      # - 
-      #   name: test
-      #   run: docker-compose up --exit-code-from api
-      #   shell: bash
-      #   env:
-      #     SECRET: ${secrets.SECRET}
-      #     CLOUDINARY_CLOUD_NAME: ${secrets.CLOUDINARY_CLOUD_NAME}
-      #     CLOUDINARY_API_KEY: ${secrets.CLOUDINARY_API_KEY}
-      #     CLOUDINARY_API_SECRET: ${secrets.CLOUDINARY_API_SECRET}
-      #     GOOGLE_CLIENT_ID: ${secrets.GOOGLE_CLIENT_ID}
-      #     GOOGLE_CLIENT_SECRET: ${secrets.GOOGLE_CLIENT_SECRET}
-      #     AUTH_EMAIL: ${secrets.AUTH_EMAIL}
-      #     AUTH_PASS: ${secrets.AUTH_PASS}
-      #     CURRENTURL: http://localhost:3000/
+      - 
+        name: test
+        run: docker-compose up --exit-code-from api
+        shell: bash
+        env:
+          SECRET: ${secrets.SECRET}
+          CLOUDINARY_CLOUD_NAME: ${secrets.CLOUDINARY_CLOUD_NAME}
+          CLOUDINARY_API_KEY: ${secrets.CLOUDINARY_API_KEY}
+          CLOUDINARY_API_SECRET: ${secrets.CLOUDINARY_API_SECRET}
+          GOOGLE_CLIENT_ID: ${secrets.GOOGLE_CLIENT_ID}
+          GOOGLE_CLIENT_SECRET: ${secrets.GOOGLE_CLIENT_SECRET}
+          AUTH_EMAIL: ${secrets.AUTH_EMAIL}
+          AUTH_PASS: ${secrets.AUTH_PASS}
+          CURRENTURL: http://localhost:3000/
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
