@@ -97,7 +97,8 @@ test('check upload profile banner',async ()=>{
     const res2=await request(app).put('/profile/'+user1._id.toString()+'/banner')
     .set('Authorization','Bearer '+user1token.token)
     .attach('image','src/tests/fixtures/favicon-32x32.png')
-    .expect(200)
+    .expect(400)
+    expect(res.text).toEqual("f")
 });
 test('check upload profile banner fail',async ()=>{
    
