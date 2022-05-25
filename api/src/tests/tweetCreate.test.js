@@ -154,7 +154,7 @@ test("Refuse a tweet that exceeds tag limit", async () => {
     .field("imageCheck", "true")
     .attach('image','src/tests/fixtures/favicon-32x32.png')
     .expect(400);
-    expect(res.text).toEqual("f")
+    expect(res.text.error).toEqual("f")
 });
 test("post with images", async () => {
   const res = await request(app)
