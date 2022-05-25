@@ -710,7 +710,6 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
         }
       });
       const UserTweets = user.Tweets;
-      console.log(user.Tweets);
       let temp;
       for (let i = 0; i < user.Tweets.length; i++) {
         if (user.Tweets[i].replyingTo.tweetExisted) {
@@ -1382,7 +1381,8 @@ function replyFilterFunc(viewer,tweet){
 function reptoFilterFunc(viewer,tweet){
   if(!tweet.replyingTo.tweetId){return null;}
   const viewerId=viewer._id;
-  if(viewerId.equals(tweet.replyingTo.tweetId.authorId)){return null;}
+  console.log(viewerId.equals(tweet.replyingTo.tweetId.authorId._id));
+  if(viewerId.equals(tweet.replyingTo.tweetId.authorId._id)){return null;}
   if(!tweet.replyingTo.tweetId.authorId.isPrivate){return null;}
   let followArr=viewer.following;
   followArr = followArr.map((follow) => {

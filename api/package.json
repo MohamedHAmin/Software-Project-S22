@@ -4,8 +4,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --runInBand --coverage --forceExit",
+    "dev": "env-cmd -f ../config/dev.env nodemon src/index.js",
+    "test": "env-cmd -f ../config/test.env jest --runInBand --coverage --forceExit",
     "Dtest": "jest --runInBand --forceExit"
   },
   "jest": {
@@ -26,7 +26,7 @@
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.2",
-    "fcm-node": "^1.6.1",
+    "fcm-node": "^1.3.0",
     "firebase-admin": "^10.1.0",
     "fs": "^0.0.1-security",
     "generate-password": "^1.7.0",
