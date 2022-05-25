@@ -98,7 +98,7 @@ test('check upload profile banner',async ()=>{
     .set('Authorization','Bearer '+user1token.token)
     .attach('image','src/tests/fixtures/favicon-32x32.png')
     .expect(400)
-    console.log(res.text)
+    console.log(res.text.error)
 });
 test('check upload profile banner fail',async ()=>{
    
