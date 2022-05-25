@@ -8,9 +8,13 @@ import * as Yup from 'yup'
 import UploaderBanner from "./utils/UploaderBanner";
 import UploaderProfile from "./utils/UploaderProfile";
 
+/**
+ * 
+ * @param {props} props Getting the name and photo of the banner and profile picture also.
+ * @returns Returns the banner photo uploader and the profile photo uploader.
+ * it also contains a button if you want to skip it for now in addition to the exit button.
+ */
 const Addpic = (props) => {
-
-  
     return (
         <div className='modalBackground'>
             <div className='Container'>
