@@ -438,7 +438,6 @@ function AdminDashboard(props) {
         </div>
       </div>
       <div className="rightbarSearch"></div>
-      <div className="Notificationrightbar"></div>
     </div>
   );
 }
