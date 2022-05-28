@@ -69,13 +69,8 @@ test('check profile',async ()=>{
  
 });
 test('check upload profile image',async ()=>{
-    jest.setTimeout(30000);
     
     const res=await request(app).put('/profile/'+user1._id.toString()+'/avater')
-    .set('Authorization','Bearer '+user1token.token)
-    .attach('image','src/tests/fixtures/favicon-32x32.png')
-    
-    const res2=await request(app).put('/profile/'+user1._id.toString()+'/avater')
     .set('Authorization','Bearer '+user1token.token)
     .attach('image','src/tests/fixtures/favicon-32x32.png')
    
@@ -93,11 +88,6 @@ test('check upload profile banner',async ()=>{
     const res=await request(app).put('/profile/'+user1._id.toString()+'/banner')
     .set('Authorization','Bearer '+user1token.token)
     .attach('image','src/tests/fixtures/favicon-32x32.png')
-    jest.setTimeout(30000);
-    const res2=await request(app).put('/profile/'+user1._id.toString()+'/banner')
-    .set('Authorization','Bearer '+user1token.token)
-    .attach('image','src/tests/fixtures/favicon-32x32.png')
-    .expect(200)
 });
 test('check upload profile banner fail',async ()=>{
    

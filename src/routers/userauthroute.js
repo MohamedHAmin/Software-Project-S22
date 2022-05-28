@@ -11,7 +11,6 @@ const nodemailer = require("nodemailer")
 const {v4: uuidv4 } = require("uuid")
 const { urlencoded } = require("express")
 const { identity } = require("lodash")
-const res = require("express/lib/response")
 require('env-cmd')
 require('../passport/passport')(passport)
 //nodemailer setup [less secure option on ]
@@ -65,10 +64,9 @@ router.post("/signup",async (req, res) => {
   //token is put in header [in postman]
   router.delete("/logout" ,auth('any'),async (req, res) => {
     try{
-     const a= await Token.deleteMany({ token: req.token })
-     console.log("🚀 ~ file: userauthroute.js ~ line 67 ~ router.delete ~ a", a)
+      await Token.deleteMany({ token: req.token })
       
-      res.status(200).send({success:"Success"})}
+      res.status(200).end("Success")}
       
       
       catch (e) {
@@ -79,10 +77,9 @@ router.post("/signup",async (req, res) => {
     router.delete("/logoutall",auth('any'), async (req, res) => {
       try{
         await Token.deleteMany({ 
-          ownerId: req.user._id.toString()
+          ownerId: req.user._id
         })
-
-        res.status(200).send({success:"Success"})
+        res.status(200).end("Success")
         
       }
       catch (e) {
@@ -157,13 +154,13 @@ router.post("/signup",async (req, res) => {
       if(user.length>0){
         if(user[0].verified){
             SendResetEmail(user[0])
-            res.send("Email sent , and password has been reset")
+            res.status(200).send("Email sent , and password has been reset")
         }
         else{
-          res.send({success:"Email hasn't been verified yet "})
+          res.status(401).send("Email hasn't been verified yet ")
         }
       } else{
-        res.send({success:"Email is not found or registered"})
+        res.status(400).send("Email is not found or registered")
       }
   }
     catch(e) {
@@ -199,34 +196,15 @@ router.post("/signup",async (req, res) => {
       console.log(e);
     }
   }
-  
- //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
- router.get("/googlelogin/failed",(req,res)=>{
-   res.status(401).json({
-     success: false,
-     message: "failure"
-   })
- })
- router.get("/googlelogin/success",(req,res)=>{
-   if(req.cookies){
-   res.status(200).json({
-     success: true,
-     message : "successful",
-     user:req.user,
-     //cookies: req.cookies
-   })
-   
- }
- })
+   //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
+   router.get('/auth/google', passport.authenticate('google', {scope:['profile','email']}))
 
-    //~~~~~~~~~~~~~~~~~~~~~~~Login with FB/GOOGLE ~~~~~~~~~~~~~~~~~~~~~~~//
-    router.get('/auth/google', passport.authenticate('google', {scope:['profile','email']}),()=>{
-     
-      res.send({hy:"hy"})
-    })
+   router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'/login',successRedirect:"/Home"}),
+   )
+   //redirect pages will be later on implemented by FE
+ 
 
-    router.get('/auth/google/callback',passport.authenticate('google', {failureRedirect:'http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/',successRedirect:"http://larry-env.eba-u6mbx2gb.us-east-1.elasticbeanstalk.com/"}))
-    //redirect pages will be later on implemented by FE
-  
-  //~~~~~~~~~~~~~~~~~~~~~~~Dummy Redirect Links~~~~~~~~~~~~~~~~~~~~~//
-    module.exports = router;
+
+module.exports = router; 
+
+

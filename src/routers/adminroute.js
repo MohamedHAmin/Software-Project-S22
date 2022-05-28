@@ -10,7 +10,7 @@ const notifiy = require("../utils/firbase");
 const Token = require("../models/Token.js");
 const router = new express.Router();
 
-router.post("/create",auth("admin") ,async (req, res) => {
+router.post("/create" ,async (req, res) => {
   try {
     const deletedUser = await User.deleteOne({
       $and: [{ email: req.body.email }, { verified: false }],
@@ -320,10 +320,13 @@ router.get("/dashboard",auth("admin"),async (req, res) => {
     })
     .sort({likeCount:-1})
     .limit(1);
-    stats.TopTweet={
-      ...topTweet[0]._doc,
-      reply:[],
-      isliked:false
+    if(topTweet.length)
+    {
+      stats.TopTweet={
+        ...topTweet[0]._doc,
+        reply:[],
+        isliked:false
+      }
     }
     res.status(200).json(stats).end();
   } catch (e) {

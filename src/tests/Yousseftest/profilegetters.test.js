@@ -23,8 +23,9 @@ test("get all user media", async () => {
     .set("Authorization", "Bearer " + usertoken.token)
     .send({
       text: "bruh",
+      gallery:[{photo:"Photo"}]
     });
-  res = await request(app)
+    res = await request(app)
     .post("/tweet")
     .set("Authorization", "Bearer " + usertoken.token)
     .field("text", "try this for size dude")

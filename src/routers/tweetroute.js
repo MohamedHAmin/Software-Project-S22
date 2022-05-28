@@ -24,7 +24,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
     //gets tweet ID from route parameter /:id
     //and searches for respective tweet
   
-    const tweet = await Tweet.findById(req.params.id);
+    let tweet = await Tweet.findById(req.params.id);
  
     let sentTweet;
     if (!tweet) {
@@ -41,7 +41,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
 
     await tweet.populate({
       path: "authorId",
-      select: "_id screenName tag profileAvater.url",
+      select: "_id screenName tag isPrivate profileAvater.url",
     });
     await tweet.populate({
       path: "retweetedTweet.tweetId",
@@ -51,7 +51,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
       populate: {
         path: "authorId",
         strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName tag isPrivate profileAvater.url",
       },
     });
     await tweet.populate({
@@ -63,7 +63,7 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         {
           path: "authorId",
           strictPopulate: false,
-          select: "_id screenName tag profileAvater.url",
+          select: "_id screenName tag isPrivate profileAvater.url",
         },
         {
           path: "reply",
@@ -73,11 +73,12 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
           populate: {
             path: "authorId",
             strictPopulate: false,
-            select: "_id screenName tag profileAvater.url",
+            select: "_id screenName tag isPrivate profileAvater.url",
           },
         },
       ],
     });
+    replyFilterFunc(req.user,tweet)
 
     let Retweet = tweet.retweetedTweet;
     let modifiedRetweet = { tweetId: "", tweetExisted: null };
@@ -159,7 +160,6 @@ router.get("/tweet/:id", auth("any"), async (req, res) => {
         retweetedTweet: modifiedRetweet,
       };
     }
-    replyFilterFunc(req.user,sentTweet)
     res.send(sentTweet);
   } catch (e) {
     //here all caught errors are sent to the client
@@ -383,9 +383,10 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       .populate({
         path: "authorId",
         strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName tag isPrivate profileAvater.url",
       });
-
+      console.log("🚀 ~ file: tweetroute.js ~ line 388 ~ router.get ~ resultTweets", resultTweets)
+      resultTweets=tweetFilterFunc(req.user,resultTweets);
     let resultUsers = await User.find({
       $or: [
         {tag: { $regex: searchedItem, $options: "i" }},
@@ -402,7 +403,7 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       "profileAvater.url": 1,
       "Biography": 1,
     });
-    console.log("🚀 ~ file: tweetroute.js ~ line 395 ~ router.get ~ resultUsers", resultUsers)
+   
     const followingsId = req.user.following.map((user) => {
       return user.followingId.toString();
     });
@@ -455,11 +456,13 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
     for (let i = 0; i < resultTweets.length; i++) {
       if (resultTweets[i].replyingTo.tweetExisted) {
         temp = await Tweet.findById(resultTweets[i].replyingTo.tweetId);
+        console.log("🚀 ~ file: tweetroute.js ~ line 458 ~ router.get ~ temp", temp)
         if (!temp) {
           resultTweets[i].replyingTo.tweetId = null;
         }
       }
     }
+  
     if (filters.followerfilter) {
       modifiedresultUsers = [];
       for (let i = 0; i < resultUsers.length; i++) {
@@ -468,14 +471,20 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
         }
       }
       resultUsers = modifiedresultUsers;
+      
       let modifiedresultTweets = [];
+     let l=req.user.following.length
       for (let i = 0; i < resultTweets.length; i++) {
-        for (resultUser of resultUsers) {
+
+        for (let j = 0; j < l; j++) {
+  
           if (
-            resultTweets[i].authorId.toString() === resultUser._id.toString()
+            resultTweets[i].authorId._id.toString() == req.user.following[j].followingId.toString()
+           
           ) {
+            console.log(i)
             modifiedresultTweets.push(resultTweets[i]);
-       
+            break;
           }
         }
       }
@@ -486,7 +495,27 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
       e = "no users or tweets found";
       throw e;
     }
-    
+    resultTweets = resultTweets.map((tweet) => {
+      const isliked = tweet.likes.some(
+        (like) => like.like.toString() == req.user._id.toString()
+      );
+      if (isliked) {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet._doc,
+          isliked: true,
+        };
+        return tweets;
+      } else {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet._doc,
+          isliked: false,
+        };
+        return tweets;
+      }
+    });
+      
     let searchResults = { Tweets: resultTweets, Users: resultUsers };
     res.send(searchResults);
   } catch (e) {
@@ -496,9 +525,9 @@ router.get("/search/:searchedtext", auth("any"), async (req, res) => {
 });
 
 
-
 router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
   try {
+    await req.user.isBanned();
     const limit = req.query.limit ? parseInt(req.query.limit) : 30;
     const skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let requiredId = mongoose.Types.ObjectId(req.params.id);
@@ -508,20 +537,13 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
       throw e;
     }
 
-    let likedtweets = await Tweet.aggregate([
-      { $match: { "likes.like": requiredId } },
-      { $project: { likes:1,id:1, authorId:1, text:1, tags:1, likeCount:1, retweetCount:1, gallery:1, likes:1, replyCount:1, createdAt:1}},
-    ])
-    .limit(limit)
-    .skip(skip)
-    .sort({ createdAt: -1 });
-    console.log("🚀 ~ file: tweetroute.js ~ line 512 ~ router.get ~ Tweet", likedtweets)
-    for (likedtweet of likedtweets) {
-      await User.populate(likedtweet, {
-        path: "authorId",
-        select: "_id screenName tag profileAvater.url",
-      });
-      await Tweet.populate(likedtweet, {
+    let likedtweets = await Tweet.find({ "likes.like": requiredId })
+    .populate([
+      {
+      path: "authorId",
+      select: "_id screenName isPrivate tag profileAvater.url",
+      },
+      {
         path: "retweetedTweet.tweetId",
         select:
           "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
@@ -530,65 +552,87 @@ router.get("/profile/likedtweets/:id", auth("user"), async (req, res) => {
           strictPopulate: false,
           select: "_id screenName tag profileAvater.url",
         },
-      });
-      await Tweet.populate(likedtweet, {
+      },
+      {
         path: "replyingTo.tweetId",
         select:
           "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
         populate: {
           path: "authorId",
           strictPopulate: false,
-          select: "_id screenName tag profileAvater.url",
+          select: "_id screenName tag isPrivate profileAvater.url",
         },
-      });
+      }
+    ])
+      .limit(limit)
+      .skip(skip)
+      .sort({ createdAt: -1 });
+    if(!req.user._id.equals(req.params.id)){
+      likedtweets= tweetFilterFunc(req.user,likedtweets)
     }
+    // for (likedtweet of likedtweets) {
+    //   await User.populate(likedtweet, {
+    //     path: "authorId",
+    //     select: "_id screenName tag profileAvater.url",
+    //   });
+    //   await Tweet.populate(likedtweet, {
+    //     path: "retweetedTweet.tweetId",
+    //     select:
+    //       "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+    //     populate: {
+    //       path: "authorId",
+    //       strictPopulate: false,
+    //       select: "_id screenName tag profileAvater.url",
+    //     },
+    //   });
+    //   await Tweet.populate(likedtweet, {
+    //     path: "replyingTo.tweetId",
+    //     select:
+    //       "_id authorId text tags likeCount retweetCount gallery likes replyCount createdAt",
+    //     populate: {
+    //       path: "authorId",
+    //       strictPopulate: false,
+    //       select: "_id screenName tag profileAvater.url",
+    //     },
+    //   });
+    // }
     if (likedtweets.length < 1) {
       e = "no liked tweets found";
       throw e;
     }
-   /*  let modifiedlikedtweets = [];
-    let modifiedlikedtweet;
-    for (likedtweet of likedtweets) {
-      modifiedlikedtweet = { ...likedtweet, isliked: true };
-      modifiedlikedtweets.push(modifiedlikedtweet);
-    } */
-    likedtweets = likedtweets;
-    let i=-1
-    if (!likedtweets.length < 1) {
-      likedtweets = likedtweets.map((tweet) => {
-        i++;
-        const isliked = tweet.likes.some(
-          (like) => like.like.toString() == req.user._id.toString()
-        );
-        if (isliked) {
-          delete tweet._doc.likes;
-          const tweets = {
-            ...tweet._doc,
-            isliked: true,
-          };
-          return tweets;
-        } else {
-          delete tweet._doc.likes;
-          const tweets = {
-            ...tweet._doc,
-            isliked: false,
-          };
-          return tweets;
-        }
-      });
-    }
-    let likedtweetk
-    if(req.user._id.toString!==req.params.id){
+    // let modifiedlikedtweets = [];
+    // let modifiedlikedtweet;
+    // for (likedtweet of likedtweets) {
+    //   modifiedlikedtweet = { ...likedtweet, isliked: true };
+    //   modifiedlikedtweets.push(modifiedlikedtweet);
+    // }
+    likedtweets = likedtweets.map((tweet) => {
+      const isliked = tweet.likes.some(
+        (like) => like.like.toString() == req.user._id.toString()
+      );
+      if (isliked) {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet._doc,
+          isliked: true,
+        };
+        return tweets;
+      } else {
+        delete tweet.likes;
+        const tweets = {
+          ...tweet._doc,
+          isliked: false,
+        };
+        return tweets;
+      }
+    });
 
-      likedtweetk= tweetFilterFunc(req.user,likedtweets)
-      //console.log("🚀 ~ file: tweetroute.js ~ line 558 ~ router.get ~ likedtweets", likedtweetk)
-    }
-
-    res.send(likedtweetk);
+    res.send(likedtweets);
   } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
 });
+
 router.get("/profile/replies/:id", auth("user"), async (req, res) => {
   try {
   
@@ -635,16 +679,17 @@ router.get("/profile/replies/:id", auth("user"), async (req, res) => {
           populate: {
             path: "authorId",
             strictPopulate: false,
-            select: "_id screenName tag profileAvater.url",
+            select: "_id screenName tag isPrivate profileAvater.url",
           },
         },
       ],
 
       options: { sort },
     });
-
     if (!user.Tweets.length < 1) {
       user.Tweets = user.Tweets.map((tweet) => {
+        const priv=reptoFilterFunc(req.user,tweet);
+        if(priv){return priv;}
         const isliked = tweet.likes.some(
           (like) => like.like.toString() == req.user._id.toString()
         );
@@ -834,19 +879,9 @@ router.get("/explore", auth("any"), async (req, res) => {
       .populate({
         path: "authorId",
         strictPopulate: false,
-        select: "_id screenName tag profileAvater.url",
+        select: "_id screenName tag isPrivate profileAvater.url",
       })
-      .populate({
-        path: "replyingTo.tweetId",
-        strictPopulate: true,
-        select:
-          "_id replyingTo authorId text tags likeCount retweetCount replyCount gallery likes createdAt",
-        populate: {
-          path: "authorId",
-          strictPopulate: true,
-          select: "_id screenName tag profileAvater.url",
-        },
-      });
+      exploredTweet=tweetFilterFunc(req.user,exploredTweet);
     let i = -1;
     if (!exploredTweet.length < 1) {
       exploredTweet = exploredTweet.map((tweet) => {
@@ -1217,8 +1252,8 @@ router.delete("/tweet/:id", auth("any"), async (req, res) => {
           await retweetedTweet.save();
         }
       }
-      const temp = await Tweet.findByIdAndDelete(req.params.id);
-      res.status(200).send({success:"Success"});
+      await Tweet.findByIdAndDelete(req.params.id);
+      res.status(200).send({Status:"Success"});
     } else {
       throw new Error("Unauthorized");
     }
@@ -1346,7 +1381,8 @@ function replyFilterFunc(viewer,tweet){
 function reptoFilterFunc(viewer,tweet){
   if(!tweet.replyingTo.tweetId){return null;}
   const viewerId=viewer._id;
-  if(viewerId.equals(tweet.replyingTo.tweetId.authorId)){return null;}
+  console.log(viewerId.equals(tweet.replyingTo.tweetId.authorId._id));
+  if(viewerId.equals(tweet.replyingTo.tweetId.authorId._id)){return null;}
   if(!tweet.replyingTo.tweetId.authorId.isPrivate){return null;}
   let followArr=viewer.following;
   followArr = followArr.map((follow) => {
@@ -1355,8 +1391,9 @@ function reptoFilterFunc(viewer,tweet){
   if(followArr.includes(tweet.replyingTo.tweetId.authorId._id.toString())){console.log(followArr);return null;}
   const temp={...tweet._doc};
   temp.replyingTo={
-    tweetId:"Content is Private",
-    tweetExisted:true
+    tweetId: null,
+    tweetExisted:true,
+    isPrivate:true
   };
   return temp;
 }

@@ -101,8 +101,8 @@ test("reply exceeded tag limit", async () => {
 });
 
 test("reply with image", async () => {
-  const newtweet = await Tweet.create({
-    authorId: user._id,
+const newtweet = await Tweet.create({
+  authorId: user._id,
     text: "I am Abdelkhalek",
   });
 

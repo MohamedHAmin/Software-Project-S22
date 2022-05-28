@@ -15,8 +15,8 @@ const sendNotification = async (
   tags = [],
   text = ""
 ) => {
-  console.log("🚀 ~ file: firbase.js ~ line 18 ~ tags", tags)
-  console.log("🚀 ~ file: firbase.js ~ line 18 ~ text", text)
+  //console.log("🚀 ~ file: firbase.js ~ line 18 ~ tags", tags)
+  //console.log("🚀 ~ file: firbase.js ~ line 18 ~ text", text)
   
   //console.log("🚀 ~ file: firbase.js ~ line 9 ~ sendNotification ~ user", user)
   fcmtoken = user;
@@ -28,7 +28,7 @@ const sendNotification = async (
           return tag.tag;
         });
       }
-      console.log("🚀 ~ file: firbase.js ~ line 26 ~ tags", tags)
+     // console.log("🚀 ~ file: firbase.js ~ line 26 ~ tags", tags)
 
      tags = tags.map((tag) => {
         return tag.slice(1);
@@ -42,7 +42,7 @@ const sendNotification = async (
       select: "_id screenName tag Notificationssetting  ",
     });
     let tagnot = await User.find({ tag: { $in: tags } });
-    console.log("🚀 ~ file: firbase.js ~ line 45 ~ tagnot", tagnot)
+   // console.log("🚀 ~ file: firbase.js ~ line 45 ~ tagnot", tagnot)
     let users = user.following;
  /*    const notifiedUId = suggestedAccounts.map((user) => {
       return user._id;
@@ -69,8 +69,8 @@ const sendNotification = async (
         notifiedUId: tagnot[index]._id,
       };
     }
-    console.log("🚀 ~ file: firbase.js ~ line 66 ~ tagnot.length", tagnot.length)
-    console.log("🚀 ~ file: firbase.js ~ line 68 ~ tagnotifications", tagnotifications)
+    //console.log("🚀 ~ file: firbase.js ~ line 66 ~ tagnot.length", tagnot.length)
+    //console.log("🚀 ~ file: firbase.js ~ line 68 ~ tagnotifications", tagnotifications)
     const notifications2 = await Notification.insertMany(notifications);
     const notifications3 = await Notification.insertMany(tagnotifications);
 
@@ -84,14 +84,14 @@ const sendNotification = async (
     var uniqueArray = [...new Set(untokens)];
     fcmtoken = uniqueArray.filter((t) => t != null);
   }
-  console.log(
+/*   console.log(
     "🚀 ~ file: firbase.js ~ line 47 ~ fcm.subscribeToTopic ~ fcmtoken",
     fcmtoken
   );
   console.log(
     "🚀 ~ file: firbase.js ~ line 48 ~ fcm.subscribeToTopic ~ topic",
     topic
-  );
+  ); */
 
   if (fcmtoken.length === 1) {
     console.log(

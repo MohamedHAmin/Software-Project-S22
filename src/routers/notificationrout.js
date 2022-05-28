@@ -1,4 +1,5 @@
 const express = require("express");
+const Notification = require("../models/Notification");
 
 const auth = require("../middleware/auth");
 const notifiy = require("../utils/firbase");
@@ -15,19 +16,14 @@ router.get("/notification", auth("any"),async (req, res) => {
     select:
       "_id screenName tag profileAvater.url ",
 })
-     //notifications=notifications.reverse()
+    await Notification.updateMany({notifiedUId:req.user._id},{seen:true})
 
-
-  
-    let notifications2=await Notification.updateMany({notifiedUId:req.user._id},{seen:true})
-    console.log("🚀 ~ file: notificationrout.js ~ line 26 ~ router.get ~ notifications2", notifications2)
-    
     res.send({notifications});
   } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
 });
-router.delete("/notification/:id", auth("any"),async (req, res) => {
+/* router.delete("/notification/:id", auth("any"),async (req, res) => {
   try { 
     const notifications=await Notification.deleteOne({_id:req.params.id})
     
@@ -35,8 +31,8 @@ router.delete("/notification/:id", auth("any"),async (req, res) => {
   } catch (e) {
     res.status(400).send({ error: e.toString() });
   }
-});
-router.get("/sendspecific",async (req, res) => {
+}); */
+/* router.get("/sendspecific",async (req, res) => {
     try { 
         let fcmToken = req.query.token;
       
@@ -45,8 +41,8 @@ router.get("/sendspecific",async (req, res) => {
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }
-  });
-router.get("/sendfcm", auth("any"),async (req, res) => {
+  }); */
+/* router.get("/sendfcm", auth("any"),async (req, res) => {
     try {
       
       let fcmToken = req.query.token;
@@ -60,7 +56,7 @@ router.get("/sendfcm", auth("any"),async (req, res) => {
     } catch (e) {
       res.status(400).send({ error: e.toString() });
     }
-  });
+  }); */
 
 
 

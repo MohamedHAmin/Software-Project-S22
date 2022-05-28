@@ -151,7 +151,7 @@ router.get("/acceptRequest/:id", auth("any"), async (req, res) => {
     res.status(400).send({ error: e.toString() });
   }
 })
-router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
+/* router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
   try{
     const user = await User.findById(req.params.id);
     //if no user
@@ -172,7 +172,7 @@ router.get("/denyRequest/:id",auth("any"),async (req,res)=>{
   }catch (e){
     res.status(400).send({ error: e.toString() });
   }
-})
+}) */
 //*unfollow ROUT
 router.post("/user/:userId/unfollow/:id", auth("user"), async (req, res) => {
   try {

@@ -18,6 +18,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy
 
 
 module.exports = function (passport){
+  
     var newPassword = generator.generate({
         length: 10,
         numbers: true
@@ -33,6 +34,7 @@ module.exports = function (passport){
         screenName: profile.displayName,
         tag: profile.name.givenName + Math.floor(Math.random() *10000),
         "profileAvater.url": profile.photos[0].value,
+       
         verified:true,
         email:profile.emails[0].value,
         password:newPassword

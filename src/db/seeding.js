@@ -13,7 +13,7 @@ const seed = async () => {
   // make a bunch of users
   let users = [];
 
-  for (let i = 0; i < 10; i += 1) {
+  for (let i = 0; i < 100; i += 1) {
       
     const screenName = faker.name.firstName();
     const lastName = faker.name.lastName();
@@ -59,7 +59,7 @@ const seed = async () => {
 
      ///TWEETS
      let tweets = [];
-     for (let i = 0; i < 20; i += 1) {
+     for (let i = 0; i < 200; i += 1) {
         const length= Math.round(Math.random() * users.length)
        let newtweet = {
          text: faker.lorem.words(10),
